@@ -1,0 +1,71 @@
+@import "../../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/_alerts.scss";
+
+
+.alert {
+    display: inline-block;
+    margin: 10px 0; 
+    width: 100%;
+    padding: $alert-padding $alert-padding*2;
+
+    .close {
+        margin-top: -3px;
+        margin-left: 8px;
+        margin-right: -3px;
+        text-shadow: none;
+    }
+
+    .alert-icon {
+        margin-right: 3px;
+        width: 18px;
+        margin-left: -4px;
+        text-align: center;
+        display: inline-block;
+    }
+
+    .btn {
+        margin: -4px;
+        margin-left: 10px;
+        text-decoration: underline;
+        // margin-right: -10px;
+        // text-transform: uppercase;
+    }
+}
+
+.alert-dismissible {
+        padding-right:32px;
+        
+        .close {
+            margin-top:0px;
+        }
+    }
+
+.alert-success {
+    background-color: #E5F8CE;
+    border-color: #D6E9C6;
+    color: #333333;
+}
+
+.alert-error {
+    @extend .alert-danger;
+    &.page {
+        margin: 0 0 20px;
+    }  
+    
+    p {
+        @extend .text-danger;
+    }  
+}
+
+.alert-warning {
+   a {
+        color: #134b96;
+    }
+}
+
+.alert-hd {
+        font-weight: bold;
+    }
+
+.text-error {
+    @extebd .text-danger;
+}

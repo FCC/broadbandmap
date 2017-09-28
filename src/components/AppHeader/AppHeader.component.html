@@ -1,0 +1,29 @@
+<header class="site-header" role="banner">
+  <nav role="navigation">
+    <div class="navbar navbar-default navbar-primary">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <h1 class="navbar-brand">
+            <a title="Home" href="http://fcc.gov" class="navbar-logo">
+              <span class="sr-only">Federal Communications Commission</span>
+            </a>
+          </h1>
+        </div>
+        <ul id="menu-primary" class="nav navbar-nav nav-offcanvas-right" aria-hidden="false">
+          <li>
+            <a href="#">
+                <strong class="title-emphasis">Fixed Broadband Deployment Data</strong>
+                            <span style="display: block; color: #fff; font-size: 11px; font-weight: normal; margin-top: -40px; position: relative; text-align: right; text-transform: uppercase;">Prototype</span>
+            </a>
+          </li>
+        </ul>
+        <div class="navbar-controls">
+          <button class="btn hamburger navbar-btn btn-toggle-menu" type="button" data-toggle-direction="right" data-toggle="offcanvas">
+            <span class="btn-inner btn-inner-menu"><span class="sr-only">Menu</span></span>
+          </button>
+        </div>
+      </div>
+    </div>
+    <navbar-secondary v-show="!isHome"></navbar-secondary>         
+  </nav>
+</header>

@@ -1,0 +1,41 @@
+// Paths for compilation.
+
+// Core variables and mixins
+@import "bootstrap-gisp/_variables"; 
+@import "mixins";
+
+// Reset and dependencies
+@import "normalize";
+@import "print";
+@import "font-awesome/font-awesome"; 
+
+// Core CSS
+@import "scaffolding";
+@import "bootstrap-gisp/_type"; 
+@import "grid";
+@import "tables";
+@import "forms";
+@import "buttons";
+
+// Components
+@import "component-animations";
+@import "dropdowns";
+@import "button-groups";
+@import "input-groups";
+@import "navs"; 
+@import "navbar";
+@import "bootstrap-gisp/_alerts"; 
+@import "panels";
+@import "close";
+
+// Components w/ JavaScript
+@import "modals";
+@import "tooltip";
+
+
+// Utility classes
+@import "utilities";
+@import "responsive-utilities";
+
+// Custom components
+// @import "custom/_datatables";

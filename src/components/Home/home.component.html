@@ -1,0 +1,34 @@
+<div class="map-home">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-sm-12">
+        <a id="main-content" class="sr-only" tabindex="0"></a>
+        <form>
+          <div class="panel-home panel panel-default">
+            <div class="panel-heading">
+              <h2 class="panel-title">Learn About Broadband Data</h2>
+            </div>
+            <div class="panel-body">
+              <label for="addr">Enter a Location</label>
+              <div class="input-group input-group-lg">
+                <span class="input-group-addon"><span class="icon icon-map-marker"></span></span>
+                <input id="addr" type="text" class="form-control input-lg" placeholder="Enter an address">
+                <span class="input-group-btn">                 
+                  <router-link class="btn btn-default" to="location-summary"><span class="icon icon-search"></span><span class="sr-only">Search</span></router-link>
+                </span>
+              </div>
+            </div>
+            <div class="panel-footer">
+              <p>Explore the Data</p>
+              <router-link class="btn btn-lg btn-link" to="/area-summary"><span class="icon icon-map-o"></span>Area</router-link>
+              <router-link class="btn btn-lg btn-link" to="/provider-detail"><span class="icon icon-users"></span>Providers</router-link>
+              <router-link class="btn btn-lg btn-link" to="/area-comparison"><span class="icon icon-table"></span>Comparison</router-link>
+              <router-link class="btn btn-lg btn-link" to="/data-download"><span class="icon icon-cloud-download"></span>Download</router-link>
+              <router-link class="btn btn-lg btn-link" to="/about"><span class="icon icon-info-circle"></span>About</router-link>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
