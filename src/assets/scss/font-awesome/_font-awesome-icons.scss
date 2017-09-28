@@ -1,0 +1,59 @@
+/* Font Awesome uses the Unicode Private Use Area (PUA) to ensure screen
+   readers do not read off random characters that represent icons */
+
+.#{$fa-css-prefix}-external-link-square:before { content: $fa-var-external-link-square; }
+.#{$fa-css-prefix}-search:before { content: $fa-var-search; }
+.#{$fa-css-prefix}-caret-right:before { content: $fa-var-caret-right; }
+.#{$fa-css-prefix}-caret-down:before { content: $fa-var-caret-down; }
+.#{$fa-css-prefix}-location-arrow:before { content: $fa-var-location-arrow; }
+.#{$fa-css-prefix}-globe:before { content: $fa-var-globe; }
+.#{$fa-css-prefix}-close:before,
+.#{$fa-css-prefix}-times:before, .#{$fa-css-prefix}-error:before { content: $fa-var-times; }
+.#{$fa-css-prefix}-list:before { content: $fa-var-list; }
+
+.#{$fa-css-prefix}-file-code-o:before { content: $fa-var-file-code-o; }
+.#{$fa-css-prefix}-code:before { content: $fa-var-code; }
+.#{$fa-css-prefix}-database:before { content: $fa-var-database; }
+.#{$fa-css-prefix}-question:before { content: $fa-var-question; }
+.#{$fa-css-prefix}-external-link-square:before { content: $fa-var-external-link-square; }
+
+.#{$fa-css-prefix}-sort:before { content: $fa-var-sort; }
+.#{$fa-css-prefix}-sort-down:before,
+.#{$fa-css-prefix}-sort-desc:before { content: $fa-var-sort-desc; }
+.#{$fa-css-prefix}-sort-up:before,
+.#{$fa-css-prefix}-sort-asc:before { content: $fa-var-sort-asc; }
+
+.#{$fa-css-prefix}-file-pdf-o:before { content: $fa-var-file-pdf-o; }
+.#{$fa-css-prefix}-info-circle:before { content: $fa-var-info-circle; }
+.#{$fa-css-prefix}-question-circle-o:before { content: $fa-var-question-circle-o; }
+.#{$fa-css-prefix}-question-circle:before { content: $fa-var-question-circle; }
+.#{$fa-css-prefix}-paperclip:before { content: $fa-var-paperclip; }
+.#{$fa-css-prefix}-sign-out:before { content: $fa-var-sign-out; }
+
+.#{$fa-css-prefix}-check:before { content: $fa-var-check; }
+.#{$fa-css-prefix}-exclamation-triangle:before { content: $fa-var-exclamation-triangle; }
+.#{$fa-css-prefix}-arrow-right:before { content: $fa-var-arrow-right; }
+
+.#{$fa-css-prefix}-map-marker:before { content: $fa-var-map-marker; }
+.#{$fa-css-prefix}-map-o:before { content: $fa-var-map-o; }
+
+.#{$fa-css-prefix}-cloud-download:before { content: $fa-var-cloud-download; }
+
+.#{$fa-css-prefix}-users:before { content: $fa-var-users; }
+
+.#{$fa-css-prefix}-table:before { content: $fa-var-table; }
+
+.#{$fa-css-prefix}-gear:before,
+.#{$fa-css-prefix}-cog:before { content: $fa-var-cog; }
+.#{$fa-css-prefix}-circle:before { content: $fa-var-circle; }
+
+.#{$fa-css-prefix}-chevron-left:before { content: $fa-var-chevron-left; }
+.#{$fa-css-prefix}-chevron-right:before { content: $fa-var-chevron-right; }
+
+
+.#{$fa-css-prefix}-info-circle:before { content: $fa-var-info-circle; }
+.#{$fa-css-prefix}-info:before { content: $fa-var-info; }
+
+.#{$fa-css-prefix}-bookmark:before { content: $fa-var-bookmark; }
+
+.#{$fa-css-prefix}-filter:before { content: $fa-var-filter; }

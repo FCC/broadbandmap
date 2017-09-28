@@ -1,41 +1,50 @@
-Application Name as Headline
-======
-**Application Name** is an application for things. Short description here of what the application does. This section may include who the stakeholders, business owner/unit etc. are.
+# NBM2
 
-#### Screenshot
-<img width="428" alt="screen shot 2016-11-17 at 1 25 33 pm" src="https://cloud.githubusercontent.com/assets/23366275/20402128/7fb342cc-acc9-11e6-9c4a-8542b967c64e.png">
+### Local Setup
+Prerequisites: Node.js (>=6.x), npm version 3+ and Git.
 
-## System Requirements
- Software name and version 
+1. Clone the repository.
 
-## Setup and How-to use this code
- Download
-* [Version X.Y](https://github.com/username/sw-name/archive/master.zip)
-* Other Versions
-* see [INSTRUCTIONS](https://github.com/username/sw-name/blob/master/INSTRUCTIONS.md) file for instructions to install, configure, and to run the programs
+2. Install node modules.  
 
-## Change Management
-* See intructions for submitting bugs, feature requests, join mailing lists, get announcements...
+   ```
+   npm install
+   ```
 
+3. Test the app. 
 
-## Contributors
+   Unit and End-to-end tests
+   ```
+   npm test
+   ```
 
-### Contributors on GitHub
-* [Contributors](https://github.com/username/sw-name/graphs/contributors)
+   Unit tests
+   ```
+   npm run unit
+   ```
+   
+   End-to-end test
+   ```
+   npm run e2e
+   ```
+   
+   Lint
+   ```
+   npm run lint
+   ```
+   
+4. Run the app.
 
+   Local
+   ```
+   npm start
+   ```   
 
-### Third party libraries
-* see [LIBRARIES](https://github.com/username/sw-name/blob/master/LIBRARIES.md) files
-
-## License Information
-* see [LICENSE](https://github.com/username/sw-name/blob/master/LICENSE.md) file
-
-## Version 
-* Version X.Y
-
-
-## Contact
-#### Developer/Team
-* e-mail: 
-* Twitter: [@twitterhandle](https://twitter.com/twitterhandle "twitterhandle on twitter")
-* other communication/social media
+### Deployment
+1. Build the app.
+   ```
+   npm run build
+   ```   
+   
+### Project Info
+[NBM2 JIRA Project](https://jira.fcc.gov/browse/GISNBM2/)

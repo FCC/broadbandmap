@@ -1,0 +1,43 @@
+.container-fluid,
+.container {
+    transition: width 0.5s
+}
+
+main,
+header .container-fluid {
+    width: 100%;
+}
+
+main {
+    // padding-bottom: 50px;
+    position: relative
+}
+
+h1 {
+    font-size: 30px;
+    font-weight: 500;
+}
+
+a {
+    &:focus {
+        outline: thin dotted;
+    }
+    &[href]:after {
+        @media print {
+            content: none !important;
+        }
+    }
+}
+
+.text-overflow {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.sr-only.focusable:focus {
+    position: static !important;
+    clip: auto;
+    overflow: visible;
+    height: auto;
+}
