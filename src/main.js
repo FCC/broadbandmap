@@ -4,7 +4,7 @@ import Vue from 'vue'
 import App from './App'
 
 import router from './router'
-import './assets/scss/gisp-theme.scss'
+import './assets/scss/app-theme.scss'
 
 Vue.config.productionTip = false
 

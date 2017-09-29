@@ -1,0 +1,45 @@
+/* Map Legend */
+.map-legend {
+  font-size: 12px;  
+  li {
+    margin-bottom: 5px;
+  }  
+}
+
+.key-symbol {
+  border: solid 1px #ccc;
+  display: inline-block;
+  height: 20px;
+  opacity: 1.0;
+  vertical-align: middle;
+  width: 20px;
+}
+
+
+/*  Map Sidebar */
+.map-sidebar {
+    h2 {
+        font-size: 16px;
+    }
+    
+    .table {
+        margin-bottom: 40px;
+    }
+}
+
+.nav-sidebar {
+    font-size: 20px;
+    float: none;
+    margin-top: 0;
+    @media (min-width: 1200px) {
+        float: right;
+        margin-top: 13px;
+    }
+    a+a {
+        margin-left: 10px;
+        vertical-align: text-bottom;
+    }
+    .icon {
+        margin: 0;
+    }
+}
