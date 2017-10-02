@@ -1,5 +1,8 @@
-<div class="col-xs-12 col-sm-12 col-md-4">
-  <aside class="map-sidebar">
+<div id="mapSidebar" class="map-sidebar col-xs-12 col-sm-12 col-md-4" v-bind:class="{ 'hide-pane': hidePane }">
+  <button class="btn-toggle btn btn-default btn-lg" v-on:click="toggle()" v-bind:aria-controls="'mapSidebar'" v-bind:aria-expanded="hidePane ? 'false':'true'">
+    <span class="icon" v-bind:class="{ 'icon-caret-left': hidePane, 'icon-caret-right': !hidePane }"></span><span class="sr-only">Show/hide sidebar</span>
+  </button>
+  <aside>    
     <section>
       <div class="row">
         <div class="col-sm-12 col-lg-9">

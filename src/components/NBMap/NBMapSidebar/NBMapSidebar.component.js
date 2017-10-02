@@ -1,3 +1,5 @@
+import EventHub from '../../../_mixins/EventHub.js'
+
 export default {
   name: 'nbMapSidebar',
   props: [],
@@ -6,11 +8,15 @@ export default {
   },
   data () {
     return {
-
+      hidePane: false
     }
   },
   methods: {
+    toggle: function () {
+      this.hidePane = !this.hidePane
 
+      EventHub.$emit('toggleSidebar', this.hidePane)
+    }
   },
   computed: {
 

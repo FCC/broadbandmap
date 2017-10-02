@@ -6,7 +6,7 @@ describe('NBMapSidebar.vue', () => {
     const Constructor = Vue.extend(NBMapSidebar)
     const vm = new Constructor().$mount()
 
-    expect(vm.$el.querySelector('aside').className)
-      .to.equal('map-sidebar')
+    expect(vm.$el.querySelector('aside'))
+      .to.exist
   })
 })

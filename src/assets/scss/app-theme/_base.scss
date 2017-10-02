@@ -1,8 +1,21 @@
+/* Container */
 .container-fluid,
 .container {
     transition: width 0.5s
 }
 
+.outer-container {
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+}
+
+.inner-container {
+    position: relative;
+    width: 100%;
+}
+
+/* Base element Styles */
 main,
 header .container-fluid {
     width: 100%;
@@ -29,6 +42,7 @@ a {
     }
 }
 
+/* Helpers */
 .text-overflow {
     overflow: hidden;
     text-overflow: ellipsis;
