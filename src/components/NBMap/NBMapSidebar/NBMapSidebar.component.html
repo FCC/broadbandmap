@@ -1,8 +1,10 @@
 <div id="mapSidebar" class="map-sidebar col-xs-12 col-sm-12 col-md-4" v-bind:class="{ 'hide-pane': hidePane }">
-  <button class="btn-toggle btn btn-default btn-lg" v-on:click="toggle()" v-bind:aria-controls="'mapSidebar'" v-bind:aria-expanded="hidePane ? 'false':'true'">
-    <span class="icon" v-bind:class="{ 'icon-caret-left': hidePane, 'icon-caret-right': !hidePane }"></span><span class="sr-only">Show/hide sidebar</span>
-  </button>
-  <aside>    
+  <tooltip :text="toggleText" placement="left" trigger="hover" :enable="toggleTooltip">
+    <button class="btn-toggle btn btn-default btn-lg" @click="toggle" v-bind:aria-controls="'mapSidebar'" v-bind:aria-expanded="hidePane ? 'false':'true'">
+      <span class="icon" v-bind:class="{ 'icon-caret-left': hidePane, 'icon-caret-right': !hidePane }"></span><span class="sr-only">Show/hide sidebar</span>
+    </button>
+  </tooltip>
+  <aside>
     <section>
       <div class="row">
         <div class="col-sm-12 col-lg-9">
@@ -11,8 +13,14 @@
         </div>
         <div class="col-sm-12 col-lg-3">
           <div class="nav-sidebar">
-            <a href="#"><span class="icon icon-cloud-download" title="Download data"></span><span class="sr-only">Download Data</span></a>
-            <a href="#"><span class="icon icon-bookmark" title="Bookmark this map"></span></span><span class="sr-only">Bookmark this map</span></a>
+            <div class="nav-links">
+              <tooltip text="Download data" placement="left">
+                <a href="#"><span class="icon icon-cloud-download"></span><span class="sr-only">Download Data</span></a>
+              </tooltip>
+              <tooltip text="Bookmark this page" placement="left">
+                <a href="#"><span class="icon icon-bookmark"></span></span><span class="sr-only">Bookmark this map</span></a>
+              </tooltip>
+            </div>
           </div>
         </div>
       </div>
