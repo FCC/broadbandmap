@@ -15,7 +15,7 @@ module.exports = function (config) {
     client: {
       captureConsole: true
     },
-    frameworks: ['mocha', 'sinon-chai', 'phantomjs-shim'],
+    frameworks: ['mocha', 'chai-dom', 'sinon-chai', 'phantomjs-shim'],
     reporters: ['spec', 'coverage', 'html'],
     files: ['./index.js', '../../src'],
     exclude: [

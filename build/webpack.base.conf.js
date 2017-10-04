@@ -11,6 +11,9 @@ module.exports = {
   entry: {
     app: './src/main.js'
   },
+  externals: {
+    mapboxgl: 'mapboxgl'
+  },
   output: {
     path: config.build.assetsRoot,
     filename: '[name].js',

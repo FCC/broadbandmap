@@ -1,0 +1,24 @@
+.table {
+	font-size: 14px
+}
+
+.sorting {
+	.icon-sorting {
+		font-size: 12px;
+	}
+    .icon-sorting:before {
+        content: $fa-var-sort;
+    }
+}
+
+.sorting_asc {
+    .icon-sorting:before {
+        content: $fa-var-sort-asc;
+    }
+}
+
+.sorting_desc {
+    .icon-sorting:before {
+        content: $fa-var-sort-desc;
+    }
+}
