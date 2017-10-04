@@ -12,7 +12,13 @@
               <label for="addr">Enter a Location</label>
               <div class="input-group input-group-lg">
                 <span class="input-group-addon"><span class="icon icon-map-marker"></span></span>
+                <!-- Todo: Incorporate this CSS styling:
                 <input id="addr" type="text" class="form-control input-lg" placeholder="Enter an address">
+                -->
+
+                <!-- Custom Vue component -->
+                <Autocomplete></Autocomplete>
+
                 <span class="input-group-btn">                 
                   <router-link class="btn btn-default" to="location-summary"><span class="icon icon-search"></span><span class="sr-only">Search</span></router-link>
                 </span>
