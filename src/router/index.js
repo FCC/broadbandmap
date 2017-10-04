@@ -10,8 +10,9 @@ import About from '@/components/About/'
 
 Vue.use(Router)
 
-export default new Router({
-  mode: 'history',
+const titleText = ' | Fixed Broadband Deployment Data | Federal Communications Commission'
+
+const router = new Router({
   base: '/nbm2/DEV/',
   linkExactActiveClass: 'active',
   routes: [
@@ -59,3 +60,10 @@ export default new Router({
     }
   ]
 })
+
+router.beforeEach((to, from, next) => {
+  document.title = to.meta.title + titleText
+  next()
+})
+
+export default router
