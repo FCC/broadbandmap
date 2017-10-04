@@ -10,7 +10,7 @@
       :force-select="false"
       :open-on-focus="openOnFocus"
       >
-      <input data-role="input" class="form-control" type="text">
+      <input data-role="input" class="form-control" type="text" :placeholder="placeholderText">
     </typeahead>
     <br/>
     <div class="alert alert-info">
@@ -28,6 +28,7 @@
     components: {
       Typeahead: Typeahead
     },
+    props: ['placeholderText'],
     data () {
       return {
         modelVar: '',
