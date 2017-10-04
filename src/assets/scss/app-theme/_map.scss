@@ -3,10 +3,10 @@
 .map.container-fluid {
   overflow: hidden;
   position: relative;
-    @media (min-width: 992px) {
-      padding-left: 0;
-    }
+  @media (min-width: 992px) {
+    padding-left: 0;
   }
+}
 
 .map-wrapper {
   &.full-width {
@@ -23,6 +23,7 @@
   width: 100%;
 }
 
+
 /* Search bar */
 
 .search-wrapper {
@@ -30,54 +31,64 @@
   box-shadow: none;
   margin: 0 0 20px;
   max-width: 100%;
-  padding: 0;
-  position: relative;
+  padding: 0; // position: relative;
   top: 10px;
-  z-index: 2;
+  z-index: 3;
   @media(min-width: 768px) {
-    box-shadow: 0 2px 4px rgba(0,0,0,0.2), 0 -1px 0px rgba(0,0,0,0.02);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2), 0 -1px 0px rgba(0, 0, 0, 0.02);
     margin: 0 75px 0 60px;
     max-width: 700px;
     padding: 5px;
     position: absolute;
     top: 10px;
   }
-  .btn, input {
+  .btn,
+  input {
     border: 1px solid #ccc;
     @media(min-width: 768px) {
-      border: none;  
+      border: none;
     }
   }
   input {
     border-right: 0;
     box-shadow: none;
   }
-  &.input-group input, .input-group-btn .btn {
+  &.input-group input,
+  .input-group-btn .btn {
     font-size: 14px;
+    height: 46px;
     padding: 6px 12px;
-    @media(min-width: 480px) { 
+    @media(min-width: 480px) {
       font-size: 18px;
       padding: 10px 16px;
     }
   }
-  .map-settings {
-    margin: 64px -100px;
-    position: absolute;
-    @media(min-width: 480px) { 
-       margin: 64px -125px;
-    }
-    @media(min-width: 768px) {
-      position: relative;
+  .dropdown .btn:first-of-type {
+    border-right: 0;
+    margin-right: -1px;
+  }
+  .dropdown-toggle {
+    span:first-child {
+      text-overflow: ellipsis;
+      max-width: 54px;
+      overflow: hidden;
+      display: inline-block;
+      vertical-align: middle;
+
+      @media(min-width: 480px) {
+        max-width: none;
+      }
     }
   }
+
   .divider {
-    display: none; 
-    vertical-align: middle; 
+    display: none;
+    vertical-align: middle;
     width: 1px;
     div {
-       border-right: 1px solid #ccc; 
-       height: 35px; 
-       margin: 0 10px;
+      border-right: 1px solid #ccc;
+      height: 35px;
+      margin: 0 10px;
     }
     @media(min-width: 768px) {
       display: table-cell;
@@ -85,19 +96,53 @@
   }
 }
 
-/* Map Controls */
-.mapboxgl-ctrl-group > .mapboxgl-ctrl-compass {
-  display: none;
+.map-settings {
+  margin: 64px -100px;
+  position: absolute;
+  @media(min-width: 480px) {
+    margin: 64px -125px;
+  }
+  @media(min-width: 768px) {
+    position: relative;
+  }
+  .dropdown {
+    display: inline-block;
+    .btn {
+      height: 46px;
+    }
+  }
+  .btn-settings.dropdown-toggle {
+    padding-top: 6px;
+  }
 }
 
-.mapboxgl-ctrl-top-left {    
-    &.custom {
-      top: 80px;
-      .icon {
-        font-size: 14px;
-        margin: 0;
-      }
+
+/* Map Controls */
+
+.mapboxgl-ctrl-group {
+  box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.1);
+  >.mapboxgl-ctrl-compass {
+    display: none;
+  }
+}
+
+.mapboxgl-ctrl {
+  &.mapboxgl-ctrl-group {
+    border-radius: 0; // box-shadow: none;
+  }
+}
+
+.mapboxgl-ctrl-top-left {
+  &.custom {
+    top: 100px;
+    .btn-nationwide {
+      // border-top: 1px solid #ddd;
     }
+    .icon {
+      font-size: 18px;
+      margin: 0;
+    }
+  }
 }
 
 /*  Map Sidebar */
@@ -131,7 +176,7 @@
   h2 {
     font-size: 16px;
   }
-  
+
   &.hide-pane {
     @media(min-width: 992px) {
       position: absolute;
@@ -151,7 +196,10 @@
     float: right;
     margin-top: 13px;
   }
-  a+a {
+}
+
+.nav-links {
+  a:last-child {
     margin-left: 10px;
     vertical-align: text-bottom;
   }
@@ -166,6 +214,7 @@
   margin: 20px 0;
   padding: 20px 0;
 }
+
 
 /* Map Legend */
 
