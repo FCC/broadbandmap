@@ -2,7 +2,7 @@
   <section class="container-fluid">
     <typeahead ref="typeahead2"
       v-model="modelVar"
-      :async-src="'https://api.mapbox.com/geocoding/v5/mapbox.places/' + encodeURIComponent(modelVar) + '.json?country=us&access_token=pk.eyJ1IjoiZmNjIiwiYSI6IktmWXZja00ifQ.GEwhTOZ-sw8BSJK7Q17S_Q&'"
+      :async-src="'https://api.mapbox.com/geocoding/v5/mapbox.places/' + encodeURIComponent(modelVar) + '.json?country=us&access_token=pk.eyJ1IjoiY29tcHV0ZWNoIiwiYSI6InMyblMya3cifQ.P8yppesHki5qMyxTc2CNLg&'"
       async-key="features"
       item-key="place_name"
       :ignore-case="ignoreCase"
