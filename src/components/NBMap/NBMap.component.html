@@ -1,3 +1,17 @@
-<div class="col-xs-12 col-sm-12 col-md-8">
-  <h1>Map</h1>
+<div class="map-wrapper col-xs-12 col-sm-12 col-md-8" v-bind:class="{ 'full-width': toggleWidth }">
+  <nb-map-search :type="type" :defaultSearch="defaultSearch"></nb-map-search>
+  <div id="map-location">
+    <div class="mapboxgl-control-container">
+      <div id="btn-custom" class="custom mapboxgl-ctrl-top-left">
+        <div class="mapboxgl-ctrl mapboxgl-ctrl-group">                                
+            <button class="btn-nationwide mapboxgl-ctrl-icon" type="button" @click="viewNationwide">
+              <tooltip text="Nationwide" placement="right" trigger="hover">
+                <span class="icon icon-globe"></span>
+                <span class="sr-only">Nationwide</span>
+              </tooltip>
+            </button>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
