@@ -1,5 +1,5 @@
 <section class="container-fluid">
-    <typeahead ref="typeahead2"
+    <Typeahead ref="typeahead2"
         v-model="modelVar"
         :async-src="'https://api.mapbox.com/geocoding/v5/mapbox.places/' + encodeURIComponent(modelVar) + '.json?country=us&limit=10&access_token=pk.eyJ1IjoiY29tcHV0ZWNoIiwiYSI6InMyblMya3cifQ.P8yppesHki5qMyxTc2CNLg&'"
         async-key="features"
@@ -10,7 +10,7 @@
         :open-on-focus="openOnFocus"
         >
         <input data-role="input" class="form-control" type="text" :placeholder="placeholderText">
-    </typeahead>
+    </Typeahead>
     <br/>
     <div class="alert alert-info">
         <p v-if="modelVar">You selected: {{modelVar}}</p>
