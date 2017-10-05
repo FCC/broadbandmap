@@ -1,19 +1,19 @@
 <section class="container-fluid">
-<typeahead ref="typeahead2"
-    v-model="modelVar"
-    :async-src="'https://api.mapbox.com/geocoding/v5/mapbox.places/' + encodeURIComponent(modelVar) + '.json?country=us&limit=10&access_token=pk.eyJ1IjoiY29tcHV0ZWNoIiwiYSI6InMyblMya3cifQ.P8yppesHki5qMyxTc2CNLg&'"
-    async-key="features"
-    item-key="place_name"
-    :ignore-case="ignoreCase"
-    :match-start="matchStart"
-    :force-select="false"
-    :open-on-focus="openOnFocus"
-    >
-    <input data-role="input" class="form-control" type="text" :placeholder="placeholderText">
-</typeahead>
-<br/>
-<div class="alert alert-info">
-    <p v-if="modelVar">You selected: {{modelVar}}</p>
-    <p v-else>Please select an item.</p>
-</div>
+    <typeahead ref="typeahead2"
+        v-model="modelVar"
+        :async-src="'https://api.mapbox.com/geocoding/v5/mapbox.places/' + encodeURIComponent(modelVar) + '.json?country=us&limit=10&access_token=pk.eyJ1IjoiY29tcHV0ZWNoIiwiYSI6InMyblMya3cifQ.P8yppesHki5qMyxTc2CNLg&'"
+        async-key="features"
+        item-key="place_name"
+        :ignore-case="ignoreCase"
+        :match-start="matchStart"
+        :force-select="false"
+        :open-on-focus="openOnFocus"
+        >
+        <input data-role="input" class="form-control" type="text" :placeholder="placeholderText">
+    </typeahead>
+    <br/>
+    <div class="alert alert-info">
+        <p v-if="modelVar">You selected: {{modelVar}}</p>
+        <p v-else>Please select an item.</p>
+    </div>
 </section>

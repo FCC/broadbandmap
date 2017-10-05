@@ -5,14 +5,14 @@ export default {
 components: {
     Typeahead: Typeahead
 },
-props: ['placeholderText'],
+    props: ['placeholderText'],
     data () {
         return {
-        modelVar: '',
-        itemKey: 'name',
-        ignoreCase: true,
-        matchStart: false,
-        openOnFocus: false
+            modelVar: '',
+            itemKey: 'name',
+            ignoreCase: true,
+            matchStart: false,
+            openOnFocus: false
         }
     }
 }
