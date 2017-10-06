@@ -8,7 +8,7 @@ export default {
     let srchType = this.searchTypes[this.type]
 
     this.searchLabel = srchType[this.defaultSearch].label
-    this.searchOptsList = srchType    
+    this.searchOptsList = srchType
   },
   data () {
     return {
@@ -20,7 +20,7 @@ export default {
       searchTypes: {
         location: {
           'Address': {
-            'label': 'Address',            
+            'label': 'Address',
             'placeholderText': 'Enter address'
           },
           'Coordinates': {
@@ -59,26 +59,26 @@ export default {
     }
   },
   methods: {
-    toggleSearchType: function(selectedVal) {
+    toggleSearchType: function (selectedVal) {
       let selectedOpt = this.searchTypes[this.type][selectedVal]
-      
+
       this.searchType = selectedVal
-      this.searchLabel = selectedOpt.label      
+      this.searchLabel = selectedOpt.label
     }
   },
   computed: {
-    getPlaceholderText: function() {
+    getPlaceholderText: function () {
       let srchType = this.searchTypes[this.type][this.searchType]
 
       return srchType.hasOwnProperty('placeholderText') ? srchType.placeholderText : 'Enter ' + srchType.label
     },
-    getTooltipText: function() {
+    getTooltipText: function () {
       let srchType = this.searchTypes[this.type][this.searchType]
       let hasTooltip = srchType.hasOwnProperty('tooltipText')
 
       this.enableTooltip = hasTooltip
 
-      if (hasTooltip) {       
+      if (hasTooltip) {
         return srchType.tooltipText
       }
     }
