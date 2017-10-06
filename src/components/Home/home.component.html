@@ -4,17 +4,14 @@
       <div class="col-sm-12">
         <a id="main-content" class="sr-only" tabindex="0"></a>
         <form>
-          <div class="panel-home panel panel-default">
+          <div class="panel-home panel-search panel panel-default">
             <div class="panel-heading">
-              <h2 class="panel-title">Learn About Broadband Data</h2>
+              <h2 class="panel-title">Get Broadband Data by Location</h2>
             </div>
             <div class="panel-body">
-              <label for="addr">Enter a Location</label>
+              <label class="sr-only" for="addr">Enter a Location</label>
               <div class="input-group input-group-lg">
                 <span class="input-group-addon"><span class="icon icon-map-marker"></span></span>
-                <!-- Todo: Incorporate this CSS styling:
-                <input id="addr" type="text" class="form-control input-lg" placeholder="Enter an address">
-                -->
 
                 <!-- Custom Vue component -->
                 <Autocomplete placeholderText="Enter an address"></Autocomplete>
@@ -24,13 +21,63 @@
                 </span>
               </div>
             </div>
-            <div class="panel-footer">
-              <p>Explore the Data</p>
-              <router-link class="btn btn-lg btn-link" to="/area-summary"><span class="icon icon-map-o"></span>Area</router-link>
-              <router-link class="btn btn-lg btn-link" to="/provider-detail"><span class="icon icon-users"></span>Providers</router-link>
-              <router-link class="btn btn-lg btn-link" to="/area-comparison"><span class="icon icon-table"></span>Comparison</router-link>
-              <router-link class="btn btn-lg btn-link" to="/data-download"><span class="icon icon-cloud-download"></span>Download</router-link>
-              <router-link class="btn btn-lg btn-link" to="/about"><span class="icon icon-info-circle"></span>About</router-link>
+          </div>
+          <div class="panel-browse panel panel-default">
+            <div class="panel-heading">
+              <h3 class="panel-title">Explore the Data</h3>
+            </div>
+            <div class="panel-body">
+              <div class="row">
+                <div class="col-sm-4">
+                  <router-link class="btn btn-lg btn-default" to="/location-summary">
+                    <span class="icon-box">
+                      <span class="icon icon-map-o"></span>
+                    </span>
+                    <span class="text-label">Location</span>
+                  </router-link>
+                </div>
+                <div class="col-sm-4">
+                  <router-link class="btn btn-lg btn-default" to="/area-summary">
+                    <span class="icon-box">
+                        <span class="icon icon-map-o"></span>
+                    </span>
+                    <span class="text-label">Area</span>
+                  </router-link>
+                </div>
+                <div class="col-sm-4">
+                  <router-link class="btn btn-lg btn-default" to="/provider-detail">
+                    <span class="icon-box">
+                        <span class="icon icon-users"></span>
+                    </span>
+                    <span class="text-label">Providers</span>
+                  </router-link>
+                </div>
+              
+                <div class="col-sm-4">
+                  <router-link class="btn btn-lg btn-default" to="/area-comparison">
+                    <span class="icon-box">
+                        <span class="icon icon-table"></span>
+                    </span>
+                    <span class="text-label">Comparison</span>
+                  </router-link>
+                </div>
+                <div class="col-sm-4">
+                  <router-link class="btn btn-lg btn-default" to="/data-download">
+                    <span class="icon-box">
+                        <span class="icon icon-cloud-download"></span>
+                    </span>
+                    <span class="text-label">Download</span>
+                  </router-link>
+                </div>
+                <div class="col-sm-4">
+                  <router-link class="btn btn-lg btn-default" to="/about">
+                    <span class="icon-box">
+                        <span class="icon icon-info-circle"></span>
+                    </span>
+                    <span class="text-label">About</span>
+                  </router-link>
+                </div>
+              </div>
             </div>
           </div>
         </form>
