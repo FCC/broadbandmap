@@ -1,7 +1,7 @@
 .map-home {
   background: radial-gradient(ellipse at center, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0) 70%), url('../../assets/images/us-map-bg.png') center center no-repeat fixed;
   background-size: cover;
-  padding-bottom: 0;
+  min-height: 75vh;
 }
 
 form {
@@ -181,10 +181,11 @@ form {
     display: table-cell;
     margin-right: 10px;
     padding: 16px;
+    text-align: center;
     width: 63px;
   }
 
   .icon {
     font-size: 24px;
-  }  
+  }
 }
