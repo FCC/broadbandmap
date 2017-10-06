@@ -121,27 +121,37 @@
 
 .mapboxgl-ctrl-group {
   box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.1);
-  >.mapboxgl-ctrl-compass {
+  /* >.mapboxgl-ctrl-compass {
     display: none;
-  }
+  } */
+  .dropdown-toggle {
+    width: 30px;
+    height: 30px;
+    display: block;
+    padding: 0;
+    outline: none;
+    border: none;
+    border-bottom: 1px solid #ddd;
+    box-sizing: border-box;
+    background-color: rgba(0,0,0,0);
+    cursor: pointer;
+}
 }
 
 .mapboxgl-ctrl {
   &.mapboxgl-ctrl-group {
-    border-radius: 0; // box-shadow: none;
+    border-radius: 0;
+    overflow: visible;
+  }
+  &.custom {
+    margin-top: 0;
   }
 }
 
-.mapboxgl-ctrl-top-left {
-  &.custom {
-    top: 100px;
-    .btn-nationwide {
-      // border-top: 1px solid #ddd;
-    }
-    .icon {
-      font-size: 18px;
-      margin: 0;
-    }
+.mapboxgl-ctrl-top-left {  
+  .icon {
+    font-size: 18px;
+    margin: 0;
   }
 }
 

@@ -1,17 +1,33 @@
 <div class="map-wrapper col-xs-12 col-sm-12 col-md-8" v-bind:class="{ 'full-width': toggleWidth }">
   <nb-map-search :type="type" :defaultSearch="defaultSearch"></nb-map-search>
   <div id="map-location">
-    <div class="mapboxgl-control-container">
-      <div id="btn-custom" class="custom mapboxgl-ctrl-top-left">
-        <div class="mapboxgl-ctrl mapboxgl-ctrl-group">                                
-            <button class="btn-nationwide mapboxgl-ctrl-icon" type="button" @click="viewNationwide">
-              <tooltip text="Nationwide" placement="right" trigger="hover">
-                <span class="icon icon-globe"></span>
-                <span class="sr-only">Nationwide</span>
-              </tooltip>
-            </button>
-        </div>
-      </div>
+    <div id="btn-custom" class="custom mapboxgl-ctrl mapboxgl-ctrl-group">
+      <button class="btn-nationwide mapboxgl-ctrl-icon" type="button" @click="viewNationwide">
+        <tooltip text="Nationwide" placement="right" trigger="hover">
+          <span class="icon icon-globe"></span>
+          <span class="sr-only">Nationwide</span>
+        </tooltip>
+      </button>
+    </div>
+    <div id="btn-layerSwitch" class="mapboxgl-ctrl mapboxgl-ctrl-group">
+      <dropdown>
+        <button class="mapboxgl-ctrl-icon dropdown-toggle" type="button" data-role="trigger" aria-haspopup="true" aria-expanded="false">
+          <tooltip text="Switch base layer" placement="right" trigger="hover">
+            <span class="icon icon-layers"></span>
+            <span class="sr-only">Switch base layer</span>
+          </tooltip>
+        </button>
+        <template slot="dropdown">
+          <li class="radio" v-for="baseLayerName in baseLayerNames">            
+            <div class="radio">
+              <input type="radio" name="layerOpts" :id="baseLayerName" :value="baseLayerName" v-model="defaultBaseLayer" @change="switchBaseLayer(baseLayerName)">
+              <label :for="baseLayerName">
+                {{baseLayerName}}
+              </label>
+            </div>
+          </li>          
+        </template>
+      </dropdown>
     </div>
   </div>
 </div>

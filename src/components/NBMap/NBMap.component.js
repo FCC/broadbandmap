@@ -1,80 +1,116 @@
 import mapboxgl from 'mapboxgl'
-import { Tooltip } from 'uiv'
+import { Dropdown, Tooltip } from 'uiv'
 import nbMapSearch from './NBMapSearch/'
 import EventHub from '../../_mixins/EventHub.js'
 import layers from './layers-location.js'
 
 export default {
   name: 'nbMap',
-  components: { Tooltip, 'nbMapSearch': nbMapSearch },
+  components: { 'Dropdown': Dropdown, 'Tooltip': Tooltip, 'nbMapSearch': nbMapSearch },
   props: ['defaultSearch', 'type'],
-  mounted() {
-    mapboxgl.accessToken = 'pk.eyJ1IjoiY29tcHV0ZWNoIiwiYSI6InMyblMya3cifQ.P8yppesHki5qMyxTc2CNLg'
-
-    let map = new mapboxgl.Map({
-      container: 'map-location',
-      style: layers,
-      center: [-94.96, 38.82],
-      logoPosition: 'bottom-left',
-      zoom: 3,
-      maxZoom: 10,
-      minZoom: 3
-    })
-
-    // define navigation and geolocation controls
-    const navControl = new mapboxgl.NavigationControl()
-    const geoLocControl = new mapboxgl.GeolocateControl({
-      positionOptions: {
-        enableHighAccuracy: true
-      },
-      trackUserLocation: true
-    })   
-
-    // define custom Nationwide control
-    class MyCustomControl {
-      onAdd(map) {
-        this.map = map;
-        this.container = document.getElementById('btn-custom');        
-        return this.container;
-      }
-      onRemove() {
-        this.container.parentNode.removeChild(this.container);
-        this.map = undefined;
-      }
-    }
-
-    const myCustomControl = new MyCustomControl();
-
-    // add map controls
-    map.addControl(navControl, 'top-left')
-    map.addControl(geoLocControl, 'top-left')
-    map.addControl(myCustomControl, 'top-left');    
-
-    // toggle map full width
-    EventHub.$on('toggleSidebar', data => {
-      let element = document.querySelector('.map-sidebar')
-
-      this.toggleWidth = data
-
-      element.addEventListener('transitionend', function(event) {
-        map.resize()
-      }, false)
-    })
-
-    this.Map = map
+  mounted () {
+    this.$nextTick(this.init)
   },
-  data() {
+  data () {
     return {
+      Map: {},
       toggleWidth: false,
-      Map: {}
+      baseLayerNames: [],
+      defaultBaseLayer: 'dark'
     }
   },
   methods: {
-    viewNationwide: function() {      
+    init: function () {
+      mapboxgl.accessToken = 'pk.eyJ1IjoiY29tcHV0ZWNoIiwiYSI6InMyblMya3cifQ.P8yppesHki5qMyxTc2CNLg'
+
+      let map = new mapboxgl.Map({
+        container: 'map-location',
+        style: layers,
+        center: [-94.96, 38.82],
+        logoPosition: 'bottom-left',
+        zoom: 3,
+        maxZoom: 10,
+        minZoom: 3
+      })
+
+      // define navigation and geolocation controls
+      const navControl = new mapboxgl.NavigationControl()
+      const geoLocControl = new mapboxgl.GeolocateControl({
+        positionOptions: {
+          enableHighAccuracy: true
+        },
+        trackUserLocation: true
+      })
+
+      // define custom Nationwide control
+      class NationwideBtnControl {
+        onAdd (map) {
+          this.map = map
+          this.container = document.getElementById('btn-custom')
+          return this.container
+        }
+        onRemove () {
+          this.container.parentNode.removeChild(this.container)
+          this.map = undefined
+        }
+      }
+
+      const nationwideBtnControl = new NationwideBtnControl()
+
+      // define custom layer switch control
+      class LayerSwitchControl {
+        onAdd (map) {
+          this.map = map
+          this.container = document.getElementById('btn-layerSwitch')
+          return this.container
+        }
+        onRemove () {
+          this.container.parentNode.removeChild(this.container)
+          this.map = undefined
+        }
+      }
+
+      const layerSwitchControl = new LayerSwitchControl()
+
+      // define listener to resize map full width
+      EventHub.$on('toggleSidebar', data => {
+        let element = document.querySelector('.map-sidebar')
+
+        this.toggleWidth = data
+
+        element.addEventListener('transitionend', function (event) {
+          map.resize()
+        }, false)
+      })
+
+      // add controls to map
+      map.addControl(navControl, 'top-left')
+      map.addControl(geoLocControl, 'top-left')
+      map.addControl(nationwideBtnControl, 'top-left')
+      map.addControl(layerSwitchControl, 'top-left')
+
+      // add layer names to lawer switch control
+      this.getLayerNames()
+
+      this.Map = map
+    },
+    getLayerNames: function () {
+      this.baseLayerNames = layers.layers.slice(0, 3).map(baseLayerName => {
+        return baseLayerName.id
+      })
+    },
+    switchBaseLayer: function (layerId) {
+      this.baseLayerNames.map(layerName => {
+        this.Map.setLayoutProperty(layerName, 'visibility', 'none')
+      })
+
+      this.Map.setLayoutProperty(layerId, 'visibility', 'visible')
+    },
+    viewNationwide: function () {
       this.Map.flyTo({
         center: [-94.96, 38.82],
         zoom: 3
-      });
+      })
     }
   },
   computed: {

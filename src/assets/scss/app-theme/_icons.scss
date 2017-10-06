@@ -7,3 +7,14 @@
 		margin-right: 0;
 	}
 }
+
+.icon-layers {
+	opacity: .75;
+	background-image: url(../images/icons-000000@2x.png);
+	background-image: linear-gradient(transparent,transparent),url(../images/mapbox-icons.svg);
+	background-position: 0 -104px;
+	background-repeat: no-repeat;
+	background-size: 26px 260px;
+	height: 26px;
+	width: 26px;
+}
