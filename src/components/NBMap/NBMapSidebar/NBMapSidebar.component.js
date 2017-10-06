@@ -18,14 +18,14 @@ export default {
   methods: {
     toggle: function (event) {
       let thisTooltip = document.querySelectorAll('.tooltip')
-      
-      for(let i=0; i<thisTooltip.length; i++) {
+
+      for (let i = 0; i < thisTooltip.length; i++) {
         thisTooltip[i].parentNode.removeChild(thisTooltip[i])
       }
 
       this.hidePane = !this.hidePane
-      this.toggleText = this.hidePane ? 'Expand sidebar' :'Collapse sidebar'
-            
+      this.toggleText = this.hidePane ? 'Expand sidebar' : 'Collapse sidebar'
+
       EventHub.$emit('toggleSidebar', this.hidePane)
     }
   },

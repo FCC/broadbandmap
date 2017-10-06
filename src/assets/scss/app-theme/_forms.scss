@@ -1,3 +1,19 @@
+label:first-letter {
+	text-transform: capitalize;
+}
+.radio, .checkbox {
+    padding-left: 20px;
+}
+
+.radio label, .checkbox label {
+    padding-left: 0;
+}
+
+// improve checkbox/radio positioning
+input[type="radio"], input[type="checkbox"] {
+    margin: .2em 0 0;
+}
+
 .help-inline {
   display: inline;
   font-style: italic;
