@@ -1,5 +1,7 @@
 // Include the needed "uiv" library components
-import { Typeahead } from 'uiv'
+// import { Typeahead } from 'uiv'
+// This is a modified fork off of the Typeahead component from the uiv library v0.11.10
+import Typeahead from './Typeahead.vue'
 
 export default {
     components: {
