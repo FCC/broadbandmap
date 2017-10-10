@@ -1,7 +1,7 @@
 <div aria-hidden="false" class="navbar-secondary navbar-default nav-offcanvas nav-offcanvas-right">
-  <div id="menu-secondary" class="tab-content">
-    <div class="container-fluid tab-pane active" id="browse-by-category">
-      <ul id="browseCategory" class="nav nav-tabs menu-secondary js-browseBy" role="navigation">
+  <div class="tab-content">
+    <div class="container-fluid tab-pane active">
+      <ul class="nav nav-tabs menu-secondary" role="navigation">
         <li v-for="route in routes">
           <router-link :to="route">
             <span class="link-title">{{ route.meta.title }}</span>
