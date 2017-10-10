@@ -4,5 +4,8 @@
     box-shadow: none;
     padding-left: 12px;
     padding-right: 12px;
+    /* Override Bootstrap CSS to keep geocoder results from overlapping with input field */
+    float: none;
   }
 }
+
