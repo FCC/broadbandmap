@@ -64,18 +64,6 @@ form {
     font-weight: normal
   }
 
-  .input-group-addon {
-    background-color: #fff;
-    border: none;
-    border-radius: 0;
-    padding-right: 0;
-    +[type="text"] {
-      border-left: 0;
-      padding-left: 3px;
-      width: 100%
-    }
-  }
-
   .icon:not(.icon-search) {
     margin-right: 5px;
   }
