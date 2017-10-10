@@ -29,8 +29,8 @@
         </template>
     </Typeahead>
 
-    <span class="input-group-btn">                 
-        <router-link class="btn btn-default" to="location-summary"><span class="icon icon-search"></span><span class="sr-only">Search</span></router-link>
+    <span class="input-group-btn">
+        <a class="btn btn-default" href="javascript:void(0);" @click="searchButtonClicked($event)"><span class="icon icon-search"></span><span class="sr-only">Search</span></a>
     </span>
 </div>
 </section>
