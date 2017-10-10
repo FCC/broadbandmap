@@ -6,7 +6,7 @@ export default {
   components: { 'nbMap': nbMap, 'nbMapSidebar': nbMapSidebar },
   props: [],
   mounted () {
-
+    this.$emit('toggleSecondaryNav', false)
   },
   data () {
     return {

@@ -1,0 +1,11 @@
+.js-hide {
+  @media(min-width: 992px) {
+    display: none;
+  }
+  .js-nav & {
+    display: block;
+    @media(min-width: 992px) {
+      display: none;
+    }
+  }
+}
