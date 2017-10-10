@@ -64,10 +64,6 @@ form {
     font-weight: normal
   }
 
-  .input-group {
-    border: 2px solid #ffd34d;
-  }
-
   .input-group-addon {
     background-color: #fff;
     border: none;
@@ -80,21 +76,8 @@ form {
     }
   }
 
-  .input-group-btn {
-    background-color: #ffd34d;
-    &>.btn {
-      background: none;
-      border: none;
-      border-radius: 0;
-    }
-  }
-
   .icon:not(.icon-search) {
     margin-right: 5px;
-  }
-
-  .icon-map-marker {
-    opacity: .7;
   }
 
   .icon-search {
