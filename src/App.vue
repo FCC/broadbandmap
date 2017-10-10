@@ -1,24 +1,15 @@
 <template>
   <div id="app">
-  	 <div class="outer-container">
-        <div class="inner-container">
-		    <app-header></app-header>
-		    <main>
-		    	<router-view></router-view>
-		    </main>
-		    <app-footer></app-footer>    
-		  </div>
-  	</div>
-	</div>
+     <app-container></app-container>
+  </div>
 </template>
 
 <script>
-import AppHeader from './components/AppHeader/'
-import AppFooter from './components/AppFooter/'
+import AppContainer from './components/AppContainer/'
 
 export default {
   name: 'app',
-  components: { AppHeader, AppFooter }
+  components: { AppContainer }
 }
 </script>
 

@@ -4,6 +4,36 @@
    ==========================================================================
    ========================================================================== */
 
+.inner-container {
+    position: relative;
+    width: 100%;
+}
+
+.js-ready .inner-container {
+    left: 0;
+}
+
+.js-nav .inner-container {
+    left: 70%;
+}
+
+.js-ready .inner-container {
+    left: 0 !important;
+    transform: translate3d(0, 0, 0);
+    transition: transform 100ms ease;
+    backface-visibility: hidden;
+}
+
+.js-nav .inner-container {
+    transform: translate3d(-70%, 0, 0) scale3d(1, 1, 1);
+    @media (max-width: $screen-sm-max) {
+        transform: translate3d(-80%, 0, 0) scale3d(1, 1, 1);
+    }
+    @media (min-width: $screen-md-min) {
+        transform: translate3d(0, 0, 0) scale3d(1, 1, 1);
+    }
+}
+
 #skip-link a {
     display: block;
     width: 100%;
@@ -538,10 +568,10 @@
     background: transparent;
 }
 
-.menu-secondary > li > a.active:focus,
+/* .menu-secondary > li > a.active:focus,
 .menu-secondary > li > a:focus {
     border-bottom: 6px solid #ffd34d;
-}
+} */
 
 @media screen and (max-width: 991px) {
     .menu-secondary > li > a {
