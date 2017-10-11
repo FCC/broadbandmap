@@ -24,6 +24,7 @@ export default {
       mapboxgl.accessToken = 'pk.eyJ1IjoiY29tcHV0ZWNoIiwiYSI6InMyblMya3cifQ.P8yppesHki5qMyxTc2CNLg'
 
       let map = new mapboxgl.Map({
+        attributionControl: false,
         container: 'map-location',
         style: layers,
         center: [-94.96, 38.82],
@@ -40,6 +41,11 @@ export default {
           enableHighAccuracy: true
         },
         trackUserLocation: true
+      })
+
+      // define Attribution Control
+      const attrControl = new mapboxgl.AttributionControl({
+        compact: true
       })
 
       // define custom Nationwide control
@@ -84,6 +90,7 @@ export default {
       })
 
       // add controls to map
+      map.addControl(attrControl, 'bottom-right')
       map.addControl(navControl, 'top-left')
       map.addControl(geoLocControl, 'top-left')
       map.addControl(nationwideBtnControl, 'top-left')

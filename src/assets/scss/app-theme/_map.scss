@@ -31,8 +31,7 @@
   box-shadow: none;
   margin: 0 0 20px;
   max-width: 100%;
-  padding: 0; // position: relative;
-  top: 10px;
+  padding: 0;
   z-index: 3;
   @media(min-width: 768px) {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2), 0 -1px 0px rgba(0, 0, 0, 0.02);
@@ -97,10 +96,10 @@
 }
 
 .map-settings {
-  margin: 64px -100px;
+  margin: 75px -100px;
   position: absolute;
   @media(min-width: 480px) {
-    margin: 64px -125px;
+    margin: 75px -125px;
   }
   @media(min-width: 768px) {
     position: relative;
@@ -193,7 +192,10 @@
       right: -33.2vw;
     }
     aside {
-      display: none;
+      display: block;
+      @media(min-width: 992px) {
+        display: none;
+      }
     }
   }
 }

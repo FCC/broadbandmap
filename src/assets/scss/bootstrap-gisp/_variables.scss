@@ -16,6 +16,10 @@ $border-radius-base:        0 !default;
 $border-radius-large:       0 !default;
 $border-radius-small:       0 !default;
 
+$tooltip-bg:				#2c75d6;
+$tooltip-arrow-color:		#2c75d6;
+$tooltip-color:				#fff;
+
 @import "../../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/variables";
 
 $btn-default-color:                 $text-color;
