@@ -22,17 +22,25 @@ export default {
   methods: {
     init: function () {
       mapboxgl.accessToken = 'pk.eyJ1IjoiY29tcHV0ZWNoIiwiYSI6InMyblMya3cifQ.P8yppesHki5qMyxTc2CNLg'
-
-      let map = new mapboxgl.Map({
+      
+      // Define default map options
+      let mapOptions = {
         attributionControl: false,
         container: 'map-location',
         style: layers,
-        center: [-94.96, 38.82],
         logoPosition: 'bottom-left',
-        zoom: 3,
         maxZoom: 10,
-        minZoom: 3
-      })
+        minZoom: 3,
+        center: [-94.96, 38.82],
+        zoom: 3
+      }
+      // If valid latitude and longitude are in query string, override defaults, and zoom in
+      if (typeof this.$route.query.lat == 'string' && typeof this.$route.query.lon == 'string' && this.$route.query.lat.length && this.$route.query.lon.length && !isNaN(this.$route.query.lat) && !isNaN(this.$route.query.lon)) {
+        mapOptions.center = [this.$route.query.lon, this.$route.query.lat];
+        mapOptions.zoom = 10;
+      }
+      // Create map
+      let map = new mapboxgl.Map(mapOptions)
 
       // define navigation and geolocation controls
       const navControl = new mapboxgl.NavigationControl()
