@@ -15,7 +15,7 @@
         :open-on-focus="true"
         >
         <!-- Override the input template -->
-        <input id="addr" data-role="input" class="form-control input-lg" type="search" :placeholder="placeholderText" autocomplete="off" @keydown.enter="enterClicked">
+        <input id="addr" data-role="input" class="form-control input-lg" type="search" :placeholder="placeholderText" autocomplete="off" @keydown.prevent.enter="enterClicked">
         <!-- Override the typeahead template -->
         <template slot="item" scope="props">
             <!-- Iterate through each address returned -->
