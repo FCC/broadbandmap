@@ -19,9 +19,9 @@
         <!-- Override the typeahead template -->
         <template slot="item" scope="props">
             <!-- Iterate through each address returned -->
-            <li v-for="(item, index) in props.items" v-bind:class="{active:props.activeIndex===index}">
+            <li v-for="(item, index) in props.items" :class="{active:props.activeIndex===index}">
                 <!-- Link to this address -->
-                <a href="javascript:void(0)" v-on:click="addressClicked($event, props, item)">
+                <a href="javascript:void(0)" @click="props.select(item)">
                     <!-- Highlight search keywords in this item -->
                     <span v-html="props.highlight(item)"></span>
                 </a>

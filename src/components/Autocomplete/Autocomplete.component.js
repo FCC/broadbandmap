@@ -14,11 +14,6 @@ export default {
         }
     },
     methods: {
-        // Called when the user selects an address returned by the geocoder
-        addressClicked (event, props, item) {
-            // Select the item the user clicked
-            props.select(item);
-        },
         searchButtonClicked (event) {
             if (typeof this.typeaheadModel == "object") {
                 this.gotoLocationSummary(event);
