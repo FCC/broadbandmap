@@ -9,8 +9,17 @@
               <h2 class="panel-title">Get Broadband Data by Location</h2>
             </div>
             <div class="panel-body">
-              <!-- Custom Vue component -->
-              <Autocomplete placeholderText="Enter an address"></Autocomplete>
+              <section class="container-fluid">
+                <label class="sr-only" for="addr">Enter a Location</label>
+                <div class="input-group input-group-lg">
+                  <span class="input-group-addon"><span class="icon icon-map-marker"></span></span>
+                  <!-- Custom Vue component -->
+                  <Autocomplete placeholderText="Enter an address"></Autocomplete>
+                  <span class="input-group-btn">
+                    <a class="btn btn-default" href="javascript:void(0);"><span class="icon icon-search"></span><span class="sr-only">Search</span></a>
+                  </span>
+                </div>
+              </section>
             </div>
           </div>
           <div class="panel-browse panel panel-default">
