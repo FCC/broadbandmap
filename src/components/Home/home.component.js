@@ -17,7 +17,10 @@ export default {
     }
   },
   methods: {
-
+    searchButtonClicked (event) {
+      // Pass the event to the Autocomplete component
+      this.$refs.autocomplete2.searchButtonClicked(event);
+    }
   },
   computed: {
 
