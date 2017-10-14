@@ -18,7 +18,7 @@ export default {
             if (typeof this.typeaheadModel == "object") {
                 this.gotoLocationSummary(event);
             } else {
-                alert("No results found.");
+                alert("Please enter and select a valid U.S. address.");
             }
         },
         enterClicked (event) {
