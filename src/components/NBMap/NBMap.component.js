@@ -130,5 +130,14 @@ export default {
   },
   computed: {
 
+  },
+  watch: {
+    // When query params change for the same route (URL slug), fly there in the map
+    '$route' (to, from) {
+      this.Map.flyTo({
+        center: [to.query.lon, to.query.lat],
+        zoom: 10
+      })
+    }
   }
 }
