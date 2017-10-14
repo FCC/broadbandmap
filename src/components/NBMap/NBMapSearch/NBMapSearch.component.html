@@ -16,7 +16,7 @@
       </div>
       <tooltip :enable="enableTooltip" :text="getTooltipText" placement="bottom" trigger="focus">
         <!-- Custom Vue component -->
-        <Autocomplete ref="autocomplete2" :placeholderText="getPlaceholderText"></Autocomplete>
+        <Autocomplete ref="autocomplete2" :placeholderText="getPlaceholderText" :searchType="searchType"></Autocomplete>
       </tooltip>
       <div class="input-group-btn">
         <button class="btn btn-default" type="submit" title="Search" data-toggle="tooltip" data-placement="top" @click="searchButtonClicked($event)">
