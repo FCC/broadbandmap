@@ -1,8 +1,11 @@
+// Include Uiv components
 import { Dropdown, Tooltip } from 'uiv'
+// Include custom Vue components
+import Autocomplete from '../../Autocomplete/index.vue'
 
 export default {
   name: 'nbMapSearch',
-  components: { Dropdown, Tooltip },
+  components: { Dropdown, Tooltip, Autocomplete },
   props: ['defaultSearch', 'type'],
   mounted () {
     let srchType = this.searchTypes[this.type]
