@@ -9,3 +9,7 @@
     }
   }
 }
+// Disallow underlining "Home" nav button
+.menu-secondary > li:first-child > a.active .link-title {
+    border-bottom: none;
+}
