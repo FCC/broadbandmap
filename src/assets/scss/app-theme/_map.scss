@@ -24,6 +24,7 @@
 }
 
 
+
 /* Search bar */
 
 .search-wrapper {
@@ -116,6 +117,7 @@
 }
 
 
+
 /* Map Controls */
 
 .mapboxgl-ctrl-group {
@@ -132,9 +134,9 @@
     border: none;
     border-bottom: 1px solid #ddd;
     box-sizing: border-box;
-    background-color: rgba(0,0,0,0);
+    background-color: rgba(0, 0, 0, 0);
     cursor: pointer;
-}
+  }
 }
 
 .mapboxgl-ctrl {
@@ -147,12 +149,13 @@
   }
 }
 
-.mapboxgl-ctrl-top-left {  
+.mapboxgl-ctrl-top-left {
   .icon {
     font-size: 18px;
     margin: 0;
   }
 }
+
 
 /*  Map Sidebar */
 
@@ -228,6 +231,7 @@
 }
 
 
+
 /* Map Legend */
 
 .map-legend {
@@ -244,4 +248,15 @@
   opacity: 1.0;
   vertical-align: middle;
   width: 20px;
+}
+
+
+
+/* Location Marker */
+
+.marker {
+  background: url('../images/marker-icon.png') no-repeat center center;
+  width: 25px;
+  height: 41px;
+  cursor: pointer;
 }
