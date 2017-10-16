@@ -1,8 +1,11 @@
+// Include Uiv components
 import { Dropdown, Tooltip } from 'uiv'
+// Include custom Vue components
+import Autocomplete from '../../Autocomplete/index.vue'
 
 export default {
   name: 'nbMapSearch',
-  components: { Dropdown, Tooltip },
+  components: { Dropdown, Tooltip, Autocomplete },
   props: {
     defaultSearch: {
       type: String,
@@ -73,6 +76,10 @@ export default {
 
       this.searchType = selectedVal
       this.searchLabel = selectedOpt.label
+    },
+    searchButtonClicked (event) {
+      // Pass the event and geography type to the Autocomplete component
+      this.$refs.autocomplete2.searchButtonClicked(event, this.searchType);
     }
   },
   computed: {

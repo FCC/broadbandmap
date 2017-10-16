@@ -1,4 +1,4 @@
-.panel-search {
+.panel-search, .search-wrapper {
   .form-control {
     border: none;
     box-shadow: none;
@@ -6,35 +6,5 @@
     padding-right: 12px;
     /* Override Bootstrap CSS to keep geocoder results from overlapping with input field */
     float: none;
-  }
-
-  .input-group {
-    border: 2px solid #ffd34d;
-  }
-
-  
-  .input-group-addon {
-    background-color: #fff;
-    border: none;
-    border-radius: 0;
-    padding-right: 0;
-    +[type="text"] {
-      border-left: 0;
-      padding-left: 3px;
-      width: 100%
-    }
-  }
-
-  .input-group-btn {
-    background-color: #ffd34d;
-    &>.btn {
-      background: none;
-      border: none;
-      border-radius: 0;
-    }
-  }
-
-  .icon-map-marker {
-    opacity: .7;
   }
 }
