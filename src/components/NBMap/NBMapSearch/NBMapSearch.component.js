@@ -3,7 +3,16 @@ import { Dropdown, Tooltip } from 'uiv'
 export default {
   name: 'nbMapSearch',
   components: { Dropdown, Tooltip },
-  props: ['defaultSearch', 'type'],
+  props: {
+    defaultSearch: {
+      type: String,
+      required: true
+    },
+    type: {
+      type: String,
+      required: true
+    }
+  },
   mounted () {
     let srchType = this.searchTypes[this.type]
 
