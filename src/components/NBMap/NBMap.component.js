@@ -2,28 +2,47 @@ import mapboxgl from 'mapboxgl'
 import { Dropdown, Tooltip } from 'uiv'
 import nbMapSearch from './NBMapSearch/'
 import EventHub from '../../_mixins/EventHub.js'
-import layers from './layers-location.js'
+import LayersLocation from './layers-location.js'
+import LayersArea from './layers-area.js'
 
 export default {
   name: 'nbMap',
-  components: { 'Dropdown': Dropdown, 'Tooltip': Tooltip, 'nbMapSearch': nbMapSearch },
-  props: ['defaultSearch', 'type'],
-  mounted () {
-    this.$nextTick(this.init)
+  components: { Dropdown, Tooltip, nbMapSearch },
+  props: {
+    mapType: {
+      type: String,
+      required: true
+    },
+    searchType: {
+      type: String,
+      required: true
+    },
+    searchDefault: {
+      type: String,
+      required: true
+    }
   },
   data () {
     return {
       Map: {},
       toggleWidth: false,
+      mapLayers: this.mapType === 'location' ? LayersLocation : LayersArea,
       baseLayerNames: [],
-      defaultBaseLayer: 'dark'
+      defaultBaseLayer: 'default'
     }
+  },
+  mounted () {
+    // Initialze Map
+    this.$nextTick(this.init)
+  },
+  beforeDestroy () {
+    this.Map.remove()
   },
   methods: {
     init: function () {
-      mapboxgl.accessToken = 'pk.eyJ1IjoiY29tcHV0ZWNoIiwiYSI6InMyblMya3cifQ.P8yppesHki5qMyxTc2CNLg'
-      
-      // Define default map options
+      mapboxgl.accessToken = process.env.MAPBOX_ACCESS_TOKEN
+
+     // Define default map options
       let mapOptions = {
         attributionControl: false,
         container: 'map-location',
@@ -42,7 +61,19 @@ export default {
       // Create map
       let map = new mapboxgl.Map(mapOptions)
 
-      // define navigation and geolocation controls
+      // Add Controls to map
+      this.addControls(map)
+
+      // Add layer names for layer switch control
+      this.getLayerNames()
+
+      // Register map related events
+      this.registerEvents(map)
+
+      this.Map = map
+    },
+    addControls: function (map) {
+      // Define navigation and geolocation controls
       const navControl = new mapboxgl.NavigationControl()
       const geoLocControl = new mapboxgl.GeolocateControl({
         positionOptions: {
@@ -51,15 +82,15 @@ export default {
         trackUserLocation: true
       })
 
-      // define Attribution Control
+      // Define Attribution Control
       const attrControl = new mapboxgl.AttributionControl({
         compact: true
       })
 
-      // define custom Nationwide control
+      // Define custom Nationwide control
       class NationwideBtnControl {
         onAdd (map) {
-          this.map = map
+          this._map = map
           this.container = document.getElementById('btn-custom')
           return this.container
         }
@@ -71,22 +102,32 @@ export default {
 
       const nationwideBtnControl = new NationwideBtnControl()
 
-      // define custom layer switch control
+      // Define custom layer switch control
       class LayerSwitchControl {
         onAdd (map) {
-          this.map = map
+          this._map = map
           this.container = document.getElementById('btn-layerSwitch')
           return this.container
         }
         onRemove () {
           this.container.parentNode.removeChild(this.container)
-          this.map = undefined
+          this._map = undefined
         }
       }
 
       const layerSwitchControl = new LayerSwitchControl()
 
-      // define listener to resize map full width
+      // Add controls to map
+      map.addControl(attrControl, 'bottom-right')
+      map.addControl(navControl, 'top-left')
+      map.addControl(geoLocControl, 'top-left')
+      map.addControl(nationwideBtnControl, 'top-left')
+      map.addControl(layerSwitchControl, 'top-left')
+    },
+    registerEvents: function (map) {
+      const _self = this
+
+      // Define listener to resize map full width when sidebar is collapsed
       EventHub.$on('toggleSidebar', data => {
         let element = document.querySelector('.map-sidebar')
 
@@ -97,24 +138,16 @@ export default {
         }, false)
       })
 
-      // add controls to map
-      map.addControl(attrControl, 'bottom-right')
-      map.addControl(navControl, 'top-left')
-      map.addControl(geoLocControl, 'top-left')
-      map.addControl(nationwideBtnControl, 'top-left')
-      map.addControl(layerSwitchControl, 'top-left')
-
-      // add layer names to lawer switch control
-      this.getLayerNames()
-
-      this.Map = map
+      map.on('click', _self.showBlock)
     },
     getLayerNames: function () {
-      this.baseLayerNames = layers.layers.slice(0, 3).map(baseLayerName => {
+      // Get layer names for base layer switch control
+      this.baseLayerNames = this.mapLayers.layers.slice(0, 3).map(baseLayerName => {
         return baseLayerName.id
       })
     },
     switchBaseLayer: function (layerId) {
+      // Switch base layer
       this.baseLayerNames.map(layerName => {
         this.Map.setLayoutProperty(layerName, 'visibility', 'none')
       })
@@ -122,9 +155,42 @@ export default {
       this.Map.setLayoutProperty(layerId, 'visibility', 'visible')
     },
     viewNationwide: function () {
+      // Reset pitch and bearing
+      this.Map.setPitch(0)
+      this.Map.setBearing(0)
+
+      // Recenter map
       this.Map.flyTo({
         center: [-94.96, 38.82],
         zoom: 3
+      })
+    },
+    showBlock: function (event) {
+      let lon = event.lngLat.lng
+      let lat = event.lngLat.lat
+
+      this.setLocationMarker(lat, lon)
+    },
+    setLocationMarker (lat, lon) {
+      // Create element for marker
+      let el = document.createElement('div')
+      el.className = 'marker'
+
+      // Remove pre-existing marker
+      if (this.locationMarker) {
+        this.locationMarker.remove()
+      }
+
+      // Add new marker
+      this.locationMarker = new mapboxgl.Marker(el, {
+        offset: [0, -41 / 2]
+      })
+      .setLngLat([lon, lat])
+      .addTo(this.Map)
+
+      this.Map.flyTo({
+        center: [lon, lat],
+        zoom: 10
       })
     }
   },

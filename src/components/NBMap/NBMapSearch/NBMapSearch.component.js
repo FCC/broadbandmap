@@ -6,7 +6,16 @@ import Autocomplete from '../../Autocomplete/index.vue'
 export default {
   name: 'nbMapSearch',
   components: { Dropdown, Tooltip, Autocomplete },
-  props: ['defaultSearch', 'type'],
+  props: {
+    defaultSearch: {
+      type: String,
+      required: true
+    },
+    type: {
+      type: String,
+      required: true
+    }
+  },
   mounted () {
     let srchType = this.searchTypes[this.type]
 

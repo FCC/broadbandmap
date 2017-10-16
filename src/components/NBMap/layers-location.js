@@ -1,3 +1,5 @@
+import {baseSources, baseLayers} from './layers-base.js'
+
 export default {
   version: 8,
   name: 'Basic',
@@ -5,80 +7,91 @@ export default {
     'mapbox:autocomposite': true
   },
   sources: {
-    dark: {
-      type: 'raster',
-      url: 'mapbox://mapbox.dark',
-      tileSize: 256
+    ...baseSources,
+    state: {
+      type: 'vector',
+      url: 'mapbox://fcc.1r5um5ls'
     },
-    satellite: {
-      type: 'raster',
-      url: 'mapbox://mapbox.satellite',
-      tileSize: 256
+    county: {
+      type: 'vector',
+      url: 'mapbox://fcc.ao2kqazm'
     },
-    street: {
-      type: 'raster',
-      url: 'mapbox://fcc.k74ed5ge',
-      tileSize: 256
+    block: {
+      type: 'vector',
+      url: 'mapbox://fcc.9tcqhtt6'
     },
-    deploymentFixed: {
-      type: 'raster',
-      tiles: [
-        'https://geo.fcc.gov/fcc/gwc/service/wms?tiled=true&service=WMS&request=GetMap&layers=bpr_apr2017_county_layer_fixed&styles=bpr_layer_fixed_1&format=image%2Fpng&transparent=true&version=1.1.1&color=%236CBCD5&height=256&width=256&bbox={bbox-epsg-3857}&srs=EPSG%3A3857'
-      ],
-      tileSize: 256
+    tract: {
+      type: 'vector',
+      url: 'mapbox://fcc.1oj9ffcg'
     },
-    deploymentNoFixed: {
-      type: 'raster',
-      tiles: [
-        'https://geo.fcc.gov/fcc/gwc/service/wms?tiled=true&service=WMS&request=GetMap&layers=bpr_apr2017_county_layer_nonfixed&styles=bpr_layer_fixed_0&format=image%2Fpng&transparent=true&version=1.1.1&color=%236CBCD5&height=256&width=256&bbox={bbox-epsg-3857}&srs=EPSG%3A3857'
-      ],
-      tileSize: 256
+    place: {
+      type: 'vector',
+      url: 'mapbox://fcc.6pgpraox'
     }
   },
   sprite: 'mapbox://sprites/mapbox/basic-v8',
   glyphs: 'mapbox://fonts/mapbox/{fontstack}/{range}.pbf',
   layers: [
+    ...baseLayers,
     {
-      id: 'dark',
-      type: 'raster',
-      source: 'dark',
-      layout: {
-        visibility: 'visible'
-      }
-    },
-    {
-      id: 'satellite',
-      type: 'raster',
-      source: 'satellite',
-      layout: {
-        visibility: 'none'
-      }
-    },
-    {
-      id: 'street',
-      type: 'raster',
-      source: 'street',
-      layout: {
-        visibility: 'none'
-      }
-    },
-    {
-      id: 'deploymentFixed',
-      type: 'raster',
-      source: 'deploymentFixed',
+      id: 'state',
+      type: 'line',
+      source: 'state',
+      'source-layer': 'state2016geojson',
       layout: {
         visibility: 'visible'
       },
-      paint: {}
+      paint: {
+        'line-color': '#a9b55c'
+      }
     },
     {
-      id: 'deploymentNoFixed',
-      type: 'raster',
-      source: 'deploymentNoFixed',
+      id: 'county',
+      type: 'line',
+      source: 'county',
+      'source-layer': 'county2016geojson',
       layout: {
         visibility: 'visible'
       },
-      paint: {}
+      paint: {
+        'line-color': '#74994e'
+      }
+    },
+    {
+      id: 'block',
+      type: 'line',
+      source: 'block',
+      'source-layer': 'block2010geojson',
+      layout: {
+        visibility: 'visible'
+      },
+      paint: {
+        'line-color': '#48517c'
+      }
+    },
+    {
+      id: 'tract',
+      type: 'line',
+      source: 'tract',
+      'source-layer': 'tract2016geojson',
+      layout: {
+        visibility: 'visible'
+      },
+      paint: {
+        'line-color': '#2a3463'
+      }
+    },
+    {
+      id: 'place',
+      type: 'line',
+      source: 'place',
+      'source-layer': 'place2016geojson',
+      layout: {
+        visibility: 'visible'
+      },
+      paint: {
+        'line-color': '#8c9651'
+      }
     }
   ]
 }
