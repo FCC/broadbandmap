@@ -246,7 +246,7 @@
 
 #menu-primary {
     text-align: center;
-    height: 58px;
+    height: 59px;
 }
 
 @media screen and (max-width: 991px) {
@@ -261,7 +261,7 @@
 
 @media screen and (min-width: 768px) {
     #menu-primary {
-        height: 129px;
+        height: 87px;
     }
 }
 
@@ -341,11 +341,11 @@
     }
 }
 
-@media screen and (min-width: 768px) and (max-width: 991px) {
+/* @media screen and (min-width: 768px) and (max-width: 991px) {
     #menu-primary > li a {
         padding-top: 35px;
     }
-}
+} */
 
 #menu-primary .text-prefix {
     font-style: italic;
@@ -478,13 +478,13 @@
 @media screen and (max-width: 991px) {
     .navbar-secondary {
         background-color: #2c75d6;
-        top: 129px;
+        top: 87px;
     }
 }
 
 @media screen and (max-width: 767px) {
     .navbar-secondary {
-        top: 58px;
+        top: 59px;
     }
 }
 
