@@ -1,5 +1,5 @@
 <div class="map-wrapper col-xs-12 col-sm-12 col-md-8" v-bind:class="{ 'full-width': toggleWidth }">
-  <nb-map-search :type="type" :defaultSearch="defaultSearch"></nb-map-search>
+  <nb-map-search :type="searchType" :defaultSearch="searchDefault"></nb-map-search>
   <div id="map-location">
     <div id="btn-custom" class="custom mapboxgl-ctrl mapboxgl-ctrl-group">
       <button class="btn-nationwide mapboxgl-ctrl-icon" type="button" @click="viewNationwide">
