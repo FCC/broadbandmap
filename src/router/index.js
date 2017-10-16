@@ -14,6 +14,7 @@ const titleText = ' | Fixed Broadband Deployment Data | Federal Communications C
 
 const router = new Router({
   base: '/nbm2/DEV/',
+  linkActiveClass: 'active',
   linkExactActiveClass: 'active',
   routes: [
     {
