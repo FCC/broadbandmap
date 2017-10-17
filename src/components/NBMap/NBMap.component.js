@@ -55,8 +55,8 @@ export default {
       }
       // If valid latitude and longitude are in query string, override defaults, and zoom in
       if (this.isValidLatLon()) {
-        mapOptions.center = [this.$route.query.lon, this.$route.query.lat];
-        mapOptions.zoom = 10;
+        mapOptions.center = [this.$route.query.lon, this.$route.query.lat]
+        mapOptions.zoom = 10
       }
       // Create map
       let map = new mapboxgl.Map(mapOptions)
@@ -194,8 +194,11 @@ export default {
       })
     },
     isValidLatLon () {
-      if (typeof this.$route.query.lat == 'string' && typeof this.$route.query.lon == 'string' && this.$route.query.lat.length && this.$route.query.lon.length && !isNaN(this.$route.query.lat) && !isNaN(this.$route.query.lon)) return true;
-      else return false;
+      if (typeof this.$route.query.lat === 'string' && typeof this.$route.query.lon === 'string' && this.$route.query.lat.length && this.$route.query.lon.length && !isNaN(this.$route.query.lat) && !isNaN(this.$route.query.lon)) {
+        return true
+      } else {
+        return false
+      }
     }
   },
   computed: {
