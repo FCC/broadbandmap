@@ -24,6 +24,8 @@ export default {
   },
   data () {
     return {
+      // Tooltip component needs access to document.querySelector() inside Autocomplete
+      document,
       enableTooltip: false,
       searchLabel: '',
       placeholderText: '',
