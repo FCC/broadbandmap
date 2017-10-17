@@ -43,7 +43,7 @@ export default {
       mapboxgl.accessToken = process.env.MAPBOX_ACCESS_TOKEN
 
      // Define default map options
-      let mapOptions = {
+      this.mapOptions = {
         attributionControl: false,
         container: 'map-location',
         style: this.mapLayers,
@@ -55,11 +55,11 @@ export default {
       }
       // If valid latitude and longitude are in query string, override defaults, and zoom in
       if (this.isValidLatLon()) {
-        mapOptions.center = [this.$route.query.lon, this.$route.query.lat]
-        mapOptions.zoom = 10
+        this.mapOptions.center = [this.$route.query.lon, this.$route.query.lat]
+        this.mapOptions.zoom = 10
       }
       // Create map
-      let map = new mapboxgl.Map(mapOptions)
+      let map = new mapboxgl.Map(this.mapOptions)
 
       // Add Controls to map
       this.addControls(map)
@@ -205,12 +205,17 @@ export default {
 
   },
   watch: {
-    // When query params change for the same route (URL slug), fly there in the map
+    // When query params change for the same route (URL slug)
     '$route' (to, from) {
       if (this.isValidLatLon()) {
         this.Map.flyTo({
           center: [to.query.lon, to.query.lat],
           zoom: 10
+        })
+      } else {
+        this.Map.flyTo({
+          center: this.mapOptions.center,
+          zoom: this.mapOptions.zoom
         })
       }
     }
