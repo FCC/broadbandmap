@@ -46,7 +46,7 @@ export default {
       let mapOptions = {
         attributionControl: false,
         container: 'map-location',
-        style: layers,
+        style: this.mapLayers,
         logoPosition: 'bottom-left',
         maxZoom: 10,
         minZoom: 3,
