@@ -54,7 +54,7 @@ export default {
         zoom: 3
       }
       // If valid latitude and longitude are in query string, override defaults, and zoom in
-      if (typeof this.$route.query.lat == 'string' && typeof this.$route.query.lon == 'string' && this.$route.query.lat.length && this.$route.query.lon.length && !isNaN(this.$route.query.lat) && !isNaN(this.$route.query.lon)) {
+      if (this.isValidLatLon()) {
         mapOptions.center = [this.$route.query.lon, this.$route.query.lat];
         mapOptions.zoom = 10;
       }
@@ -192,6 +192,10 @@ export default {
         center: [lon, lat],
         zoom: 10
       })
+    },
+    isValidLatLon () {
+      if (typeof this.$route.query.lat == 'string' && typeof this.$route.query.lon == 'string' && this.$route.query.lat.length && this.$route.query.lon.length && !isNaN(this.$route.query.lat) && !isNaN(this.$route.query.lon)) return true;
+      else return false;
     }
   },
   computed: {
@@ -200,10 +204,12 @@ export default {
   watch: {
     // When query params change for the same route (URL slug), fly there in the map
     '$route' (to, from) {
-      this.Map.flyTo({
-        center: [to.query.lon, to.query.lat],
-        zoom: 10
-      })
+      if (this.isValidLatLon()) {
+        this.Map.flyTo({
+          center: [to.query.lon, to.query.lat],
+          zoom: 10
+        })
+      }
     }
   }
 }
