@@ -44,12 +44,14 @@ export default {
             alert('Please enter valid coordinates in latitude, longitude format')
           }
           break
+        default:
+          console.log('DEBUG: No handler for searchType = ' + this.searchType)
       }
       // Push the URL to the Vue router
       if (typeof newURL !== 'undefined') {
         this.$router.push(newURL)
       } else {
-        alert('DEBUG: Still need lat/lon for this geography')
+        console.log('DEBUG: Still need lat/lon for this geography')
       }
     },
     // Called by data() on init, and when searchType changes
