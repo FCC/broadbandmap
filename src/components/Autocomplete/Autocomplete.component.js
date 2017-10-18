@@ -13,8 +13,13 @@ export default {
   props: ['placeholderText', 'searchType'],
   // Initialize vars
   data () {
-    let configObj = this.getConfig()
-    return configObj
+    return {
+      typeaheadModel: '',
+      dataSource: [],
+      asyncSrc: '',
+      asyncKey: '',
+      itemKey: ''
+    }
   },
   methods: {
     searchButtonClicked (event) {
@@ -55,44 +60,33 @@ export default {
       }
     },
     // Called by data() on init, and when searchType changes
-    getConfig () {
+    populateTypeahead () {
       if (this.searchType === 'Address') {
-        return {
-          dataSource: null,
-          itemKey: 'place_name',
-          asyncKey: 'features',
-          asyncSrc: '',
-          typeaheadModel: {
+        this.dataSource = null
+        this.asyncKey = 'features'
+        this.itemKey = 'place_name'
+        this.typeaheadModel = {
             place_name: this.isValidAddress() ? this.$route.query.place_name : ''
           }
-        }
       } else if (this.searchType === 'Coordinates') {
-        return {
-          dataSource: null,
-          asyncSrc: null,
-          asyncKey: '',
-          /* Clearing this throws error, but may need to come back to this later
-          // itemKey: ''
-          */
-          typeaheadModel: this.isValidLatLon() ? this.$route.query.lat + ', ' + this.$route.query.lon : ''
-        }
+        this.dataSource = null
+        this.asyncSrc = null
+        this.asyncKey = ''
+        /* Clearing this throws error, but may need to come back to this later
+        this.itemKey = ''
+        */
+        this.typeaheadModel = this.isValidLatLon() ? this.$route.query.lat + ', ' + this.$route.query.lon : ''
       } else {
-        return {
-          dataSource: states.data,
-          itemKey: 'name',
-          asyncKey: null
-        }
+        this.dataSource = states.data
+        this.itemKey = 'name'
+        this.asyncKey = ''
       }
     }
   },
   watch: {
     // When user selects different geography, reconfigure Typeahead component
     searchType () {
-      let configObj = this.getConfig()
-      // Copy config to the component
-      for (var oneVar in configObj) {
-        this[oneVar] = configObj[oneVar]
-      }
+      this.populateTypeahead()
     },
     typeaheadModel () {
       if (this.searchType === 'Address') {
@@ -102,10 +96,6 @@ export default {
   },
   // Check query string for initial values
   mounted () {
-    let configObj = this.getConfig()
-    // Copy config to the component
-    for (var oneVar in configObj) {
-      this[oneVar] = configObj[oneVar]
-    }
+    this.populateTypeahead()
   }
 }
