@@ -2,10 +2,12 @@
 import { Dropdown, Tooltip } from 'uiv'
 // Include custom Vue components
 import Autocomplete from '../../Autocomplete/index.vue'
+import { urlValidation } from '../../../_mixins/urlValidation.js'
 
 export default {
   name: 'nbMapSearch',
   components: { Dropdown, Tooltip, Autocomplete },
+  mixins: [urlValidation],
   props: {
     defaultSearch: {
       type: String,
@@ -19,7 +21,8 @@ export default {
   mounted () {
     let srchType = this.searchTypes[this.type]
 
-    this.searchLabel = srchType[this.defaultSearch].label
+    this.receiveSearchType()
+    this.searchLabel = srchType[this.searchType].label
     this.searchOptsList = srchType
   },
   data () {
@@ -82,6 +85,19 @@ export default {
     searchButtonClicked (event) {
       // Pass the event and geography type to the Autocomplete component
       this.$refs.autocomplete2.searchButtonClicked(event, this.searchType)
+    },
+    // Check query string and override or use default search type
+    receiveSearchType () {
+      if (this.isValidLatLon()) {
+        if (this.isValidAddress()) {
+          this.searchType = 'Address'
+        } else {
+          this.searchType = 'Coordinates'
+        }
+      } else {
+        this.searchType = this.defaultSearch
+      }
+      this.toggleSearchType(this.searchType)
     }
   },
   computed: {
@@ -99,6 +115,12 @@ export default {
       if (hasTooltip) {
         return srchType.tooltipText
       }
+    }
+  },
+  watch: {
+    // When query params change for the same route (URL slug)
+    '$route' (to, from) {
+      this.receiveSearchType()
     }
   }
 }

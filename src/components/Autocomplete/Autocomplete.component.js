@@ -56,6 +56,16 @@ export default {
             place_name: this.isValidAddress() ? this.$route.query.place_name : ''
           }
         }
+      } else if (this.searchType === 'Coordinates') {
+        return {
+          dataSource: null,
+          asyncSrc: null,
+          asyncKey: '',
+          /* Clearing this throws error, but may need to come back to this later
+          // itemKey: ''
+          */
+          typeaheadModel: this.isValidLatLon() ? this.$route.query.lat + ', ' + this.$route.query.lon : ''
+        }
       } else {
         return {
           dataSource: states.data,
