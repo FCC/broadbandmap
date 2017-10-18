@@ -25,7 +25,7 @@ export default {
       }
     },
     enterClicked (event) {
-      if (typeof this.typeaheadModel === 'object') {
+      if ((typeof this.typeaheadModel === 'object') || (this.searchType !== 'Address')) {
         this.gotoGeography(event)
       }
     },
@@ -35,6 +35,14 @@ export default {
         case 'Address':
           // Create the URL
           var newURL = 'location-summary?lat=' + this.typeaheadModel.center[1] + '&lon=' + this.typeaheadModel.center[0] + '&place_name=' + encodeURIComponent(this.typeaheadModel.place_name)
+          break
+        case 'Coordinates':
+          let coordinatesArray = this.typeaheadModel.split(',')
+          if (coordinatesArray.length === 2 && !isNaN(coordinatesArray[0]) && !isNaN(coordinatesArray[0])) {
+            newURL = 'location-summary?lat=' + coordinatesArray[0] + '&lon=' + coordinatesArray[1]
+          } else {
+            alert('Please enter valid coordinates in latitude, longitude format')
+          }
           break
       }
       // Push the URL to the Vue router
