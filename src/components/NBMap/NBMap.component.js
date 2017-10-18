@@ -4,10 +4,12 @@ import nbMapSearch from './NBMapSearch/'
 import EventHub from '../../_mixins/EventHub.js'
 import LayersLocation from './layers-location.js'
 import LayersArea from './layers-area.js'
+import { urlValidation } from '../../_mixins/urlValidation.js'
 
 export default {
   name: 'nbMap',
   components: { Dropdown, Tooltip, nbMapSearch },
+  mixins: [urlValidation],
   props: {
     mapType: {
       type: String,
@@ -192,12 +194,6 @@ export default {
         center: [lon, lat],
         zoom: 10
       })
-    },
-    isValidLatLon () {
-      return (typeof this.$route.query.lat === 'string' && typeof this.$route.query.lon === 'string' && this.$route.query.lat.length && this.$route.query.lon.length && !isNaN(this.$route.query.lat) && !isNaN(this.$route.query.lon))
-    },
-    isValidAddress () {
-      return (typeof this.$route.query.place_name === 'string' && this.$route.query.place_name.length)
     }
   },
   computed: {
