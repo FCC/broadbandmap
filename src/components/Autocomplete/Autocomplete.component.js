@@ -72,7 +72,7 @@ export default {
   },
   computed: {
     // When Typeahead model changes, generate dynamic URL for Ajax call to API
-    apiURL: function () {
+    asyncSrc: function () {
       if (this.searchType === 'Address') {
         return 'https://api.mapbox.com/geocoding/v5/mapbox.places/' + encodeURIComponent(this.typeaheadModel) + '.json?country=us&limit=10&access_token=pk.eyJ1IjoiY29tcHV0ZWNoIiwiYSI6InMyblMya3cifQ.P8yppesHki5qMyxTc2CNLg&'
       } else {
