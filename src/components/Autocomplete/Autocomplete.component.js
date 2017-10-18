@@ -2,17 +2,18 @@
 import { Typeahead } from 'uiv'
 // JSON data for static geographies
 import states from './states.json'
+import { urlValidation } from '../../_mixins/urlValidation.js'
 
 export default {
   components: {
     Typeahead: Typeahead
   },
+  mixins: [urlValidation],
   // Bind vars passed in via the <Autocomplete> tag
   props: ['placeholderText', 'searchType'],
   // Initialize vars
   data () {
     let configObj = this.getConfig()
-    configObj.typeaheadModel = ''
     return configObj
   },
   methods: {
@@ -50,7 +51,10 @@ export default {
           dataSource: null,
           itemKey: 'place_name',
           asyncKey: 'features',
-          asyncSrc: ''
+          asyncSrc: '',
+          typeaheadModel: {
+            place_name: this.isValidAddress() ? this.$route.query.place_name : ''
+          }
         }
       } else {
         return {
@@ -74,6 +78,14 @@ export default {
       if (this.searchType === 'Address') {
         this.asyncSrc = 'https://api.mapbox.com/geocoding/v5/mapbox.places/' + encodeURIComponent(this.typeaheadModel) + '.json?country=us&limit=10&access_token=pk.eyJ1IjoiY29tcHV0ZWNoIiwiYSI6InMyblMya3cifQ.P8yppesHki5qMyxTc2CNLg&'
       }
+    }
+  },
+  // Check query string for initial values
+  mounted () {
+    let configObj = this.getConfig()
+    // Copy config to the component
+    for (var oneVar in configObj) {
+      this[oneVar] = configObj[oneVar]
     }
   }
 }
