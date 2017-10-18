@@ -23,11 +23,7 @@ export default {
   },
   methods: {
     searchButtonClicked (event) {
-      if (typeof this.typeaheadModel === 'object') {
-        this.gotoGeography(event)
-      } else {
-        alert('Please enter and select a valid U.S. address.')
-      }
+      this.gotoGeography(event)
     },
     enterClicked (event) {
       if ((typeof this.typeaheadModel === 'object') || (this.searchType !== 'Address')) {
@@ -36,10 +32,15 @@ export default {
     },
     // Called when user pressed enter or clicked search
     gotoGeography (event) {
+      var newURL = ''
       switch (this.searchType) {
         case 'Address':
-          // Create the URL
-          var newURL = 'location-summary?lat=' + this.typeaheadModel.center[1] + '&lon=' + this.typeaheadModel.center[0] + '&place_name=' + encodeURIComponent(this.typeaheadModel.place_name)
+          if (typeof this.typeaheadModel === 'object') {
+            // Create the URL
+            newURL = 'location-summary?lat=' + this.typeaheadModel.center[1] + '&lon=' + this.typeaheadModel.center[0] + '&place_name=' + encodeURIComponent(this.typeaheadModel.place_name)
+          } else {
+            alert('Please enter and select a valid U.S. address.')
+          }
           break
         case 'Coordinates':
           let coordinatesArray = this.typeaheadModel.split(',')
@@ -66,8 +67,8 @@ export default {
         this.asyncKey = 'features'
         this.itemKey = 'place_name'
         this.typeaheadModel = {
-            place_name: this.isValidAddress() ? this.$route.query.place_name : ''
-          }
+          place_name: this.isValidAddress() ? this.$route.query.place_name : ''
+        }
       } else if (this.searchType === 'Coordinates') {
         this.dataSource = null
         this.asyncSrc = null
