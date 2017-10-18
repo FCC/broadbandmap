@@ -4,10 +4,12 @@ import nbMapSearch from './NBMapSearch/'
 import EventHub from '../../_mixins/EventHub.js'
 import LayersLocation from './layers-location.js'
 import LayersArea from './layers-area.js'
+import { urlValidation } from '../../_mixins/urlValidation.js'
 
 export default {
   name: 'nbMap',
   components: { Dropdown, Tooltip, nbMapSearch },
+  mixins: [urlValidation],
   props: {
     mapType: {
       type: String,
@@ -43,7 +45,7 @@ export default {
       mapboxgl.accessToken = process.env.MAPBOX_ACCESS_TOKEN
 
      // Define default map options
-      let mapOptions = {
+      this.mapOptions = {
         attributionControl: false,
         container: 'map-location',
         style: this.mapLayers,
@@ -55,11 +57,11 @@ export default {
       }
       // If valid latitude and longitude are in query string, override defaults, and zoom in
       if (this.isValidLatLon()) {
-        mapOptions.center = [this.$route.query.lon, this.$route.query.lat];
-        mapOptions.zoom = 10;
+        this.mapOptions.center = [this.$route.query.lon, this.$route.query.lat]
+        this.mapOptions.zoom = 10
       }
       // Create map
-      let map = new mapboxgl.Map(mapOptions)
+      let map = new mapboxgl.Map(this.mapOptions)
 
       // Add Controls to map
       this.addControls(map)
@@ -192,22 +194,23 @@ export default {
         center: [lon, lat],
         zoom: 10
       })
-    },
-    isValidLatLon () {
-      if (typeof this.$route.query.lat == 'string' && typeof this.$route.query.lon == 'string' && this.$route.query.lat.length && this.$route.query.lon.length && !isNaN(this.$route.query.lat) && !isNaN(this.$route.query.lon)) return true;
-      else return false;
     }
   },
   computed: {
 
   },
   watch: {
-    // When query params change for the same route (URL slug), fly there in the map
+    // When query params change for the same route (URL slug)
     '$route' (to, from) {
       if (this.isValidLatLon()) {
         this.Map.flyTo({
           center: [to.query.lon, to.query.lat],
           zoom: 10
+        })
+      } else {
+        this.Map.flyTo({
+          center: this.mapOptions.center,
+          zoom: this.mapOptions.zoom
         })
       }
     }

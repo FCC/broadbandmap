@@ -14,7 +14,7 @@
           </template>
         </dropdown>
       </div>
-      <tooltip :enable="enableTooltip" :text="getTooltipText" placement="bottom" trigger="focus">
+      <tooltip :enable="enableTooltip" :text="getTooltipText" placement="bottom" trigger="focus" :target="document.querySelector('#addr')">
         <!-- Custom Vue component -->
         <Autocomplete ref="autocomplete2" :placeholderText="getPlaceholderText" :searchType="searchType"></Autocomplete>
       </tooltip>

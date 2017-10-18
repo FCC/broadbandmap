@@ -2,81 +2,101 @@
 import { Typeahead } from 'uiv'
 // JSON data for static geographies
 import states from './states.json'
+import { urlValidation } from '../../_mixins/urlValidation.js'
 
 export default {
-    components: {
-        Typeahead: Typeahead
-    },
-    // Bind vars passed in via the <Autocomplete> tag
-    props: ['placeholderText', 'searchType'],
-    // Initialize vars
-    data () {
-        let configObj = this.getConfig();
-        configObj.typeaheadModel = '';
-        return configObj;
-    },
-    methods: {
-        searchButtonClicked (event) {
-            if (typeof this.typeaheadModel == "object") {
-                this.gotoGeography(event);
-            } else {
-                alert("Please enter and select a valid U.S. address.");
-            }
-        },
-        enterClicked (event) {
-            if (typeof this.typeaheadModel == "object") {
-                this.gotoGeography(event);
-            }
-        },
-        // Called when user pressed enter or clicked search
-        gotoGeography (event) {
-            switch(this.searchType) {
-                case 'Address':
-                    // Create the URL
-                    var newURL = "location-summary?lat=" + this.typeaheadModel.center[1] + "&lon=" + this.typeaheadModel.center[0] + "&place_name=" + encodeURIComponent(this.typeaheadModel.place_name);
-                    break;
-            }
-            // Push the URL to the Vue router
-            if (typeof newURL != "undefined") {
-                this.$router.push(newURL);
-            } else {
-                alert("DEBUG: Still need lat/lon for this geography");
-            }
-        },
-        // Called by data() on init, and when searchType changes
-        getConfig () {
-            if (this.searchType == "Address" ) {
-                return {
-                    dataSource: null,
-                    itemKey: 'place_name',
-                    asyncKey: 'features'
-                };
-            } else {
-                return {
-                    dataSource: states.data,
-                    itemKey: 'name',
-                    asyncKey: null
-                };
-            }
-        }
-    },
-    watch: {
-        // When user selects different geography, reconfigure Typeahead component
-        searchType () {
-            let configObj = this.getConfig();
-            // Copy config to the component
-            for (var oneVar in configObj) {
-                this[oneVar] = configObj[oneVar];
-            }
-        }
-    },
-    computed: {
-        // When Typeahead model changes, generate dynamic URL for Ajax call to API
-        apiURL: function() {
-            if (this.searchType == 'Address')
-                return 'https://api.mapbox.com/geocoding/v5/mapbox.places/' + encodeURIComponent(this.typeaheadModel) + '.json?country=us&limit=10&access_token=pk.eyJ1IjoiY29tcHV0ZWNoIiwiYSI6InMyblMya3cifQ.P8yppesHki5qMyxTc2CNLg&'
-            else
-                return null;
-        }
+  components: {
+    Typeahead: Typeahead
+  },
+  mixins: [urlValidation],
+  // Bind vars passed in via the <Autocomplete> tag
+  props: ['placeholderText', 'searchType'],
+  // Initialize vars
+  data () {
+    return {
+      typeaheadModel: '',
+      dataSource: [],
+      asyncSrc: '',
+      asyncKey: '',
+      itemKey: ''
     }
+  },
+  methods: {
+    searchButtonClicked (event) {
+      this.gotoGeography(event)
+    },
+    enterClicked (event) {
+      if ((typeof this.typeaheadModel === 'object') || (this.searchType !== 'Address')) {
+        this.gotoGeography(event)
+      }
+    },
+    // Called when user pressed enter or clicked search
+    gotoGeography (event) {
+      var newURL = ''
+      switch (this.searchType) {
+        case 'Address':
+          if (typeof this.typeaheadModel === 'object') {
+            // Create the URL
+            newURL = 'location-summary?lat=' + this.typeaheadModel.center[1] + '&lon=' + this.typeaheadModel.center[0] + '&place_name=' + encodeURIComponent(this.typeaheadModel.place_name)
+          } else {
+            alert('Please enter and select a valid U.S. address.')
+          }
+          break
+        case 'Coordinates':
+          let coordinatesArray = this.typeaheadModel.split(',')
+          if (coordinatesArray.length === 2 && !isNaN(coordinatesArray[0]) && !isNaN(coordinatesArray[0])) {
+            newURL = 'location-summary?lat=' + coordinatesArray[0] + '&lon=' + coordinatesArray[1]
+          } else {
+            alert('Please enter valid coordinates in latitude, longitude format')
+          }
+          break
+        default:
+          console.log('DEBUG: No handler for searchType = ' + this.searchType)
+      }
+      // Push the URL to the Vue router
+      if (typeof newURL !== 'undefined') {
+        this.$router.push(newURL)
+      } else {
+        console.log('DEBUG: Still need lat/lon for this geography')
+      }
+    },
+    // Called by data() on init, and when searchType changes
+    populateTypeahead () {
+      if (this.searchType === 'Address') {
+        this.dataSource = null
+        this.asyncKey = 'features'
+        this.itemKey = 'place_name'
+        this.typeaheadModel = {
+          place_name: this.isValidAddress() ? this.$route.query.place_name : ''
+        }
+      } else if (this.searchType === 'Coordinates') {
+        this.dataSource = null
+        this.asyncSrc = null
+        this.asyncKey = ''
+        /* Clearing this throws error, but may need to come back to this later
+        this.itemKey = ''
+        */
+        this.typeaheadModel = this.isValidLatLon() ? this.$route.query.lat + ', ' + this.$route.query.lon : ''
+      } else {
+        this.dataSource = states.data
+        this.itemKey = 'name'
+        this.asyncKey = ''
+      }
+    }
+  },
+  watch: {
+    // When user selects different geography, reconfigure Typeahead component
+    searchType () {
+      this.populateTypeahead()
+    },
+    typeaheadModel () {
+      if (this.searchType === 'Address') {
+        this.asyncSrc = 'https://api.mapbox.com/geocoding/v5/mapbox.places/' + encodeURIComponent(this.typeaheadModel) + '.json?country=us&limit=10&access_token=' + process.env.MAPBOX_ACCESS_TOKEN + '&'
+      }
+    }
+  },
+  // Check query string for initial values
+  mounted () {
+    this.populateTypeahead()
+  }
 }

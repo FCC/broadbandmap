@@ -19,7 +19,7 @@ export default {
   methods: {
     searchButtonClicked (event) {
       // Pass the event and geography type to the Autocomplete component
-      this.$refs.autocomplete2.searchButtonClicked(event, "Address");
+      this.$refs.autocomplete2.searchButtonClicked(event, 'Address')
     }
   },
   computed: {
