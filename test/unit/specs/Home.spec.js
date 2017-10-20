@@ -13,6 +13,6 @@ describe('Home.vue', () => {
     }).$mount()
 
     expect(vm.$el.querySelector('.panel-title').textContent)
-      .to.equal('Learn About Broadband Data')
+      .to.equal('Search by Address')
   })
 })
