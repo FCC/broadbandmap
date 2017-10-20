@@ -17,7 +17,7 @@ module.exports = function (config) {
     },
     frameworks: ['mocha', 'chai-dom', 'sinon-chai', 'phantomjs-shim'],
     reporters: ['spec', 'coverage', 'html'],
-    files: ['./index.js', '../../src'],
+    files: ['../../node_modules/mapbox-gl/dist/mapbox-gl.js', './index.js', '../../src'],
     exclude: [
       '../../src/main.js',
       '../../src/**/*.scss',
