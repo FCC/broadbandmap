@@ -11,7 +11,13 @@ export default {
     }
   },
   methods: {
-    toggleSecondaryNav: function () {
+    // Called when the hamburger icon is clicked
+    hamburgerClicked () {
+      this.navShown = !this.navShown
+      this.$emit('toggleSecondaryNav', this.navShown)
+    },
+    // Called when a secondary nav button is clicked (in either desktop or mobile layout)
+    secondaryNavClicked () {
       this.navShown = !this.navShown
       this.$emit('toggleSecondaryNav', this.navShown)
     }
