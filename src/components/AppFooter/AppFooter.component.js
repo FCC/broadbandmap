@@ -18,6 +18,7 @@ export default {
     }
   },
   created () {
+    // Currently called by Autocomplete component (via either Home, or NBMapSearch components)
     EventHub.$on('openModal', function (title, body) {
       // Display Modal uiv component
       this.modalTitle = title

@@ -3,6 +3,7 @@ import { Typeahead } from 'uiv'
 // JSON data for static geographies
 import states from './states.json'
 import { urlValidation } from '../../_mixins/urlValidation.js'
+import EventHub from '../../_mixins/EventHub.js'
 
 export default {
   components: {
@@ -39,7 +40,8 @@ export default {
             // Create the URL
             newURL = 'location-summary?lat=' + this.typeaheadModel.center[1] + '&lon=' + this.typeaheadModel.center[0] + '&place_name=' + encodeURIComponent(this.typeaheadModel.place_name)
           } else {
-            alert('Please enter and select a valid U.S. address.')
+            // Call Modal component in app footer
+            EventHub.$emit('openModal', 'No results found', 'Please enter and then select a valid U.S. address.')
           }
           break
         case 'Coordinates':
@@ -47,7 +49,8 @@ export default {
           if (coordinatesArray.length === 2 && !isNaN(coordinatesArray[0]) && !isNaN(coordinatesArray[0])) {
             newURL = 'location-summary?lat=' + coordinatesArray[0] + '&lon=' + coordinatesArray[1]
           } else {
-            alert('Please enter valid coordinates in latitude, longitude format')
+            // Call Modal component in app footer
+            EventHub.$emit('openModal', 'No results found', 'Please enter valid coordinates in "latitude, longitude" format.')
           }
           break
         default:
