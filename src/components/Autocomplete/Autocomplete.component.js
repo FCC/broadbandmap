@@ -35,7 +35,7 @@ export default {
       var newURL = ''
       switch (this.searchType) {
         case 'Address':
-          if (typeof this.typeaheadModel === 'object') {
+          if (typeof this.typeaheadModel === 'object' && typeof this.typeaheadModel.id === 'string') {
             // Create the URL
             newURL = 'location-summary?lat=' + this.typeaheadModel.center[1] + '&lon=' + this.typeaheadModel.center[0] + '&place_name=' + encodeURIComponent(this.typeaheadModel.place_name)
           } else {
