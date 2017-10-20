@@ -18,7 +18,7 @@ export default {
     },
     // Called when a secondary nav button is clicked (in either desktop or mobile layout)
     secondaryNavClicked () {
-      this.navShown = !this.navShown
+      this.navShown = false
       this.$emit('toggleSecondaryNav', this.navShown)
     }
   },
