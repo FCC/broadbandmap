@@ -19,7 +19,9 @@
 
 .js-ready .inner-container {
     left: 0 !important;
+    /* This conflicted with the uiv Modal component - Retain in case it needs to be reinstated
     transform: translate3d(0, 0, 0);
+    */
     transition: transform 100ms ease;
     backface-visibility: hidden;
 }

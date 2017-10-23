@@ -4,11 +4,12 @@ export const urlValidation = {
     }
   },
   methods: {
-    isValidLatLon () {
-      return (typeof this.$route.query.lat === 'string' && typeof this.$route.query.lon === 'string' && this.$route.query.lat.length && this.$route.query.lon.length && !isNaN(this.$route.query.lat) && !isNaN(this.$route.query.lon))
+    isValidLatLon (lat, lon) {
+      // NOTE: Mapbox intermittently rejects a latitude of exactly -90
+      return (typeof lat === 'string' && typeof lon === 'string' && lat.length && lon.length && !isNaN(lat) && !isNaN(lon) && lat > -90 && lat <= 90 && lon >= -180 && lon <= 180)
     },
-    isValidAddress () {
-      return (typeof this.$route.query.place_name === 'string' && this.$route.query.place_name.length)
+    isValidAddress (address) {
+      return (typeof address === 'string' && address.length)
     }
   }
 }

@@ -88,8 +88,8 @@ export default {
     },
     // Check query string and override or use default search type
     receiveSearchType () {
-      if (this.isValidLatLon()) {
-        if (this.isValidAddress()) {
+      if (this.isValidLatLon(this.$route.query.lat, this.$route.query.lon)) {
+        if (this.isValidAddress(this.$route.query.place_name)) {
           this.searchType = 'Address'
         } else {
           this.searchType = 'Coordinates'

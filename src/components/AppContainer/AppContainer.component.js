@@ -10,12 +10,13 @@ export default {
   },
   data () {
     return {
-      toggleNav: false
+      isMobileNavShown: false
     }
   },
   methods: {
-    toggleHamburger: function (isShown) {
-      this.toggleNav = isShown
+    // Called any time the hambuger icon is clicked, to open or close the secondary nav
+    setHamburger: function (isMobileNavShown) {
+      this.isMobileNavShown = isMobileNavShown
     }
   },
   computed: {

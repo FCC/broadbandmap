@@ -56,9 +56,12 @@ export default {
         zoom: 3
       }
       // If valid latitude and longitude are in query string, override defaults, and zoom in
-      if (this.isValidLatLon()) {
-        this.mapOptions.center = [this.$route.query.lon, this.$route.query.lat]
+      if (this.isValidLatLon(this.$route.query.lat, this.$route.query.lon)) {
+        this.mapOptions.center = [this.$route.query.lon.trim(), this.$route.query.lat.trim()]
         this.mapOptions.zoom = 10
+      // If invalid lat or lon are passed in, remove from the query string
+      } else if (this.$route.query.lat !== undefined || this.$route.query.lon !== undefined) {
+        this.$router.push('location-summary')
       }
       // Create map
       let map = new mapboxgl.Map(this.mapOptions)
@@ -202,11 +205,15 @@ export default {
   watch: {
     // When query params change for the same route (URL slug)
     '$route' (to, from) {
-      if (this.isValidLatLon()) {
+      if (this.isValidLatLon(to.query.lat, to.query.lon)) {
         this.Map.flyTo({
-          center: [to.query.lon, to.query.lat],
+          center: [to.query.lon.trim(), to.query.lat.trim()],
           zoom: 10
         })
+      // If lat or lon become invalid, remove from the query string
+      } else if (this.$route.query.lat !== undefined || this.$route.query.lon !== undefined) {
+        this.$router.push('location-summary')
+      // Otherwise fly to national view
       } else {
         this.Map.flyTo({
           center: this.mapOptions.center,

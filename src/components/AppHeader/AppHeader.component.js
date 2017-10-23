@@ -7,13 +7,19 @@ export default {
   },
   data () {
     return {
-      navShown: false
+      isMobileNavShown: false
     }
   },
   methods: {
-    toggleSecondaryNav: function () {
-      this.navShown = !this.navShown
-      this.$emit('toggleSecondaryNav', this.navShown)
+    // Called when the hamburger icon is clicked
+    hamburgerClicked () {
+      this.isMobileNavShown = !this.isMobileNavShown
+      this.$emit('setHamburger', this.isMobileNavShown)
+    },
+    // Called when a secondary nav button is clicked (in either desktop or mobile layout)
+    secondaryNavClicked () {
+      this.isMobileNavShown = false
+      this.$emit('setHamburger', this.isMobileNavShown)
     }
   },
   computed: {
