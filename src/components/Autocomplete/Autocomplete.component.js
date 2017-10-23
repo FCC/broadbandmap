@@ -47,7 +47,7 @@ export default {
         case 'Coordinates':
           let coordinatesArray = this.typeaheadModel.split(',')
           if (coordinatesArray.length === 2 && !isNaN(coordinatesArray[0]) && !isNaN(coordinatesArray[0])) {
-            newURL = 'location-summary?lat=' + coordinatesArray[0] + '&lon=' + coordinatesArray[1]
+            newURL = 'location-summary?lat=' + coordinatesArray[0].trim() + '&lon=' + coordinatesArray[1].trim()
           } else {
             // Call Modal component in app footer
             EventHub.$emit('openModal', 'No results found', 'Please enter valid coordinates in "latitude, longitude" format.')
