@@ -65,7 +65,7 @@ export default {
         this.asyncKey = 'features'
         this.itemKey = 'place_name'
         this.typeaheadModel = {
-          place_name: this.isValidAddress() ? this.$route.query.place_name : ''
+          place_name: this.isValidAddress(this.$route.query.place_name) ? this.$route.query.place_name : ''
         }
       } else if (this.searchType === 'Coordinates') {
         this.dataSource = null
@@ -74,7 +74,7 @@ export default {
         /* Clearing this throws error, but may need to come back to this later
         this.itemKey = ''
         */
-        this.typeaheadModel = this.isValidLatLon() ? this.$route.query.lat + ', ' + this.$route.query.lon : ''
+        this.typeaheadModel = this.isValidLatLon(this.$route.query.lat, this.$route.query.lon) ? this.$route.query.lat + ', ' + this.$route.query.lon : ''
       } else {
         this.dataSource = states.data
         this.itemKey = 'name'

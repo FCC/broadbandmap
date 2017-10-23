@@ -4,11 +4,11 @@ export const urlValidation = {
     }
   },
   methods: {
-    isValidLatLon () {
-      return (typeof this.$route.query.lat === 'string' && typeof this.$route.query.lon === 'string' && this.$route.query.lat.length && this.$route.query.lon.length && !isNaN(this.$route.query.lat) && !isNaN(this.$route.query.lon))
+    isValidLatLon (lat, lon) {
+      return (typeof lat === 'string' && typeof lon === 'string' && lat.length && lon.length && !isNaN(lat) && !isNaN(lon))
     },
-    isValidAddress () {
-      return (typeof this.$route.query.place_name === 'string' && this.$route.query.place_name.length)
+    isValidAddress (address) {
+      return (typeof address === 'string' && address.length)
     }
   }
 }

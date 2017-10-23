@@ -56,7 +56,7 @@ export default {
         zoom: 3
       }
       // If valid latitude and longitude are in query string, override defaults, and zoom in
-      if (this.isValidLatLon()) {
+      if (this.isValidLatLon(this.$route.query.lat, this.$route.query.lon)) {
         this.mapOptions.center = [this.$route.query.lon.trim(), this.$route.query.lat.trim()]
         this.mapOptions.zoom = 10
       }
@@ -202,7 +202,7 @@ export default {
   watch: {
     // When query params change for the same route (URL slug)
     '$route' (to, from) {
-      if (this.isValidLatLon()) {
+      if (this.isValidLatLon(to.query.lat, to.query.lon)) {
         this.Map.flyTo({
           center: [to.query.lon.trim(), to.query.lat.trim()],
           zoom: 10
