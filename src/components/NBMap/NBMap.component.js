@@ -59,6 +59,9 @@ export default {
       if (this.isValidLatLon(this.$route.query.lat, this.$route.query.lon)) {
         this.mapOptions.center = [this.$route.query.lon.trim(), this.$route.query.lat.trim()]
         this.mapOptions.zoom = 10
+      // If invalid lat or lon are passed in, remove from the query string
+      } else if (this.$route.query.lat !== undefined || this.$route.query.lon !== undefined) {
+        this.$router.push('location-summary')
       }
       // Create map
       let map = new mapboxgl.Map(this.mapOptions)
@@ -207,6 +210,10 @@ export default {
           center: [to.query.lon.trim(), to.query.lat.trim()],
           zoom: 10
         })
+      // If lat or lon become invalid, remove from the query string
+      } else if (this.$route.query.lat !== undefined || this.$route.query.lon !== undefined) {
+        this.$router.push('location-summary')
+      // Otherwise fly to national view
       } else {
         this.Map.flyTo({
           center: this.mapOptions.center,
