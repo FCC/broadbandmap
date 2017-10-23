@@ -46,7 +46,7 @@ export default {
           break
         case 'Coordinates':
           let coordinatesArray = this.typeaheadModel.split(',')
-          if (coordinatesArray.length === 2 && !isNaN(coordinatesArray[0]) && !isNaN(coordinatesArray[1])) {
+          if (coordinatesArray.length === 2 && this.isValidLatLon(coordinatesArray[0], coordinatesArray[1])) {
             let newURL = 'location-summary?lat=' + coordinatesArray[0].trim() + '&lon=' + coordinatesArray[1].trim()
             this.$router.push(newURL)
           } else {
