@@ -33,12 +33,12 @@ export default {
     },
     // Called when user pressed enter or clicked search
     gotoGeography (event) {
-      var newURL = ''
       switch (this.searchType) {
         case 'Address':
           if (typeof this.typeaheadModel === 'object' && typeof this.typeaheadModel.id === 'string') {
             // Create the URL
-            newURL = 'location-summary?lat=' + this.typeaheadModel.center[1] + '&lon=' + this.typeaheadModel.center[0] + '&place_name=' + encodeURIComponent(this.typeaheadModel.place_name)
+            let newURL = 'location-summary?lat=' + this.typeaheadModel.center[1] + '&lon=' + this.typeaheadModel.center[0] + '&place_name=' + encodeURIComponent(this.typeaheadModel.place_name)
+            this.$router.push(newURL)
           } else {
             // Call Modal component in app footer
             EventHub.$emit('openModal', 'No results found', 'Please enter and then select a valid U.S. address.')
@@ -47,7 +47,8 @@ export default {
         case 'Coordinates':
           let coordinatesArray = this.typeaheadModel.split(',')
           if (coordinatesArray.length === 2 && !isNaN(coordinatesArray[0]) && !isNaN(coordinatesArray[1])) {
-            newURL = 'location-summary?lat=' + coordinatesArray[0].trim() + '&lon=' + coordinatesArray[1].trim()
+            let newURL = 'location-summary?lat=' + coordinatesArray[0].trim() + '&lon=' + coordinatesArray[1].trim()
+            this.$router.push(newURL)
           } else {
             // Call Modal component in app footer
             EventHub.$emit('openModal', 'No results found', 'Please enter valid coordinates in "latitude, longitude" format.')
@@ -55,12 +56,6 @@ export default {
           break
         default:
           console.log('DEBUG: No handler for searchType = ' + this.searchType)
-      }
-      // Push the URL to the Vue router
-      if (typeof newURL !== 'undefined') {
-        this.$router.push(newURL)
-      } else {
-        console.log('DEBUG: Still need lat/lon for this geography')
       }
     },
     // Called by data() on init, and when searchType changes
