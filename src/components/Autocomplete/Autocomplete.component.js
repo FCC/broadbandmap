@@ -46,7 +46,7 @@ export default {
           break
         case 'Coordinates':
           let coordinatesArray = this.typeaheadModel.split(',')
-          if (coordinatesArray.length === 2 && !isNaN(coordinatesArray[0]) && !isNaN(coordinatesArray[0])) {
+          if (coordinatesArray.length === 2 && !isNaN(coordinatesArray[0]) && !isNaN(coordinatesArray[1])) {
             newURL = 'location-summary?lat=' + coordinatesArray[0].trim() + '&lon=' + coordinatesArray[1].trim()
           } else {
             // Call Modal component in app footer
