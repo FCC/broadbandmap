@@ -64,8 +64,7 @@ const router = new Router({
     {
       path: '/PageNotFound',
       name: 'Page Not Found',
-      component: PageNotFound,
-      meta: { title: 'Page Not Found' }
+      component: PageNotFound
     },
     {
       path: '*',
