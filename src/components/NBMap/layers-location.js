@@ -37,7 +37,7 @@ export default {
       id: 'state',
       type: 'line',
       source: 'state',
-      'source-layer': 'state2016geojson',
+      'source-layer': 'nbm2_state2016geojson',
       layout: {
         visibility: 'visible'
       },
@@ -49,7 +49,7 @@ export default {
       id: 'county',
       type: 'line',
       source: 'county',
-      'source-layer': 'county2016geojson',
+      'source-layer': 'nbm2_county2016geojson',
       layout: {
         visibility: 'visible'
       },
@@ -73,7 +73,7 @@ export default {
       id: 'tract',
       type: 'line',
       source: 'tract',
-      'source-layer': 'tract2016geojson',
+      'source-layer': 'nbm2_tract2016geojson',
       layout: {
         visibility: 'visible'
       },
@@ -85,7 +85,7 @@ export default {
       id: 'place',
       type: 'line',
       source: 'place',
-      'source-layer': 'place2016geojson',
+      'source-layer': 'nbm2_place2016geojson',
       layout: {
         visibility: 'visible'
       },

@@ -7,6 +7,7 @@ import ProviderDetail from '@/components/ProviderDetail/'
 import AreaComparison from '@/components/AreaComparison/'
 import DataDownload from '@/components/DataDownload/'
 import About from '@/components/About/'
+import PageNotFound from '@/components/PageNotFound/'
 
 Vue.use(Router)
 
@@ -58,6 +59,17 @@ const router = new Router({
       name: 'About',
       component: About,
       meta: { title: 'About' }
+    },
+    /* Page Not Found handler */
+    {
+      path: '/PageNotFound',
+      name: 'Page Not Found',
+      component: PageNotFound,
+      meta: { title: 'Page Not Found' }
+    },
+    {
+      path: '*',
+      redirect: 'PageNotFound'
     }
   ]
 })
