@@ -50,7 +50,7 @@ export default {
         container: 'map-location',
         style: this.mapLayers,
         logoPosition: 'bottom-left',
-        maxZoom: 10,
+        maxZoom: 16,
         minZoom: 3,
         center: [-94.96, 38.82],
         zoom: 3
@@ -58,7 +58,7 @@ export default {
       // If valid latitude and longitude are in query string, override defaults, and zoom in
       if (this.isValidLatLon(this.$route.query.lat, this.$route.query.lon)) {
         this.mapOptions.center = [this.$route.query.lon.trim(), this.$route.query.lat.trim()]
-        this.mapOptions.zoom = 10
+        this.mapOptions.zoom = 15
       // If invalid lat or lon are passed in, remove from the query string
       } else if (this.$route.query.lat !== undefined || this.$route.query.lon !== undefined) {
         this.$router.push('location-summary')
@@ -208,7 +208,7 @@ export default {
       if (this.isValidLatLon(to.query.lat, to.query.lon)) {
         this.Map.flyTo({
           center: [to.query.lon.trim(), to.query.lat.trim()],
-          zoom: 10
+          zoom: 15
         })
       // If lat or lon become invalid, remove from the query string
       } else if (this.$route.query.lat !== undefined || this.$route.query.lon !== undefined) {
