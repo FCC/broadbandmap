@@ -1,3 +1,8 @@
+// This file is used by the Area Summary page
+
+// Include the base layers
+import {baseSources, baseLayers} from './layers-base.js'
+
 export default {
   version: 8,
   name: 'Basic',
@@ -5,21 +10,7 @@ export default {
     'mapbox:autocomposite': true
   },
   sources: {
-    dark: {
-      type: 'raster',
-      url: 'mapbox://mapbox.dark',
-      tileSize: 256
-    },
-    satellite: {
-      type: 'raster',
-      url: 'mapbox://mapbox.satellite',
-      tileSize: 256
-    },
-    street: {
-      type: 'raster',
-      url: 'mapbox://fcc.k74ed5ge',
-      tileSize: 256
-    },
+    ...baseSources,
     deploymentFixed: {
       type: 'raster',
       tiles: [
@@ -38,30 +29,7 @@ export default {
   sprite: 'mapbox://sprites/mapbox/basic-v8',
   glyphs: 'mapbox://fonts/mapbox/{fontstack}/{range}.pbf',
   layers: [
-    {
-      id: 'dark',
-      type: 'raster',
-      source: 'dark',
-      layout: {
-        visibility: 'visible'
-      }
-    },
-    {
-      id: 'satellite',
-      type: 'raster',
-      source: 'satellite',
-      layout: {
-        visibility: 'none'
-      }
-    },
-    {
-      id: 'street',
-      type: 'raster',
-      source: 'street',
-      layout: {
-        visibility: 'none'
-      }
-    },
+    ...baseLayers,
     {
       id: 'deploymentFixed',
       type: 'raster',
