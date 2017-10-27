@@ -1,3 +1,8 @@
+// This file is used by the Area Summary page
+
+// Include the base layers
+import {baseSources, baseLayers} from './layers-base.js'
+
 export default {
   version: 8,
   name: 'Basic',
@@ -5,80 +10,123 @@ export default {
     'mapbox:autocomposite': true
   },
   sources: {
-    dark: {
-      type: 'raster',
-      url: 'mapbox://mapbox.dark',
-      tileSize: 256
+    ...baseSources,
+    block: {
+      type: 'vector',
+      url: 'mapbox://fcc.9tcqhtt6'
     },
-    satellite: {
-      type: 'raster',
-      url: 'mapbox://mapbox.satellite',
-      tileSize: 256
+    tract: {
+      type: 'vector',
+      url: 'mapbox://fcc.1oj9ffcg'
     },
-    street: {
-      type: 'raster',
-      url: 'mapbox://fcc.k74ed5ge',
-      tileSize: 256
+    county: {
+      type: 'vector',
+      url: 'mapbox://fcc.ao2kqazm'
     },
-    deploymentFixed: {
-      type: 'raster',
-      tiles: [
-        'https://geo.fcc.gov/fcc/gwc/service/wms?tiled=true&service=WMS&request=GetMap&layers=bpr_apr2017_county_layer_fixed&styles=bpr_layer_fixed_1&format=image%2Fpng&transparent=true&version=1.1.1&color=%236CBCD5&height=256&width=256&bbox={bbox-epsg-3857}&srs=EPSG%3A3857'
-      ],
-      tileSize: 256
+    state: {
+      type: 'vector',
+      url: 'mapbox://fcc.1r5um5ls'
     },
-    deploymentNoFixed: {
-      type: 'raster',
-      tiles: [
-        'https://geo.fcc.gov/fcc/gwc/service/wms?tiled=true&service=WMS&request=GetMap&layers=bpr_apr2017_county_layer_nonfixed&styles=bpr_layer_fixed_0&format=image%2Fpng&transparent=true&version=1.1.1&color=%236CBCD5&height=256&width=256&bbox={bbox-epsg-3857}&srs=EPSG%3A3857'
-      ],
-      tileSize: 256
+    place: {
+      type: 'vector',
+      url: 'mapbox://fcc.6pgpraox'
+    },
+    cd: {
+      type: 'vector',
+      url: 'mapbox://fcc.dpum4fkf'
+    },
+    tribe: {
+      type: 'vector',
+      url: 'mapbox://fcc.26rqlqpa'
     }
   },
   sprite: 'mapbox://sprites/mapbox/basic-v8',
   glyphs: 'mapbox://fonts/mapbox/{fontstack}/{range}.pbf',
   layers: [
+    ...baseLayers,
     {
-      id: 'dark',
-      type: 'raster',
-      source: 'dark',
-      layout: {
-        visibility: 'visible'
-      }
-    },
-    {
-      id: 'satellite',
-      type: 'raster',
-      source: 'satellite',
-      layout: {
-        visibility: 'none'
-      }
-    },
-    {
-      id: 'street',
-      type: 'raster',
-      source: 'street',
-      layout: {
-        visibility: 'none'
-      }
-    },
-    {
-      id: 'deploymentFixed',
-      type: 'raster',
-      source: 'deploymentFixed',
+      id: 'block',
+      type: 'line',
+      source: 'block',
+      'source-layer': 'nbm2_block2010geojson',
       layout: {
         visibility: 'visible'
       },
-      paint: {}
+      paint: {
+        'line-color': '#48517c'
+      }
     },
     {
-      id: 'deploymentNoFixed',
-      type: 'raster',
-      source: 'deploymentNoFixed',
+      id: 'tract',
+      type: 'line',
+      source: 'tract',
+      'source-layer': 'nbm2_tract2016geojson',
       layout: {
         visibility: 'visible'
       },
-      paint: {}
+      paint: {
+        'line-color': '#2a3463'
+      }
+    },
+    {
+      id: 'county',
+      type: 'line',
+      source: 'county',
+      'source-layer': 'nbm2_county2016geojson',
+      layout: {
+        visibility: 'visible'
+      },
+      paint: {
+        'line-color': '#74994e'
+      }
+    },
+    {
+      id: 'state',
+      type: 'line',
+      source: 'state',
+      'source-layer': 'nbm2_state2016geojson',
+      layout: {
+        visibility: 'visible'
+      },
+      paint: {
+        'line-color': '#a9b55c'
+      }
+    },
+    {
+      id: 'place',
+      type: 'line',
+      source: 'place',
+      'source-layer': 'nbm2_place2016geojson',
+      layout: {
+        visibility: 'none'
+      },
+      paint: {
+        'line-color': '#8c9651'
+      }
+    },
+    {
+      id: 'cd',
+      type: 'line',
+      source: 'cd',
+      'source-layer': 'nbm2_cd115_2016geojson',
+      layout: {
+        visibility: 'none'
+      },
+      paint: {
+        'line-color': '#8c9651'
+      }
+    },
+    {
+      id: 'tribe',
+      type: 'line',
+      source: 'tribe',
+      'source-layer': 'nbm2_tribe2016geojson',
+      layout: {
+        visibility: 'none'
+      },
+      paint: {
+        'line-color': '#8c9651'
+      }
     }
   ]
 }
