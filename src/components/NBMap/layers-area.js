@@ -22,6 +22,22 @@ export default {
     county: {
       type: 'vector',
       url: 'mapbox://fcc.ao2kqazm'
+    },
+    state: {
+      type: 'vector',
+      url: 'mapbox://fcc.1r5um5ls'
+    },
+    place: {
+      type: 'vector',
+      url: 'mapbox://fcc.6pgpraox'
+    },
+    cd: {
+      type: 'vector',
+      url: 'mapbox://fcc.dpum4fkf'
+    },
+    tribe: {
+      type: 'vector',
+      url: 'mapbox://fcc.26rqlqpa'
     }
   },
   sprite: 'mapbox://sprites/mapbox/basic-v8',
@@ -62,6 +78,54 @@ export default {
       },
       paint: {
         'line-color': '#74994e'
+      }
+    },
+    {
+      id: 'state',
+      type: 'line',
+      source: 'state',
+      'source-layer': 'nbm2_state2016geojson',
+      layout: {
+        visibility: 'visible'
+      },
+      paint: {
+        'line-color': '#a9b55c'
+      }
+    },
+    {
+      id: 'place',
+      type: 'line',
+      source: 'place',
+      'source-layer': 'nbm2_place2016geojson',
+      layout: {
+        visibility: 'none'
+      },
+      paint: {
+        'line-color': '#8c9651'
+      }
+    },
+    {
+      id: 'cd',
+      type: 'line',
+      source: 'cd',
+      'source-layer': 'nbm2_cd115_2016geojson',
+      layout: {
+        visibility: 'none'
+      },
+      paint: {
+        'line-color': '#8c9651'
+      }
+    },
+    {
+      id: 'tribe',
+      type: 'line',
+      source: 'tribe',
+      'source-layer': 'nbm2_tribe2016geojson',
+      layout: {
+        visibility: 'none'
+      },
+      paint: {
+        'line-color': '#8c9651'
       }
     }
   ]
