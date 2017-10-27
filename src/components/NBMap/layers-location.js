@@ -1,3 +1,6 @@
+// This file is used by the Location Summary page
+
+// Include the base layers
 import {baseSources, baseLayers} from './layers-base.js'
 
 export default {
@@ -8,14 +11,6 @@ export default {
   },
   sources: {
     ...baseSources,
-    state: {
-      type: 'vector',
-      url: 'mapbox://fcc.1r5um5ls'
-    },
-    county: {
-      type: 'vector',
-      url: 'mapbox://fcc.ao2kqazm'
-    },
     block: {
       type: 'vector',
       url: 'mapbox://fcc.9tcqhtt6'
@@ -23,6 +18,14 @@ export default {
     tract: {
       type: 'vector',
       url: 'mapbox://fcc.1oj9ffcg'
+    },
+    county: {
+      type: 'vector',
+      url: 'mapbox://fcc.ao2kqazm'
+    },
+    state: {
+      type: 'vector',
+      url: 'mapbox://fcc.1r5um5ls'
     },
     place: {
       type: 'vector',
@@ -33,30 +36,6 @@ export default {
   glyphs: 'mapbox://fonts/mapbox/{fontstack}/{range}.pbf',
   layers: [
     ...baseLayers,
-    {
-      id: 'state',
-      type: 'line',
-      source: 'state',
-      'source-layer': 'nbm2_state2016geojson',
-      layout: {
-        visibility: 'visible'
-      },
-      paint: {
-        'line-color': '#a9b55c'
-      }
-    },
-    {
-      id: 'county',
-      type: 'line',
-      source: 'county',
-      'source-layer': 'nbm2_county2016geojson',
-      layout: {
-        visibility: 'visible'
-      },
-      paint: {
-        'line-color': '#74994e'
-      }
-    },
     {
       id: 'block',
       type: 'line',
@@ -79,6 +58,30 @@ export default {
       },
       paint: {
         'line-color': '#2a3463'
+      }
+    },
+    {
+      id: 'county',
+      type: 'line',
+      source: 'county',
+      'source-layer': 'nbm2_county2016geojson',
+      layout: {
+        visibility: 'visible'
+      },
+      paint: {
+        'line-color': '#74994e'
+      }
+    },
+    {
+      id: 'state',
+      type: 'line',
+      source: 'state',
+      'source-layer': 'nbm2_state2016geojson',
+      layout: {
+        visibility: 'visible'
+      },
+      paint: {
+        'line-color': '#a9b55c'
       }
     },
     {
