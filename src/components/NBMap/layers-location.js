@@ -61,7 +61,7 @@ export default {
       id: 'block',
       type: 'line',
       source: 'block',
-      'source-layer': 'block2010geojson',
+      'source-layer': 'nbm2_block2010geojson',
       layout: {
         visibility: 'visible'
       },
