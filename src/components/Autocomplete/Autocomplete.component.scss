@@ -1,12 +1,26 @@
-.panel-search, .search-wrapper {
-  .form-control {
-    @media(min-width: 768px) {
-      border: none;
-    }
-    box-shadow: none;
-    padding-left: 12px;
-    padding-right: 12px;
-    /* Override Bootstrap CSS to keep geocoder results from overlapping with input field */
-    float: none;
+.form-control {
+  @media(min-width: 768px) {
+    border: none;
   }
+  box-shadow: none;
+  padding-left: 12px;
+  padding-right: 12px;
+  /* Override Bootstrap CSS to keep geocoder results from overlapping with input field */
+  float: none;
+}
+
+
+.search-geography {
+  .form-control {
+    border: 1px solid #ccc;    
+  }
+  .input-group {
+    .form-control {
+      border-left: none;
+    }
+  }
+}
+
+.search-state {
+  margin-bottom: 5px;
 }
