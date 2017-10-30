@@ -38,15 +38,29 @@ export default {
     ...baseLayers,
     {
       id: 'block',
-      type: 'line',
+      type: 'fill',
       source: 'block',
       'source-layer': 'nbm2_block2010geojson',
       layout: {
         visibility: 'visible'
       },
       paint: {
-        'line-color': '#48517c'
+        'fill-outline-color': '#484896',
+        'fill-color': '#ffffff',
+        'fill-opacity': 0.5
       }
+    },
+    {
+      id: 'block-highlighted',
+      type: 'fill',
+      source: 'block',
+      'source-layer': 'nbm2_block2010geojson',
+      paint: {
+        'fill-outline-color': '#484896',
+        'fill-color': '#6e599f',
+        'fill-opacity': 0.75
+      },
+      'filter': ['in', 'bbox_arr', '']
     },
     {
       id: 'tract',
