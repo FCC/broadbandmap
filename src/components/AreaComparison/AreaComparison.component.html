@@ -26,7 +26,7 @@
           </div>
         </div>
         <div class="input-state">
-          <p>Enter a state or <a href="#" @click.prevent="setNationwide">search Nationwide</a></p>
+          <p><a href="#" @click.prevent="searchArea('')">Enter a state</a> or <a href="#" @click.prevent="searchArea('Nationwide')">search Nationwide</a></p>
           <div class="input-group-lg">
             <Autocomplete class="search-state" ref="autocomplete2" searchType="comparison" placeholderText="Enter state"></Autocomplete>
           </div>
@@ -44,8 +44,12 @@
   <div class="row">
     <div class="col-sm-10">
       <div class="nav-utility">
-        <a class="link-downloads" href="#"><span class="icon icon-cloud-download"></span><span class="sr-only">Download Data</span></a>
-        <a class="link-about" href="#"><span class="icon icon-info-circle" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="About"></span><span class="sr-only">About this map</span></a>
+        <tooltip text="Download data" placement="top">
+          <a href="#"><span class="icon icon-cloud-download"></span><span class="sr-only">Download Data</span></a>
+        </tooltip>
+        <tooltip text="Bookmark this page" placement="top">
+          <a href="#"><span class="icon icon-bookmark"></span></span><span class="sr-only">Bookmark this map</span></a>
+        </tooltip>
       </div>
     </div>
   </div>
