@@ -1,12 +1,15 @@
+import axios from 'axios'
 import { Dropdown, Tooltip } from 'uiv'
 
 import Autocomplete from '@/components/Autocomplete/index.vue'
+import searchGeogTypes from '../../_mixins/search-geog-types.js'
 import { columns } from './table-mock-columns.js'
 import { rows } from './table-mock-rows.js'
 
 export default {
   name: 'AreaComparison',
-  components: { Dropdown, Autocomplete },
+  components: { Tooltip, Dropdown, Autocomplete },
+  mixins: [searchGeogTypes],
   props: [],
   mounted () {
     this.searchLabel = 'County'
@@ -16,53 +19,22 @@ export default {
     return {
       columns: columns,
       rows: rows,
-      searchLabel: '',
-      placeholderText: '',
-      searchOptsList: {},
-      searchType: 'County',
-      searchTypes: {
-        comparison: {
-          'State': {
-            'label': 'State',
-            'placeholderText': 'Enter state'
-          },
-          'County': {
-            'label': 'County',
-            'placeholderText': 'Enter county'
-          },
-          'Congressional District': {
-            'label': 'District',
-            'placeholderText': 'Enter congressional district'
-          },
-          'Census Place': {
-            'label': 'Census Place',
-            'placeholderText': 'Enter town or city'
-          },
-          'Tribal Area': {
-            'label': 'Tribal Area',
-            'placeholderText': 'Enter tribal area'
-          },
-          'CBSA (MSA)': {
-            'label': 'CBSA',
-            'placeholderText': 'Enter CBSA (MSA)'
-          }
-        }
-      }
+      searchType: 'County'
     }
   },
   methods: {
-    toggleSearchType: function (selectedVal) {
+    toggleSearchType: function (selectedVal) { // Change the search (geography) type (e.g. county, state, district, etc.)
       let selectedOpt = this.searchTypes.comparison[selectedVal]
 
       this.searchType = selectedVal
       this.searchLabel = selectedOpt.label
     },
-    setNationwide: function (isNW) {
-      this.$refs.autocomplete2.typeaheadModel = 'Nationwide'
+    searchArea: function (areaType) { // Set the search area input value to nationwide or blank
+      this.$refs.autocomplete2.typeaheadModel = areaType
     }
   },
   computed: {
-    getPlaceholderText: function () {
+    getPlaceholderText: function () { // Set the geography type input placeholder text based on search type
       let srchType = this.searchTypes.comparison[this.searchType]
 
       return srchType.hasOwnProperty('placeholderText') ? srchType.placeholderText : 'Enter ' + srchType.label
