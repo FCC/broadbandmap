@@ -5,9 +5,12 @@ import Vue from 'vue'
 import App from './App'
 
 import router from './router'
+import VueGoodTable from 'vue-good-table'
 import './assets/scss/app-theme.scss'
 
 Vue.config.productionTip = false
+
+Vue.use(VueGoodTable)
 
 /* eslint-disable no-new */
 new Vue({

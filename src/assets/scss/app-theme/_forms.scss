@@ -21,3 +21,8 @@ input[type="radio"], input[type="checkbox"] {
   margin-bottom: 10px;
   color: #737373;
 }
+
+/* Force dropdown menu links to wrap */
+.dropdown-menu > li > a {
+  white-space: normal;
+}
