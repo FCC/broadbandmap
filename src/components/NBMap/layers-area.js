@@ -38,6 +38,10 @@ export default {
     tribe: {
       type: 'vector',
       url: 'mapbox://fcc.26rqlqpa'
+    },
+    cbsa: {
+      type: 'vector',
+      url: 'mapbox://fcc.a7r386t6'
     }
   },
   sprite: 'mapbox://sprites/mapbox/basic-v8',
@@ -126,6 +130,18 @@ export default {
       },
       paint: {
         'line-color': '#8c9651'
+      }
+    },
+    {
+      id: 'cbsa',
+      type: 'line',
+      source: 'cbsa',
+      'source-layer': 'nbm2_cbsa2016geojson',
+      layout: {
+        visibility: 'none'
+      },
+      paint: {
+        'line-color': '#ffffff'
       }
     }
   ]
