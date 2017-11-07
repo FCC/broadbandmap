@@ -48,7 +48,7 @@ export default {
      // Define default map options
       this.mapOptions = {
         attributionControl: false,
-        container: 'map-location',
+        container: 'map-container',
         style: this.mapLayers,
         logoPosition: 'bottom-left',
         maxZoom: 16,
@@ -56,14 +56,7 @@ export default {
         center: [-94.96, 38.82],
         zoom: 3
       }
-      // If valid latitude and longitude are in query string, override defaults, and zoom in
-      if (this.isValidLatLon(this.$route.query.lat, this.$route.query.lon)) {
-        this.mapOptions.center = [this.$route.query.lon.trim(), this.$route.query.lat.trim()]
-        this.mapOptions.zoom = 15
-      // If invalid lat or lon are passed in, remove from the query string
-      } else if (this.$route.query.lat !== undefined || this.$route.query.lon !== undefined) {
-        this.$router.push('location-summary')
-      }
+
       // Create map
       let map = new mapboxgl.Map(this.mapOptions)
 
@@ -75,6 +68,9 @@ export default {
 
       // Register map related events
       this.registerEvents(map)
+
+      // Trigger map initialize event
+      this.$emit('map-init', map, this.mapOptions)
 
       this.Map = map
     },
@@ -131,7 +127,7 @@ export default {
       map.addControl(layerSwitchControl, 'top-left')
     },
     registerEvents: function (map) {
-      const _self = this
+      const vm = this
 
       // Define listener to resize map full width when sidebar is collapsed
       EventHub.$on('toggleSidebar', data => {
@@ -144,7 +140,9 @@ export default {
         }, false)
       })
 
-      map.on('click', _self.showBlock)
+      map.on('click', function (event) {
+        vm.$emit('map-click', event)
+      })
     },
     getLayerNames: function () {
       // Get layer names for base layer switch control
@@ -166,118 +164,16 @@ export default {
       this.Map.setBearing(0)
 
       // Recenter map
-      this.Map.flyTo({
+      this.Map.easeTo({
         center: [-94.96, 38.82],
         zoom: 3
       })
-    },
-    showBlock: function (event) { // Highlight census block when map is clicked
-      let x = 0
-      let y = 0
-      let clickedPoint = []
-      let feature = {}
-      let bbx = ''
-      let boundingBox = []
-
-      // When the map is clicked, get x, y values from the clicked point
-      if (event.point) {
-        x = event.point.x
-        y = event.point.y
-        clickedPoint = [[x - 5, y - 5], [x + 5, y + 5]]
-      }
-
-      // Query the block layer based on the clicked point
-      feature = this.Map.queryRenderedFeatures(clickedPoint, {layers: ['block']})
-
-      // Get the bounding box of the selected feature
-      bbx = feature[0].properties.bbox_arr
-      boundingBox = JSON.parse(bbx)
-
-      // Highlight the selected block
-      this.Map.setFilter('block-highlighted', ['==', 'bbox_arr', bbx])
-
-      // Zoom and center map to bounding box
-      this.Map.fitBounds(boundingBox, {
-        padding: 100
-      })
-    },
-    highlightBlock (response) { // Highlight census block when map is searched
-      let fipsCode = ''
-      let envelope = 0
-      let envArray = []
-      let feature = {}
-
-      // Get FIPS and envelope from response data
-      fipsCode = response.data.Results.block[0].FIPS
-      envelope = response.data.Results.block[0].envelope
-      envArray = [envelope.minx, envelope.miny, envelope.maxx, envelope.maxy]
-
-      // Zoom and center map to envelope
-      this.Map.fitBounds(envArray, {
-        animate: false,
-        easeTo: true,
-        padding: 100
-      })
-
-      // Query the block layer based on the FIPS code
-      feature = this.Map.querySourceFeatures('block', {
-        sourcelayer: 'nbm2_block2010geojson',
-        filter: ['==', 'block_fips', fipsCode]
-      })
-
-      // Highlight the selected block
-      this.Map.setFilter('block-highlighted', ['==', 'block_fips', fipsCode])
     }
   },
   computed: {
 
   },
   watch: {
-    // When query params change for the same route (URL slug)
-    '$route' (to, from) {
-      const self = this
-      let lat = parseFloat(to.query.lat.trim())
-      let lon = parseFloat(to.query.lon.trim())
 
-      // Highlight census block if valid lat, lon
-      if (this.isValidLatLon(to.query.lat, to.query.lon)) {
-        let blockAPI = 'https://www.broadbandmap.gov/broadbandmap/census/block'
-
-        // Call block API and expect FIPS and bounding box in response
-        axios
-          .get(blockAPI, {
-            params: {
-              longitude: lon,
-              latitude: lat,
-              format: 'json'
-            }
-          })
-          .then(self.highlightBlock)
-          .catch(function (error) {
-            if (error.response) {
-              // Server responded with a status code that falls out of the range of 2xx
-              console.log(error.response.data)
-              console.log(error.response.status)
-              console.log(error.response.headers)
-            } else if (error.request) {
-              // Request was made but no response was received
-              console.log(error.request)
-            } else {
-              // Something happened in setting up the request that triggered an Error
-              console.log('Error', error.message)
-            }
-            console.log(error)
-          })
-      // If lat or lon become invalid, remove from the query string
-      } else if (this.$route.query.lat !== undefined || this.$route.query.lon !== undefined) {
-        this.$router.push('location-summary')
-      // Otherwise fly to national view
-      } else {
-        this.Map.flyTo({
-          center: this.mapOptions.center,
-          zoom: this.mapOptions.zoom
-        })
-      }
-    }
   }
 }

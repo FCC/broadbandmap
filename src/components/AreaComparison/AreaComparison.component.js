@@ -28,6 +28,7 @@ export default {
 
       this.searchType = selectedVal
       this.searchLabel = selectedOpt.label
+      this.$refs.autocomplete1.typeaheadModel = ''
     },
     searchArea: function (areaType) { // Set the search area input value to nationwide or blank
       this.$refs.autocomplete2.typeaheadModel = areaType
