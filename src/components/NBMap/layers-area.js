@@ -60,7 +60,7 @@ export default {
       id: 'tract',
       type: 'line',
       source: 'tract',
-      'source-layer': 'nbm2_tract2016geojson',
+      'source-layer': 'nbm2_tract2010geojson',
       layout: {
         visibility: 'visible'
       },
