@@ -49,6 +49,7 @@ export default {
           .then(response => {
             if (response.data.Results.block.length !== 0) {
               this.highlightBlock(response, lat, lon)
+              this.fetchProviderData(response)
             }
           })
           .catch(function (error) {
@@ -94,6 +95,44 @@ export default {
 
       // Highlight the selected block
       this.Map.setFilter('block-highlighted', ['==', 'block_fips', fipsCode])
+    },
+    fetchProviderData (response) {
+      console.log('fetchProviderData(), response= ', response)
+      let fipsCode = response.data.Results.block[0].FIPS
+      console.log('fipsCode= ', fipsCode)
+      axios
+      .get('https://opendata.fcc.gov/resource/gx6m-8dv6.json', {
+        params: {
+          blockcode: fipsCode,
+          consumer: 1,
+          $$app_token: process.env.SOCRATA_APP_TOKEN
+        }
+      })
+      .then(this.populateProviderTable)
+      .catch(function (error) {
+        if (error.response) {
+          // Server responded with a status code that falls out of the range of 2xx
+          console.log(error.response.data)
+          console.log(error.response.status)
+          console.log(error.response.headers)
+        } else if (error.request) {
+          // Request was made but no response was received
+          console.log(error.request)
+        } else {
+          // Something happened in setting up the request that triggered an Error
+          console.log('Error', error.message)
+        }
+        console.log(error)
+      })
+    },
+    populateProviderTable (response) {
+      console.log('populateProviderTable(), response=', response)
+      let data = response.data
+      let dataStr = ''
+      for (var index in data) {
+        dataStr += data[index].hocofinal + ' - ' + data[index].techcode + ' - ' + data[index].maxaddown + ' - ' + data[index].maxadup + '\n'
+      }
+      console.log(dataStr)
     }
   },
   watch: {
