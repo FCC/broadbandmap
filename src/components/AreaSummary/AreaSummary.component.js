@@ -1,6 +1,7 @@
 import nbMap from '../NBMap/'
 import nbMapSidebar from '../NBMap/NBMapSidebar/'
 import axios from 'axios'
+const d3 = require('d3')
 
 export default {
   name: 'AreaSummary',
