@@ -34,10 +34,7 @@ export default {
           width: '20px'
         }
       ],
-      providerRows: [
-        { id: 1, provider: 'Time Warner Cable Inc.', tech: 'Wireless', down: 1000, up: 500 },
-        { id: 2, provider: 'RCN', tech: 'Cable', down: 500, up: 250 }
-      ]
+      providerRows: []
     }
   },
   methods: {
@@ -83,6 +80,8 @@ export default {
             if (response.data.Results.block.length !== 0) {
               this.highlightBlock(response, lat, lon)
               this.fetchProviderData(response)
+            } else {
+              this.clearProviderTable()
             }
           })
           .catch(function (error) {
@@ -173,6 +172,11 @@ export default {
           up: data[index].maxadup
         })
       }
+    },
+    // Remove Census block & provider table results
+    clearProviderTable () {
+      this.censusBlock = ''
+      this.providerRows = []
     }
   },
   watch: {
@@ -190,6 +194,7 @@ export default {
         this.$router.push('location-summary')
       // Otherwise fly to national view
       } else {
+        this.clearProviderTable()
         this.Map.easeTo({
           center: this.mapOptions.center,
           zoom: this.mapOptions.zoom
