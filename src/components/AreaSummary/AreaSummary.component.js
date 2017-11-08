@@ -18,12 +18,24 @@ export default {
   methods: {
     fetchCombinedData () {
       const self = this
+      let type = ''
+      let id = 0
+      // If the geoid and geography type are in the query string, use those
+      if (typeof this.$route.query.type !== 'undefined' && ['state', 'county', 'place', 'cbsa', 'cd', 'tribal'].indexOf(this.$route.query.type) && typeof this.$route.query.geoid !== 'undefined') {
+        type = this.$route.query.type
+        id = this.$route.query.geoid
+      // Set defaults
+      } else {
+        type = 'nation'
+        id = 0
+      }
+
       // Call Socrata API - Combined Table for charts
       axios
       .get('https://fcc-dev.data.socrata.com/resource/wnht-yxes.json', {
         params: {
-          id: 51013,
-          type: 'county',
+          id: id,
+          type: type,
           tech: 'a',
           $order: 'speed',
           $$app_token: process.env.SOCRATA_APP_TOKEN
@@ -167,5 +179,11 @@ export default {
   },
   computed: {
 
+  },
+  watch: {
+    // When query params change for the same route (URL slug)
+    '$route' (to, from) {
+      this.fetchCombinedData()
+    }
   }
 }
