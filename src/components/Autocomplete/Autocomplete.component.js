@@ -1,7 +1,5 @@
 // Include the needed "uiv" library components
 import { Typeahead } from 'uiv'
-// JSON data for static geographies
-import states from './states.json'
 import { urlValidation } from '../../_mixins/urlValidation.js'
 import EventHub from '../../_mixins/EventHub.js'
 
@@ -75,10 +73,6 @@ export default {
         this.itemKey = ''
         */
         this.typeaheadModel = this.isValidLatLon(this.$route.query.lat, this.$route.query.lon) ? this.$route.query.lat + ', ' + this.$route.query.lon : ''
-      } else {
-        this.dataSource = states.data
-        this.itemKey = 'name'
-        this.asyncKey = ''
       }
     }
   },
