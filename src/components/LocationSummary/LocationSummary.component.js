@@ -7,6 +7,38 @@ export default {
   name: 'LocationSummary',
   components: { axios, nbMap, nbMapSidebar },
   mixins: [urlValidation],
+  data () {
+    return {
+      providerColumns: [
+        {
+          label: 'Provider',
+          field: 'provider',
+          width: '150px'
+        },
+        {
+          label: 'Tech',
+          field: 'tech',
+          width: '20px'
+        },
+        {
+          label: 'Down (Mbps)',
+          field: 'down',
+          type: 'number',
+          width: '20px'
+        },
+        {
+          label: 'Up (Mbps)',
+          field: 'up',
+          type: 'number',
+          width: '20px'
+        }
+      ],
+      providerRows: [
+        { id: 1, provider: 'Time Warner Cable Inc.', tech: 'Wireless', down: 1000, up: 500 },
+        { id: 2, provider: 'RCN', tech: 'Cable', down: 500, up: 250 }
+      ]
+    }
+  },
   methods: {
     mapInit (map, mapOptions) {
       this.Map = map
