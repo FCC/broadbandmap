@@ -9,6 +9,7 @@ export default {
   mixins: [urlValidation],
   data () {
     return {
+      censusBlock: '',
       providerColumns: [
         {
           label: 'Provider',
@@ -109,6 +110,8 @@ export default {
 
       // Get FIPS and envelope from response data
       fipsCode = response.data.Results.block[0].FIPS
+      // Display on page
+      this.censusBlock = fipsCode
       envelope = response.data.Results.block[0].envelope
       envArray = [envelope.minx, envelope.miny, envelope.maxx, envelope.maxy]
 
