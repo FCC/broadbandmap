@@ -34,7 +34,24 @@ export default {
           width: '20px'
         }
       ],
-      providerRows: []
+      providerRows: [],
+      techCodes: {
+        10: 'ADSL',
+        11: 'ADSL',
+        12: 'ADSL',
+        13: 'ADSL',
+        40: 'Cable',
+        41: 'Cable',
+        42: 'Cable',
+        43: 'Cable',
+        50: 'Fiber',
+        0: 'Other',
+        90: 'Other',
+        20: 'Other',
+        30: 'Other',
+        60: 'Satellite',
+        70: 'Fixed Wireless'
+      }
     }
   },
   methods: {
@@ -161,13 +178,19 @@ export default {
       let data = response.data
       // Clear any existing values in the provider array
       this.providerRows = []
+      let techCode = '';
       // Loop through all providers
       for (var index in data) {
+        if (typeof this.techCodes[data[index].techcode] !== 'undefined') {
+          techCode = this.techCodes[data[index].techcode]
+        } else {
+          techCode = ''
+        }
         // Add this provider to the array
         this.providerRows.push({
           id: index,
           provider: data[index].hocofinal,
-          tech: data[index].techcode,
+          tech: techCode,
           down: data[index].maxaddown,
           up: data[index].maxadup
         })
