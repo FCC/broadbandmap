@@ -75,4 +75,34 @@
   margin: 0 15px;
 }
 
+/* vue-good-table plugin styles */
+.good-table {
+  table {
+    display: flex;
+    flex-flow: column;
+    max-height: 600px;
+    width: 100%;
+  }
+  table thead {
+    flex: 0 0 auto;
+    width: calc(100% - 0.9em);
+  }
+  table tbody {
+    flex: 1 1 auto;
+    display: block;
+    overflow-y: scroll;
+  }
+  table tbody tr {
+    width: 100%;
+  }
+  table thead,
+  table tbody tr {
+    display: table;
+    table-layout: fixed;
+  }
+  .table-footer {
+    background-color: transparent !important;
+    border: none !important;
+  }
+}
 

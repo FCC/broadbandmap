@@ -7,6 +7,53 @@ export default {
   name: 'LocationSummary',
   components: { axios, nbMap, nbMapSidebar },
   mixins: [urlValidation],
+  data () {
+    return {
+      censusBlock: '',
+      providerColumns: [
+        {
+          label: 'Provider',
+          field: 'provider',
+          width: '150px'
+        },
+        {
+          label: 'Tech',
+          field: 'tech',
+          width: '20px'
+        },
+        {
+          label: 'Down (Mbps)',
+          field: 'down',
+          type: 'number',
+          width: '20px'
+        },
+        {
+          label: 'Up (Mbps)',
+          field: 'up',
+          type: 'number',
+          width: '20px'
+        }
+      ],
+      providerRows: [],
+      techCodes: {
+        10: 'ADSL',
+        11: 'ADSL',
+        12: 'ADSL',
+        13: 'ADSL',
+        40: 'Cable',
+        41: 'Cable',
+        42: 'Cable',
+        43: 'Cable',
+        50: 'Fiber',
+        0: 'Other',
+        90: 'Other',
+        20: 'Other',
+        30: 'Other',
+        60: 'Satellite',
+        70: 'Fixed Wireless'
+      }
+    }
+  },
   methods: {
     mapInit (map, mapOptions) {
       this.Map = map
@@ -49,6 +96,9 @@ export default {
           .then(response => {
             if (response.data.Results.block.length !== 0) {
               this.highlightBlock(response, lat, lon)
+              this.fetchProviderData(response)
+            } else {
+              this.clearProviderTable()
             }
           })
           .catch(function (error) {
@@ -76,6 +126,8 @@ export default {
 
       // Get FIPS and envelope from response data
       fipsCode = response.data.Results.block[0].FIPS
+      // Display on page
+      this.censusBlock = fipsCode
       envelope = response.data.Results.block[0].envelope
       envArray = [envelope.minx, envelope.miny, envelope.maxx, envelope.maxy]
 
@@ -94,6 +146,60 @@ export default {
 
       // Highlight the selected block
       this.Map.setFilter('block-highlighted', ['==', 'block_fips', fipsCode])
+    },
+    fetchProviderData (response) {
+      let fipsCode = response.data.Results.block[0].FIPS
+      axios
+      .get('https://opendata.fcc.gov/resource/gx6m-8dv6.json', {
+        params: {
+          blockcode: fipsCode,
+          consumer: 1,
+          $$app_token: process.env.SOCRATA_APP_TOKEN
+        }
+      })
+      .then(this.populateProviderTable)
+      .catch(function (error) {
+        if (error.response) {
+          // Server responded with a status code that falls out of the range of 2xx
+          console.log(error.response.data)
+          console.log(error.response.status)
+          console.log(error.response.headers)
+        } else if (error.request) {
+          // Request was made but no response was received
+          console.log(error.request)
+        } else {
+          // Something happened in setting up the request that triggered an Error
+          console.log('Error', error.message)
+        }
+        console.log(error)
+      })
+    },
+    populateProviderTable (response) {
+      let data = response.data
+      // Clear any existing values in the provider array
+      this.providerRows = []
+      let techCode = '';
+      // Loop through all providers
+      for (var index in data) {
+        if (typeof this.techCodes[data[index].techcode] !== 'undefined') {
+          techCode = this.techCodes[data[index].techcode]
+        } else {
+          techCode = ''
+        }
+        // Add this provider to the array
+        this.providerRows.push({
+          id: index,
+          provider: data[index].hocofinal,
+          tech: techCode,
+          down: data[index].maxaddown,
+          up: data[index].maxadup
+        })
+      }
+    },
+    // Remove Census block & provider table results
+    clearProviderTable () {
+      this.censusBlock = ''
+      this.providerRows = []
     }
   },
   watch: {
@@ -111,6 +217,7 @@ export default {
         this.$router.push('location-summary')
       // Otherwise fly to national view
       } else {
+        this.clearProviderTable()
         this.Map.easeTo({
           center: this.mapOptions.center,
           zoom: this.mapOptions.zoom

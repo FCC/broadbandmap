@@ -47,9 +47,25 @@ export default {
     },
     // Check query string and override or use default search type
     receiveSearchType () {
-      if (this.isValidLatLon(this.$route.query.lat, this.$route.query.lon)) {
+      if (typeof this.$route.query.type !== 'undefined') {
+        if (this.$route.query.type === 'state') {
+          this.searchType = 'State'
+        } else if (this.$route.query.type === 'cbsa') {
+          this.searchType = 'CBSA (MSA)'
+        } else if (this.$route.query.type === 'county') {
+          this.searchType = 'County'
+        } else if (this.$route.query.type === 'district') {
+          this.searchType = 'Congressional District'
+        } else if (this.$route.query.type === 'tribal') {
+          this.searchType = 'Tribal Area'
+        } else if (this.$route.query.type === 'place') {
+          this.searchType = 'Census Place'
+        }
+      } else if (this.isValidLatLon(this.$route.query.lat, this.$route.query.lon)) {
+        // If valid lat, lon and address
         if (this.isValidAddress(this.$route.query.place_name)) {
           this.searchType = 'Address'
+        // If valid lat & lon, but no address
         } else {
           this.searchType = 'Coordinates'
         }
@@ -80,7 +96,6 @@ export default {
     // When query params change for the same route (URL slug)
     '$route' (to, from) {
       this.receiveSearchType()
-
       if (to.query.place_name !== undefined) {
         this.$refs.autocomplete2.typeaheadModel = to.query.place_name
       }
