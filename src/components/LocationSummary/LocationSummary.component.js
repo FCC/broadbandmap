@@ -129,9 +129,7 @@ export default {
       this.Map.setFilter('block-highlighted', ['==', 'block_fips', fipsCode])
     },
     fetchProviderData (response) {
-      console.log('fetchProviderData(), response= ', response)
       let fipsCode = response.data.Results.block[0].FIPS
-      console.log('fipsCode= ', fipsCode)
       axios
       .get('https://opendata.fcc.gov/resource/gx6m-8dv6.json', {
         params: {
@@ -158,13 +156,20 @@ export default {
       })
     },
     populateProviderTable (response) {
-      console.log('populateProviderTable(), response=', response)
       let data = response.data
-      let dataStr = ''
+      // Clear any existing values in the provider array
+      this.providerRows = []
+      // Loop through all providers
       for (var index in data) {
-        dataStr += data[index].hocofinal + ' - ' + data[index].techcode + ' - ' + data[index].maxaddown + ' - ' + data[index].maxadup + '\n'
+        // Add this provider to the array
+        this.providerRows.push({
+          id: index,
+          provider: data[index].hocofinal,
+          tech: data[index].techcode,
+          down: data[index].maxaddown,
+          up: data[index].maxadup
+        })
       }
-      console.log(dataStr)
     }
   },
   watch: {
