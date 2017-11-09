@@ -96,8 +96,18 @@ export default {
     // When query params change for the same route (URL slug)
     '$route' (to, from) {
       this.receiveSearchType()
+
+      // Update search input field value with place_name
       if (to.query.place_name !== undefined) {
         this.$refs.autocomplete2.typeaheadModel = to.query.place_name
+      }
+
+      // Update search input field value with lat, lon
+      if (this.searchType === 'Coordinates') {
+        let lat = parseFloat(to.query.lat.trim())
+        let lon = parseFloat(to.query.lon.trim())
+
+        this.$refs.autocomplete2.typeaheadModel = lat + ', ' + lon
       }
     }
   }
