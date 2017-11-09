@@ -1,0 +1,16 @@
+.h4 {
+  margin-top: 20px;
+}
+
+.panel-default {
+	max-width: 350px;
+}
+
+.panel-body {
+  ul {
+    margin-bottom: 0;
+  }
+  li+li {
+    margin-top: 10px;
+  }
+}
