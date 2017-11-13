@@ -1,10 +1,11 @@
 import mapboxgl from 'mapboxgl'
-import axios from 'axios'
 import { Dropdown, Tooltip } from 'uiv'
 import nbMapSearch from './NBMapSearch/'
 import EventHub from '../../_mixins/EventHub.js'
 import LayersLocation from './layers-location.js'
 import LayersArea from './layers-area.js'
+import LayersProvider from './layers-provider.js'
+
 import { urlValidation } from '../../_mixins/urlValidation.js'
 
 export default {
@@ -18,24 +19,25 @@ export default {
     },
     searchType: {
       type: String,
-      required: true
+      required: false
     },
     searchDefault: {
       type: String,
-      required: true
+      required: false
     }
   },
   data () {
     return {
       Map: {},
       toggleWidth: false,
-      mapLayers: this.mapType === 'location' ? LayersLocation : LayersArea,
+      mapLayers: {},
       baseLayerNames: [],
-      defaultBaseLayer: 'default'
+      defaultBaseLayer: 'default',
+      showSearch: this.searchType === 'none'
     }
   },
   mounted () {
-    // Initialze Map
+     // Initialze Map
     this.$nextTick(this.init)
   },
   beforeDestroy () {
@@ -45,7 +47,16 @@ export default {
     init: function () {
       mapboxgl.accessToken = process.env.MAPBOX_ACCESS_TOKEN
 
-     // Define default map options
+      // Define map layers based on map type
+      const layerTypes = {
+        location: LayersLocation,
+        area: LayersArea,
+        provider: LayersProvider
+      }
+
+      this.mapLayers = layerTypes[this.mapType]
+
+      // Define default map options
       this.mapOptions = {
         attributionControl: false,
         container: 'map-container',
