@@ -123,7 +123,7 @@ export default {
         .enter().append('g')
         .attr('fill', function (d) { return z(d.key) })
         .selectAll('rect')
-        .data(function (d) { return d; })
+        .data(function (d) { return d })
         .enter().append('rect')
         // .attr('x', function (d) { return x(d.data.speed) })
         .attr('x', function (d) {
