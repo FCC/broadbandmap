@@ -1,8 +1,9 @@
+import { Tooltip } from 'uiv'
 import nbMap from '../NBMap/'
 
 export default {
   name: 'ProviderDetail',
-  components: { nbMap },
+  components: { Tooltip, nbMap },
   props: [],
   mounted () {
 
