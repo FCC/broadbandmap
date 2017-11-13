@@ -21,6 +21,9 @@
   height: 77vh;
   margin-bottom: 0;
   width: 100%;
+  .map-provider & {
+    height: 370px;
+  }
 }
 
 
@@ -118,6 +121,8 @@
 
 
 
+
+
 /* Map Controls */
 
 .mapboxgl-ctrl-group {
@@ -155,6 +160,8 @@
     margin: 0;
   }
 }
+
+
 
 
 /*  Map Sidebar */
@@ -232,6 +239,8 @@
 
 
 
+
+
 /* Map Legend */
 
 .map-legend {
@@ -249,6 +258,8 @@
   vertical-align: middle;
   width: 20px;
 }
+
+
 
 
 

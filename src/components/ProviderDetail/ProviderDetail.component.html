@@ -1,5 +1,255 @@
-<div class="container-fluid">
-	<div class="row">
-		<div class="col-sm-12"><h1>Provider Detail</h1></div>
-	</div>
+<div>
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-sm-12">
+        <h1>View Service Provider Details</h1>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-12">
+        <form class="provider-input">
+          <p>Get detailed information on as many as 3 service providers at a time.</p>
+          <div class="input-provider">
+            <template v-for="provider in providers">
+              <div class="input-group input-group-lg">
+                <input class="form-control input-lg" type="search" v-model="provider.name" placeholder="Enter provider name" autocomplete="off" aria-label="Enter provider name">
+                <span class="input-group-btn">
+                <button class="btn btn-default btn-remove" @click.prevent="removeProvider(provider.id)"><span class="icon icon-close"></span></button>
+                </span>
+              </div>
+            </template>
+            <p v-if="showLink">
+              <button class="btn-add btn btn-link" @click.prevent="addProvider"><span class="icon icon-plus-circle"></span>Add Provider</button>
+            </p>
+          </div>
+          <button class="btn-search btn btn-lg btn-primary" type="button" @click.prevent="viewDetails">View Details</button>
+          <p>
+          </p>
+        </form>
+      </div>
+    </div>
+  </div>
+  <div class="provider-charts">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-sm-9">
+          <h3>Provider coverage overlap and population coverage</h3>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-12 col-md-8">
+          <div class="panel-coverage panel-map panel panel-default">
+            <div class="panel-body">
+              <div class="row">
+                <div class="col-sm-5">
+                  <h4 class="h5">Provider coverage</h4>
+                </div>
+                <div class="col-sm-7">
+                  <ul class="map-key list-unstyled list-inline pull-right">
+                    <template v-for="(providerName, index) in providerNames">
+                      <li>
+                        <span :class="'key key-color' + index"></span>
+                        <span class="key-name">{{ providerName }}</span>
+                      </li>
+                    </template>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <nb-map class="map-provider" mapType="provider" searchType="none" @map-init="mapInit" @map-click="mapClick"></nb-map>
+          </div>
+        </div>
+        <div class="col-sm-12 col-md-4">
+          <div class="panel-coverage panel panel-default">
+            <div class="panel-body">
+              <div class="row">
+                <div class="col-sm-8">
+                  <h4 class="h5">Percentage of the pop. covered by selected provider(s)</h4>
+                </div>
+                <div class="col-sm-4">
+                  <div class="nav-utility">
+                    <tooltip text="Download data" placement="top">
+                      <a href="#"><span class="icon icon-cloud-download"></span><span class="sr-only">Download Data</span></a>
+                    </tooltip>
+                    <tooltip text="About this map" placement="top">
+                      <a href="#"><span class="icon icon-info-circle" data-toggle="tooltip" data-placement="top" title="" data-original-title="About"></span><span class="sr-only">About this map</span></a>
+                    </tooltip>
+                  </div>
+                </div>
+              </div>
+              <div class="chart-percentagePop"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <hr>
+      <h3>Percent of each provider's broadband footprint with each speed based on technology</h3>
+      <div class="row">
+        <div class="col-sm-12 col-lg-8">
+          <div class="panel-chart panel panel-default">
+            <div class="panel-body">
+              <div class="row">
+                <div class="col-sm-6">
+                  <h4 class="h5">Any Technology</h4>
+                  <div class="btn-group btn-group-xs" role="group" aria-label="Select download or upload speed.">
+                    <button type="button" class="btn btn-default active">Download</button>
+                    <button type="button" class="btn btn-default">Upload</button>
+                  </div>
+                </div>
+                <div class="col-sm-6">
+                  <div class="nav-utility">
+                    <tooltip text="Download data" placement="top">
+                      <a href="#"><span class="icon icon-cloud-download"></span><span class="sr-only">Download Data</span></a>
+                    </tooltip>
+                    <tooltip text="About this map" placement="top">
+                      <a href="#"><span class="icon icon-info-circle" data-toggle="tooltip" data-placement="top" title="" data-original-title="About"></span><span class="sr-only">About this map</span></a>
+                    </tooltip>
+                  </div>
+                </div>
+              </div>
+              <div class="chart-anyTech"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-6 col-md-6 col-lg-4">
+          <div class="panel-chart panel panel-default">
+            <div class="panel-body">
+              <div class="row">
+                <div class="col-sm-6">
+                  <h4 class="h5">ADSL</h4>
+                </div>
+                <div class="col-sm-6">
+                  <div class="nav-utility">
+                    <tooltip text="Download data" placement="top">
+                      <a href="#"><span class="icon icon-cloud-download"></span><span class="sr-only">Download Data</span></a>
+                    </tooltip>
+                    <tooltip text="About this map" placement="top">
+                      <a href="#"><span class="icon icon-info-circle" data-toggle="tooltip" data-placement="top" title="" data-original-title="About"></span><span class="sr-only">About this map</span></a>
+                    </tooltip>
+                  </div>
+                </div>
+              </div>
+              <div class="chart-container"></div>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-6 col-md-6 col-lg-4">
+          <div class="panel-chart panel panel-default">
+            <div class="panel-body">
+              <div class="row">
+                <div class="col-sm-6">
+                  <h4 class="h5">Cable</h4>
+                </div>
+                <div class="col-sm-6">
+                  <div class="nav-utility">
+                    <tooltip text="Download data" placement="top">
+                      <a href="#"><span class="icon icon-cloud-download"></span><span class="sr-only">Download Data</span></a>
+                    </tooltip>
+                    <tooltip text="About this map" placement="top">
+                      <a href="#"><span class="icon icon-info-circle" data-toggle="tooltip" data-placement="top" title="" data-original-title="About"></span><span class="sr-only">About this map</span></a>
+                    </tooltip>
+                  </div>
+                </div>
+              </div>
+              <div class="chart-container"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-6 col-md-6 col-lg-4">
+          <div class="panel-chart panel panel-default">
+            <div class="panel-body">
+              <div class="row">
+                <div class="col-sm-6">
+                  <h4 class="h5">Fiber</h4>
+                </div>
+                <div class="col-sm-6">
+                  <div class="nav-utility">
+                    <tooltip text="Download data" placement="top">
+                      <a href="#"><span class="icon icon-cloud-download"></span><span class="sr-only">Download Data</span></a>
+                    </tooltip>
+                    <tooltip text="About this map" placement="top">
+                      <a href="#"><span class="icon icon-info-circle" data-toggle="tooltip" data-placement="top" title="" data-original-title="About"></span><span class="sr-only">About this map</span></a>
+                    </tooltip>
+                  </div>
+                </div>
+              </div>
+              <div class="chart-container"></div>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-6 col-md-6 col-lg-4">
+          <div class="panel-chart panel panel-default">
+            <div class="panel-body">
+              <div class="row">
+                <div class="col-sm-6">
+                  <h4 class="h5">Fixed Wireless</h4>
+                </div>
+                <div class="col-sm-6">
+                  <div class="nav-utility">
+                    <tooltip text="Download data" placement="top">
+                      <a href="#"><span class="icon icon-cloud-download"></span><span class="sr-only">Download Data</span></a>
+                    </tooltip>
+                    <tooltip text="About this map" placement="top">
+                      <a href="#"><span class="icon icon-info-circle" data-toggle="tooltip" data-placement="top" title="" data-original-title="About"></span><span class="sr-only">About this map</span></a>
+                    </tooltip>
+                  </div>
+                </div>
+              </div>
+              <div class="chart-container"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-6 col-md-6 col-lg-4">
+          <div class="panel-chart panel panel-default">
+            <div class="panel-body">
+              <div class="row">
+                <div class="col-sm-6">
+                  <h4 class="h5">Satellite</h4>
+                </div>
+                <div class="col-sm-6">
+                  <div class="nav-utility">
+                    <tooltip text="Download data" placement="top">
+                      <a href="#"><span class="icon icon-cloud-download"></span><span class="sr-only">Download Data</span></a>
+                    </tooltip>
+                    <tooltip text="About this map" placement="top">
+                      <a href="#"><span class="icon icon-info-circle" data-toggle="tooltip" data-placement="top" title="" data-original-title="About"></span><span class="sr-only">About this map</span></a>
+                    </tooltip>
+                  </div>
+                </div>
+              </div>
+              <div class="chart-container"></div>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-6 col-md-6 col-lg-4">
+          <div class="panel-chart panel panel-default">
+            <div class="panel-body">
+              <div class="row">
+                <div class="col-sm-6">
+                  <h4 class="h5">Other</h4>
+                </div>
+                <div class="col-sm-6">
+                  <div class="nav-utility">
+                    <tooltip text="Download data" placement="top">
+                      <a href="#"><span class="icon icon-cloud-download"></span><span class="sr-only">Download Data</span></a>
+                    </tooltip>
+                    <tooltip text="About this map" placement="top">
+                      <a href="#"><span class="icon icon-info-circle" data-toggle="tooltip" data-placement="top" title="" data-original-title="About"></span><span class="sr-only">About this map</span></a>
+                    </tooltip>
+                  </div>
+                </div>
+              </div>
+              <div class="chart-container"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>

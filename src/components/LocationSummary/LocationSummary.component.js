@@ -121,7 +121,6 @@ export default {
       let fipsCode = ''
       let envelope = 0
       let envArray = []
-      let feature = {}
       let placeName = this.$route.query.place_name
 
       // Get FIPS and envelope from response data
@@ -136,12 +135,6 @@ export default {
         animate: false,
         easeTo: true,
         padding: 100
-      })
-
-      // Query the block layer based on the FIPS code
-      feature = this.Map.querySourceFeatures('block', {
-        sourcelayer: 'nbm2_block2010geojson',
-        filter: ['==', 'block_fips', fipsCode]
       })
 
       // Highlight the selected block
@@ -179,6 +172,7 @@ export default {
       // Clear any existing values in the provider array
       this.providerRows = []
       let techCode = ''
+
       // Loop through all providers
       for (var index in data) {
         if (typeof this.techCodes[data[index].techcode] !== 'undefined') {
