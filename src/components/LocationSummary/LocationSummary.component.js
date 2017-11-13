@@ -68,8 +68,8 @@ export default {
       }
     },
     getLatLon (event) {
-      let lat = event.lngLat.lat
-      let lon = event.lngLat.lng
+      let lat = event.lngLat.lat.toFixed(6)
+      let lon = event.lngLat.lng.toFixed(6)
 
       // Get FIPS
       this.getFIPS(lat, lon)
@@ -169,7 +169,6 @@ export default {
     },
     populateProviderTable (response) {
       let data = response.data
-
       // Clear any existing values in the provider array
       this.providerRows = []
       let techCode = ''
@@ -181,7 +180,6 @@ export default {
         } else {
           techCode = ''
         }
-
         // Add this provider to the array
         this.providerRows.push({
           id: index,

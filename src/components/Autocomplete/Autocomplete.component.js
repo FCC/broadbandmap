@@ -36,7 +36,7 @@ export default {
         case 'Address':
           if (typeof this.typeaheadModel === 'object' && typeof this.typeaheadModel.id === 'string') {
             // Create the URL
-            newURL = 'location-summary?lat=' + this.typeaheadModel.center[1] + '&lon=' + this.typeaheadModel.center[0] + '&place_name=' + encodeURIComponent(this.typeaheadModel.place_name)
+            newURL = 'location-summary?lat=' + this.typeaheadModel.center[1].toFixed(6) + '&lon=' + this.typeaheadModel.center[0].toFixed(6) + '&place_name=' + encodeURIComponent(this.typeaheadModel.place_name)
             this.$router.push(newURL)
           } else {
             // Call Modal component in app footer
@@ -97,13 +97,16 @@ export default {
           place_name: this.isValidAddress(this.$route.query.place_name) ? this.$route.query.place_name : ''
         }
       } else if (this.searchType === 'Coordinates') {
+        let lat = parseFloat(this.$route.query.lat).toFixed(6)
+        let lon = parseFloat(this.$route.query.lon).toFixed(6)
+
         this.dataSource = null
         this.asyncSrc = null
         this.asyncKey = ''
         /* Clearing this throws error, but may need to come back to this later
         this.itemKey = ''
         */
-        this.typeaheadModel = this.isValidLatLon(this.$route.query.lat, this.$route.query.lon) ? this.$route.query.lat + ', ' + this.$route.query.lon : ''
+        this.typeaheadModel = this.isValidLatLon(this.$route.query.lat, this.$route.query.lon) ? lat + ', ' + lon : ''
       } else if (this.searchType === 'State') {
         this.itemKey = 'name'
         this.asyncKey = ''
