@@ -63,7 +63,7 @@ export default {
         style: this.mapLayers,
         logoPosition: 'bottom-left',
         maxZoom: 16,
-        minZoom: 3,
+        minZoom: 0,
         center: [-94.96, 38.82],
         zoom: 3
       }
