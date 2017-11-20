@@ -1,9 +1,10 @@
 import AppHeader from '@/components/AppHeader/'
+import MapSettings from '@/components/NBMap/NBMapSettings/'
 import AppFooter from '@/components/AppFooter/'
 
 export default {
   name: 'AppContainer',
-  components: { AppHeader, AppFooter },
+  components: { AppHeader, MapSettings, AppFooter },
   props: [],
   mounted () {
 
