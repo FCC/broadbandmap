@@ -69,7 +69,7 @@ export default {
       this.mapOptions = mapOptions
 
       // Show default tech and speed layers
-      map.on('load', function () {
+      this.Map.on('load', function () {
         vm.updateTechSpeed(vm.defaultPropertyID)
       })
 
@@ -194,6 +194,7 @@ export default {
         } else {
           techCode = ''
         }
+
         // Add this provider to the array
         this.providerRows.push({
           id: index,
