@@ -16,12 +16,13 @@ export default {
       }],
       providerNames: [],
       numProviders: 1,
-      showLink: true
+      showLink: true,
+      showResults: false
     }
   },
   methods: {
-    mapInit () {
-      console.log('initialize map')
+    mapInit (map) {
+      this.Map = map
     },
     mapClick () {
       console.log('map click')
@@ -59,6 +60,14 @@ export default {
     viewDetails () {
       // Create list of provider Names
       this.providerNames = this.providers.map(provider => provider.name).filter(providerName => providerName !== undefined && providerName !== '')
+
+      // Display charts section
+      this.showResults = true
+
+      // Resize the map once the charts section is visible
+      setTimeout(() => {
+        this.Map.resize()
+      }, 100)
     }
   },
   computed: {

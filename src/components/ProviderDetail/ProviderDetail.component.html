@@ -22,14 +22,12 @@
               <button class="btn-add btn btn-link" @click.prevent="addProvider"><span class="icon icon-plus-circle"></span>Add Provider</button>
             </p>
           </div>
-          <button class="btn-search btn btn-lg btn-primary" type="button" @click.prevent="viewDetails">View Details</button>
-          <p>
-          </p>
+          <button class="btn-search btn btn-lg btn-primary" type="button" @click.prevent="viewDetails">View Details</button>          
         </form>
       </div>
     </div>
   </div>
-  <div class="provider-charts">
+  <div class="provider-charts" v-show="showResults">
     <div class="container-fluid">
       <div class="row">
         <div class="col-sm-8">
