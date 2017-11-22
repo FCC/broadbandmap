@@ -31,19 +31,32 @@ export default {
       }
 
       // Call Socrata API - Combined Table for charts
+      let socrataURL = ''
+      let appToken = ''
+      let httpHeaders = {}
+      if (process.env.SOCRATA_ENV === 'DEV') {
+        socrataURL = process.env.SOCRATA_DEV_COMBINED
+        httpHeaders = {
+          // Dev: Authentication to Socrata using HTTP Basic Authentication
+          'Authorization': 'Basic ' + process.env.SOCRATA_DEV_HTTP_BASIC_AUTHENTICATION
+        }
+      } else if (process.env.SOCRATA_ENV === 'PROD') {
+        socrataURL = process.env.SOCRATA_PROD_COMBINED
+        // Socrata does not currently enforce an app token, but may in the future
+        appToken = process.env.SOCRATA_PROD_APP_TOKEN
+      } else {
+        console.log('ERROR: process.env.SOCRATA_ENV in .env file must be PROD or DEV, not ' + process.env.SOCRATA_ENV)
+      }
       axios
-      .get('https://fcc-dev.data.socrata.com/resource/wnht-yxes.json', {
+      .get(socrataURL, {
         params: {
           id: id,
           type: type,
           tech: 'a',
           $order: 'speed',
-          $$app_token: process.env.SOCRATA_APP_TOKEN
+          $$app_token: appToken
         },
-        headers: {
-          // Dev: Authentication to Socrata using HTTP Basic Authentication
-          'Authorization': 'Basic ' + process.env.SOCRATA_HTTP_BASIC_AUTHENTICATION
-        }
+        headers: httpHeaders
       })
       .then(function (response) {
         console.log('Socrata response= ', response)
