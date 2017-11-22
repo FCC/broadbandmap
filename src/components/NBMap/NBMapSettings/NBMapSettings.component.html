@@ -1,0 +1,37 @@
+<modal v-model="showModal" title="Settings" @hide="" ref="modal">
+  <form>
+    <h3>Select Broadand</h3>
+    <div class="row">
+      <div class="col-sm-6">
+        <fieldset>
+          <legend>Technologies</legend>
+          <div role="group">
+            <div class="checkbox" v-for="technology in technologies">
+              <input type="checkbox" name="tech" :id="technology.name" :value="technology.value" @change="saveSettings" v-model="selectedTech">
+              <label :for="technology.name">
+                {{ technology.name }}
+              </label>
+            </div>            
+          </div>
+        </fieldset>
+      </div>
+      <div class="col-sm-6">
+        <fieldset>
+          <legend>Speed (Mbps)</legend>
+          <div role="group">
+            <div class="radio" v-for="(speed, index) in speeds">
+              <input type="radio" name="speed" :id="'speed'+index" :value="speed.value" @change="saveSettings" v-model="selectedSpeed">
+              <label :for="'speed'+index">
+                &gt; {{ speed.name }}
+              </label>
+            </div>            
+          </div>
+        </fieldset>
+      </div>
+    </div>
+  </form>
+  <div slot="footer">
+    <!-- <button class="btn btn-default" type="button" @click="closeModal">Close</button> -->
+    <button class="btn btn-default pull-right" type="button" @click="closeModal">Close</button>
+  </div>
+</modal>

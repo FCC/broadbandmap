@@ -1,6 +1,8 @@
 // Include Uiv components
 import { Dropdown, Tooltip } from 'uiv'
+
 // Include custom Vue components
+import EventHub from '../../../_mixins/EventHub.js'
 import Autocomplete from '../../Autocomplete/index.vue'
 import searchGeogTypes from '../../../_mixins/search-geog-types.js'
 import { urlValidation } from '../../../_mixins/urlValidation.js'
@@ -73,6 +75,9 @@ export default {
         this.searchType = this.defaultSearch
       }
       this.toggleSearchType(this.searchType)
+    },
+    openMapSettings () {
+      EventHub.$emit('openMapSettings')
     }
   },
   computed: {
