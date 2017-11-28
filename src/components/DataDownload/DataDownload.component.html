@@ -1,5 +1,111 @@
 <div class="container-fluid">
-	<div class="row">
-		<div class="col-sm-12"><h1>Data Download</h1></div>
-	</div>
+  <div class="row">
+    <div class="col-sm-8">
+      <h1>Data Download</h1>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm-8 col-fixed">
+      <table class="table table-striped">
+        <thead>
+          <tr class="tr-heading">
+            <th colspan="2"></th>
+            <th colspan="2">
+              Characteristics of Data Collected
+            </th>
+          </tr>
+          <tr>
+            <th>Data Type</th>
+            <th>What We Collect</th>
+            <th>Fixed Broadband</th>
+            <th>Mobile Broadband</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Deployment data</td>
+            <td>Areas where providers can or do offer service</td>
+            <td>
+              <ul>
+                <li>Public</li>
+                <li>Census block</li>
+                <li>Consumer vs. business</li>
+                <li>Technology deployed</li>
+                <li>Max. advertised down/up</li>
+              </ul>
+            </td>
+            <td>
+              <ul>
+                <li>(Mostly) Public</li>
+                <li>Geospatial polygons (mapping data)</li>
+                <li>Technology deployed</li>
+                <li>Min. advertised down/up</li>
+                <li>Spectrum</li>
+              </ul>
+            </td>
+          </tr>
+          <tr>
+            <td>Subscription (connection) data</td>
+            <td>The number of connections</td>
+            <td>
+              <ul>
+                <li>(Mostly) confidential</li>
+                <li>Census tract</li>
+                <li>Consumer vs. business</li>
+                <li>Technology in use</li>
+                <li>Subs per advertised speed</li>
+              </ul>
+            </td>
+            <td>
+              <ul>
+                <li>(Mostly) Confidential</li>
+                <li>State</li>
+                <li>Subs per advertised speed</li>
+              </ul>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="col-sm-4">
+      <div class="panel-sidebar panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title">FCC Data</h3>
+        </div>
+        <div class="panel-body">
+          <section>
+            <p><b>Raw Data</b></p>
+            <ul class="list-unstyled">
+              <li><a href="#">Form 477</a></li>
+              <li><a href="#">Block-level estimates for HU, HH, POP</a></li>
+            </ul>
+            <hr>
+            <p><b>Processed Data</b></p>
+            <ul class="list-unstyled">
+              <li><a href="#">Mapping data</a></li>
+              <li><a href="#">Roll-ups to geography</a></li>
+              <li><a href="#">Provider Summary</a></li>
+            </ul>
+          </section>
+          <hr>
+          <h3 class="h4">Non-FCC Data</h3>
+          <section>
+            <ul class="list-unstyled">
+              <li><b>Geographic Data from Census</b>
+                <ul class="list-unstyled">
+                  <li><a href="#">2010 census blocks </a></li>
+                  <li><a href="#">20xx cartographic tracts and counties</a></li>
+                  <li><a href="#">Cartographic state</a></li>
+                  <li><a href="#">20xx Congressional Districts</a></li>
+                  <li><a href="#">20xx CDPs</a></li>
+                  <li><a href="#">20xx Tribal areas</a></li>
+                </ul>
+              </li>
+              <li><a href="#">CBSA definition </a></li>
+            </ul>
+          </section>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
