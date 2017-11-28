@@ -158,7 +158,7 @@ export default {
     fetchProviderData (response) {
       let fipsCode = response.data.Results.block[0].FIPS
       axios
-      .get('https://opendata.fcc.gov/resource/gx6m-8dv6.json', {
+      .get(process.env.SOCRATA_PROD_FULL, {
         params: {
           blockcode: fipsCode,
           consumer: 1,
