@@ -26,10 +26,6 @@ export default {
     state: {
       type: 'vector',
       url: 'mapbox://fcc.1r5um5ls'
-    },
-    place: {
-      type: 'vector',
-      url: 'mapbox://fcc.6pgpraox'
     }
   },
   sprite: 'mapbox://sprites/mapbox/basic-v8',
