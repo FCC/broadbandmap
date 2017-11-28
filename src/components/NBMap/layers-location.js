@@ -38,27 +38,24 @@ export default {
     ...baseLayers,
     {
       id: 'block',
-      type: 'fill',
+      type: 'line',
       source: 'block',
       'source-layer': 'nbm2_block2010geojson',
       layout: {
         visibility: 'visible'
       },
       paint: {
-        'fill-outline-color': '#484896',
-        'fill-color': '#ffffff',
-        'fill-opacity': 0.5
+        'line-color': '#484896'
       }
     },
     {
       id: 'block-highlighted',
-      type: 'fill',
+      type: 'line',
       source: 'block',
       'source-layer': 'nbm2_block2010geojson',
       paint: {
-        'fill-outline-color': '#484896',
-        'fill-color': '#6e599f',
-        'fill-opacity': 0.75
+        'line-color': '#484896',
+        'line-width': 7
       },
       'filter': ['in', 'bbox_arr', '']
     },
@@ -72,7 +69,8 @@ export default {
       },
       paint: {
         'line-color': '#2a3463'
-      }
+      },
+      maxzoom: 10
     },
     {
       id: 'county',
@@ -96,18 +94,6 @@ export default {
       },
       paint: {
         'line-color': '#a9b55c'
-      }
-    },
-    {
-      id: 'place',
-      type: 'line',
-      source: 'place',
-      'source-layer': 'nbm2_place2016geojson',
-      layout: {
-        visibility: 'visible'
-      },
-      paint: {
-        'line-color': '#8c9651'
       }
     }
   ]
