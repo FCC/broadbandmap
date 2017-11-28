@@ -148,6 +148,7 @@ export default {
       this.Map.fitBounds(envArray, {
         animate: false,
         easeTo: true,
+        maxZoom: 14,
         padding: 100
       })
 
