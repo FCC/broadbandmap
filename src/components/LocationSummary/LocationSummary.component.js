@@ -3,7 +3,7 @@ import nbMap from '../NBMap/'
 import EventHub from '../../_mixins/EventHub.js'
 import nbMapSidebar from '../NBMap/NBMapSidebar/'
 import { urlValidation } from '../../_mixins/urlValidation.js'
-import { sourcesTechSpeed, layersTechSpeed, layersSpeed } from './layers-techSpeed.js'
+import { sourcesTechSpeed, layersTechSpeed, layersSpeed } from '../NBMap/layers-techSpeed.js'
 
 export default {
   name: 'LocationSummary',
