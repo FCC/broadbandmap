@@ -3,7 +3,7 @@ import nbMap from '../NBMap/'
 import EventHub from '../../_mixins/EventHub.js'
 import nbMapSidebar from '../NBMap/NBMapSidebar/'
 import { urlValidation } from '../../_mixins/urlValidation.js'
-import { sourcesTechSpeed, layersTechSpeed, layersSpeed } from './layers-techSpeed.js'
+import { sourcesTechSpeed, layersTechSpeed, layersSpeed } from '../NBMap/layers-techSpeed.js'
 
 export default {
   name: 'LocationSummary',
@@ -54,12 +54,17 @@ export default {
         60: 'Satellite',
         70: 'Fixed Wireless'
       },
-      defaultPropertyID: 'acfosw_25_3'
+      defaultTech: 'acfosw',
+      defaultSpeed: '25_3'
     }
   },
-  created () {
+  mounted () {
     EventHub.$on('updateMapSettings', (selectedTech, selectedSpeed) => this.updateTechSpeed(selectedTech, selectedSpeed))
     EventHub.$on('removeLayers', (propertyID) => this.removeLayers(propertyID))
+  },
+  destroyed () {
+    EventHub.$off('updateMapSettings')
+    EventHub.$off('removeLayers')
   },
   methods: {
     mapInit (map, mapOptions) {
@@ -70,7 +75,7 @@ export default {
 
       // Show default tech and speed layers
       this.Map.on('load', function () {
-        vm.updateTechSpeed(vm.defaultPropertyID)
+        vm.updateTechSpeed(vm.defaultTech, vm.defaultSpeed)
       })
 
       // If valid latitude and longitude get the FIPS and highlight the census block
@@ -158,7 +163,7 @@ export default {
     fetchProviderData (response) {
       let fipsCode = response.data.Results.block[0].FIPS
       axios
-      .get('https://opendata.fcc.gov/resource/gx6m-8dv6.json', {
+      .get(process.env.SOCRATA_PROD_FULL, {
         params: {
           blockcode: fipsCode,
           consumer: 1,
@@ -205,6 +210,11 @@ export default {
           up: data[index].maxadup
         })
       }
+    },
+    // Remove Census block & provider table results
+    clearProviderTable () {
+      this.censusBlock = ''
+      this.providerRows = []
     },
     addSources () {
       const vm = this
@@ -264,7 +274,7 @@ export default {
         })
       }
     },
-    removeLayers (propertyID) {
+    removeLayers (propertyID) { // e.g. acfosw_25_3
       const vm = this
       const speed = propertyID.split('_')[1]
 
@@ -282,7 +292,9 @@ export default {
         })
       }
     },
-    updateTechSpeed (propertyID) {
+    // Called by mounted() and Map.on('load')
+    updateTechSpeed (selectedTech, selectedSpeed) { // e.g. acfosw, 25_3
+      let propertyID = [selectedTech, selectedSpeed].join('_')
       // add layer sources if they don't exist already
       if (this.Map.getSource('county-techSpeed') === undefined || this.Map.getSource('block-techSpeed') === undefined) {
         this.addSources()
@@ -293,11 +305,6 @@ export default {
 
       // add new map layers
       this.addLayers(propertyID)
-    },
-    // Remove Census block & provider table results
-    clearProviderTable () {
-      this.censusBlock = ''
-      this.providerRows = []
     }
   },
   watch: {

@@ -37,7 +37,7 @@ export default {
           value: 'o'
         }
       ],
-      selectedTech: ['a', 'c', 'f', 'w', 's', 'o'],
+      selectedTechCategories: ['a', 'c', 'f', 'w', 's', 'o'],
       speeds: [
         {
           name: '0.2',
@@ -73,8 +73,8 @@ export default {
       this.showModal = false
     },
     saveSettings () {
-      // layerID corresponds to first letter of all selected layer names (e.g. acfosw)
-      let layerID = this.selectedTech.sort().join('')
+      // Corresponds to first letter of all selected layer names (e.g. acfosw)
+      let selectedTech = this.selectedTechCategories.sort().join('')
 
       // propertyID (eg. acfosw_25_3) corresponds to tileset property (field) ID
       let propertyID = ''
@@ -85,12 +85,12 @@ export default {
       }
 
       // when no technology is selected, set selected speed to empty string
-      if (layerID === '') {
+      if (selectedTech === '') {
         this.selectedSpeed = ''
         propertyID = ''
       } else {
         // set property ID = layer ID + selected speed
-        propertyID = [layerID, this.selectedSpeed].join('_')
+        propertyID = [selectedTech, this.selectedSpeed].join('_')
       }
 
       // if no tech or speed selected, remove all tech and speed map layers
@@ -98,7 +98,8 @@ export default {
         EventHub.$emit('removeLayers', this.selectedPropertyID)
       } else {
         this.selectedPropertyID = propertyID
-        EventHub.$emit('updateMapSettings', propertyID)
+        // Send technologies & speed to LocationSummary and AreaSummary components
+        EventHub.$emit('updateMapSettings', selectedTech, this.selectedSpeed)
       }
     }
   }
