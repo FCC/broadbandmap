@@ -7,7 +7,7 @@
           <legend>Technologies</legend>
           <div role="group">
             <div class="checkbox" v-for="technology in technologies">
-              <input type="checkbox" name="tech" :id="technology.name" :value="technology.value" @change="saveSettings" v-model="selectedTech">
+              <input type="checkbox" name="tech" :id="technology.name" :value="technology.value" @change="saveSettings" v-model="selectedTechCategories">
               <label :for="technology.name">
                 {{ technology.name }}
               </label>

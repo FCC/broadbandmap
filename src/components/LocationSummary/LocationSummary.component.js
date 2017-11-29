@@ -54,7 +54,8 @@ export default {
         60: 'Satellite',
         70: 'Fixed Wireless'
       },
-      defaultPropertyID: 'acfosw_25_3'
+      defaultTech: 'acfosw',
+      defaultSpeed: '25_3'
     }
   },
   created () {
@@ -70,7 +71,7 @@ export default {
 
       // Show default tech and speed layers
       this.Map.on('load', function () {
-        vm.updateTechSpeed(vm.defaultPropertyID)
+        vm.updateTechSpeed(vm.defaultTech, vm.defaultSpeed)
       })
 
       // If valid latitude and longitude get the FIPS and highlight the census block
@@ -269,7 +270,7 @@ export default {
         })
       }
     },
-    removeLayers (propertyID) {
+    removeLayers (propertyID) { // e.g. acfosw_25_3
       const vm = this
       const speed = propertyID.split('_')[1]
 
@@ -287,7 +288,9 @@ export default {
         })
       }
     },
-    updateTechSpeed (propertyID) {
+    // Called by created() and Map.on('load')
+    updateTechSpeed (selectedTech, selectedSpeed) { // e.g. acfosw, 25_3
+      let propertyID = [selectedTech, selectedSpeed].join('_')
       // add layer sources if they don't exist already
       if (this.Map.getSource('county-techSpeed') === undefined || this.Map.getSource('block-techSpeed') === undefined) {
         this.addSources()
