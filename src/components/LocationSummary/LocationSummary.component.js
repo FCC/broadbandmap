@@ -206,6 +206,11 @@ export default {
         })
       }
     },
+    // Remove Census block & provider table results
+    clearProviderTable () {
+      this.censusBlock = ''
+      this.providerRows = []
+    },
     addSources () {
       const vm = this
 
@@ -293,11 +298,6 @@ export default {
 
       // add new map layers
       this.addLayers(propertyID)
-    },
-    // Remove Census block & provider table results
-    clearProviderTable () {
-      this.censusBlock = ''
-      this.providerRows = []
     }
   },
   watch: {
