@@ -58,9 +58,13 @@ export default {
       defaultSpeed: '25_3'
     }
   },
-  created () {
+  mounted () {
     EventHub.$on('updateMapSettings', (selectedTech, selectedSpeed) => this.updateTechSpeed(selectedTech, selectedSpeed))
     EventHub.$on('removeLayers', (propertyID) => this.removeLayers(propertyID))
+  },
+  destroyed () {
+    EventHub.$off('updateMapSettings')
+    EventHub.$off('removeLayers')
   },
   methods: {
     mapInit (map, mapOptions) {
@@ -288,7 +292,7 @@ export default {
         })
       }
     },
-    // Called by created() and Map.on('load')
+    // Called by mounted() and Map.on('load')
     updateTechSpeed (selectedTech, selectedSpeed) { // e.g. acfosw, 25_3
       let propertyID = [selectedTech, selectedSpeed].join('_')
       // add layer sources if they don't exist already
