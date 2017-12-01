@@ -95,7 +95,8 @@ export default {
 
       // if no tech or speed selected, remove all tech and speed map layers
       if (propertyID === '') {
-        EventHub.$emit('removeLayers', this.selectedPropertyID)
+        const removeAll = true
+        EventHub.$emit('removeLayers', this.selectedPropertyID, removeAll)
       } else {
         this.selectedPropertyID = propertyID
         // Send technologies & speed to LocationSummary and AreaSummary components
