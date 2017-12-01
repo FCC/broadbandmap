@@ -2,9 +2,9 @@ import mapboxgl from 'mapboxgl'
 import { Dropdown, Tooltip } from 'uiv'
 import nbMapSearch from './NBMapSearch/'
 import EventHub from '../../_mixins/EventHub.js'
-import LayersLocation from './layers-location.js'
-import LayersArea from './layers-area.js'
-import LayersProvider from './layers-provider.js'
+import { LayersCartographic } from './layers-cartographic.js'
+import { LayersArea } from './layers-areas.js'
+import { LayersProvider } from './layers-provider.js'
 
 import { urlValidation } from '../../_mixins/urlValidation.js'
 
@@ -32,8 +32,18 @@ export default {
       toggleWidth: false,
       mapLayers: {},
       baseLayerNames: [],
-      defaultBaseLayer: 'default',
-      showSearch: this.searchType === 'none'
+      defaultBaseLayer: 'dark',
+      showSearch: this.searchType === 'none',
+      baseLayerNames: [{
+        id: 'dark',
+        label: 'Default (Dark)'
+      }, {
+        id: 'light',
+        label: 'Light'
+      }, {
+        id: 'satellite-streets',
+        label: 'Satellite'
+      }]
     }
   },
   mounted () {
@@ -45,13 +55,14 @@ export default {
   },
   methods: {
     init: function () {
+      let vm = this
       mapboxgl.accessToken = process.env.MAPBOX_ACCESS_TOKEN
 
       // Define map layers based on map type
       const layerTypes = {
-        location: LayersLocation,
+        location: LayersCartographic,
         area: LayersArea,
-        provider: LayersProvider
+        provider: LayersCartographic
       }
 
       this.mapLayers = layerTypes[this.mapType]
@@ -60,7 +71,7 @@ export default {
       this.mapOptions = {
         attributionControl: false,
         container: 'map-container',
-        style: this.mapLayers,
+        style: 'mapbox://styles/fcc/cj8xntlh3h7nw2slazdt1a0rt',
         logoPosition: 'bottom-left',
         maxZoom: 16,
         minZoom: 0,
@@ -74,8 +85,10 @@ export default {
       // Add Controls to map
       this.addControls(map)
 
-      // Add layer names for layer switch control
-      this.getLayerNames()
+      map.on('style.load', () => {
+        // Reload the cartographic layers after base layer style change
+        vm.addCartographicLayers(this.mapLayers)
+      })
 
       // Register map related events
       this.registerEvents(map)
@@ -154,20 +167,37 @@ export default {
       map.on('click', function (event) {
         vm.$emit('map-click', event)
       })
-    },
-    getLayerNames: function () {
-      // Get layer names for base layer switch control
-      this.baseLayerNames = this.mapLayers.layers.slice(0, 3).map(baseLayerName => {
-        return baseLayerName.id
+
+      map.on('zoomend', function (event) {
+        console.log('zoom = ', map.getZoom())
       })
     },
     switchBaseLayer: function (layerId) {
       // Switch base layer
-      this.baseLayerNames.map(layerName => {
-        this.Map.setLayoutProperty(layerName, 'visibility', 'none')
-      })
 
-      this.Map.setLayoutProperty(layerId, 'visibility', 'visible')
+      const baseLayerStyles = {
+        'dark': 'mapbox://styles/fcc/cjan4l3hadb3m2rka6pnx2m4k',
+        'light': 'mapbox://styles/fcc/cjan3c2yxe6fg2sqv5rcgmrwz',
+        'satellite-streets': 'mapbox://styles/mapbox/satellite-streets-v9'
+      }
+
+      this.Map.setStyle(baseLayerStyles[layerId])
+    },
+    addCartographicLayers (mapLayers) {
+      let layers = this.Map.getStyle().layers
+
+      let firstSymbolId
+
+      for (var i = 0; i < layers.length; i++) {
+        if (layers[i].type === 'symbol') {
+          firstSymbolId = layers[i].id
+          break
+        }
+      }
+
+      mapLayers.forEach(layer => {
+        this.Map.addLayer(layer, firstSymbolId)
+      })
     },
     viewNationwide: function () {
       // Reset pitch and bearing
