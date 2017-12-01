@@ -55,12 +55,13 @@ export default {
         70: 'Fixed Wireless'
       },
       defaultTech: 'acfosw',
-      defaultSpeed: '25_3'
+      defaultSpeed: '25_3',
+      removeAllLayers: false
     }
   },
   mounted () {
     EventHub.$on('updateMapSettings', (selectedTech, selectedSpeed) => this.updateTechSpeed(selectedTech, selectedSpeed))
-    EventHub.$on('removeLayers', (propertyID) => this.removeLayers(propertyID))
+    EventHub.$on('removeLayers', (propertyID, removeAll) => this.removeLayers(propertyID, removeAll))
   },
   destroyed () {
     EventHub.$off('updateMapSettings')
@@ -73,9 +74,17 @@ export default {
       this.Map = map
       this.mapOptions = mapOptions
 
-      // Show default tech and speed layers
-      this.Map.on('load', function () {
-        vm.updateTechSpeed(vm.defaultTech, vm.defaultSpeed)
+      this.Map.on('style.load', () => {
+        // If one or more technologies is selected, then reload the tech/speed layers when the base layer style is changed
+        // Need to reload tech/speed layers so the labels will appear on top
+        if (!vm.removeAllLayers) {
+          // If no tech is selected use default tech and speed settings
+          if (vm.selectedTech === undefined) {
+            vm.updateTechSpeed(vm.defaultTech, vm.defaultSpeed)
+          } else {
+            vm.updateTechSpeed(vm.selectedTech, vm.selectedSpeed)
+          }
+        }
       })
 
       // If valid latitude and longitude get the FIPS and highlight the census block
@@ -219,7 +228,7 @@ export default {
     addSources () {
       const vm = this
 
-      // add sources for tech and speed map layers
+      // Add sources for tech and speed map layers
       sourcesTechSpeed.forEach(source => {
         vm.Map.addSource(source.id, {
           url: source.url,
@@ -234,7 +243,7 @@ export default {
       let layers = [layersTechSpeed, layersSpeed[speed]]
       let layersLen = layers.length
 
-      // template for layer style
+      // Template for layer style
       let layerStyle = {
         'layout': {
           'visibility': 'visible'
@@ -274,14 +283,17 @@ export default {
         })
       }
     },
-    removeLayers (propertyID) { // e.g. acfosw_25_3
+    removeLayers (propertyID, removeAll) { // e.g. acfosw_25_3
       const vm = this
       const speed = propertyID.split('_')[1]
 
       let layers = [layersTechSpeed, layersSpeed[speed]]
       let layersLen = layers.length
 
-      // loop through each layer type and remove map
+      // When removeAll = true, do not reload tech/speed layers when the base layer style is changed
+      this.removeAllLayers = removeAll
+
+      // Loop through each layer type and remove from map
       for (let i = 0; i < layersLen; i++) {
         layers[i].forEach(layer => {
           let layerExists = vm.Map.getLayer(layer.id)
@@ -295,15 +307,20 @@ export default {
     // Called by mounted() and Map.on('load')
     updateTechSpeed (selectedTech, selectedSpeed) { // e.g. acfosw, 25_3
       let propertyID = [selectedTech, selectedSpeed].join('_')
-      // add layer sources if they don't exist already
+
+      // When base layer style is changed, the selected tech & speed layers will be reloaded
+      this.selectedTech = selectedTech
+      this.selectedSpeed = selectedSpeed
+
+      // Add layer sources if they don't exist already
       if (this.Map.getSource('county-techSpeed') === undefined || this.Map.getSource('block-techSpeed') === undefined) {
         this.addSources()
       } else {
-        // remove existing map layers
+        // Remove existing map layers
         this.removeLayers(propertyID)
       }
 
-      // add new map layers
+      // Add new map layers
       this.addLayers(propertyID)
     }
   },
