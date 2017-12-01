@@ -3,7 +3,7 @@ import { Dropdown, Tooltip } from 'uiv'
 import nbMapSearch from './NBMapSearch/'
 import EventHub from '../../_mixins/EventHub.js'
 import { LayersLocation } from './layers-location.js'
-import { LayersArea } from './layers-areas.js'
+import { LayersArea } from './layers-area.js'
 import { LayersProvider } from './layers-provider.js'
 
 import { urlValidation } from '../../_mixins/urlValidation.js'
@@ -34,15 +34,18 @@ export default {
       baseLayerNames: [],
       defaultBaseLayer: 'dark',
       showSearch: this.searchType === 'none',
-      baseLayerNames: [{
+      baseLayers: [{
         id: 'dark',
-        label: 'Dark (Default)'
+        label: 'Dark (Default)',
+        styleURL: 'mapbox://styles/fcc/cjan4l3hadb3m2rka6pnx2m4k'
       }, {
         id: 'light',
-        label: 'Light'
+        label: 'Light',
+        styleURL: 'mapbox://styles/fcc/cjan3c2yxe6fg2sqv5rcgmrwz'
       }, {
         id: 'satellite-streets',
-        label: 'Satellite'
+        label: 'Satellite',
+        styleURL: 'mapbox://styles/mapbox/satellite-streets-v9'
       }]
     }
   },
@@ -71,7 +74,7 @@ export default {
       this.mapOptions = {
         attributionControl: false,
         container: 'map-container',
-        style: 'mapbox://styles/fcc/cj8xntlh3h7nw2slazdt1a0rt',
+        style: this.baseLayers[0].styleURL,
         logoPosition: 'bottom-left',
         maxZoom: 16,
         minZoom: 0,
@@ -173,15 +176,16 @@ export default {
       })
     },
     switchBaseLayer: function (layerId) {
-      // Switch base layer
+      let baseLayerURL = ''
 
-      const baseLayerStyles = {
-        'dark': 'mapbox://styles/fcc/cjan4l3hadb3m2rka6pnx2m4k',
-        'light': 'mapbox://styles/fcc/cjan3c2yxe6fg2sqv5rcgmrwz',
-        'satellite-streets': 'mapbox://styles/mapbox/satellite-streets-v9'
-      }
+      // Find the base layer style URL
+      this.baseLayers.forEach(baseLayer => {
+        if (baseLayer.id === layerId) {
+          baseLayerURL = baseLayer.styleURL
+        }
+      })
 
-      this.Map.setStyle(baseLayerStyles[layerId])
+      this.Map.setStyle(baseLayerURL)
     },
     addCartographicLayers (mapLayers) {
       let layers = this.Map.getStyle().layers
