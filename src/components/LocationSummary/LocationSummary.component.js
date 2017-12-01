@@ -85,8 +85,14 @@ export default {
             vm.updateTechSpeed(vm.selectedTech, vm.selectedSpeed)
           }
         }
+
+        // Trigger reload of highlighted block when base layer style is changed
+        this.validateLatLon()
       })
 
+      this.validateLatLon()
+    },
+    validateLatLon () {
       // If valid latitude and longitude get the FIPS and highlight the census block
       if (this.isValidLatLon(this.$route.query.lat, this.$route.query.lon)) {
         this.getFIPS(this.$route.query.lat.trim(), this.$route.query.lon.trim())
@@ -228,6 +234,8 @@ export default {
     addSources () {
       const vm = this
 
+      vm.removeAllLayers = false
+
       // Add sources for tech and speed map layers
       sourcesTechSpeed.forEach(source => {
         vm.Map.addSource(source.id, {
@@ -317,7 +325,7 @@ export default {
         this.addSources()
       } else {
         // Remove existing map layers
-        this.removeLayers(propertyID)
+        this.removeLayers(propertyID, false)
       }
 
       // Add new map layers
