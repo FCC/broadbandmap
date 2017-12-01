@@ -2,7 +2,7 @@ import mapboxgl from 'mapboxgl'
 import { Dropdown, Tooltip } from 'uiv'
 import nbMapSearch from './NBMapSearch/'
 import EventHub from '../../_mixins/EventHub.js'
-import { LayersCartographic } from './layers-cartographic.js'
+import { LayersLocation } from './layers-location.js'
 import { LayersArea } from './layers-areas.js'
 import { LayersProvider } from './layers-provider.js'
 
@@ -36,7 +36,7 @@ export default {
       showSearch: this.searchType === 'none',
       baseLayerNames: [{
         id: 'dark',
-        label: 'Default (Dark)'
+        label: 'Dark (Default)'
       }, {
         id: 'light',
         label: 'Light'
@@ -60,9 +60,9 @@ export default {
 
       // Define map layers based on map type
       const layerTypes = {
-        location: LayersCartographic,
+        location: LayersLocation,
         area: LayersArea,
-        provider: LayersCartographic
+        provider: LayersLocation
       }
 
       this.mapLayers = layerTypes[this.mapType]
