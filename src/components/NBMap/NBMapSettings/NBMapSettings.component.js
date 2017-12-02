@@ -69,9 +69,6 @@ export default {
     }.bind(this))
   },
   methods: {
-    closeModal () {
-      this.showModal = false
-    },
     saveSettings () {
       // Corresponds to first letter of all selected layer names (e.g. acfosw)
       let selectedTech = this.selectedTechCategories.sort().join('')
@@ -101,6 +98,17 @@ export default {
         this.selectedPropertyID = propertyID
         // Send technologies & speed to LocationSummary and AreaSummary components
         EventHub.$emit('updateMapSettings', selectedTech, this.selectedSpeed)
+      }
+    },
+    closeModal () {
+      this.showModal = false
+    }
+  },
+  watch: {
+    '$route' (to, from) {
+      // Reset modal data when page changes
+      if (to.name !== from.name) {
+        Object.assign(this.$data, this.$options.data.call(this))
       }
     }
   }
