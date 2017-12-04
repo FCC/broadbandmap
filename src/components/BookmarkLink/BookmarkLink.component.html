@@ -1,0 +1,25 @@
+<span>
+  <popover @show="setFocus" v-model="showPopup" :target="document.querySelector('#btn-bookmark')">            
+  <div slot="popover">
+      <label for="linkField">Link to this page</label>
+      <span class="text-success pull-right" role="alert">{{ msgCopied }}</span>
+      <div class="input-group">
+        <input id="linkField" class="form-control" type="text" :value="pageURL" ref="linkField" readonly>
+        <span class="input-group-btn">
+              <tooltip text="Copy to clipboard" placement="bottom" trigger="hover">
+                <button class="btn btn-default" @click="copyLink">
+                <span class="icon icon-copy"></span>
+        <span class="sr-only">Copy to clipboard</span>
+        </button>
+        </tooltip>
+        </span>
+      </div>
+      <button class="btn btn-default btn-xs sr-only" type="button" @click="hidePopup">Close</button>
+  </div>
+  </popover>
+  <button class="btn btn-link" type="button" id="btn-bookmark">
+    <span class="icon icon-bookmark"></span>
+    <span class="sr-only">Link to this page</span>
+  </button>
+  <tooltip text="Link to this page" placement="left" :target="document.querySelector('#btn-bookmark')"></tooltip>
+</span>
