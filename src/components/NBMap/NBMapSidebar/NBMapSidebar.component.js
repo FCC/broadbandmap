@@ -1,9 +1,11 @@
 import { Tooltip } from 'uiv'
 import EventHub from '../../../_mixins/EventHub.js'
 
+import BookmarkLink from '@/components/BookmarkLink'
+
 export default {
   name: 'nbMapSidebar',
-  components: { Tooltip },
+  components: { Tooltip, BookmarkLink },
   props: [],
   mounted () {
 
