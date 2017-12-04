@@ -23,10 +23,14 @@ export default {
       this.$refs.linkField.focus()
       this.msgCopied = ''
     },
-    copyLink () {
-      let copyCmd = document.execCommand('copy')
-
+    selectText () {
       this.$refs.linkField.select()
+    },
+    copyLink () {
+      let copyCmd
+
+      this.selectText()
+      copyCmd = document.execCommand('copy')
 
       if (copyCmd) {
         this.msgCopied = 'Copied!'
