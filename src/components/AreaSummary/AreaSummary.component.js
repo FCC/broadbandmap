@@ -3,14 +3,15 @@ import nbMapSidebar from '../NBMap/NBMapSidebar/'
 import axios from 'axios'
 import EventHub from '../../_mixins/EventHub.js'
 import { urlValidation } from '../../_mixins/urlValidation.js'
-import { sourcesTechSpeed, layersTechSpeed, layersSpeed } from '../NBMap/layers-techSpeed.js'
+import { updateMapLayers } from '../../_mixins/map-update-layers.js'
+
 const d3 = require('d3')
 
 export default {
   name: 'AreaSummary',
   components: { 'nbMap': nbMap, 'nbMapSidebar': nbMapSidebar },
   props: [],
-  mixins: [urlValidation],
+  mixins: [urlValidation, updateMapLayers],
   data () {
     return {
       defaultTech: 'acfosw',
@@ -20,7 +21,7 @@ export default {
   mounted () {
     this.fetchCombinedData()
     EventHub.$on('updateMapSettings', (selectedTech, selectedSpeed) => this.updateTechSpeed(selectedTech, selectedSpeed))
-    EventHub.$on('removeLayers', (propertyID) => this.removeLayers(propertyID))
+    EventHub.$on('removeLayers', (propertyID, removeAll) => this.removeLayers(propertyID, removeAll))
   },
   destroyed () {
     EventHub.$off('updateMapSettings')
@@ -33,100 +34,18 @@ export default {
       this.Map = map
       this.mapOptions = mapOptions
 
-      // Show default tech and speed layers
-      this.Map.on('load', function () {
-        vm.updateTechSpeed(vm.defaultTech, vm.defaultSpeed)
-      })
-    },
-    addSources () {
-      const vm = this
-
-      // add sources for tech and speed map layers
-      sourcesTechSpeed.forEach(source => {
-        vm.Map.addSource(source.id, {
-          url: source.url,
-          type: source.type
-        })
-      })
-    },
-    addLayers (propertyID) {
-      const vm = this
-      const speed = propertyID.split('_')[1]
-
-      let layers = [layersTechSpeed, layersSpeed[speed]]
-      let layersLen = layers.length
-
-      // template for layer style
-      let layerStyle = {
-        'layout': {
-          'visibility': 'visible'
-        },
-        'maxzoom': 0,
-        'type': 'fill',
-        'source': '',
-        'id': '',
-        'paint': {
-          'fill-color': {
-            'base': 1,
-            'type': 'exponential',
-            'property': '',
-            'stops': [
-                  [0, '#ffffcc'],
-                  [1, '#a1dab4'],
-                  [2, '#41b6c4'],
-                  [3, '#225ea8']
-            ],
-            'default': '#ffffcc'
+      this.Map.on('style.load', () => {
+        // If one or more technologies is selected, then reload the tech/speed layers when the base layer style is changed
+        // Need to reload tech/speed layers so the labels will appear on top
+        if (!vm.removeAllLayers) {
+          // If no tech is selected use default tech and speed settings
+          if (vm.selectedTech === undefined) {
+            vm.updateTechSpeed(vm.defaultTech, vm.defaultSpeed)
+          } else {
+            vm.updateTechSpeed(vm.selectedTech, vm.selectedSpeed)
           }
-        },
-        'source-layer': ''
-      }
-
-      // loop through each layer type and add to map
-      for (let i = 0; i < layersLen; i++) {
-        layers[i].forEach(layer => {
-          let lyrStyle = {}
-
-          layerStyle.paint['fill-color'].property = propertyID
-          layerStyle['source-layer'] = layer.id
-
-          lyrStyle = Object.assign({}, layerStyle, layer)
-
-          vm.Map.addLayer(lyrStyle, layer.beforeLayer)
-        })
-      }
-    },
-    removeLayers (propertyID) { // e.g. acfosw_25_3
-      const vm = this
-      const speed = propertyID.split('_')[1]
-
-      let layers = [layersTechSpeed, layersSpeed[speed]]
-      let layersLen = layers.length
-
-      // loop through each layer type and remove map
-      for (let i = 0; i < layersLen; i++) {
-        layers[i].forEach(layer => {
-          let layerExists = vm.Map.getLayer(layer.id)
-
-          if (layerExists) {
-            vm.Map.removeLayer(layer.id)
-          }
-        })
-      }
-    },
-    // Called by mounted() and Map.on('load')
-    updateTechSpeed (selectedTech, selectedSpeed) { // e.g. acfosw, 25_3
-      let propertyID = [selectedTech, selectedSpeed].join('_')
-      // add layer sources if they don't exist already
-      if (this.Map.getSource('county-techSpeed') === undefined || this.Map.getSource('block-techSpeed') === undefined) {
-        this.addSources()
-      } else {
-        // remove existing map layers
-        this.removeLayers(propertyID)
-      }
-
-      // add new map layers
-      this.addLayers(propertyID)
+        }
+      })
     },
     fetchCombinedData () {
       const self = this
@@ -172,7 +91,7 @@ export default {
         headers: httpHeaders
       })
       .then(function (response) {
-        console.log('Socrata response= ', response)
+        // console.log('Socrata response= ', response)
         self.drawCombinedCharts(response)
       })
       .catch(function (error) {
