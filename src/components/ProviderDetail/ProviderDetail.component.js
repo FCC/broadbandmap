@@ -76,7 +76,7 @@ export default {
       }
 
       // Display charts section
-      self.showResults = false
+      this.showResults = false
 
       // Fetch provider data
       this.fetchProviderData()
