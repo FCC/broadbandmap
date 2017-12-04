@@ -4,10 +4,11 @@ import nbMap from '../NBMap/'
 
 import PopulationChart from './PopulationChart'
 import SpeedChart from './SpeedChart'
+import UpSpeedChart from './UpSpeedChart'
 
 export default {
   name: 'ProviderDetail',
-  components: { Tooltip, nbMap, PopulationChart, SpeedChart },
+  components: { Tooltip, nbMap, PopulationChart, SpeedChart, UpSpeedChart },
   props: [],
   mounted () {
 
@@ -24,24 +25,9 @@ export default {
       numProviders: 1,
       showLink: true,
       showResults: false,
+      direction: 'd',
       popChartData: {},
       techChartData: {}
-/*
-      popChartData: {
-        labels: ['AT&T', 'Comcast', 'Verizon'],
-        data: [0.7, 0.35, 0.25]
-      },
-      anyTechChartData: [{
-        label: 'AT&T',
-        data: [0.10, 0.20, 0.30, 0.40, 0.50, 1, 0.10]
-      }, {
-        label: 'Comcast',
-        data: [0.40, 0.50, 0.60, 0.70, 0.80, 0.90, 1]
-      }, {
-        label: 'Verizon',
-        data: [0.70, 0.80, 0.90, 1, 0.10, 0.20, 0.30]
-      }]
-*/
     }
   },
   methods: {
@@ -85,9 +71,12 @@ export default {
       // Create list of provider Names
       this.providerNames = this.providers.map(provider => provider.name).filter(providerName => providerName !== undefined && providerName !== '')
       this.providerHoconums = [];
-      for (var pni in this.providerNames) {
+      for (let pni in this.providerNames) {
         this.providerHoconums.push(this.getHoconumByName(this.providerNames[pni]))
       }
+
+      // Display charts section
+      self.showResults = false
 
       // Fetch provider data
       this.fetchProviderData()
@@ -114,8 +103,8 @@ export default {
         console.log('ERROR: process.env.SOCRATA_ENV in .env file must be PROD or DEV, not ' + process.env.SOCRATA_ENV)
       }
 
-      var hoconumClause = ''
-      for (var hci in this.providerHoconums) {
+      let hoconumClause = ''
+      for (let hci in this.providerHoconums) {
         hoconumClause += "'" + this.providerHoconums[hci] + "',"
       }
       hoconumClause = hoconumClause.replace(/,\s*$/, "")
@@ -131,7 +120,6 @@ export default {
         headers: httpHeaders
       })
       .then(function (response) {
-        console.log('Socrata response= ', response)
         self.providerData = response.data
 
         self.calculateChartData()
@@ -165,59 +153,85 @@ export default {
 
       let usPopulation = process.env.US_POPULATION
 
-      this.popChartData['labels'] = []
-      this.popChartData['data'] = []
+      let directions = ['u', 'd']
 
-      for (var phi in this.providerHoconums) {
-        let ph = this.providerHoconums[phi]
-        for (var pdi in this.providerData) {
-          let pd = this.providerData[pdi]
-          if (pd.hoconum === ph && pd.tech === 'all') {
-            this.popChartData['labels'].push(this.getNameByHoconum(pd.hoconum))
-            this.popChartData['data'].push(pd.d_1 * 100 / usPopulation)
-          }                   
+      for (let di in ['u', 'd']) {
+
+        let drct = directions[di]
+  
+        this.popChartData[drct] = {}
+        this.popChartData[drct]['labels'] = []
+        this.popChartData[drct]['data'] = []
+
+        for (let phi in this.providerHoconums) {
+          let ph = this.providerHoconums[phi]
+          for (let pdi in this.providerData) {
+            let pd = this.providerData[pdi]
+            if (pd.hoconum === ph && pd.tech === 'all') {
+              this.popChartData[drct]['labels'].push(this.getNameByHoconum(pd.hoconum))
+              this.popChartData[drct]['data'].push(pd[drct + '_1'] * 100 / usPopulation)
+            }                   
+          }
+        }
+
+        let collapsed = this.collapseTech(this.providerData)
+
+        this.techChartData[drct] = {}
+
+        for (let ci in collapsed) {
+          let count = 8
+          if (drct === 'u') {
+            count = 10
+          }
+       
+          let cData = []
+          cData[0] = 1
+          for (let i = 1; i < count; i++) {
+            cData[i] = parseFloat(collapsed[ci][drct + '_' + i.toString()]) / parseFloat(collapsed[ci][drct + '_1'])
+          }
+
+          let series = { 
+            label: this.getNameByHoconum(collapsed[ci].hoconum),
+            data: cData
+          }
+
+          if (!this.techChartData[drct][collapsed[ci].tech]) {
+            this.techChartData[drct][collapsed[ci].tech] = []
+          } 
+          this.techChartData[drct][collapsed[ci].tech].push(series)
         }
       }
-      /*
-      this.popChartData = {
-        labels: ['AT&T', 'Comcast', 'Verizon'],
-        data: [0.7, 0.35, 0.25]
+    },
+    collapseTech (data) {
+      let outData = []
+      for (let di in data) {
+        let found = false
+        for (let odi in outData) {
+          if (outData[odi].hoconum === data[di].hoconum &&
+              outData[odi].tech    === this.getTechNameByCode(data[di].tech)) {
+            for (let i = 1; i < 9; i++) {
+              outData[odi]['d_'+i.toString()] = (parseInt(outData[odi]['d_'+i.toString()]) + parseInt(data[di]['d_'+i.toString()])).toString()
+            }
+            for (let i = 1; i < 11; i++) {
+              outData[odi]['u_'+i.toString()] = (parseInt(outData[odi]['u_'+i.toString()]) + parseInt(data[di]['u_'+i.toString()])).toString()
+            }
+            found = true
+          }
+        }
+
+        if (!found) {
+          let od = data[di]
+          od.tech = this.getTechNameByCode(od.tech)
+          outData.push(od)
+        }
       }
-      */
-
-      this.techChartData['any'] = [{
-        label: 'AT&T',
-        data: [0.10, 0.20, 0.30, 0.40, 0.50, 1, 0.10]
-      }, {
-        label: 'Comcast',
-        data: [0.40, 0.50, 0.60, 0.70, 0.80, 0.90, 1]
-      }, {
-        label: 'Verizon',
-        data: [0.70, 0.80, 0.90, 1, 0.10, 0.20, 0.30]
-      }]
-
-      this.techChartData['adsl'] = [{
-        label: 'AT&T',
-        data: [0.10, 0.20, 0.30, 0.40, 0.50, 1, 0.10]
-      }, {
-        label: 'Comcast',
-        data: [0.40, 0.50, 0.60, 0.70, 0.80, 0.90, 1]
-      }, {
-        label: 'Verizon',
-        data: [0.70, 0.80, 0.90, 1, 0.10, 0.20, 0.30]
-      }]
-
-      this.anyTechChartData = [{
-        label: 'AT&T',
-        data: [0.10, 0.20, 0.30, 0.40, 0.50, 1, 0.10]
-      }, {
-        label: 'Comcast',
-        data: [0.40, 0.50, 0.60, 0.70, 0.80, 0.90, 1]
-      }, {
-        label: 'Verizon',
-        data: [0.70, 0.80, 0.90, 1, 0.10, 0.20, 0.30]
-      }]
-
+      return outData
+    },
+    setU () {
+      this.direction = 'u'
+    },
+    setD () {
+      this.direction = 'd'
     },
     // Hoconum lookup by provider name
     getHoconumByName (name) {
@@ -231,11 +245,12 @@ export default {
     },
     // Tech name by code 
     getTechNameByCode (code) {
-      if (code >= 10 && code <= 13) return 'adsl'
-      if (code >= 40 && code <= 43) return 'cable'
-      if (code === 50) return 'fiber'
-      if (code === 60) return 'satellite'
-      if (code === 70) return 'fixedWireless'
+      if (code === 'all') return code;
+      if (parseInt(code) >= 10 && parseInt(code) <= 13) return 'adsl'
+      if (parseInt(code) >= 40 && parseInt(code) <= 43) return 'cable'
+      if (code === '50') return 'fiber'
+      if (code === '60') return 'satellite'
+      if (code === '70') return 'fixedWireless'
       return 'other'
     }
   },

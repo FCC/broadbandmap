@@ -2,13 +2,13 @@ import VueCharts from 'vue-chartjs'
 import { Bar } from 'vue-chartjs'
 
 export default {
-  name: 'SpeedChart',
+  name: 'UpSpeedChart',
   components: { },
   props: ['data'],
   extends: Bar,
   mounted () {
     let chartData = {
-      labels: ['any', '10', '25', '50', '100', '250', '500', '1000'],
+      labels: ['any', '1', '3', '5', '10', '25', '100', '250', '500', '1000'],
       datasets: []
     }
 
