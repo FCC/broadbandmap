@@ -3,7 +3,7 @@ import nbMap from '../NBMap/'
 import EventHub from '../../_mixins/EventHub.js'
 import nbMapSidebar from '../NBMap/NBMapSidebar/'
 import { urlValidation } from '../../_mixins/urlValidation.js'
-import { sourcesTechSpeed, layersTechSpeed, layersSpeed } from '../NBMap/layers-techSpeed.js'
+import { sourcesTechSpeed, layersTechSpeed } from '../NBMap/layers-techSpeed.js'
 
 export default {
   name: 'LocationSummary',
@@ -75,6 +75,7 @@ export default {
 
       // Show default tech and speed layers
       this.Map.on('load', function () {
+        vm.addLayerSources()
         vm.updateTechSpeed(vm.defaultTech, vm.defaultSpeed)
       })
 
@@ -216,7 +217,7 @@ export default {
       this.censusBlock = ''
       this.providerRows = []
     },
-    addSources () {
+    addLayerSources () {
       const vm = this
 
       // add sources for tech and speed map layers
@@ -231,10 +232,10 @@ export default {
       const vm = this
       const speed = propertyID.split('_')[1]
 
-      let layers = [layersTechSpeed, layersSpeed[speed]]
-      let layersLen = layers.length
+      let layer = layersTechSpeed[speed]
+      let lyrStyle = {}
 
-      // template for layer style
+      // Template for layer style
       let layerStyle = {
         'layout': {
           'visibility': 'visible'
@@ -252,56 +253,51 @@ export default {
                   [0, '#ffffcc'],
                   [1, '#a1dab4'],
                   [2, '#41b6c4'],
-                  [3, '#225ea8']
+                  [3, '#225ea8'],
+                  [4, '#253494'],
+                  [6, '#081d58'],
+                  [12, '#000000']
             ],
             'default': '#ffffcc'
-          }
+          },
+          'fill-outline-color': 'hsl(0, 1%, 46%)'
         },
         'source-layer': ''
       }
 
-      // loop through each layer type and add to map
-      for (let i = 0; i < layersLen; i++) {
-        layers[i].forEach(layer => {
-          let lyrStyle = {}
+      // Modify layer template based on property and layer ID
+      layerStyle.paint['fill-color'].property = propertyID
+      layerStyle['source-layer'] = layer.id
 
-          layerStyle.paint['fill-color'].property = propertyID
-          layerStyle['source-layer'] = layer.id
+      // Merge layer style properties
+      lyrStyle = Object.assign({}, layerStyle, layer)
 
-          lyrStyle = Object.assign({}, layerStyle, layer)
-
-          vm.Map.addLayer(lyrStyle, layer.beforeLayer)
-        })
-      }
+      // Add layer to map
+      vm.Map.addLayer(lyrStyle, layer.beforeLayer)
     },
     removeLayers (propertyID) { // e.g. acfosw_25_3
       const vm = this
       const speed = propertyID.split('_')[1]
 
-      let layers = [layersTechSpeed, layersSpeed[speed]]
+      let layers = [layersTechSpeed]
       let layersLen = layers.length
 
-      // loop through each layer type and remove map
-      for (let i = 0; i < layersLen; i++) {
-        layers[i].forEach(layer => {
-          let layerExists = vm.Map.getLayer(layer.id)
+      // Loop through each layer and remove from map
+      for (var key in layersTechSpeed) {
+        let layer = layersTechSpeed[key]
+        let layerExists = vm.Map.getLayer(layer.id)
 
-          if (layerExists) {
-            vm.Map.removeLayer(layer.id)
-          }
-        })
+        if (layerExists) {
+          vm.Map.removeLayer(layer.id)
+        }
       }
     },
     // Called by mounted() and Map.on('load')
     updateTechSpeed (selectedTech, selectedSpeed) { // e.g. acfosw, 25_3
       let propertyID = [selectedTech, selectedSpeed].join('_')
-      // add layer sources if they don't exist already
-      if (this.Map.getSource('county-techSpeed') === undefined || this.Map.getSource('block-techSpeed') === undefined) {
-        this.addSources()
-      } else {
-        // remove existing map layers
-        this.removeLayers(propertyID)
-      }
+
+      // remove existing map layers
+      this.removeLayers(propertyID)
 
       // add new map layers
       this.addLayers(propertyID)
