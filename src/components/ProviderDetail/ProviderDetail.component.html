@@ -12,8 +12,7 @@
           <div class="input-provider">
             <template v-for="provider in providers">
               <div class="input-group input-group-lg">
-                <input class="form-control input-lg" type="search" v-model="provider.name" placeholder="Enter provider name" autocomplete="off" aria-label="Enter provider name">
-<!--                <Autocomplete ref="autocomplete" v-model="provider.name" :placeholderText="getPlaceholderText"></Autocomplete> -->
+                <Autocomplete ref="providerBox" :placeholderText="getPlaceholderText"></Autocomplete>
                 <span class="input-group-btn">
                 <button class="btn btn-default btn-remove" @click.prevent="removeProvider(provider.id)"><span class="icon icon-close"></span></button>
                 </span>
@@ -41,7 +40,7 @@
               <button type="button" id="u-button" class="btn btn-default" :disabled="direction === 'u'" @click.prevent="setU">Upload</button>
             </div>
           </div>
-        </div>
+        </div>                                                                                             
       </div>
       <div class="row">
         <div class="col-sm-12 col-md-8">

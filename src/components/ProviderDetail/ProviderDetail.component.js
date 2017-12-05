@@ -16,10 +16,7 @@ export default {
   },
   data () {
     return {
-      providers: [{
-        name: '',
-        id: Date.now()
-      }],
+      providers: [{}],
       providerData: [],
       providerNames: [],
       providerHoconums: [],
@@ -82,38 +79,31 @@ export default {
       })
     },
     addProvider () {
-      let newProvider = {
-        name: '',
-        id: Date.now()
-      }
+      this.numProviders++
+      this.providers.push({})
 
-      if (this.numProviders <= 3) {
-        this.numProviders++
-
-        // Show the 'Add Provider' link
-        this.showLink = this.numProviders !== 3
-
-        // Add a provider to the list of providers
-        this.providers.push(newProvider)
-      }
+      // Show the 'Add Provider' link
+      this.showLink = this.numProviders !== 3
     },
     removeProvider (providerID) {
-      if (this.numProviders >= 2) {
-        this.numProviders--
-
-        // Hide the 'Add Provider' link
-        this.showLink = this.numProviders < 3
-
-        // Remove the selected provider from the list of providers
-        this.providers = this.providers.filter(provider => provider.id !== providerID)
-      } else if (this.numProviders === 1) {
-        // Clear the text field instead of removing it when there is only 1 provider
-        this.providers[0].name = ''
+      this.numProviders--
+      this.providers.pop()
+      if (this.numProviders === 0) {
+        this.providers.push({})
+        this.numProviders = 1
       }
+
+      // Hide the 'Add Provider' link
+      this.showLink = this.numProviders < 3
     },
     viewDetails () {
+
+      let providerBox = this.$refs.providerBox
+      for (let pbi in providerBox) {
+        this.providerNames.push(providerBox[pbi].typeaheadModel.holdingcompanyname)
+      }
+
       // Create list of provider Names
-      this.providerNames = this.providers.map(provider => provider.name).filter(providerName => providerName !== undefined && providerName !== '')
       this.providerHoconums = [];
       for (let pni in this.providerNames) {
         this.providerHoconums.push(this.getHoconumByName(this.providerNames[pni]))
