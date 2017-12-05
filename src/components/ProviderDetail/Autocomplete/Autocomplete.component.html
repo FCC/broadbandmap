@@ -1,0 +1,26 @@
+    <!-- Custom Vue component for: uiv Typeahead component -->
+    <Typeahead ref="typeahead2"
+        v-model="typeaheadModel"
+        :data="dataSource"
+        :async-src="asyncSrc"
+        :async-key="asyncKey"
+        :item-key="itemKey"
+        :ignore-case="true"
+        :match-start="false"
+        :force-select="false"
+        :open-on-focus="true"
+        >
+        <!-- Override the input template -->
+        <input id="addr" data-role="input" class="form-control input-lg" type="search" :placeholder="placeholderText" autocomplete="off" @keydown.prevent.enter="enterClicked">
+        <!-- Override the typeahead template -->
+        <template slot="item" slot-scope="props">
+            <!-- Iterate through each address returned -->
+            <li v-for="(item, index) in props.items" :class="{active:props.activeIndex===index}">
+                <!-- Link to this address -->
+                <a href="javascript:void(0)" @click="props.select(item)">
+                    <!-- Highlight search keywords in this item -->
+                    <span v-html="props.highlight(item)"></span>
+                </a>
+            </li>
+        </template>
+    </Typeahead>

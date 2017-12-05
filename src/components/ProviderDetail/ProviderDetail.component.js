@@ -5,13 +5,14 @@ import nbMap from '../NBMap/'
 import PopulationChart from './PopulationChart'
 import SpeedChart from './SpeedChart'
 import UpSpeedChart from './UpSpeedChart'
+import Autocomplete from './Autocomplete/index.vue'
 
 export default {
   name: 'ProviderDetail',
-  components: { Tooltip, nbMap, PopulationChart, SpeedChart, UpSpeedChart },
+  components: { Tooltip, nbMap, PopulationChart, SpeedChart, UpSpeedChart, Autocomplete },
   props: [],
   mounted () {
-
+    this.loadProviderLookup()
   },
   data () {
     return {
@@ -27,7 +28,9 @@ export default {
       showResults: false,
       direction: 'd',
       popChartData: {},
-      techChartData: {}
+      techChartData: {},
+      hoconum2Name: {},
+      name2Hoconum: {}
     }
   },
   methods: {
@@ -36,6 +39,47 @@ export default {
     },
     mapClick () {
       console.log('map click')
+    },
+    loadProviderLookup () {
+      const self = this
+
+      let httpHeaders = {}
+      let socrataURL = process.env.SOCRATA_PROD_FULL
+      let appToken = process.env.SOCRATA_PROD_APP_TOKEN
+
+      axios
+      .get(socrataURL, {
+        params: {
+          $select: 'holdingcompanyname,hoconum',
+          $group: 'holdingcompanyname,hoconum',
+          $limit: 5000,
+          $$app_token: appToken
+        },
+        headers: httpHeaders
+      })
+      .then(function (response) {
+        self.hoconum2Name = {}
+        self.name2Hoconum = {}
+        for (let rdi in response.data) {
+          self.hoconum2Name[response.data[rdi].hoconum] = response.data[rdi].holdingcompanyname
+          self.name2Hoconum[response.data[rdi].holdingcompanyname] = response.data[rdi].hoconum
+        }
+      })
+      .catch(function (error) {
+        if (error.response) {
+          // Server responded with a status code that falls out of the range of 2xx
+          console.log(error.response.data)
+          console.log(error.response.status)
+          console.log(error.response.headers)
+        } else if (error.request) {
+          // Request was made but no response was received
+          console.log(error.request)
+        } else {
+          // Something happened in setting up the request that triggered an Error
+          console.log('Error', error.message)
+        }
+        console.log(error)
+      })
     },
     addProvider () {
       let newProvider = {
@@ -236,12 +280,12 @@ export default {
     // Hoconum lookup by provider name
     getHoconumByName (name) {
       // To be implemented later properly. Currently a stub that assumes hoconum is passed in
-      return name
+      return this.name2Hoconum[name]
     },
     // Provider name lookup by hoconum
     getNameByHoconum (hoconum) {
       // To be implemented later properly. Currently a stub that assumes name is passed in
-      return hoconum
+      return this.hoconum2Name[hoconum]
     },
     // Tech name by code 
     getTechNameByCode (code) {
@@ -255,6 +299,8 @@ export default {
     }
   },
   computed: {
-
+    getPlaceholderText: function () {
+      return 'Enter Provider Name'
+    }
   }
 }
