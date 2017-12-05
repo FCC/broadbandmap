@@ -99,11 +99,13 @@ export default {
     viewDetails () {
 
       let providerBox = this.$refs.providerBox
+      // Create list of provider Names
+      this.providerNames = [];
       for (let pbi in providerBox) {
         this.providerNames.push(providerBox[pbi].typeaheadModel.holdingcompanyname)
       }
 
-      // Create list of provider Names
+      // Create list of provider Hoconums
       this.providerHoconums = [];
       for (let pni in this.providerNames) {
         this.providerHoconums.push(this.getHoconumByName(this.providerNames[pni]))
