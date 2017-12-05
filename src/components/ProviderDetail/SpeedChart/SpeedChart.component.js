@@ -12,7 +12,7 @@ export default {
       datasets: []
     }
 
-    let backgroundColors = ['#ff848b', '#838eff', '#ffff95']
+    let backgroundColors = [process.env.CHART_COLOR_01, process.env.CHART_COLOR_02, process.env.CHART_COLOR_03]
 
     // merge the prop data array with chartData.datasets
     for (let i = 0; i < this.data.length; i++) {

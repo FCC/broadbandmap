@@ -18,11 +18,11 @@
           </tooltip>
         </button>
         <template slot="dropdown">
-          <li class="radio" v-for="baseLayerName in baseLayerNames">            
+          <li class="radio" v-for="baseLayer in baseLayers">            
             <div class="radio">
-              <input type="radio" name="layerOpts" :id="baseLayerName" :value="baseLayerName" v-model="defaultBaseLayer" @change="switchBaseLayer(baseLayerName)">
-              <label :for="baseLayerName">
-                {{baseLayerName}}
+              <input type="radio" name="layerOpts" :id="baseLayer.id" :value="baseLayer.id" v-model="defaultBaseLayer" @change="switchBaseLayer(baseLayer.id)">
+              <label :for="baseLayer.id">
+                {{baseLayer.label}}                
               </label>
             </div>
           </li>          
