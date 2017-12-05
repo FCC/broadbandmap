@@ -22,31 +22,14 @@ export default {
   },
   methods: {
     searchButtonClicked (event) {
-      this.gotoNomenclature(event)
     },
     enterClicked (event) {
-      this.gotoNomenclature(event)
-    },
-    // Called when user pressed enter or clicked search
-    gotoNomenclature (event) {
-      let newURL = ''
-      if (typeof this.typeaheadModel === 'object' && typeof this.typeaheadModel.id === 'string') {
-        // Create the URL
-        newURL = 'location-summary?lat=' + this.typeaheadModel.center[1].toFixed(6) + '&lon=' + this.typeaheadModel.center[0].toFixed(6) + '&place_name=' + encodeURIComponent(this.typeaheadModel.place_name)
-        this.$router.push(newURL)
-      } else {
-        // Call Modal component in app footer
-        EventHub.$emit('openModal', 'No results found', 'Please enter and then select a valid provider name.')
-      }
     },
     // Called by data() on init, and when searchType changes
     populateTypeahead () {
-      this.dataSource = null
       this.asyncKey = ''
       this.itemKey = 'holdingcompanyname'
-      this.typeaheadModel = {
-        holdingcompanyname: this.$route.query.holdingcompanyname
-      }
+      this.fetchLookupTable()
     },
     // Call Socrata API - Lookup Table for geographies
     fetchLookupTable () {
@@ -67,7 +50,6 @@ export default {
         headers: httpHeaders
       })
       .then(function (response) {
-        console.log('Socrata response= ', response)
         self.dataSource = response.data
       })
       .catch(function (error) {
