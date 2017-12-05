@@ -62,8 +62,11 @@
 /* Download and about links */
 .nav-utility {
   font-size: 20px;
-  margin: 0 10px 10px;
+  margin: 0 0 10px;
   text-align: right;
+  > :last-child {
+    margin-left: 10px;    
+  }
 }
 
 /* Search results table */
