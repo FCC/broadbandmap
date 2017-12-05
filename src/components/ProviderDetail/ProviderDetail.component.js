@@ -1,9 +1,12 @@
 import { Tooltip } from 'uiv'
 import nbMap from '../NBMap/'
 
+import PopulationChart from './PopulationChart'
+import SpeedChart from './SpeedChart'
+
 export default {
   name: 'ProviderDetail',
-  components: { Tooltip, nbMap },
+  components: { Tooltip, nbMap, PopulationChart, SpeedChart },
   props: [],
   mounted () {
 
@@ -17,7 +20,21 @@ export default {
       providerNames: [],
       numProviders: 1,
       showLink: true,
-      showResults: false
+      showResults: false,
+      popChartData: {
+        labels: ['AT&T', 'Comcast', 'Verizon'],
+        data: [0.7, 0.35, 0.25]
+      },
+      anyTechChartData: [{
+        label: 'AT&T',
+        data: [0.10, 0.20, 0.30, 0.40, 0.50, 1, 0.10]
+      }, {
+        label: 'Comcast',
+        data: [0.40, 0.50, 0.60, 0.70, 0.80, 0.90, 1]
+      }, {
+        label: 'Verizon',
+        data: [0.70, 0.80, 0.90, 1, 0.10, 0.20, 0.30]
+      }]
     }
   },
   methods: {

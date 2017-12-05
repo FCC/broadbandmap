@@ -1,142 +1,60 @@
-export const sourcesTechSpeed = [{
-  id: 'county-techSpeed',
-  url: 'mapbox://fcc.9nsww14b',
-  type: 'vector'
-},
-{
-  id: 'block-techSpeed',
-  url: 'mapbox://fcc.2aq1sqrg',
-  type: 'vector'
-},
-{
-  id: 'tract-block-combo',
-  url: 'mapbox://fcc.7cg8a56e',
-  type: 'vector'
-},
-{
-  id: 'tract-speed-200',
-  url: 'mapbox://fcc.bi1dbc0r',
-  type: 'vector'
-},
-{
-  id: 'tract-speed-10',
-  url: 'mapbox://fcc.a6x4nf2x',
-  type: 'vector'
-},
-{
-  id: 'tract-speed-25',
-  url: 'mapbox://fcc.4vacyilq',
-  type: 'vector'
-},
-{
-  id: 'tract-speed-50',
-  url: 'mapbox://fcc.6tutbhh2',
-  type: 'vector'
-},
-{
-  id: 'tract-speed-100',
-  url: 'mapbox://fcc.2ek9cchf',
-  type: 'vector'
-}
+export const sourcesTechSpeed = [
+  {
+    id: '200',
+    url: 'mapbox://fcc.3mn2ckcc',
+    type: 'vector'
+  },
+  {
+    id: '10_1',
+    url: 'mapbox://fcc.97d0gam3',
+    type: 'vector'
+  },
+  {
+    id: '25_3',
+    url: 'mapbox://fcc.4ai93o1d',
+    type: 'vector'
+  },
+  {
+    id: '50_5',
+    url: 'mapbox://fcc.dcc1b9rv',
+    type: 'vector'
+  },
+  {
+    id: '100_10',
+    url: 'mapbox://fcc.btj2xg09',
+    type: 'vector'
+  }
 ]
 
-export const layersTechSpeed = [{
-  id: 'county_round_z0_z2',
-  source: 'county-techSpeed',
-  maxzoom: 3,
-  beforeLayer: 'county'
-},
-{
-  id: 'county_round_z3_z6',
-  source: 'county-techSpeed',
-  maxzoom: 7,
-  beforeLayer: 'county'
-},
-{
-  id: 'block_null_z10',
-  source: 'block-techSpeed',
-  maxzoom: 11,
-  beforeLayer: 'block'
-},
-{
-  id: 'block_null_z11',
-  source: 'block-techSpeed',
-  maxzoom: 15,
-  beforeLayer: 'block'
-},
-{
-  id: 'big_tract_blocks_z9',
-  source: 'tract-block-combo',
-  maxzoom: 10,
-  beforeLayer: ''
-},
-{
-  id: 'tract_round_all_z9',
-  source: 'tract-block-combo',
-  maxzoom: 10,
-  beforeLayer: ''
-}
-]
-
-export const layersSpeed = {
-  200: [{
-    id: 'tract_round_200_z4_z5',
-    source: 'tract-speed-200',
-    maxzoom: 6,
-    beforeLayer: 'tract'
+export const layersTechSpeed = {
+  '200': {
+    id: 'all_200',
+    source: '200',
+    maxzoom: 16,
+    beforeLayer: 'block'
   },
-  {
-    id: 'tract_round_200_z6_z9',
-    source: 'tract-speed-200',
-    maxzoom: 10,
-    beforeLayer: 'tract'
-  }],
-  10: [{
-    id: 'tract_round_10_1_z4_z5',
-    source: 'tract-speed-10',
-    maxzoom: 6,
-    beforeLayer: 'tract'
+  '10': {
+    id: 'all_10',
+    source: '10_1',
+    maxzoom: 16,
+    beforeLayer: 'block'
   },
-  {
-    id: 'tract_round_10_1_z6_z9',
-    source: 'tract-speed-10',
-    maxzoom: 10,
-    beforeLayer: 'tract'
-  }],
-  25: [{
-    id: 'tract_round_25_3_z4_z5',
-    source: 'tract-speed-25',
-    maxzoom: 6,
-    beforeLayer: 'tract'
+  '25': {
+    id: 'all_25',
+    source: '25_3',
+    maxzoom: 16,
+    beforeLayer: 'block'
   },
-  {
-    id: 'tract_round_25_3_z6_z9',
-    source: 'tract-speed-25',
-    maxzoom: 10,
-    beforeLayer: 'tract'
-  }],
-  50: [{
-    id: 'tract_round_50_5_z4_z5',
-    source: 'tract-speed-50',
-    maxzoom: 6,
-    beforeLayer: 'tract'
+  '50': {
+    id: 'all_50',
+    source: '50_5',
+    maxzoom: 16,
+    beforeLayer: 'block'
   },
-  {
-    id: 'tract_round_50_5_z6_z9',
-    source: 'tract-speed-50',
-    maxzoom: 10,
-    beforeLayer: 'tract'
-  }],
-  100: [{
-    id: 'tract_round_100_10_z4_z5',
-    source: 'tract-speed-100',
-    maxzoom: 6,
-    beforeLayer: 'tract'
-  },
-  {
-    id: 'tract_round_100_10_z6_z9',
-    source: 'tract-speed-100',
-    maxzoom: 10,
-    beforeLayer: 'tract'
-  }]
+  '100': {
+    id: 'all_100',
+    source: '100_10',
+    maxzoom: 16,
+    beforeLayer: 'block'
+  }
 }

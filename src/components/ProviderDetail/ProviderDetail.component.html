@@ -27,7 +27,7 @@
       </div>
     </div>
   </div>
-  <div class="provider-charts" v-show="showResults">
+  <div class="provider-charts" v-if="showResults">
     <div class="container-fluid">
       <div class="row">
         <div class="col-sm-8">
@@ -83,7 +83,7 @@
                   </div>
                 </div>
               </div>
-              <div class="chart-percentagePop"></div>
+              <population-chart :width="392" :height="350" :data="popChartData"></population-chart>
             </div>
           </div>
         </div>
@@ -109,13 +109,13 @@
                   </div>
                 </div>
               </div>
-              <div class="chart-anyTech"></div>
+              <speed-chart :width="392" :height="270" :data="anyTechChartData"></speed-chart>
             </div>
           </div>
         </div>
       </div>
       <div class="row">
-        <div class="col-sm-6 col-md-6 col-lg-4">
+        <div class="col-sm-6 col-lg-4">
           <div class="panel-chart panel panel-default">
             <div class="panel-body">
               <div class="row">
@@ -133,11 +133,11 @@
                   </div>
                 </div>
               </div>
-              <div class="chart-container"></div>
+              <speed-chart :width="392" :height="270" :data="anyTechChartData"></speed-chart>
             </div>
           </div>
         </div>
-        <div class="col-sm-6 col-md-6 col-lg-4">
+        <div class="col-sm-6 col-lg-4">
           <div class="panel-chart panel panel-default">
             <div class="panel-body">
               <div class="row">
@@ -155,13 +155,13 @@
                   </div>
                 </div>
               </div>
-              <div class="chart-container"></div>
+              <speed-chart :width="392" :height="270" :data="anyTechChartData"></speed-chart>
             </div>
           </div>
         </div>
       </div>
       <div class="row">
-        <div class="col-sm-6 col-md-6 col-lg-4">
+        <div class="col-sm-6 col-lg-4">
           <div class="panel-chart panel panel-default">
             <div class="panel-body">
               <div class="row">
@@ -179,11 +179,11 @@
                   </div>
                 </div>
               </div>
-              <div class="chart-container"></div>
+              <speed-chart :width="392" :height="270" :data="anyTechChartData"></speed-chart>
             </div>
           </div>
         </div>
-        <div class="col-sm-6 col-md-6 col-lg-4">
+        <div class="col-sm-6 col-lg-4">
           <div class="panel-chart panel panel-default">
             <div class="panel-body">
               <div class="row">
@@ -201,13 +201,13 @@
                   </div>
                 </div>
               </div>
-              <div class="chart-container"></div>
+              <speed-chart :width="392" :height="270" :data="anyTechChartData"></speed-chart>
             </div>
           </div>
         </div>
       </div>
       <div class="row">
-        <div class="col-sm-6 col-md-6 col-lg-4">
+        <div class="col-sm-6 col-lg-4">
           <div class="panel-chart panel panel-default">
             <div class="panel-body">
               <div class="row">
@@ -225,11 +225,11 @@
                   </div>
                 </div>
               </div>
-              <div class="chart-container"></div>
+              <speed-chart :width="392" :height="270" :data="anyTechChartData"></speed-chart>
             </div>
           </div>
         </div>
-        <div class="col-sm-6 col-md-6 col-lg-4">
+        <div class="col-sm-6 col-lg-4">
           <div class="panel-chart panel panel-default">
             <div class="panel-body">
               <div class="row">
@@ -247,7 +247,7 @@
                   </div>
                 </div>
               </div>
-              <div class="chart-container"></div>
+              <speed-chart :width="392" :height="270" :data="anyTechChartData"></speed-chart>
             </div>
           </div>
         </div>

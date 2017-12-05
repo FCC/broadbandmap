@@ -2,13 +2,14 @@ import axios from 'axios'
 import { Dropdown, Tooltip } from 'uiv'
 
 import Autocomplete from '@/components/Autocomplete/index.vue'
+import BookmarkLink from '@/components/BookmarkLink/'
 import searchGeogTypes from '../../_mixins/search-geog-types.js'
 import { columns } from './table-mock-columns.js'
 import { rows } from './table-mock-rows.js'
 
 export default {
   name: 'AreaComparison',
-  components: { Tooltip, Dropdown, Autocomplete },
+  components: { Tooltip, Dropdown, Autocomplete, BookmarkLink },
   mixins: [searchGeogTypes],
   props: [],
   mounted () {
