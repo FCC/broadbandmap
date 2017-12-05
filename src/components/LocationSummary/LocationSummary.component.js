@@ -3,9 +3,8 @@ import nbMap from '../NBMap/'
 import EventHub from '../../_mixins/EventHub.js'
 import nbMapSidebar from '../NBMap/NBMapSidebar/'
 import { urlValidation } from '../../_mixins/urlValidation.js'
-import { sourcesTechSpeed, layersTechSpeed, layersSpeed } from '../NBMap/layers-techSpeed.js'
+import { sourcesTechSpeed, layersTechSpeed } from '../NBMap/layers-techSpeed.js'
 import { updateMapLayers } from '../../_mixins/map-update-layers.js'
-
 export default {
   name: 'LocationSummary',
   components: { axios, nbMap, nbMapSidebar },
@@ -54,7 +53,9 @@ export default {
         30: 'Other',
         60: 'Satellite',
         70: 'Fixed Wireless'
-      }
+      },
+      defaultTech: 'acfosw',
+      defaultSpeed: '25_3'
     }
   },
   mounted () {
