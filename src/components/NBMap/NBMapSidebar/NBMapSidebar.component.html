@@ -1,4 +1,4 @@
-<div id="mapSidebar" class="map-sidebar col-xs-12 col-sm-12 col-md-4" v-bind:class="{ 'hide-pane': hidePane }">
+<div id="mapSidebar" v-bind:class="{ 'hide-pane': hidePane }">
   <tooltip :text="toggleText" placement="left" trigger="hover" :enable="toggleTooltip">
     <button class="btn-toggle btn btn-default btn-lg" @click="toggle" v-bind:aria-controls="'mapSidebar'" v-bind:aria-expanded="hidePane ? 'false':'true'">
       <span class="icon" v-bind:class="{ 'icon-caret-left': hidePane, 'icon-caret-right': !hidePane }"></span><span class="sr-only">Show/hide sidebar</span>
