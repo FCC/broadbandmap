@@ -84,12 +84,9 @@ export default {
             vm.updateTechSpeed(vm.selectedTech, vm.selectedSpeed)
           }
         }
-
         // Trigger reload of highlighted block when base layer style is changed
         this.validateLatLon()
       })
-
-      this.validateLatLon()
     },
     validateLatLon () {
       // If valid latitude and longitude get the FIPS and highlight the census block
