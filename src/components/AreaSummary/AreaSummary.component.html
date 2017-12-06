@@ -12,24 +12,19 @@
       <h2 class="sub-title" slot="sidebar-title"><b>Sangamon County, IL</b></h2>      
       <div class="charts" slot="charts">
         <carousel ref="carousel" icon-control-left="icon-prev" icon-control-right="icon-next" :interval="0">
-          <slide>            
-            <div style="margin: 0 auto; padding: 0 5% 0 7%;"><stacked-bar-chart :data="popChartData" :styles="chartStyles"></stacked-bar-chart></div>            
+          <slide>
+            <h5><b>Nationwide</b></h5>
+            <div class="chart-slide"><stacked-bar-chart :data="popChartData" :styles="chartStyles"></stacked-bar-chart></div>            
           </slide>
           <slide>
-            <div style="margin: 0 auto; padding: 0 5% 0 7%;"><stacked-bar-chart :data="urbanRuralChartData" :styles="chartStyles"></stacked-bar-chart></div>            
+            <h5><b>Nationwide Urban vs. Rural</b></h5>
+            <div class="chart-slide"><stacked-bar-chart :data="urbanRuralChartData" :styles="chartStyles"></stacked-bar-chart></div>            
           </slide>
           <slide>
-            <div style="margin: 0 auto; padding: 0 5% 0 7%;"><stacked-bar-chart :data="tribalChartData" :styles="chartStyles"></stacked-bar-chart></div>            
+            <h5><b>Nationwide Tribal vs. Non-tribal</b></h5>
+            <div class="chart-slide"><stacked-bar-chart :data="tribalChartData" :styles="chartStyles"></stacked-bar-chart></div>            
           </slide>
-        </carousel>
-        <!-- <figure class="item active">
-            <svg width="380" height="350"></svg>
-            <strong>For placement:</strong>
-
-            <img class="img-responsive" src="../../assets/images/chart-speed.png">
-            <figcaption>Speed (Mbps downstream/upstream)</figcaption>
-        </figure>  -->         
-
+        </carousel>        
       </div>
       <section class="map-legend" slot="map-legend">
         <h5><b>Population weighted average number of providers</b></h5>
