@@ -221,7 +221,7 @@
 }
 
 .nav-links {
-  :last-child {
+  .btn-link {
     margin-left: 10px;
     vertical-align: text-bottom;
   }
@@ -233,7 +233,7 @@
 .charts {
   border-bottom: 1px solid #ccc;
   border-top: 1px solid #ccc;
-  margin: 20px 0;
+  // margin: 20px 0;
   padding: 20px 0;
 }
 
