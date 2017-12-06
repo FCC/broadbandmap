@@ -23,69 +23,45 @@ export default {
       popChartData: {
         labels: ['0.2', '10', '25', '50', '100'],
         datasets: [{
-          label: '0 providers',
-          backgroundColor: '#e6eecf',
           data: [40, 39, 10, 40, 20]
         },
         {
-          label: '1 provider',
-          backgroundColor: '#9bc4c1',
           data: [40, 39, 10, 40, 20]
         },
         {
-          label: '2 providers',
-          backgroundColor: '#68a8b7',
           data: [20, 10, 12, 33, 20]
         },
         {
-          label: '3 or more providers',
-          backgroundColor: '#2e557a',
           data: [50, 20, 11, 13, 60]
         }]
       },
       urbanRuralChartData: {
         labels: ['Urban', 'Rural'],
         datasets: [{
-          label: '0 providers',
-          backgroundColor: '#e6eecf',
           data: [4, 39, 10, 40, 20]
         },
         {
-          label: '1 provider',
-          backgroundColor: '#9bc4c1',
           data: [14, 39, 10, 40, 20]
         },
         {
-          label: '2 providers',
-          backgroundColor: '#68a8b7',
           data: [82, 10, 12, 33, 20]
         },
         {
-          label: '3 or more providers',
-          backgroundColor: '#2e557a',
           data: [50, 20, 11, 13, 60]
         }]
       },
       tribalChartData: {
         labels: ['Tribal', 'Non-tribal'],
         datasets: [{
-          label: '0 providers',
-          backgroundColor: '#e6eecf',
           data: [25, 39, 10, 40, 20]
         },
         {
-          label: '1 provider',
-          backgroundColor: '#9bc4c1',
           data: [25, 39, 10, 40, 20]
         },
         {
-          label: '2 providers',
-          backgroundColor: '#68a8b7',
           data: [25, 10, 12, 33, 20]
         },
         {
-          label: '3 or more providers',
-          backgroundColor: '#2e557a',
           data: [25, 20, 11, 13, 60]
         }]
       },

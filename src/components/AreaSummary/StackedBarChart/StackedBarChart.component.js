@@ -7,6 +7,29 @@ export default {
   props: ['data'],
   extends: Bar,
   mounted () {
+    let chartData = [{
+      label: '0 providers',
+      backgroundColor: '#e6eecf'
+    },
+    {
+      label: '1 provider',
+      backgroundColor: '#9bc4c1'
+    },
+    {
+      label: '2 providers',
+      backgroundColor: '#68a8b7'
+    },
+    {
+      label: '3 or more providers',
+      backgroundColor: '#2e557a'
+    }]
+
+    // Merge props 'data' with chartData labels and datasets
+    chartData.forEach((chData, index) => {
+      this.data.datasets[index].label = chData.label
+      this.data.datasets[index].backgroundColor = chData.backgroundColor
+    })
+
     this.renderChart(this.data, this.options)
   },
   data () {
