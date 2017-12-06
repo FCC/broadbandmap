@@ -1,0 +1,19 @@
+.carousel-control {
+  &.left,
+  &.right {
+    background: none;
+  }
+}
+
+.carousel-control {
+  color: #2c75d6;
+  width: 5%;
+  .icon-prev, .icon-next {
+    font-size: 65px;
+    top: 40%;
+  }
+}
+
+.carousel-inner .item {
+	text-align: center
+}
