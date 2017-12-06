@@ -18,7 +18,7 @@ export default {
       ]
     }
 
-    // add the prop data to chartData labels and datasets
+    // Merge props 'data' with chartData labels and datasets
     chartData.labels = this.data.labels
     chartData.datasets[0].data = this.data.data
 
