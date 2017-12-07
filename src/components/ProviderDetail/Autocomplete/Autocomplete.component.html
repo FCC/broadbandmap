@@ -11,7 +11,7 @@
         :open-on-focus="true"
         >
         <!-- Override the input template -->
-        <input id="name" data-role="input" class="form-control input-lg" type="search" :placeholder="placeholderText" autocomplete="off" @keydown.prevent.enter="enterClicked">
+        <input data-role="input" class="form-control input-lg" type="search" :placeholder="placeholderText" autocomplete="off" @keydown.prevent.enter="enterClicked" aria-label="Enter provider name">
         <!-- Override the typeahead template -->
         <template slot="item" slot-scope="props">
             <!-- Iterate through each address returned -->

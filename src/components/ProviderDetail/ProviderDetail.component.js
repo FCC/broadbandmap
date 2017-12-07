@@ -16,7 +16,7 @@ export default {
   },
   data () {
     return {
-      providers: [{}],
+      providers: [{id: Date.now()}],
       providerData: [],
       providerNames: [],
       providerHoconums: [],
@@ -79,15 +79,21 @@ export default {
       })
     },
     addProvider () {
+      let newProvider = {
+        id: Date.now()
+      }
       this.numProviders++
-      this.providers.push({})
+      this.providers.push(newProvider)
 
       // Show the 'Add Provider' link
       this.showLink = this.numProviders !== 3
     },
     removeProvider (providerID) {
       this.numProviders--
-      this.providers.pop()
+
+       // Remove the selected provider from the list of providers
+      this.providers = this.providers.filter(provider => provider.id !== providerID)
+
       if (this.numProviders === 0) {
         this.providers.push({})
         this.numProviders = 1
@@ -97,16 +103,15 @@ export default {
       this.showLink = this.numProviders < 3
     },
     viewDetails () {
-
       let providerBox = this.$refs.providerBox
       // Create list of provider Names
-      this.providerNames = [];
+      this.providerNames = []
       for (let pbi in providerBox) {
         this.providerNames.push(providerBox[pbi].typeaheadModel.holdingcompanyname)
       }
 
       // Create list of provider Hoconums
-      this.providerHoconums = [];
+      this.providerHoconums = []
       for (let pni in this.providerNames) {
         this.providerHoconums.push(this.getHoconumByName(this.providerNames[pni]))
       }
@@ -116,7 +121,6 @@ export default {
 
       // Fetch provider data
       this.fetchProviderData()
-
     },
     // Call Socrata API - Lookup Table for geographies
     fetchProviderData () {
@@ -143,7 +147,7 @@ export default {
       for (let hci in this.providerHoconums) {
         hoconumClause += "'" + this.providerHoconums[hci] + "',"
       }
-      hoconumClause = hoconumClause.replace(/,\s*$/, "")
+      hoconumClause = hoconumClause.replace(/,\s*$/, '')
 
       axios
       .get(socrataURL, {
@@ -167,7 +171,6 @@ export default {
         setTimeout(() => {
           self.Map.resize()
         }, 100)
-
       })
       .catch(function (error) {
         if (error.response) {
@@ -186,15 +189,13 @@ export default {
       })
     },
     calculateChartData () {
-
       let usPopulation = process.env.US_POPULATION
 
       let directions = ['u', 'd']
 
       for (let di in ['u', 'd']) {
-
         let drct = directions[di]
-  
+
         this.popChartData[drct] = {}
         this.popChartData[drct]['labels'] = []
         this.popChartData[drct]['data'] = []
@@ -206,7 +207,7 @@ export default {
             if (pd.hoconum === ph && pd.tech === 'all') {
               this.popChartData[drct]['labels'].push(this.getNameByHoconum(pd.hoconum))
               this.popChartData[drct]['data'].push(pd[drct + '_1'] * 100 / usPopulation)
-            }                   
+            }
           }
         }
 
@@ -219,21 +220,21 @@ export default {
           if (drct === 'u') {
             count = 10
           }
-       
+
           let cData = []
           cData[0] = 1
           for (let i = 1; i < count; i++) {
             cData[i] = parseFloat(collapsed[ci][drct + '_' + i.toString()]) / parseFloat(collapsed[ci][drct + '_1'])
           }
 
-          let series = { 
+          let series = {
             label: this.getNameByHoconum(collapsed[ci].hoconum),
             data: cData
           }
 
           if (!this.techChartData[drct][collapsed[ci].tech]) {
             this.techChartData[drct][collapsed[ci].tech] = []
-          } 
+          }
           this.techChartData[drct][collapsed[ci].tech].push(series)
         }
       }
@@ -244,12 +245,12 @@ export default {
         let found = false
         for (let odi in outData) {
           if (outData[odi].hoconum === data[di].hoconum &&
-              outData[odi].tech    === this.getTechNameByCode(data[di].tech)) {
+              outData[odi].tech === this.getTechNameByCode(data[di].tech)) {
             for (let i = 1; i < 9; i++) {
-              outData[odi]['d_'+i.toString()] = (parseInt(outData[odi]['d_'+i.toString()]) + parseInt(data[di]['d_'+i.toString()])).toString()
+              outData[odi]['d_' + i.toString()] = (parseInt(outData[odi]['d_' + i.toString()]) + parseInt(data[di]['d_' + i.toString()])).toString()
             }
             for (let i = 1; i < 11; i++) {
-              outData[odi]['u_'+i.toString()] = (parseInt(outData[odi]['u_'+i.toString()]) + parseInt(data[di]['u_'+i.toString()])).toString()
+              outData[odi]['u_' + i.toString()] = (parseInt(outData[odi]['u_' + i.toString()]) + parseInt(data[di]['u_' + i.toString()])).toString()
             }
             found = true
           }
@@ -279,9 +280,9 @@ export default {
       // To be implemented later properly. Currently a stub that assumes name is passed in
       return this.hoconum2Name[hoconum]
     },
-    // Tech name by code 
+    // Tech name by code
     getTechNameByCode (code) {
-      if (code === 'all') return code;
+      if (code === 'all') return code
       if (parseInt(code) >= 10 && parseInt(code) <= 13) return 'adsl'
       if (parseInt(code) >= 40 && parseInt(code) <= 43) return 'cable'
       if (code === '50') return 'fiber'

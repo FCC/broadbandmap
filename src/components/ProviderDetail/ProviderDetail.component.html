@@ -11,10 +11,10 @@
           <p>Get detailed information on as many as 3 service providers at a time.</p>
           <div class="input-provider">
             <template v-for="provider in providers">
-              <div class="input-group input-group-lg">
-                <Autocomplete ref="providerBox" :placeholderText="getPlaceholderText"></Autocomplete>
+              <div class="input-group input-group-lg" :key="provider.id">
+                <Autocomplete ref="providerBox" :placeholderText="getPlaceholderText" v-model="provider.id"></Autocomplete>
                 <span class="input-group-btn">
-                <button class="btn btn-default btn-remove" @click.prevent="removeProvider"><span class="icon icon-close"></span></button>
+                <button class="btn btn-default btn-remove" type="button" @click.prevent="removeProvider(provider.id)"><span class="icon icon-close"></span></button>
                 </span>
               </div>
             </template>
