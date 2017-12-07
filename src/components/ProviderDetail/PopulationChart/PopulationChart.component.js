@@ -11,9 +11,9 @@ export default {
       datasets: [
         {
           backgroundColor: [
-            'rgb(255,132,139)',
-            'rgb(131,142,255)',
-            'rgb(255,255,149)']
+            process.env.CHART_COLOR_01,
+            process.env.CHART_COLOR_02,
+            process.env.CHART_COLOR_03]
         }
       ]
     }
