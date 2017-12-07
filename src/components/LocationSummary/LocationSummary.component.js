@@ -55,7 +55,8 @@ export default {
         70: 'Fixed Wireless'
       },
       defaultTech: 'acfosw',
-      defaultSpeed: '25_3'
+      defaultSpeed: '25_3',
+      togLegendTitle: true
     }
   },
   mounted () {
@@ -224,6 +225,9 @@ export default {
           up: data[index].maxadup
         })
       }
+    },
+    toggleLegendTitle (zoomLevel) {
+      this.togLegendTitle = zoomLevel <= 10
     },
     // Remove Census block & provider table results
     clearProviderTable () {

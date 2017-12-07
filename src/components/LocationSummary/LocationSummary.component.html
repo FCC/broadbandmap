@@ -5,52 +5,45 @@
         <h1>Fixed Broadband at a Location</h1>
       </div>
     </div>
-  </div>  
+  </div>
   <div class="row">
-    <nb-map class="col-xs-12 col-sm-12 col-md-7 col-lg-8" mapType="location" searchType="location" searchDefault="Address" @map-init="mapInit" @map-click="getLatLon"></nb-map>
+    <nb-map class="col-xs-12 col-sm-12 col-md-7 col-lg-8" mapType="location" searchType="location" searchDefault="Address" @map-init="mapInit" @map-click="getLatLon" @map-zoomend="toggleLegendTitle"></nb-map>
     <nb-map-sidebar class="map-sidebar col-xs-12 col-sm-12 col-md-5 col-lg-4">
       <h2 class="sub-title" slot="sidebar-title"><b>All Providers Reporting Service</b></h2>
       <p v-if="censusBlock != ''" slot="sidebar-description">Census block ID: {{ censusBlock }}</p>
       <!-- Insert into NBMapSidebar sub-component's "charts" slot -->
       <div class="charts" slot="charts">
         <!-- Good Table plugin for Vue -->
-        <vue-good-table
-          v-if="providerRows.length"
-          styleClass="table-fixed table table-stripped"
-          :columns="providerColumns"
-          :rows="providerRows"
-          :defaultSortBy="{field: 'down', type: 'desc'}"
-          :paginate="false"
-          :lineNumbers="false"
-        />
+        <vue-good-table v-if="providerRows.length" styleClass="table-fixed table table-stripped" :columns="providerColumns" :rows="providerRows" :defaultSortBy="{field: 'down', type: 'desc'}" :paginate="false" :lineNumbers="false" />
         <div v-if="!providerRows.length">Please click on the map or search for a location</div>
       </div>
       <!-- Insert into NBMapSidebar sub-component's "map-legend" slot -->
-      <section class="map-legend" slot="map-legend">
-        <h5><b>Number of Broadband Providers</b></h5>
-        <ul class="list-unstyled">
-          <li>
-            <div class="key-symbol" style="background-color: #ffffcc"></div> 0
-          </li>
-          <li>
-            <div class="key-symbol" style="background-color: #a1dab4"></div> 1
-          </li>
-          <li>
-            <div class="key-symbol" style="background-color: #41b6c4"></div> 2
-          </li>
-          <li>
-            <div class="key-symbol" style="background-color: #225ea8"></div> 3
-          </li>
-          <li>
-            <div class="key-symbol" style="background-color: #253494"></div> 4
-          </li>
-          <li>
-            <div class="key-symbol" style="background-color: #081d58"></div> 6
-          </li>
-          <li>
-            <div class="key-symbol" style="background-color: #000000"></div> 12 or more
-          </li>
-        </ul>
+      <section class="map-legend" slot="map-legend">        
+          <h5 v-if="!togLegendTitle"><b>Number of Broadband Providers</b></h5>
+          <h5 v-if="togLegendTitle"><b>Population Weighted Average Number of Providers</b></h5>
+          <ul class="list-unstyled">
+            <li>
+              <div class="key-symbol" style="background-color: #ffffcc"></div> 0
+            </li>
+            <li>
+              <div class="key-symbol" style="background-color: #a1dab4"></div> 1
+            </li>
+            <li>
+              <div class="key-symbol" style="background-color: #41b6c4"></div> 2
+            </li>
+            <li>
+              <div class="key-symbol" style="background-color: #225ea8"></div> 3
+            </li>
+            <li>
+              <div class="key-symbol" style="background-color: #253494"></div> 4
+            </li>
+            <li>
+              <div class="key-symbol" style="background-color: #081d58"></div> 6
+            </li>
+            <li>
+              <div class="key-symbol" style="background-color: #000000"></div> 12 or more
+            </li>
+          </ul>        
       </section>
     </nb-map-sidebar>
   </div>
