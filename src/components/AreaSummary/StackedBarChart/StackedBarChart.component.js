@@ -2,27 +2,35 @@ import VueCharts from 'vue-chartjs'
 import { Bar } from 'vue-chartjs'
 
 export default {
-  name: 'PopulationChart',
+  name: 'StackedBarChart',
   components: { },
   props: ['data'],
   extends: Bar,
   mounted () {
-    let chartData = {
-      datasets: [
-        {
-          backgroundColor: [
-            process.env.CHART_COLOR_01,
-            process.env.CHART_COLOR_02,
-            process.env.CHART_COLOR_03]
-        }
-      ]
-    }
+    let chartData = [{
+      label: '0 providers',
+      backgroundColor: '#e6eecf'
+    },
+    {
+      label: '1 provider',
+      backgroundColor: '#9bc4c1'
+    },
+    {
+      label: '2 providers',
+      backgroundColor: '#68a8b7'
+    },
+    {
+      label: '3 or more providers',
+      backgroundColor: '#2e557a'
+    }]
 
     // Merge props 'data' with chartData labels and datasets
-    chartData.labels = this.data.labels
-    chartData.datasets[0].data = this.data.data
+    chartData.forEach((chData, index) => {
+      this.data.datasets[index].label = chData.label
+      this.data.datasets[index].backgroundColor = chData.backgroundColor
+    })
 
-    this.renderChart(chartData, this.options)
+    this.renderChart(this.data, this.options)
   },
   data () {
     return {
@@ -34,18 +42,18 @@ export default {
         responsive: true,
         scales: {
           xAxes: [{
-            barThickness: 73,
-            stacked: false,
+            barThickness: 50,
+            stacked: true,
             scaleLabel: {
               display: true,
-              labelString: 'Provider'
+              labelString: 'Speed (Mbps downstream\\upstream)'
             }
           }],
           yAxes: [{
-            stacked: false,
+            stacked: true,
             scaleLabel: {
               display: true,
-              labelString: 'Percentage'
+              labelString: 'Population Percentage'
             },
             gridLines: {
               display: true
@@ -58,7 +66,7 @@ export default {
         tooltips: {
           callbacks: {
             label: function (tooltipItems, data) {
-              return data.labels[tooltipItems.index] + ': ' + tooltipItems.yLabel
+              return data.datasets[tooltipItems.datasetIndex].label + ': ' + tooltipItems.yLabel + '%'
             }
           }
         }
