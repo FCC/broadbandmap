@@ -22,10 +22,12 @@ export default {
   },
   methods: {
     searchButtonClicked (event) {
-      this.gotoGeography(event)
+      if (this.searchType !== 'Provider') {
+        this.gotoGeography(event)
+      }
     },
     enterClicked (event) {
-      if ((typeof this.typeaheadModel === 'object') || (this.searchType !== 'Address')) {
+      if (this.searchType !== 'Provider' && (typeof this.typeaheadModel === 'object' || this.searchType !== 'Address')) {
         this.gotoGeography(event)
       }
     },
@@ -131,6 +133,10 @@ export default {
         this.itemKey = 'name'
         this.asyncKey = ''
         this.fetchLookupTable('county')
+      } else if (this.searchType === 'Provider') {
+        this.asyncKey = ''
+        this.itemKey = 'holdingcompanyname'
+        this.fetchLookupTable('provider')
       } else {
         console.log('DEBUG: No handler in Autocomplete for searchType= ', this.searchType)
       }
@@ -142,27 +148,41 @@ export default {
       let socrataURL = ''
       let appToken = ''
       let httpHeaders = {}
-      if (process.env.SOCRATA_ENV === 'DEV') {
-        socrataURL = process.env.SOCRATA_DEV_LOOKUP
-        httpHeaders = {
-          // Dev: Authentication to Socrata using HTTP Basic Authentication
-          'Authorization': 'Basic ' + process.env.SOCRATA_DEV_HTTP_BASIC_AUTHENTICATION
-        }
-      } else if (process.env.SOCRATA_ENV === 'PROD') {
-        socrataURL = process.env.SOCRATA_PROD_LOOKUP
-        // Socrata does not currently enforce an app token, but may in the future
+      let axiosParams = {}
+
+      if (fetchType === 'provider') {
+        socrataURL = process.env.SOCRATA_PROD_FULL
         appToken = process.env.SOCRATA_PROD_APP_TOKEN
+        axiosParams = {
+          $select: 'holdingcompanyname',
+          $group: 'holdingcompanyname',
+          $limit: 5000,
+          $$app_token: appToken
+        }
       } else {
-        console.log('ERROR: process.env.SOCRATA_ENV in .env file must be PROD or DEV, not ' + process.env.SOCRATA_ENV)
-      }
-      axios
-      .get(socrataURL, {
-        params: {
+        if (process.env.SOCRATA_ENV === 'DEV') {
+          socrataURL = process.env.SOCRATA_DEV_LOOKUP
+          httpHeaders = {
+            // Dev: Authentication to Socrata using HTTP Basic Authentication
+            'Authorization': 'Basic ' + process.env.SOCRATA_DEV_HTTP_BASIC_AUTHENTICATION
+          }
+        } else if (process.env.SOCRATA_ENV === 'PROD') {
+          socrataURL = process.env.SOCRATA_PROD_LOOKUP
+          // Socrata does not currently enforce an app token, but may in the future
+          appToken = process.env.SOCRATA_PROD_APP_TOKEN
+        } else {
+          console.log('ERROR: process.env.SOCRATA_ENV in .env file must be PROD or DEV, not ' + process.env.SOCRATA_ENV)
+        }
+        axiosParams = {
           type: fetchType,
           $limit: 50000, // i.e. more than the default 1000
           $order: 'name',
           $$app_token: appToken
-        },
+        }
+      }
+      axios
+      .get(socrataURL, {
+        params: axiosParams,
         headers: httpHeaders
       })
       .then(function (response) {

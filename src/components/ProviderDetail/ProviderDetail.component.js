@@ -5,7 +5,7 @@ import nbMap from '../NBMap/'
 import PopulationChart from './PopulationChart'
 import SpeedChart from './SpeedChart'
 import UpSpeedChart from './UpSpeedChart'
-import Autocomplete from './Autocomplete/index.vue'
+import Autocomplete from '../Autocomplete'
 
 export default {
   name: 'ProviderDetail',
@@ -27,7 +27,8 @@ export default {
       popChartData: {},
       techChartData: {},
       hoconum2Name: {},
-      name2Hoconum: {}
+      name2Hoconum: {},
+      searchType: 'Provider'
     }
   },
   methods: {

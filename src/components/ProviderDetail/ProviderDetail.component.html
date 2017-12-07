@@ -12,7 +12,7 @@
           <div class="input-provider">
             <template v-for="provider in providers">
               <div class="input-group input-group-lg" :key="provider.id">
-                <Autocomplete ref="providerBox" :placeholderText="getPlaceholderText" v-model="provider.id"></Autocomplete>
+                <Autocomplete ref="providerBox" :placeholderText="getPlaceholderText" :searchType="searchType" v-model="provider.id"></Autocomplete>
                 <span class="input-group-btn">
                 <button class="btn btn-default btn-remove" type="button" @click.prevent="removeProvider(provider.id)"><span class="icon icon-close"></span></button>
                 </span>
