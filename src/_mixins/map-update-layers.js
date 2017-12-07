@@ -8,7 +8,8 @@ export const updateMapLayers = {
     return {
       defaultTech: 'acfosw',
       defaultSpeed: '25_3',
-      removeAllLayers: false
+      removeAllLayers: false,
+      togLegendTitle: true
     }
   },
   methods: {
@@ -25,21 +26,6 @@ export const updateMapLayers = {
         })
       })
     },
-    /* addLayerSources () {
-      const vm = this
-      console.log('addLayerSources')
-
-      vm.removeAllLayers = false
-
-      // add sources for tech and speed map layers
-      sourcesTechSpeed.forEach(source => {
-        console.log(source.id)
-        vm.Map.addSource(source.id, {
-          url: source.url,
-          type: source.type
-        })
-      })
-    }, */
     addLayers (propertyID) {
       const vm = this
       const speed = propertyID.split('_')[1]
@@ -121,6 +107,9 @@ export const updateMapLayers = {
 
       // add new map layers
       this.addLayers(propertyID)
+    },
+    toggleLegendTitle (zoomLevel) {
+      this.togLegendTitle = zoomLevel <= 10
     }
   }
 }
