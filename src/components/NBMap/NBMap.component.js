@@ -173,6 +173,10 @@ export default {
 
       map.on('zoomend', function (event) {
         console.log('zoom = ', map.getZoom())
+
+        let zoomLevel = map.getZoom()
+
+        vm.$emit('map-zoomend', zoomLevel)
       })
     },
     switchBaseLayer: function (layerId) {

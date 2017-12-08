@@ -7,42 +7,51 @@
     </div>
   </div>
   <div class="row">
-    <nb-map class="col-xs-12 col-sm-12 col-md-8" mapType="area" searchType="comparison" searchDefault="County" @map-init="mapInit"></nb-map>
-    <nb-map-sidebar>
+    <nb-map class="col-xs-12 col-sm-12 col-md-7 col-lg-8" mapType="area" searchType="comparison" searchDefault="County" @map-init="mapInit" @map-zoomend="toggleLegendTitle"></nb-map>
+    <nb-map-sidebar class="map-sidebar col-xs-12 col-sm-12 col-md-5 col-lg-4">
       <h2 class="sub-title" slot="sidebar-title"><b>Sangamon County, IL</b></h2>      
       <div class="charts" slot="charts">
-        <figure class="item active">
-            <svg width="380" height="350"></svg>
-            <strong>For placement:</strong>
-
-            <img class="img-responsive" src="../../assets/images/chart-speed.png">
-            <figcaption>Speed (Mbps downstream/upstream)</figcaption>
-        </figure>        
+        <carousel ref="carousel" icon-control-left="icon-prev" icon-control-right="icon-next" :interval="0">
+          <slide>
+            <h5><b>Nationwide</b></h5>
+            <div class="chart-slide"><stacked-bar-chart :data="popChartData" :styles="chartStyles"></stacked-bar-chart></div>            
+          </slide>
+          <slide>
+            <h5><b>Nationwide Urban vs. Rural</b></h5>
+            <div class="chart-slide"><stacked-bar-chart :data="urbanRuralChartData" :styles="chartStyles"></stacked-bar-chart></div>            
+          </slide>
+          <slide>
+            <h5><b>Nationwide Tribal vs. Non-tribal</b></h5>
+            <div class="chart-slide"><stacked-bar-chart :data="tribalChartData" :styles="chartStyles"></stacked-bar-chart></div>            
+          </slide>
+        </carousel>        
       </div>
       <section class="map-legend" slot="map-legend">
-        <h5><b>Population weighted average number of providers</b></h5>
-        <ul class="list-unstyled">
-                <li>
-                    <div class="key-symbol" style="background-color: #e7efd0)"></div>
-                    ≤ 0.5
-                </li>
-                <li>
-                    <div class="key-symbol" style="background-color: #e7efd0"></div>
-                    ≤ 1.0
-                </li>
-                <li>
-                    <div class="key-symbol" style="background-color: #69a8b8"></div>
-                    ≤ 1.5
-                </li>
-                <li>
-                    <div class="key-symbol" style="background-color: #4a7e98"></div>
-                    ≤ 2.0
-                </li>
-                <li>
-                    <div class="key-symbol" style="background-color: #4a7e98"></div>
-                    &gt; 2.0
-                </li>
-            </ul>
+        <h5 v-if="!togLegendTitle"><b>Number of Broadband Providers</b></h5>
+          <h5 v-if="togLegendTitle"><b>Population Weighted Average Number of Providers</b></h5>
+         <ul class="list-unstyled">
+          <li>
+            <div class="key-symbol" style="background-color: #ffffcc"></div> 0
+          </li>
+          <li>
+            <div class="key-symbol" style="background-color: #a1dab4"></div> 1
+          </li>
+          <li>
+            <div class="key-symbol" style="background-color: #41b6c4"></div> 2
+          </li>
+          <li>
+            <div class="key-symbol" style="background-color: #225ea8"></div> 3
+          </li>
+          <li>
+            <div class="key-symbol" style="background-color: #253494"></div> 4
+          </li>
+          <li>
+            <div class="key-symbol" style="background-color: #081d58"></div> 6
+          </li>
+          <li>
+            <div class="key-symbol" style="background-color: #000000"></div> 12 or more
+          </li>
+        </ul>
       </section>
     </nb-map-sidebar>
   </div>

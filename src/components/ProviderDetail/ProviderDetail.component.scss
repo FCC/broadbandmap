@@ -1,16 +1,19 @@
+.pg-providerDetails {
+  margin-bottom: 300px;
+}
+
 .provider-input {
   padding: 15px 15px 10px;
 
   p {
     clear: both;
     margin-bottom: 0;
-  }
+  }  
 }
 
 .input-provider {
   display: inline-block;
-  margin: 10px 0 0;
-  overflow: hidden;
+  margin: 10px 0 0;  
 }
 
 .input-group {
@@ -19,8 +22,10 @@
   float: none;
   margin-bottom: 10px;
   @media (min-width: 992px) {
-    float: left;
-    margin-bottom: 0;
+    float: left;    
+  }
+  @media (min-width: 1200px) {
+    width: 350px;
   }
 }
 

@@ -2,13 +2,13 @@ import VueCharts from 'vue-chartjs'
 import { Bar } from 'vue-chartjs'
 
 export default {
-  name: 'SpeedChart',
+  name: 'UpSpeedChart',
   components: { },
   props: ['data'],
   extends: Bar,
   mounted () {
     let chartData = {
-      labels: ['any', '10', '25', '50', '100', '250', '500', '1000'],
+      labels: ['any', '1', '3', '5', '10', '25', '100', '250', '500', '1000'],
       datasets: []
     }
 
@@ -27,11 +27,7 @@ export default {
     return {
       options: {
         legend: {
-          display: true,
-          position: 'bottom',
-          labels: {
-            boxWidth: 20
-          }
+          display: true
         },
         maintainAspectRatio: false,
         responsive: true,
@@ -62,8 +58,7 @@ export default {
         tooltips: {
           callbacks: {
             label: function (tooltipItems, data) {
-              let percentage = (100 * tooltipItems.yLabel).toFixed(2)
-              return data.datasets[tooltipItems.datasetIndex].label.slice(0, 15) + ': ' + percentage + '%'
+              return data.datasets[tooltipItems.datasetIndex].label + ': ' + tooltipItems.yLabel + '%'
             }
           }
         }
