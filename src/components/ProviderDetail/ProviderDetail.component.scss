@@ -1,3 +1,7 @@
+.pg-providerDetails {
+  margin-bottom: 300px;
+}
+
 .provider-input {
   padding: 15px 15px 10px;
 
@@ -18,8 +22,10 @@
   float: none;
   margin-bottom: 10px;
   @media (min-width: 992px) {
-    float: left;
-    margin-bottom: 0;
+    float: left;    
+  }
+  @media (min-width: 1200px) {
+    width: 350px;
   }
 }
 
