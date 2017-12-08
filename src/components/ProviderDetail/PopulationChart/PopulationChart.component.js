@@ -19,9 +19,8 @@ export default {
     }
 
     // Merge props 'data' with chartData labels and datasets
-    chartData.labels = this.data.labels
+    chartData.labels = this.data.labels.map(label => label.slice(0, 10))
     chartData.datasets[0].data = this.data.data
-
     this.renderChart(chartData, this.options)
   },
   data () {
@@ -58,7 +57,8 @@ export default {
         tooltips: {
           callbacks: {
             label: function (tooltipItems, data) {
-              return data.labels[tooltipItems.index] + ': ' + tooltipItems.yLabel
+              let percentage = (tooltipItems.yLabel).toFixed(2)
+              return data.labels[tooltipItems.index].slice(0, 15) + ': ' + percentage + '%'
             }
           }
         }

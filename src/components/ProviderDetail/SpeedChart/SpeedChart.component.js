@@ -27,7 +27,11 @@ export default {
     return {
       options: {
         legend: {
-          display: true
+          display: true,
+          position: 'bottom',
+          labels: {
+            boxWidth: 20
+          }
         },
         maintainAspectRatio: false,
         responsive: true,
@@ -58,7 +62,8 @@ export default {
         tooltips: {
           callbacks: {
             label: function (tooltipItems, data) {
-              return data.datasets[tooltipItems.datasetIndex].label + ': ' + tooltipItems.yLabel + '%'
+              let percentage = (100 * tooltipItems.yLabel).toFixed(2)
+              return data.datasets[tooltipItems.datasetIndex].label.slice(0, 15) + ': ' + percentage + '%'
             }
           }
         }
