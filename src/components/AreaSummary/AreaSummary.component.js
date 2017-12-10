@@ -67,7 +67,7 @@ export default {
     }
   },
   mounted () {
-    EventHub.$on('updateMapSettings', (selectedTech, selectedSpeed) => this.updateTechSpeed(selectedTech, selectedSpeed))
+    EventHub.$on('updateMapSettings', (selectedTech, selectedSpeed) => this.updateTechSpeed(selectedTech, selectedSpeed)) // calls common function in map-update-layers.js
     EventHub.$on('removeLayers', (propertyID, removeAll) => this.removeLayers(propertyID, removeAll))
   },
   destroyed () {
@@ -85,7 +85,7 @@ export default {
         // If one or more technologies is selected, then reload the tech/speed layers when the base layer style is changed
         // Need to reload tech/speed layers so the labels will appear on top
         if (!vm.removeAllLayers) {
-          // If no tech is selected use default tech and speed settings
+          // If no tech is selected use default tech and speed settings (calls common function in map-update-layers.js)
           if (vm.selectedTech === undefined) {
             vm.updateTechSpeed(vm.defaultTech, vm.defaultSpeed)
           } else {
