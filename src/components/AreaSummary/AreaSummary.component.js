@@ -102,10 +102,10 @@ export default {
         // Clear out any URL parameters that may exist (this has no effect if we're already looking at the default national view)
         this.$router.push('area-summary')
       } else {
-        this.fetchCombinedData()
+        this.fetchAreaData()
       }
     },
-    fetchCombinedData () {
+    fetchAreaData () {
       const self = this
       let type = ''
       let id = 0
@@ -120,18 +120,18 @@ export default {
         id = 0
       }
 
-      // Call Socrata API - Combined Table for charts
+      // Call Socrata API - Area table for charts
       let socrataURL = ''
       let appToken = ''
       let httpHeaders = {}
       if (process.env.SOCRATA_ENV === 'DEV') {
-        socrataURL = process.env.SOCRATA_DEV_COMBINED
+        socrataURL = process.env.SOCRATA_DEV_AREA
         httpHeaders = {
           // Dev: Authentication to Socrata using HTTP Basic Authentication
           'Authorization': 'Basic ' + process.env.SOCRATA_DEV_HTTP_BASIC_AUTHENTICATION
         }
       } else if (process.env.SOCRATA_ENV === 'PROD') {
-        socrataURL = process.env.SOCRATA_PROD_COMBINED
+        socrataURL = process.env.SOCRATA_PROD_AREA
         // Socrata does not currently enforce an app token, but may in the future
         appToken = process.env.SOCRATA_PROD_APP_TOKEN
       } else {
