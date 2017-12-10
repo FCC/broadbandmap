@@ -67,7 +67,6 @@ export default {
     }
   },
   mounted () {
-    this.fetchCombinedData()
     EventHub.$on('updateMapSettings', (selectedTech, selectedSpeed) => this.updateTechSpeed(selectedTech, selectedSpeed))
     EventHub.$on('removeLayers', (propertyID, removeAll) => this.removeLayers(propertyID, removeAll))
   },
@@ -93,7 +92,18 @@ export default {
             vm.updateTechSpeed(vm.selectedTech, vm.selectedSpeed)
           }
         }
+        // Trigger reload when base layer style is changed
+        this.validateURL()
       })
+    },
+    validateURL () {
+      // If a valid "type" and "geoid" were not passed in
+      if (!this.isValidQueryParam('type') || !this.isValidQueryParam('geoid')) {
+        // Clear out any URL parameters that may exist (this has no effect if we're already looking at the default national view)
+        this.$router.push('area-summary')
+      } else {
+        this.fetchCombinedData()
+      }
     },
     fetchCombinedData () {
       const self = this
@@ -164,7 +174,7 @@ export default {
   watch: {
     // When query params change for the same route (URL slug)
     '$route' (to, from) {
-      this.fetchCombinedData()
+      this.validateURL()
     }
   }
 }
