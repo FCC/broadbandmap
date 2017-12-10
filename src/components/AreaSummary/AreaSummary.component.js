@@ -97,13 +97,14 @@ export default {
       })
     },
     validateURL () {
-      // If a valid "type" and "geoid" were not passed in
-      if (!this.isValidQueryParam('type') || !this.isValidQueryParam('geoid')) {
+      // If at least one query param was passed in, but "type" and "geoid" are not valid
+      if (Object.keys(this.$route.query).length && (!this.isValidQueryParam('type') || !this.isValidQueryParam('geoid'))) {
         // Clear out any URL parameters that may exist (this has no effect if we're already looking at the default national view)
         this.$router.push('area-summary')
-      } else {
-        this.fetchAreaData()
+        // Prevent duplicate call
+        return
       }
+      this.fetchAreaData()
     },
     fetchAreaData () {
       const self = this
