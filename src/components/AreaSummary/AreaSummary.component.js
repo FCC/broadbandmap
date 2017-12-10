@@ -138,19 +138,33 @@ export default {
       } else {
         console.log('ERROR: process.env.SOCRATA_ENV in .env file must be PROD or DEV, not ' + process.env.SOCRATA_ENV)
       }
+      // Convert selectedSpeed to numeric value
+      let speedNumeric = 0
+      if (this.selectedSpeed === '200') {
+        speedNumeric = 0.2
+      } else if (this.selectedSpeed === '10_1') {
+        speedNumeric = 10
+      } else if (this.selectedSpeed === '25_3') {
+        speedNumeric = 25
+      } else if (this.selectedSpeed === '50_5') {
+        speedNumeric = 50
+      } else if (this.selectedSpeed === '100_10') {
+        speedNumeric = 100
+      }
       axios
       .get(socrataURL, {
         params: {
           id: id,
           type: type,
-          tech: 'a',
+          tech: this.selectedTech,
+          speed: speedNumeric,
           $order: 'speed',
           $$app_token: appToken
         },
         headers: httpHeaders
       })
       .then(function (response) {
-        // console.log('Socrata response= ', response)
+        console.log('Socrata AREA table response= ', response)
       })
       .catch(function (error) {
         if (error.response) {
