@@ -31,18 +31,7 @@ export default {
       },
       tribalChartData: {
         labels: ['Tribal', 'Non-tribal'],
-        datasets: [{
-          data: [25, 19]
-        },
-        {
-          data: [25, 19]
-        },
-        {
-          data: [25, 10]
-        },
-        {
-          data: [25, 20]
-        }]
+        datasets: []
       },
       chartStyles: {width: 'auto', height: '350px'}
     }
@@ -155,6 +144,7 @@ export default {
 
         self.calculatePopChartData()
         self.calculateUrbanRuralChartData()
+        self.calculateTribalChartData()
 
         self.showCharts = true
 
@@ -246,9 +236,19 @@ export default {
         {data: [0, 0]},
         {data: [0, 0]}
       ]
-      this.urbanRuralChartData = this.aggregate(this.urbanRuralChartData, 'urban_rural', {Urban:'U', Rural:'R'})
-      console.log(this.urbanRuralChartData)
+      this.urbanRuralChartData = this.aggregate(this.urbanRuralChartData, 'urban_rural', {'Urban':'U', 'Rural':'R'})
+    },
+    calculateTribalChartData () {
+
+      this.tribalChartData.datasets = [
+        {data: [0, 0]},
+        {data: [0, 0]},
+        {data: [0, 0]},
+        {data: [0, 0]}
+      ]
+      this.tribalChartData = this.aggregate(this.tribalChartData, 'tribal_non', {'Tribal':'Y', 'Non-tribal':'N'})
     }
+
   },
   computed: {
 
