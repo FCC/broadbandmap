@@ -4,7 +4,7 @@ import { Bar } from 'vue-chartjs'
 export default {
   name: 'StackedBarChart',
   components: { },
-  props: ['data'],
+  props: ['data', 'xaxis'],
   extends: Bar,
   mounted () {
     let chartData = [{
@@ -29,6 +29,10 @@ export default {
       this.data.datasets[index].label = chData.label
       this.data.datasets[index].backgroundColor = chData.backgroundColor
     })
+
+    if (this.xaxis) {
+      this.options.scales.xAxes[0].scaleLabel.labelString = this.xaxis
+    }
 
     this.renderChart(this.data, this.options)
   },
@@ -59,7 +63,8 @@ export default {
               display: true
             },
             ticks: {
-              beginAtZero: true
+              beginAtZero: true,
+              max: 100
             }
           }]
         },

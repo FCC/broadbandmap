@@ -20,6 +20,7 @@ export default {
       showCharts: false,
       defaultTech: 'acfosw',
       defaultSpeed: '25_3',
+      settlementType: 'Settlement Type',
       popChartData: {
         labels: ['0.2', '10', '25', '50', '100'],
         datasets: []
@@ -31,16 +32,16 @@ export default {
       tribalChartData: {
         labels: ['Tribal', 'Non-tribal'],
         datasets: [{
-          data: [25, 39, 10, 40, 20]
+          data: [25, 19]
         },
         {
-          data: [25, 39, 10, 40, 20]
+          data: [25, 19]
         },
         {
-          data: [25, 10, 12, 33, 20]
+          data: [25, 10]
         },
         {
-          data: [25, 20, 11, 13, 60]
+          data: [25, 20]
         }]
       },
       chartStyles: {width: 'auto', height: '350px'}
@@ -201,7 +202,31 @@ export default {
       }
       this.socrataData = dedupedSocrataData
     },
-    aggregate () {
+    aggregate (chartData, label_field, label_code) {
+      for (let li in chartData.labels) {
+        let label = chartData.labels[li]
+        if (label_code) label = label_code[label]
+        // Summarize
+        for (let sdi in this.socrataData) {
+          let sd = this.socrataData[sdi]
+          
+          if (sd[label_field] === label) {
+            chartData.datasets[0].data[li] += parseInt(sd.has_0)
+            chartData.datasets[1].data[li] += parseInt(sd.has_1)
+            chartData.datasets[2].data[li] += parseInt(sd.has_2)
+            chartData.datasets[3].data[li] += parseInt(sd.has_3plus)
+          }
+        }
+        // Normalize
+        let labelTotalPop = 0.0
+        for (let i = 0; i < 4; i++) {
+          labelTotalPop += chartData.datasets[i].data[li]
+        }
+        for (let i = 0; i < 4; i++) {
+          chartData.datasets[i].data[li] = (100.0 * chartData.datasets[i].data[li] / (1.0 * labelTotalPop)).toFixed(2)
+        }
+      }
+      return chartData
     },
     calculatePopChartData () {
 
@@ -211,28 +236,7 @@ export default {
         {data: [0, 0, 0, 0, 0]},
         {data: [0, 0, 0, 0, 0]}
       ]
-
-      for (let li in this.popChartData.labels) {
-        let label = this.popChartData.labels[li]
-        // Summarize
-        for (let sdi in this.socrataData) {
-          let sd = this.socrataData[sdi]
-          if (sd.speed === label) {
-            this.popChartData.datasets[0].data[li] += parseInt(sd.has_0)
-            this.popChartData.datasets[1].data[li] += parseInt(sd.has_1)
-            this.popChartData.datasets[2].data[li] += parseInt(sd.has_2)
-            this.popChartData.datasets[3].data[li] += parseInt(sd.has_3plus)
-          }
-        }
-        // Normalize
-        let labelTotalPop = 0.0
-        for (let i = 0; i < 4; i++) {
-          labelTotalPop += this.popChartData.datasets[i].data[li]
-        }
-        for (let i = 0; i < 4; i++) {
-          this.popChartData.datasets[i].data[li] = (100.0 * this.popChartData.datasets[i].data[li] / (1.0 * labelTotalPop)).toFixed(2)
-        }
-      }
+      this.popChartData = this.aggregate(this.popChartData, 'speed', undefined)
     },
     calculateUrbanRuralChartData () {
 
@@ -242,29 +246,8 @@ export default {
         {data: [0, 0]},
         {data: [0, 0]}
       ]
-      let label_code = {Urban:'U', Rural:'R'}
-
-      for (let li in this.urbanRuralChartData.labels) {
-        let label = this.urbanRuralChartData.labels[li]
-        // Summarize
-        for (let sdi in this.socrataData) {
-          let sd = this.socrataData[sdi]
-          if (sd.urban_rural === label_code[label]) {
-            this.urbanRuralChartData.datasets[0].data[li] += parseInt(sd.has_0)
-            this.urbanRuralChartData.datasets[1].data[li] += parseInt(sd.has_1)
-            this.urbanRuralChartData.datasets[2].data[li] += parseInt(sd.has_2)
-            this.urbanRuralChartData.datasets[3].data[li] += parseInt(sd.has_3plus)
-          }
-        }
-        // Normalize
-        let labelTotalPop = 0.0
-        for (let i = 0; i < 4; i++) {
-          labelTotalPop += this.urbanRuralChartData.datasets[i].data[li]
-        }
-        for (let i = 0; i < 4; i++) {
-          this.urbanRuralChartData.datasets[i].data[li] = (100.0 * this.urbanRuralChartData.datasets[i].data[li] / (1.0 * labelTotalPop)).toFixed(2)
-        }
-      }
+      this.urbanRuralChartData = this.aggregate(this.urbanRuralChartData, 'urban_rural', {Urban:'U', Rural:'R'})
+      console.log(this.urbanRuralChartData)
     }
   },
   computed: {
