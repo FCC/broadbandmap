@@ -67,8 +67,9 @@ export default {
     }
   },
   mounted () {
-    this.fetchCombinedData()
-    EventHub.$on('updateMapSettings', (selectedTech, selectedSpeed) => this.updateTechSpeed(selectedTech, selectedSpeed))
+    EventHub.$on('updateMapSettings', function (selectedTech, selectedSpeed) {
+      this.updateTechSpeed(selectedTech, selectedSpeed) // calls common function in map-update-layers.js
+    }.bind(this))
     EventHub.$on('removeLayers', (propertyID, removeAll) => this.removeLayers(propertyID, removeAll))
   },
   destroyed () {
@@ -86,7 +87,7 @@ export default {
         // If one or more technologies is selected, then reload the tech/speed layers when the base layer style is changed
         // Need to reload tech/speed layers so the labels will appear on top
         if (!vm.removeAllLayers) {
-          // If no tech is selected use default tech and speed settings
+          // If no tech is selected use default tech and speed settings (calls common function in map-update-layers.js)
           if (vm.selectedTech === undefined) {
             vm.updateTechSpeed(vm.defaultTech, vm.defaultSpeed)
           } else {
@@ -95,11 +96,21 @@ export default {
         }
       })
     },
-    fetchCombinedData () {
+    validateURL () {
+      // If at least one query param was passed in, but "type" and "geoid" are not valid
+      if (Object.keys(this.$route.query).length && (!this.isValidQueryParam('type') || !this.isValidQueryParam('geoid'))) {
+        // Clear out any URL parameters that may exist (this has no effect if we're already looking at the default national view)
+        this.$router.push('area-summary')
+        // Prevent duplicate call
+        return
+      }
+      this.fetchAreaData()
+    },
+    fetchAreaData () {
       const self = this
       let type = ''
       let id = 0
-      let isValidType = ['state', 'county', 'place', 'cbsa', 'cd', 'tribal'].indexOf(this.$route.query.type) !== -1
+      let isValidType = ['state', 'county', 'place', 'cbsa', 'district', 'tribal'].indexOf(this.$route.query.type) !== -1
       // If the geoid and geography type are in the query string, use those
       if (typeof this.$route.query.type !== 'undefined' && isValidType && typeof this.$route.query.geoid !== 'undefined') {
         type = this.$route.query.type
@@ -110,36 +121,50 @@ export default {
         id = 0
       }
 
-      // Call Socrata API - Combined Table for charts
+      // Call Socrata API - Area table for charts
       let socrataURL = ''
       let appToken = ''
       let httpHeaders = {}
       if (process.env.SOCRATA_ENV === 'DEV') {
-        socrataURL = process.env.SOCRATA_DEV_COMBINED
+        socrataURL = process.env.SOCRATA_DEV_AREA
         httpHeaders = {
           // Dev: Authentication to Socrata using HTTP Basic Authentication
           'Authorization': 'Basic ' + process.env.SOCRATA_DEV_HTTP_BASIC_AUTHENTICATION
         }
       } else if (process.env.SOCRATA_ENV === 'PROD') {
-        socrataURL = process.env.SOCRATA_PROD_COMBINED
+        socrataURL = process.env.SOCRATA_PROD_AREA
         // Socrata does not currently enforce an app token, but may in the future
         appToken = process.env.SOCRATA_PROD_APP_TOKEN
       } else {
         console.log('ERROR: process.env.SOCRATA_ENV in .env file must be PROD or DEV, not ' + process.env.SOCRATA_ENV)
+      }
+      // Convert selectedSpeed to numeric value
+      let speedNumeric = 0
+      if (this.selectedSpeed === '200') {
+        speedNumeric = 0.2
+      } else if (this.selectedSpeed === '10_1') {
+        speedNumeric = 10
+      } else if (this.selectedSpeed === '25_3') {
+        speedNumeric = 25
+      } else if (this.selectedSpeed === '50_5') {
+        speedNumeric = 50
+      } else if (this.selectedSpeed === '100_10') {
+        speedNumeric = 100
       }
       axios
       .get(socrataURL, {
         params: {
           id: id,
           type: type,
-          tech: 'a',
+          tech: this.selectedTech,
+          speed: speedNumeric,
           $order: 'speed',
           $$app_token: appToken
         },
         headers: httpHeaders
       })
       .then(function (response) {
-        // console.log('Socrata response= ', response)
+        console.log('Socrata AREA table response= ', response)
       })
       .catch(function (error) {
         if (error.response) {
@@ -164,7 +189,7 @@ export default {
   watch: {
     // When query params change for the same route (URL slug)
     '$route' (to, from) {
-      this.fetchCombinedData()
+      this.validateURL()
     }
   }
 }

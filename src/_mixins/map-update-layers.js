@@ -107,6 +107,12 @@ export const updateMapLayers = {
 
       // add new map layers
       this.addLayers(propertyID)
+
+      // If this is the Area Summary page
+      if (this.$route.path === '/area-summary') {
+        // Update charts
+        this.validateURL()
+      }
     },
     toggleLegendTitle (zoomLevel) {
       this.togLegendTitle = zoomLevel <= 10

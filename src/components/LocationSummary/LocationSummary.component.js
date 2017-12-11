@@ -84,14 +84,11 @@ export default {
             vm.updateTechSpeed(vm.selectedTech, vm.selectedSpeed)
           }
         }
-
         // Trigger reload of highlighted block when base layer style is changed
-        this.validateLatLon()
+        this.validateURL()
       })
-
-      this.validateLatLon()
     },
-    validateLatLon () {
+    validateURL () {
       // If valid latitude and longitude get the FIPS and highlight the census block
       if (this.isValidLatLon(this.$route.query.lat, this.$route.query.lon)) {
         this.getFIPS(this.$route.query.lat.trim(), this.$route.query.lon.trim())
@@ -100,6 +97,7 @@ export default {
         this.$router.push('location-summary')
       }
     },
+    // Called when map is clicked ('map-click' event emitted by NBMap component)
     getLatLon (event) {
       let lat = event.lngLat.lat.toFixed(6)
       let lon = event.lngLat.lng.toFixed(6)
