@@ -111,7 +111,7 @@ export const updateMapLayers = {
       // If this is the Area Summary page
       if (this.$route.path === '/area-summary') {
         // Update charts
-        this.fetchAreaData()
+        this.validateURL()
       }
     },
     toggleLegendTitle (zoomLevel) {

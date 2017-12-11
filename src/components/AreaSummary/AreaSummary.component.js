@@ -67,7 +67,9 @@ export default {
     }
   },
   mounted () {
-    EventHub.$on('updateMapSettings', (selectedTech, selectedSpeed) => this.updateTechSpeed(selectedTech, selectedSpeed)) // calls common function in map-update-layers.js
+    EventHub.$on('updateMapSettings', function (selectedTech, selectedSpeed) {
+      this.updateTechSpeed(selectedTech, selectedSpeed) // calls common function in map-update-layers.js
+    }.bind(this))
     EventHub.$on('removeLayers', (propertyID, removeAll) => this.removeLayers(propertyID, removeAll))
   },
   destroyed () {
@@ -92,8 +94,6 @@ export default {
             vm.updateTechSpeed(vm.selectedTech, vm.selectedSpeed)
           }
         }
-        // Trigger reload when base layer style is changed
-        this.validateURL()
       })
     },
     validateURL () {
