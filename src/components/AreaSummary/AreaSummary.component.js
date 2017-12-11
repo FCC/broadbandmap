@@ -16,22 +16,13 @@ export default {
   mixins: [urlValidation, updateMapLayers],
   data () {
     return {
+      socrataData: [],
+      showCharts: false,
       defaultTech: 'acfosw',
       defaultSpeed: '25_3',
       popChartData: {
         labels: ['0.2', '10', '25', '50', '100'],
-        datasets: [{
-          data: [40, 39, 10, 40, 20]
-        },
-        {
-          data: [40, 39, 10, 40, 20]
-        },
-        {
-          data: [20, 10, 12, 33, 20]
-        },
-        {
-          data: [50, 20, 11, 13, 60]
-        }]
+        datasets: []
       },
       urbanRuralChartData: {
         labels: ['Urban', 'Rural'],
@@ -108,6 +99,9 @@ export default {
     },
     fetchAreaData () {
       const self = this
+
+      this.showCharts = false
+
       let type = ''
       let id = 0
       let isValidType = ['state', 'county', 'place', 'cbsa', 'district', 'tribal'].indexOf(this.$route.query.type) !== -1
@@ -157,7 +151,7 @@ export default {
           id: id,
           type: type,
           tech: this.selectedTech,
-          speed: speedNumeric,
+          //speed: speedNumeric,
           $order: 'speed',
           $$app_token: appToken
         },
@@ -165,6 +159,13 @@ export default {
       })
       .then(function (response) {
         console.log('Socrata AREA table response= ', response)
+        self.socrataData = response.data
+
+        self.dedupSocrataData()
+        self.calculateChartData()
+
+        self.showCharts = true
+
       })
       .catch(function (error) {
         if (error.response) {
@@ -181,6 +182,74 @@ export default {
         }
         console.log(error)
       })
+    },
+    dedupSocrataData () {
+      let dedupList = []
+      let dedupedSocrataData = []
+
+      for (let sdi in this.socrataData) {
+        var sd = this.socrataData[sdi]
+        let found = false
+        for (let ddli in dedupList) {
+          if (sd.speed === dedupList[ddli].speed &&
+              sd.has_0 === dedupList[ddli].has_0 &&
+              sd.has_1 === dedupList[ddli].has_1 &&
+              sd.has_2 === dedupList[ddli].has_2 &&
+              sd.has_3plus === dedupList[ddli].has_3plus) {
+            found = true
+            break
+          }
+        }
+        if (found) {
+          // Duplicate, must be ignored
+          continue
+        } else {
+          dedupList.push({speed: sd.speed, has_0: sd.has_0, has_1: sd.has_1, has_2: sd.has_2, has_3plus: sd.has_3plus})
+          dedupedSocrataData.push(sd)
+        }
+      }
+      this.socrataData = dedupedSocrataData
+    },
+    calculateChartData () {
+      // Calculate population chart data
+
+      this.popChartData = {
+        labels: ['0.2', '10', '25', '50', '100'],
+        datasets: [
+          {data: [0, 0, 0, 0, 0]},
+          {data: [0, 0, 0, 0, 0]},
+          {data: [0, 0, 0, 0, 0]},
+          {data: [0, 0, 0, 0, 0]}
+        ]
+      }
+
+      for (let li in this.popChartData.labels) {
+        let label = this.popChartData.labels[li]
+        // Summarize
+        for (let sdi in this.socrataData) {
+          let sd = this.socrataData[sdi]
+          if (sd.speed === label) {
+            this.popChartData.datasets[0].data[li] += parseInt(sd.has_0)
+            this.popChartData.datasets[1].data[li] += parseInt(sd.has_1)
+            this.popChartData.datasets[2].data[li] += parseInt(sd.has_2)
+            this.popChartData.datasets[3].data[li] += parseInt(sd.has_3plus)
+          }
+        }
+        // Normalize
+        let labelTotalPop = 0.0
+        for (let i = 0; i < 4; i++) {
+          labelTotalPop += this.popChartData.datasets[i].data[li]
+        }
+        console.log(label, labelTotalPop)
+        for (let i = 0; i < 4; i++) {
+          this.popChartData.datasets[i].data[li] = 100.0 * this.popChartData.datasets[i].data[li] / (1.0 * labelTotalPop)
+        }
+      }
+      console.log(this.popChartData)
+
+      // Calculate urban/rural
+
+      // Calculate tribal/non-tribal
     }
   },
   computed: {

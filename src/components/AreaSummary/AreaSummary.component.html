@@ -11,7 +11,7 @@
     <nb-map-sidebar class="map-sidebar col-xs-12 col-sm-12 col-md-5 col-lg-4">
       <h2 class="sub-title" slot="sidebar-title"><b>Sangamon County, IL</b></h2>      
       <div class="charts" slot="charts">
-        <carousel ref="carousel" icon-control-left="icon-prev" icon-control-right="icon-next" :interval="0">
+        <carousel ref="carousel" icon-control-left="icon-prev" icon-control-right="icon-next" :interval="0" v-if="showCharts">
           <slide>
             <h5><b>Nationwide</b></h5>
             <div class="chart-slide"><stacked-bar-chart :data="popChartData" :styles="chartStyles"></stacked-bar-chart></div>            
