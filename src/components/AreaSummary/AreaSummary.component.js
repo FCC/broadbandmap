@@ -246,7 +246,7 @@ export default {
         {data: [0, 0]},
         {data: [0, 0]}
       ]
-      this.tribalChartData = this.aggregate(this.tribalChartData, 'tribal_non', {'Tribal':'Y', 'Non-tribal':'N'})
+      this.tribalChartData = this.aggregate(this.tribalChartData, 'tribal_non', {'Tribal':'T', 'Non-tribal':'N'})
     }
 
   },
