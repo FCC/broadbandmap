@@ -140,14 +140,15 @@ export default {
         console.log('Socrata AREA table response= ', response)
         self.socrataData = response.data
 
-        self.dedupSocrataData()
+        if (self.socrataData.length > 0) {
+          self.dedupSocrataData()
 
-        self.calculatePopChartData()
-        self.calculateUrbanRuralChartData()
-        self.calculateTribalChartData()
+          self.calculatePopChartData()
+          self.calculateUrbanRuralChartData()
+          self.calculateTribalChartData()
 
-        self.showCharts = true
-
+          self.showCharts = true
+        }
       })
       .catch(function (error) {
         if (error.response) {
