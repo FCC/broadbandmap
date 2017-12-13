@@ -16,52 +16,22 @@ export default {
   mixins: [urlValidation, updateMapLayers],
   data () {
     return {
+      socrataData: [],
+      showCharts: false,
       defaultTech: 'acfosw',
       defaultSpeed: '25_3',
+      settlementType: 'Settlement Type',
       popChartData: {
         labels: ['0.2', '10', '25', '50', '100'],
-        datasets: [{
-          data: [40, 39, 10, 40, 20]
-        },
-        {
-          data: [40, 39, 10, 40, 20]
-        },
-        {
-          data: [20, 10, 12, 33, 20]
-        },
-        {
-          data: [50, 20, 11, 13, 60]
-        }]
+        datasets: []
       },
       urbanRuralChartData: {
         labels: ['Urban', 'Rural'],
-        datasets: [{
-          data: [4, 39, 10, 40, 20]
-        },
-        {
-          data: [14, 39, 10, 40, 20]
-        },
-        {
-          data: [82, 10, 12, 33, 20]
-        },
-        {
-          data: [50, 20, 11, 13, 60]
-        }]
+        datasets: []
       },
       tribalChartData: {
         labels: ['Tribal', 'Non-tribal'],
-        datasets: [{
-          data: [25, 39, 10, 40, 20]
-        },
-        {
-          data: [25, 39, 10, 40, 20]
-        },
-        {
-          data: [25, 10, 12, 33, 20]
-        },
-        {
-          data: [25, 20, 11, 13, 60]
-        }]
+        datasets: []
       },
       chartStyles: {width: 'auto', height: '350px'}
     }
@@ -108,6 +78,9 @@ export default {
     },
     fetchAreaData () {
       const self = this
+
+      this.showCharts = false
+
       let type = ''
       let id = 0
       let isValidType = ['state', 'county', 'place', 'cbsa', 'district', 'tribal'].indexOf(this.$route.query.type) !== -1
@@ -157,7 +130,7 @@ export default {
           id: id,
           type: type,
           tech: this.selectedTech,
-          speed: speedNumeric,
+          //speed: speedNumeric,
           $order: 'speed',
           $$app_token: appToken
         },
@@ -165,6 +138,17 @@ export default {
       })
       .then(function (response) {
         console.log('Socrata AREA table response= ', response)
+        self.socrataData = response.data
+
+        if (self.socrataData.length > 0) {
+          self.dedupSocrataData()
+
+          self.calculatePopChartData()
+          self.calculateUrbanRuralChartData()
+          self.calculateTribalChartData()
+
+          self.showCharts = true
+        }
       })
       .catch(function (error) {
         if (error.response) {
@@ -181,7 +165,91 @@ export default {
         }
         console.log(error)
       })
+    },
+    dedupSocrataData () {
+      let dedupList = []
+      let dedupedSocrataData = []
+
+      for (let sdi in this.socrataData) {
+        var sd = this.socrataData[sdi]
+        let found = false
+        for (let ddli in dedupList) {
+          if (sd.speed === dedupList[ddli].speed &&
+              sd.has_0 === dedupList[ddli].has_0 &&
+              sd.has_1 === dedupList[ddli].has_1 &&
+              sd.has_2 === dedupList[ddli].has_2 &&
+              sd.has_3plus === dedupList[ddli].has_3plus) {
+            found = true
+            break
+          }
+        }
+        if (found) {
+          // Duplicate, must be ignored
+          continue
+        } else {
+          dedupList.push({speed: sd.speed, has_0: sd.has_0, has_1: sd.has_1, has_2: sd.has_2, has_3plus: sd.has_3plus})
+          dedupedSocrataData.push(sd)
+        }
+      }
+      this.socrataData = dedupedSocrataData
+    },
+    aggregate (chartData, label_field, label_code) {
+      for (let li in chartData.labels) {
+        let label = chartData.labels[li]
+        if (label_code) label = label_code[label]
+        // Summarize
+        for (let sdi in this.socrataData) {
+          let sd = this.socrataData[sdi]
+          
+          if (sd[label_field] === label) {
+            chartData.datasets[0].data[li] += parseInt(sd.has_0)
+            chartData.datasets[1].data[li] += parseInt(sd.has_1)
+            chartData.datasets[2].data[li] += parseInt(sd.has_2)
+            chartData.datasets[3].data[li] += parseInt(sd.has_3plus)
+          }
+        }
+        // Normalize
+        let labelTotalPop = 0.0
+        for (let i = 0; i < 4; i++) {
+          labelTotalPop += chartData.datasets[i].data[li]
+        }
+        for (let i = 0; i < 4; i++) {
+          chartData.datasets[i].data[li] = (100.0 * chartData.datasets[i].data[li] / (1.0 * labelTotalPop)).toFixed(2)
+        }
+      }
+      return chartData
+    },
+    calculatePopChartData () {
+
+      this.popChartData.datasets = [
+        {data: [0, 0, 0, 0, 0]},
+        {data: [0, 0, 0, 0, 0]},
+        {data: [0, 0, 0, 0, 0]},
+        {data: [0, 0, 0, 0, 0]}
+      ]
+      this.popChartData = this.aggregate(this.popChartData, 'speed', undefined)
+    },
+    calculateUrbanRuralChartData () {
+
+      this.urbanRuralChartData.datasets = [
+        {data: [0, 0]},
+        {data: [0, 0]},
+        {data: [0, 0]},
+        {data: [0, 0]}
+      ]
+      this.urbanRuralChartData = this.aggregate(this.urbanRuralChartData, 'urban_rural', {'Urban':'U', 'Rural':'R'})
+    },
+    calculateTribalChartData () {
+
+      this.tribalChartData.datasets = [
+        {data: [0, 0]},
+        {data: [0, 0]},
+        {data: [0, 0]},
+        {data: [0, 0]}
+      ]
+      this.tribalChartData = this.aggregate(this.tribalChartData, 'tribal_non', {'Tribal':'T', 'Non-tribal':'N'})
     }
+
   },
   computed: {
 

@@ -10,19 +10,16 @@
     <nb-map class="col-xs-12 col-sm-12 col-md-7 col-lg-8" mapType="area" searchType="comparison" searchDefault="County" @map-init="mapInit" @map-zoomend="toggleLegendTitle"></nb-map>
     <nb-map-sidebar class="map-sidebar col-xs-12 col-sm-12 col-md-5 col-lg-4">
       <h2 class="sub-title" slot="sidebar-title"><b>Sangamon County, IL</b></h2>      
-      <div class="charts" slot="charts">
+      <div class="charts" slot="charts" v-if="showCharts">
         <carousel ref="carousel" icon-control-left="icon-prev" icon-control-right="icon-next" :interval="0">
           <slide>
-            <h5><b>Nationwide</b></h5>
             <div class="chart-slide"><stacked-bar-chart :data="popChartData" :styles="chartStyles"></stacked-bar-chart></div>            
           </slide>
           <slide>
-            <h5><b>Nationwide Urban vs. Rural</b></h5>
-            <div class="chart-slide"><stacked-bar-chart :data="urbanRuralChartData" :styles="chartStyles"></stacked-bar-chart></div>            
+            <div class="chart-slide"><stacked-bar-chart :data="urbanRuralChartData" :styles="chartStyles" :xaxis="settlementType"></stacked-bar-chart></div>            
           </slide>
           <slide>
-            <h5><b>Nationwide Tribal vs. Non-tribal</b></h5>
-            <div class="chart-slide"><stacked-bar-chart :data="tribalChartData" :styles="chartStyles"></stacked-bar-chart></div>            
+            <div class="chart-slide"><stacked-bar-chart :data="tribalChartData" :styles="chartStyles" :xaxis="settlementType"></stacked-bar-chart></div>            
           </slide>
         </carousel>        
       </div>
