@@ -26,17 +26,25 @@
           </div>
         </div>
         <div class="input-state">
-          <p><a href="#" @click.prevent="searchArea('')">Enter a state</a> or <a href="#" @click.prevent="searchArea('Nationwide')">search Nationwide</a></p>
+          <p><a href="#" @click.prevent="searchArea('state')">Enter a state</a> or <a href="#" @click.prevent="searchArea('Nationwide')">search Nationwide</a></p>
           <div class="input-group-lg">
             <Autocomplete class="search-state" ref="autocomplete2" searchType="comparison" placeholderText="Enter state"></Autocomplete>
           </div>
         </div>
-        <div class="btns">
+        <div class="btns map-settings input-group-btn">
           <button class="btn btn-lg btn-primary" type="button">Compare</button>
-          <button class="btn btn-default btn-lg" type="button">
-            <span class="icon icon-cog" data-toggle="tooltip" data-placement="top" title="Filter Results"></span>
-            <span class="sr-only">Filter Results</span>
-          </button>
+          <dropdown :menu-right="true">
+            <tooltip text="Table settings" trigger="hover" placement="top">
+              <button class="btn-settings btn btn-default btn-lg dropdown-toggle" data-role="trigger" aria-haspopup="true" aria-expanded="false" type="button">
+                <span class="icon icon-cog" data-toggle="tooltip" data-placement="top" title="Table Settings"></span>
+                <span class="sr-only">Table settings</span>
+                <span class="caret"></span>
+              </button>
+            </tooltip>
+            <template slot="dropdown">
+              <li><a href="#" @click.prevent="openTableSettings">Select Broadband</a></li>
+            </template>
+          </dropdown>
         </div>
       </form>
     </div>
