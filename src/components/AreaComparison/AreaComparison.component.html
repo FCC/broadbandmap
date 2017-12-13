@@ -11,7 +11,7 @@
           <p>Select geography type</p>
           <div class="input-group input-group-lg">
             <div class="input-group-btn">
-              <dropdown>
+              <dropdown :disabled="refreshingDropdown">
                 <button data-role="trigger" aria-expanded="false" class="btn btn-default dropdown-toggle" type="button">
                   <span id="btn-label">{{ searchLabel }}</span> <span class="caret"></span>
                 </button>
@@ -26,9 +26,9 @@
           </div>
         </div>
         <div class="input-state">
-          <p><a href="#" @click.prevent="searchArea('state')">Enter a state</a> or <a href="#" @click.prevent="searchArea('Nationwide')">search Nationwide</a></p>
+          <p><a href="#" @click.prevent="searchArea('')">Enter a state</a> or <a href="#" @click.prevent="searchArea('Nationwide')">search Nationwide</a></p>
           <div class="input-group-lg">
-            <Autocomplete class="search-state" ref="autocomplete2" searchType="comparison" placeholderText="Enter state"></Autocomplete>
+            <Autocomplete class="search-state" ref="autocomplete2" searchType="State" originPage="AreaComparison" placeholderText="Enter state"></Autocomplete>
           </div>
         </div>
         <div class="btns map-settings input-group-btn">

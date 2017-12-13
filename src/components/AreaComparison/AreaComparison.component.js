@@ -15,7 +15,10 @@ export default {
   props: [],
   mounted () {
     this.searchLabel = 'County'
-    this.searchOptsList = this.searchTypes.comparison
+    this.searchOptsList = Object.assign({}, this.searchTypes.comparison)
+    // Default option is enter state, so state should not be in dropdown on the left
+    delete this.searchOptsList['State']
+    this.refreshingDropdown = false
 
     EventHub.$on('updateTableSettings', function (selectedTech, selectedSpeed) {
       console.log('On updateTableSettings')
@@ -31,7 +34,8 @@ export default {
     return {
       columns: columns,
       rows: rows,
-      searchType: 'County'
+      searchType: 'County',
+      refreshingDropdown: false
     }
   },
   methods: {
@@ -44,6 +48,15 @@ export default {
     },
     searchArea: function (areaType) { // Set the search area input value to nationwide or blank
       console.log(areaType)
+
+      this.refreshingDropdown = true
+      if (areaType === '') {
+        delete this.searchOptsList['State']
+      } else {
+        this.searchOptsList = Object.assign({}, this.searchTypes.comparison)
+      }
+      this.refreshingDropdown = false
+
       this.$refs.autocomplete2.typeaheadModel = areaType
     },
     openTableSettings () {
