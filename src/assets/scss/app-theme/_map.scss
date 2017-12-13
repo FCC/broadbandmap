@@ -231,7 +231,6 @@
 }
 
 .charts {
-  border-bottom: 1px solid #ccc;
   border-top: 1px solid #ccc;
   // margin: 20px 0;
   padding: 20px 0;
@@ -244,6 +243,7 @@
 /* Map Legend */
 
 .map-legend {
+  border-top: 1px solid #ccc;
   font-size: 12px;
   li {
     margin-bottom: 5px;
