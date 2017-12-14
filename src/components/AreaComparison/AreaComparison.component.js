@@ -5,38 +5,103 @@ import EventHub from '../../_mixins/EventHub.js'
 import Autocomplete from '@/components/Autocomplete/index.vue'
 import BookmarkLink from '@/components/BookmarkLink/'
 import searchGeogTypes from '../../_mixins/search-geog-types.js'
-import { columns } from './table-mock-columns.js'
-import { rows } from './table-mock-rows.js'
 
 export default {
   name: 'AreaComparison',
   components: { Tooltip, Dropdown, Autocomplete, BookmarkLink },
   mixins: [searchGeogTypes],
   props: [],
+  data () {
+    return {
+      columns: [{
+        label: 'Area',
+        field: 'area_name',
+        filterable: true
+      },
+      {
+        label: '% with 0',
+        field: 'zero_providers',
+        type: 'number',
+        html: false,
+        filterable: false
+      },
+      {
+        label: '% with 1 or more',
+        field: 'one_provider',
+        type: 'number',
+        html: false,
+        filterable: false
+      },
+      {
+        label: '% with 2 or more',
+        field: 'two_provider',
+        type: 'number',
+        html: false,
+        filterable: false
+      },
+      {
+        label: '% with 3 or more',
+        field: 'three_provider',
+        type: 'number',
+        html: false,
+        filterable: false
+      }],
+      rows: [],
+      searchType: 'County',
+      refreshingDropdown: false,
+      selectedTech: 'acfosw',
+      selectedSpeed: '0.2',
+      selectedState: undefined,
+      socrataURL: '',
+      socrataLookupURL: '',
+      appToken: '',
+      httpHeaders: {},
+      typeDictionary: {
+        'County': 'county',
+        'State': 'state',
+        'Congressional District': 'cd',
+        'Census Place': 'place',
+        'Tribal Area': 'tribal',
+        'CBSA (MSA)': 'cbsa'
+      },
+      typeDictionaryArea: {
+        'County': 'county',
+        'State': 'state',
+        'Congressional District': 'cdist',
+        'Census Place': 'place',
+        'Tribal Area': 'tribal',
+        'CBSA (MSA)': 'cbsa'
+      },
+      speedDictionary: {
+        '0.2': '0.2',
+        '10_1': '10',
+        '25_3': '25',
+        '50_5': '50',
+        '100_10': '100'
+      },
+      stateGeoidToName: {},
+      stateNameToGeoid: {}
+    }
+  },
   mounted () {
-    this.searchLabel = 'County'
     this.searchOptsList = Object.assign({}, this.searchTypes.comparison)
     // Default option is enter state, so state should not be in dropdown on the left
+    this.searchLabel = 'County'
     delete this.searchOptsList['State']
     this.refreshingDropdown = false
+    
+    this.setSocrata()
+    this.cacheStates()
 
     EventHub.$on('updateTableSettings', function (selectedTech, selectedSpeed) {
-      console.log('On updateTableSettings')
       this.updateTechSpeed(selectedTech, selectedSpeed)
     }.bind(this))
-    EventHub.$on('removeTableData', (propertyID, removeAll) => this.removeData(propertyID, removeAll))
+    EventHub.$on('removeTableData', (propertyID, removeAll) => this.removeData())
+
   },
   destroyed () {
     EventHub.$off('updateTableSettings')
     EventHub.$off('removeTableData')
-  },
-  data () {
-    return {
-      columns: columns,
-      rows: rows,
-      searchType: 'County',
-      refreshingDropdown: false
-    }
   },
   methods: {
     toggleSearchType: function (selectedVal) { // Change the search (geography) type (e.g. county, state, district, etc.)
@@ -44,11 +109,8 @@ export default {
 
       this.searchType = selectedVal
       this.searchLabel = selectedOpt.label
-      this.$refs.autocomplete1.typeaheadModel = ''
     },
     searchArea: function (areaType) { // Set the search area input value to nationwide or blank
-      console.log(areaType)
-
       this.refreshingDropdown = true
       if (areaType === '') {
         delete this.searchOptsList['State']
@@ -57,16 +119,178 @@ export default {
       }
       this.refreshingDropdown = false
 
-      this.$refs.autocomplete2.typeaheadModel = areaType
+      this.$refs.autocomplete.typeaheadModel = areaType
     },
     openTableSettings () {
       EventHub.$emit('openTableSettings')
     },
     updateTechSpeed (selectedTech, selectedSpeed) {
-      console.log('inside updateTechSpeed', selectedTech, selectedSpeed)
+      this.selectedTech = selectedTech
+      this.selectedSpeed = selectedSpeed
     },
-    removeData(propertyID, removeAll) {
-      console.log('inside removeData', propertyID, removeAll)
+    removeData () {
+      this.rows = []
+    },
+    setSocrata () {
+      if (process.env.SOCRATA_ENV === 'DEV') {
+        this.socrataURL = process.env.SOCRATA_DEV_AREA
+        this.socrataLookupURL = process.env.SOCRATA_DEV_LOOKUP
+        this.httpHeaders = {
+          // Dev: Authentication to Socrata using HTTP Basic Authentication
+          'Authorization': 'Basic ' + process.env.SOCRATA_DEV_HTTP_BASIC_AUTHENTICATION
+        }
+      } else if (process.env.SOCRATA_ENV === 'PROD') {
+        this.socrataURL = process.env.SOCRATA_PROD_AREA
+        this.socrataLookupURL = process.env.SOCRATA_PROD_LOOKUP
+        // Socrata does not currently enforce an app token, but may in the future
+        this.appToken = process.env.SOCRATA_PROD_APP_TOKEN
+      } else {
+        console.log('ERROR: process.env.SOCRATA_ENV in .env file must be PROD or DEV, not ' + process.env.SOCRATA_ENV)
+      }
+    },
+    cacheStates() {
+      const self = this
+
+      axios
+      .get(this.socrataLookupURL, {
+        params: {
+          type: 'state',
+          $select: 'geoid,name',
+          $order: 'geoid',
+          $$app_token: this.appToken
+        },
+        headers: this.httpHeaders
+      })
+      .then(function (response) {
+        for (let sdi in response.data) {
+          let sd = response.data[sdi]
+          self.stateNameToGeoid[sd.name] = sd.geoid.toString()
+          self.stateGeoidToName[sd.geoid.toString()] = sd.name
+        }
+      })
+      .catch(function (error) {
+        if (error.response) {
+          // Server responded with a status code that falls out of the range of 2xx
+          console.log(error.response.data)
+          console.log(error.response.status)
+          console.log(error.response.headers)
+        } else if (error.request) {
+          // Request was made but no response was received
+          console.log(error.request)
+        } else {
+          // Something happened in setting up the request that triggered an Error
+          console.log('Error', error.message)
+        }
+        console.log(error)
+      })
+    },
+    assembleRows(rawData, lookupData) {
+      this.rows = []
+      for (let rdi in rawData) {
+        let totalPop = parseInt(rawData[rdi].sum_has_0) + parseInt(rawData[rdi].sum_has_1) + parseInt(rawData[rdi].sum_has_2) + parseInt(rawData[rdi].sum_has_3plus)
+        if (!totalPop) totalPop = 1
+        
+        let areaName = lookupData[rawData[rdi].id]
+        if (!this.$refs.autocomplete.typeaheadModel.geoid) {
+          areaName += ', ' + this.stateGeoidToName[rawData[rdi].id.substring(0, 2)]
+        }
+   
+        this.rows.push({
+          area_name: areaName,
+          zero_providers: (100.0 * parseFloat(rawData[rdi].sum_has_0) / (1.0 * totalPop)).toFixed(2),
+          one_provider: (100.0 * parseFloat(rawData[rdi].sum_has_1) / (1.0 * totalPop)).toFixed(2),
+          two_provider: (100.0 * parseFloat(rawData[rdi].sum_has_2) / (1.0 * totalPop)).toFixed(2),
+          three_provider: (100.0 * parseFloat(rawData[rdi].sum_has_3plus) / (1.0 * totalPop)).toFixed(2),
+        })
+      }
+      
+    },
+    compareAreas() {
+      const self = this
+      // all data we need for query
+      //console.log('CompareAreas input : ', this.$refs.autocomplete.typeaheadModel.geoid, this.selectedTech, this.selectedSpeed, this.searchType)
+
+      let socParams = {          
+        type: this.typeDictionaryArea[this.searchType],
+        tech: this.selectedTech,
+        speed: this.speedDictionary[this.selectedSpeed],
+        $limit: 50000,
+        $$app_token: this.appToken,
+        $select: 'id,sum(has_0),sum(has_1),sum(has_2),sum(has_3plus)',
+        $group: 'id'
+      }
+      if (this.$refs.autocomplete.typeaheadModel.geoid) {
+        socParams['$WHERE'] = "starts_with(id,'" + this.$refs.autocomplete.typeaheadModel.geoid + "')"
+      }
+
+      axios
+      .get(this.socrataURL, {
+        params: socParams,
+        headers: this.httpHeaders
+      })
+      .then(function (response) {
+        let rawData = response.data
+        // Got raw data. Now fetch geography names for join
+        let socLookupParams = {          
+          type: self.typeDictionary[self.searchType],
+          $limit: 50000,
+          $$app_token: self.appToken,
+          $select: 'geoid,name,type'
+        }
+        if (self.$refs.autocomplete.typeaheadModel.geoid) {
+          socLookupParams['$WHERE'] = "starts_with(geoid,'" + self.$refs.autocomplete.typeaheadModel.geoid + "')"
+        }
+
+        axios
+        .get(self.socrataLookupURL, {
+          params: socLookupParams,
+          headers: self.httpHeaders
+        })
+        .then(function (response) {
+          let lookupData = {}
+          for (let rdi in response.data) {
+            if (response.data[rdi].type === 'tribal') {
+              lookupData[response.data[rdi].geoid.replace(/\D/g,'')] = response.data[rdi].name
+            } else {
+              lookupData[response.data[rdi].geoid] = response.data[rdi].name
+            }
+          }
+          //console.log(rawData, lookupData)
+
+          self.assembleRows(rawData, lookupData)
+
+        })
+        .catch(function (error) {
+          if (error.response) {
+            // Server responded with a status code that falls out of the range of 2xx
+            console.log(error.response.data)
+            console.log(error.response.status)
+            console.log(error.response.headers)
+          } else if (error.request) {
+            // Request was made but no response was received
+            console.log(error.request)
+          } else {
+            // Something happened in setting up the request that triggered an Error
+            console.log('Error', error.message)
+          }
+          console.log(error)
+        })
+      })
+      .catch(function (error) {
+        if (error.response) {
+          // Server responded with a status code that falls out of the range of 2xx
+          console.log(error.response.data)
+          console.log(error.response.status)
+          console.log(error.response.headers)
+        } else if (error.request) {
+          // Request was made but no response was received
+          console.log(error.request)
+        } else {
+          // Something happened in setting up the request that triggered an Error
+          console.log('Error', error.message)
+        }
+        console.log(error)
+      })
     }
   },
   computed: {

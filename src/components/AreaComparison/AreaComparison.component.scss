@@ -32,8 +32,8 @@
 }
 
 .input-geography {
-  @media(min-width: 480px) {
-    width: 400px;
+  @media(min-width: 220px) {
+    width: 150px;
   }
 }
 
@@ -45,6 +45,7 @@
 
 .input-group-lg {
   .btn-default {
+    width: 165px;
     border-right: none;
   }
 }
