@@ -127,6 +127,7 @@ export default {
     updateTechSpeed (selectedTech, selectedSpeed) {
       this.selectedTech = selectedTech
       this.selectedSpeed = selectedSpeed
+      this.compareAreas()
     },
     removeData () {
       this.rows = []
@@ -203,7 +204,6 @@ export default {
           three_provider: (100.0 * parseFloat(rawData[rdi].sum_has_3plus) / (1.0 * totalPop)).toFixed(2),
         })
       }
-      
     },
     compareAreas() {
       const self = this
@@ -256,9 +256,7 @@ export default {
             }
           }
           //console.log(rawData, lookupData)
-
           self.assembleRows(rawData, lookupData)
-
         })
         .catch(function (error) {
           if (error.response) {
