@@ -24,7 +24,7 @@ export default {
     }
   },
   methods: {
-    toggleSearchType: function (selectedVal) { // Change the search (geography) type (e.g. county, state, district, etc.)
+    toggleSearchType: function (selectedVal) { // Change the search (geography) type (e.g. county, state, cdist, etc.)
       let selectedOpt = this.searchTypes.comparison[selectedVal]
 
       this.searchType = selectedVal
