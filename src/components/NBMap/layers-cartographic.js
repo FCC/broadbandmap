@@ -18,21 +18,6 @@ export const LayersCartographic = [
     }
   },
   {
-    id: 'tract',
-    source: {
-      type: 'vector',
-      url: 'mapbox://fcc.1oj9ffcg'
-    },
-    type: 'line',
-    'source-layer': 'nbm2_tract2010geojson',
-    layout: {
-      visibility: 'visible'
-    },
-    paint: {
-      'line-color': '#2a3463'
-    }
-  },
-  {
     id: 'county',
     source: {
       type: 'vector',
@@ -45,7 +30,8 @@ export const LayersCartographic = [
     },
     paint: {
       'line-color': '#74994e'
-    }
+    },
+    maxzoom: 10
   },
   {
     id: 'state',
@@ -60,6 +46,7 @@ export const LayersCartographic = [
     },
     paint: {
       'line-color': '#a9b55c'
-    }
+    },
+    maxzoom: 9
   }
 ]
