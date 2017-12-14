@@ -1,0 +1,33 @@
+<div class="map-wrapper" v-bind:class="{ 'full-width': toggleWidth }">
+  <nb-map-search :type="searchType" :defaultSearch="searchDefault" v-if="!showSearch"></nb-map-search>
+  <div id="map-container">
+    <div id="btn-custom" class="custom mapboxgl-ctrl mapboxgl-ctrl-group">
+      <button class="btn-nationwide mapboxgl-ctrl-icon" type="button" @click="viewNationwide">
+        <tooltip text="Nationwide" placement="right" trigger="hover">
+          <span class="icon icon-globe"></span>
+          <span class="sr-only">Nationwide</span>
+        </tooltip>
+      </button>
+    </div>
+    <div id="btn-layerSwitch" class="mapboxgl-ctrl mapboxgl-ctrl-group">
+      <dropdown>
+        <button class="mapboxgl-ctrl-icon dropdown-toggle" type="button" data-role="trigger" aria-haspopup="true" aria-expanded="false">
+          <tooltip text="Switch base layer" placement="right" trigger="hover">
+            <span class="icon icon-layers"></span>
+            <span class="sr-only">Switch base layer</span>
+          </tooltip>
+        </button>
+        <template slot="dropdown">
+          <li class="radio" v-for="baseLayer in baseLayers">            
+            <div class="radio">
+              <input type="radio" name="layerOpts" :id="baseLayer.id" :value="baseLayer.id" v-model="defaultBaseLayer" @change="switchBaseLayer(baseLayer.id)">
+              <label :for="baseLayer.id">
+                {{baseLayer.label}}                
+              </label>
+            </div>
+          </li>          
+        </template>
+      </dropdown>
+    </div>
+  </div>
+</div>

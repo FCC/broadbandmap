@@ -1,0 +1,15 @@
+.js-hide {
+  @media(min-width: 992px) {
+    display: none;
+  }
+  .js-nav & {
+    display: block;
+    @media(min-width: 992px) {
+      display: none;
+    }
+  }
+}
+// Disallow underlining "Home" nav button
+.menu-secondary > li:first-child > a.active .link-title {
+    border-bottom: none;
+}

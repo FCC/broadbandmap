@@ -1,0 +1,45 @@
+.col-fixed {
+  max-width: 800px;
+}
+
+.h4 {
+  margin-top: 20px;
+}
+
+.panel-sidebar {
+  box-shadow: 0 0 1.5em rgba(0, 0, 0, 0.14);
+  border: none;
+  border-top: 7px solid #ffcc44;
+  margin-top: 40px;
+  max-width: 100%;
+  @media(min-width: 768px) {
+    max-width: 300px;
+    margin-top: 0;
+  }
+}
+
+.panel-heading {
+  background-color: #fff;
+  border: none;
+  padding-bottom: 0;
+}
+
+.panel-title {
+  font-size: 25px;
+}
+
+.panel-body {
+  ul {
+    margin-bottom: 0;
+  }
+  li+li {
+    margin-top: 10px;
+  }
+  li>ul {
+    margin: 5px 0 0;
+    padding-left: 0;
+  }
+  .divider {
+    margin-top: 15px;
+  }
+}

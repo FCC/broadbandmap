@@ -1,0 +1,24 @@
+[33m28 09 2017 17:48:21.354:WARN [watcher]: [39mPattern "C:/xampp/htdocs/nbm2-web/src" does not match any file.
+[33m28 09 2017 17:48:21.373:WARN [watcher]: [39mPattern "C:/xampp/htdocs/nbm2-web/src" does not match any file.
+[33m28 09 2017 17:48:26.935:WARN [karma]: [39mNo captured browser, open http://localhost:9876/
+[32m28 09 2017 17:48:26.947:INFO [karma]: [39mKarma v1.7.1 server started at http://0.0.0.0:9876/
+[32m28 09 2017 17:48:26.947:INFO [launcher]: [39mLaunching browser PhantomJS with unlimited concurrency
+[32m28 09 2017 17:48:26.973:INFO [launcher]: [39mStarting browser PhantomJS
+[32m28 09 2017 17:48:28.718:INFO [PhantomJS 2.1.1 (Windows 7 0.0.0)]: [39mConnected on socket 3Bkmyo6iDpce4rN2AAAA with id 8419032
+
+  Home.vue
+    √ should render the Home page with search panel
+
+  NavbarSecondary.vue
+    √ should render the main application navigation links
+
+PhantomJS 2.1.1 (Windows 7 0.0.0): Executed 2 of 2 SUCCESS (0.008 secs / 0.03 secs)
+TOTAL: 2 SUCCESS
+
+
+=============================== Coverage summary ===============================
+Statements   : 55% ( 11/20 )
+Branches     : 50% ( 2/4 )
+Functions    : 100% ( 1/1 )
+Lines        : 55% ( 11/20 )
+================================================================================

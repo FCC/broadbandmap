@@ -1,0 +1,111 @@
+/* Search form */
+.search-geography {
+  background-color: #f2f2f2;
+  margin-bottom: 20px;
+  padding: 15px 15px 10px;
+  &:after {
+    clear: both;
+    content: " ";
+    display: table;
+  }
+  p {
+    margin-bottom: 5px;
+  }
+  .btns {
+    float: none;
+    margin-top: 0;
+    @media(min-width: 992px) {
+      float: left;
+      margin-top: 24px;
+    }
+  }
+}
+
+.input-geography, .input-state {
+  float: none;
+  margin: 0 15px 15px 0;
+   width: 100%;
+  @media(min-width: 992px) {
+    float: left;
+  }
+}
+
+.input-geography {
+  @media(min-width: 480px) {
+    width: 400px;
+  }
+}
+
+.input-state {
+  @media(min-width: 480px) {
+    width: 300px;
+  }
+}
+
+.input-group-lg {
+  .btn-default {
+    border-right: none;
+  }
+}
+
+.btn-primary {
+  margin-right: 15px;
+}
+
+.dropdown .btn {
+  // border: none;
+  font-size: 18px;
+  height: 46px;  
+  margin-right: -1px;
+}
+
+/* Download and about links */
+.nav-utility {
+  font-size: 20px;
+  margin: 0 0 10px;
+  text-align: right;
+  > :last-child {
+    margin-left: 10px;    
+  }
+}
+
+/* Search results table */
+.search-geography-results {
+  margin-bottom: 100px;
+}
+
+.table-results {
+  margin: 0 15px;
+}
+
+/* vue-good-table plugin styles */
+.good-table {
+  table {
+    display: flex;
+    flex-flow: column;
+    max-height: 600px;
+    width: 100%;
+  }
+  table thead {
+    flex: 0 0 auto;
+    width: calc(100% - 0.9em);
+  }
+  table tbody {
+    flex: 1 1 auto;
+    display: block;
+    overflow-y: scroll;
+  }
+  table tbody tr {
+    width: 100%;
+  }
+  table thead,
+  table tbody tr {
+    display: table;
+    table-layout: fixed;
+  }
+  .table-footer {
+    background-color: transparent !important;
+    border: none !important;
+  }
+}
+

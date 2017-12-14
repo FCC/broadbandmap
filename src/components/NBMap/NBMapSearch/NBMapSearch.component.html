@@ -1,0 +1,53 @@
+<div class="row">
+  <div class="col-sm-12 col-lg-10">
+    <!-- Search wrapper -->
+    <div class="search-wrapper input-group input-group-lg">
+      <div class="input-group-btn">
+        <dropdown>
+          <button data-role="trigger" aria-expanded="false" class="btn btn-default dropdown-toggle" type="button">
+            <span id="btn-label">{{ searchLabel }}</span> <span class="caret"></span>
+          </button>
+          <template slot="dropdown" @click="toggleSearchType">
+            <li v-for="(value, key) in searchOptsList">
+              <a href="#" @click.self.prevent="toggleSearchType(key)">{{ key }}</a>
+            </li>
+          </template>
+        </dropdown>
+      </div>
+      <tooltip :enable="enableTooltip" :text="getTooltipText" placement="bottom" trigger="focus" :target="document.querySelector('#addr')">
+        <!-- Custom Vue component -->
+        <Autocomplete ref="autocomplete2" :placeholderText="getPlaceholderText" :searchType="searchType"></Autocomplete>
+      </tooltip>
+      <div class="input-group-btn">
+        <button class="btn btn-default" type="submit" title="Search" data-toggle="tooltip" data-placement="top" @click="searchButtonClicked($event)">
+          <span class="icon icon-search"></span><span class="sr-only">Location Search</span>
+        </button>
+      </div>
+      <!-- End of search wrapper -->
+      <div class="divider" role="presentation">
+        <div></div>
+      </div>
+      <div class="map-settings input-group-btn">
+        <dropdown :menu-right="true">
+          <tooltip text="Map settings" trigger="hover" placement="left">
+            <button class="btn-settings btn btn-default btn-lg dropdown-toggle" data-role="trigger" aria-haspopup="true" aria-expanded="false" type="button">
+              <span class="icon icon-cog" data-toggle="tooltip" data-placement="top" title="Map Settings"></span>
+              <span class="sr-only">Map settings</span>
+              <span class="caret"></span>
+            </button>
+          </tooltip>
+          <template slot="dropdown">
+            <li><a href="#" @click.prevent="openMapSettings">Select Broadband</a></li>
+            <li><a href="#">Appearance</a></li>
+            <li><a href="#">Controls</a></li>
+          </template>
+        </dropdown>
+        <tooltip text="About this map" trigger="hover" placement="right">
+          <button class="btn btn-default btn-lg" type="button">
+            <span class="icon icon-info-circle"></span>
+          </button>
+        </tooltip>
+      </div>
+    </div>
+  </div>
+</div>

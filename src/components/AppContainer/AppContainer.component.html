@@ -1,0 +1,12 @@
+<div class="js-ready" :class="{ 'js-nav': isMobileNavShown }">
+  <div class="outer-container">
+    <div class="inner-container">
+      <app-header v-on:setHamburger="setHamburger"></app-header>
+      <main>
+        <router-view></router-view>
+        <map-settings></map-settings>
+      </main>
+      <app-footer></app-footer>
+    </div>
+  </div>
+</div>
