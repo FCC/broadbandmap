@@ -192,7 +192,7 @@ export default {
         if (!totalPop) totalPop = 1
         
         let areaName = lookupData[rawData[rdi].id]
-        if (!this.$refs.autocomplete.typeaheadModel.geoid) {
+        if (!this.$refs.autocomplete.typeaheadModel.geoid && Object.keys(this.stateGeoidToName).length > 0) {
           areaName += ', ' + this.stateGeoidToName[rawData[rdi].id.substring(0, 2)]
         }
    
