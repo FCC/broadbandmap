@@ -28,7 +28,8 @@ export default {
       techChartData: {},
       hoconum2Name: {},
       name2Hoconum: {},
-      searchType: 'Provider'
+      searchType: 'Provider',
+      layerColors: ['#ff848b', '#838eff', '#ffff95']
     }
   },
   methods: {
@@ -123,6 +124,46 @@ export default {
       // Fetch provider data
       this.fetchProviderData()
     },
+    updateMap (map) {
+      let hoconum = this.providerHoconums[0]
+
+      map.on('style.load', () => {
+        // Add a layer for each hoconum
+        this.providerHoconums.forEach((hoconum, index) => {
+          // Template for layer style
+          let layerStyle = {
+            id: 'exsat_prov_' + hoconum,
+            source: {
+              type: 'vector',
+              url: 'mapbox://fcc.c5py76c5'
+            },
+            type: 'fill',
+            'source-layer': 'exsat_prov',
+            layout: {
+              visibility: 'visible'
+            },
+            paint: {
+              'fill-color': {
+                base: 1,
+                type: 'categorical',
+                property: 'hoconum',
+                stops: [
+                  ['130077', 'hsl(249, 86%, 56%)'],
+                  ['130317', 'hsl(359, 84%, 62%)']
+                ],
+                default: 'hsla(112, 93%, 71%, 0)'
+              },
+              'fill-opacity': 0.5,
+              'fill-color': this.layerColors[index]
+            },
+            'filter': ['in', 'hoconum', hoconum]
+          }
+
+          // Add layer to map
+          map.addLayer(layerStyle, 'block')
+        })
+      })
+    },
     // Call Socrata API - Lookup Table for geographies
     fetchProviderData () {
       const self = this
@@ -171,6 +212,7 @@ export default {
         // Resize the map once the charts section is visible
         setTimeout(() => {
           self.Map.resize()
+          self.updateMap(self.Map)
         }, 100)
       })
       .catch(function (error) {
