@@ -1,10 +1,11 @@
 import AppHeader from '@/components/AppHeader/'
 import MapSettings from '@/components/NBMap/NBMapSettings/'
+import TableSettings from '@/components/AreaComparison/TableSettings/'
 import AppFooter from '@/components/AppFooter/'
 
 export default {
   name: 'AppContainer',
-  components: { AppHeader, MapSettings, AppFooter },
+  components: { AppHeader, MapSettings, TableSettings, AppFooter },
   props: [],
   mounted () {
 
