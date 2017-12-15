@@ -84,12 +84,8 @@ export default {
     }
   },
   mounted () {
-    this.searchOptsList = Object.assign({}, this.searchTypes.comparison)
-    // Default option is enter state, so state should not be in dropdown on the left
-    this.searchLabel = 'County'
-    delete this.searchOptsList['State']
-    this.refreshingDropdown = false
-    
+    this.searchArea('')
+
     this.setSocrata()
     this.cacheStates()
 
@@ -104,21 +100,24 @@ export default {
     EventHub.$off('removeTableData')
   },
   methods: {
-    toggleSearchType: function (selectedVal) { // Change the search (geography) type (e.g. county, state, district, etc.)
+    toggleSearchType (selectedVal) { // Change the search (geography) type (e.g. county, state, district, etc.)
       let selectedOpt = this.searchTypes.comparison[selectedVal]
 
       this.searchType = selectedVal
       this.searchLabel = selectedOpt.label
     },
-    searchArea: function (areaType) { // Set the search area input value to nationwide or blank
+    searchArea (areaType) { // Set the search area input value to nationwide or blank
       this.refreshingDropdown = true
       if (areaType === '') {
+        this.searchLabel = 'County'
+        this.searchOptsList = Object.assign({}, this.searchTypes.comparison)
         delete this.searchOptsList['State']
+        delete this.searchOptsList['Tribal Area']
+        delete this.searchOptsList['CBSA (MSA)']
       } else {
         this.searchOptsList = Object.assign({}, this.searchTypes.comparison)
       }
       this.refreshingDropdown = false
-
       this.$refs.autocomplete.typeaheadModel = areaType
     },
     openTableSettings () {
@@ -191,8 +190,16 @@ export default {
         let totalPop = parseInt(rawData[rdi].sum_has_0) + parseInt(rawData[rdi].sum_has_1) + parseInt(rawData[rdi].sum_has_2) + parseInt(rawData[rdi].sum_has_3plus)
         if (!totalPop) totalPop = 1
         
-        let areaName = lookupData[rawData[rdi].id]
-        if (!this.$refs.autocomplete.typeaheadModel.geoid && Object.keys(this.stateGeoidToName).length > 0) {
+        let areaName = ''
+        if (this.searchType === 'Congressional District') {
+          areaName = lookupData[rawData[rdi].id] + '-' + rawData[rdi].id.toString()
+        } else {
+          areaName = lookupData[rawData[rdi].id]
+        }
+        
+       if (!this.$refs.autocomplete.typeaheadModel.geoid && 
+            Object.keys(this.stateGeoidToName).length > 0 &&
+            (this.searchType === 'County' || this.searchType === 'Census Place' || this.searchType === 'Congressional District')) {
           areaName += ', ' + this.stateGeoidToName[rawData[rdi].id.substring(0, 2)]
         }
    
