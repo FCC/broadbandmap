@@ -33,7 +33,8 @@ export default {
         labels: ['Tribal', 'Non-tribal'],
         datasets: []
       },
-      chartStyles: {width: 'auto', height: '350px'}
+      chartStyles: {width: 'auto', height: '350px'},
+      sidebarTitle: ''
     }
   },
   mounted () {
@@ -74,6 +75,7 @@ export default {
         // Prevent duplicate call
         return
       }
+      // Update charts, map, and sidebar title
       this.fetchAreaData()
     },
     fetchAreaData () {
@@ -83,7 +85,7 @@ export default {
 
       let type = ''
       let id = 0
-      let isValidType = ['state', 'county', 'place', 'cbsa', 'district', 'tribal'].indexOf(this.$route.query.type) !== -1
+      let isValidType = ['state', 'county', 'place', 'cbsa', 'cdist', 'tribal'].indexOf(this.$route.query.type) !== -1
       // If the geoid and geography type are in the query string, use those
       if (typeof this.$route.query.type !== 'undefined' && isValidType && typeof this.$route.query.geoid !== 'undefined') {
         type = this.$route.query.type
@@ -165,6 +167,63 @@ export default {
         }
         console.log(error)
       })
+      // END of "area" table query
+
+      // If this is the nationwide view
+      if (id === 0) {
+        this.sidebarTitle = 'Nationwide'
+        console.log('TODO: Revert the map back to the national view')
+      // Otherwise this is a specific geography the user searched for
+      } else {
+        // Query lookup table for this specific geography
+        if (process.env.SOCRATA_ENV === 'DEV') {
+          socrataURL = process.env.SOCRATA_DEV_LOOKUP
+        } else if (process.env.SOCRATA_ENV === 'PROD') {
+          socrataURL = process.env.SOCRATA_PROD_LOOKUP
+        }
+        axios
+        .get(socrataURL, {
+          params: {
+            geoid: id,
+            type: type,
+            $$app_token: appToken
+          },
+          headers: httpHeaders
+        })
+        .then(function (response) {
+          console.log('Socrata GEOGRAPHY DETAILS query response= ', response)
+          // Display name of searched geography
+          this.sidebarTitle = response.data[0].name
+          // Get lat/lon pair
+          let bbox = response.data[0].bbox_arr.replace(/{/g, '').replace(/}/g, '')
+          let envArray = bbox.split(',')
+          // Zoom and center map to envelope
+          this.Map.fitBounds(envArray, {
+            animate: false,
+            easeTo: true,
+            maxZoom: 14,
+            padding: 100
+          })
+          // Highlight the selected block
+          // this.Map.setFilter('block-highlighted', ['==', 'block_fips', fipsCode])
+        }.bind(this))
+        .catch(function (error) {
+          if (error.response) {
+            // Server responded with a status code that falls out of the range of 2xx
+            console.log(error.response.data)
+            console.log(error.response.status)
+            console.log(error.response.headers)
+          } else if (error.request) {
+            // Request was made but no response was received
+            console.log(error.request)
+          } else {
+            // Something happened in setting up the request that triggered an Error
+            console.log('Error', error.message)
+          }
+          console.log(error)
+        })
+        // END of query to lookup table
+      }
     },
     dedupSocrataData () {
       let dedupList = []
