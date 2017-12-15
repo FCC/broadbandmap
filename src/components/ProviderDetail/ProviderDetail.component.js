@@ -125,20 +125,18 @@ export default {
       this.fetchProviderData()
     },
     updateMap (map) {
-      let hoconum = this.providerHoconums[0]
-
       map.on('style.load', () => {
         // Add a layer for each hoconum
         this.providerHoconums.forEach((hoconum, index) => {
           // Template for layer style
           let layerStyle = {
-            id: 'exsat_prov_' + hoconum,
+            id: '',
             source: {
               type: 'vector',
-              url: 'mapbox://fcc.c5py76c5'
+              url: ''
             },
             type: 'fill',
-            'source-layer': 'exsat_prov',
+            'source-layer': '',
             layout: {
               visibility: 'visible'
             },
@@ -159,8 +157,31 @@ export default {
             'filter': ['in', 'hoconum', hoconum]
           }
 
+          let layerLargeProv = {
+            id: 'large_prov_' + hoconum,
+            source: {
+              type: 'vector',
+              url: 'mapbox://fcc.prov_large_d16_v1'
+            },
+            'source-layer': 'large_prov'
+          }
+
+          let layerProvOther = {
+            id: 'prov_other_' + hoconum,
+            source: {
+              type: 'vector',
+              url: 'mapbox://fcc.prov_other_d16_v1'
+            },
+            'source-layer': 'other_prov'
+          }
+
+          // Merge layer style properties
+          let lyrLargeProv = Object.assign({}, layerStyle, layerLargeProv)
+          let lyrProvOther = Object.assign({}, layerStyle, layerProvOther)
+
           // Add layer to map
-          map.addLayer(layerStyle, 'block')
+          map.addLayer(lyrProvOther, 'block')
+          map.addLayer(lyrLargeProv, 'block')
         })
       })
     },
