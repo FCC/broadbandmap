@@ -36,8 +36,8 @@
         <div class="col-sm-4">
           <div class="btn-speedType"><span>Speed:</span>
             <div class="btn-group" role="group" aria-label="Select download or upload speed.">
-              <button type="button" id="d-button" class="btn btn-default" :disabled="direction === 'd'" @click.prevent="setD">Download</button>
-              <button type="button" id="u-button" class="btn btn-default" :disabled="direction === 'u'" @click.prevent="setU">Upload</button>
+              <button type="button" id="d-button" class="btn btn-default" v-bind:class="{active: direction === 'd'}" @click.prevent="setD">Download</button>
+              <button type="button" id="u-button" class="btn btn-default" v-bind:class="{active: direction === 'u'}" @click.prevent="setU">Upload</button>
             </div>
           </div>
         </div>                                                                                             
