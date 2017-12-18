@@ -21,7 +21,18 @@
       <section class="map-legend" slot="map-legend">        
           <h5 v-if="!togLegendTitle"><b>Number of Broadband Providers</b></h5>
           <h5 v-if="togLegendTitle"><b>Population Weighted Average Number of Providers</b></h5>
-          <ul class="list-unstyled">
+          <div class="legend-gradient"></div>
+          <div class="legend-keys">
+            <ul>
+            <li class="key first">0</li>
+            <li class="key">1</li>
+            <li class="key">2</li>
+            <li class="key">3</li>
+            <li class="key">4</li>
+            <li class="key penultimate">6</li>
+            <li class="key last">12 or more</li></ul>
+          </div>
+          <ul class="list-unstyled" style="display: none">
             <li>
               <div class="key-symbol" style="background-color: #ffffcc"></div> 0
             </li>

@@ -262,7 +262,51 @@
 
 
 
+div.legend-gradient {
+  background: #ffffcc; /* Old browsers */
+  background: -moz-linear-gradient(left, #ffffcc 0%, #a1dab4 17%, #41b6c4 33%, #225ea8 50%, #253494 66%, #081d58 83%, #000000 100%); /* FF3.6-15 */
+  background: -webkit-linear-gradient(left, #ffffcc 0%,#a1dab4 17%,#41b6c4 33%,#225ea8 50%,#253494 66%,#081d58 83%,#000000 100%); /* Chrome10-25,Safari5.1-6 */
+  background: linear-gradient(to right, #ffffcc 0%,#a1dab4 17%,#41b6c4 33%,#225ea8 50%,#253494 66%,#081d58 83%,#000000 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffcc', endColorstr='#000000',GradientType=1 ); /* IE6-9 */
+  width: 50%;
+  height: 20px;
+}
 
+div.legend-keys {
+  width: 50%;
+  border-bottom: 1px solid #333;
+}
+
+.legend-keys ul {
+  padding: 0;
+  margin: 0;
+}
+
+.legend-keys ul li {
+  float: left;
+  list-style-type:none;
+  width: 12%;
+}
+
+.legend-keys ul li::before {
+  content: '|';
+  display: block;
+  margin-top: -3px;
+}
+
+.legend-keys .key.first {
+  padding-left: 0%;
+}
+
+.legend-keys .key.penultimate {
+  width: 10%;
+  text-align: right;
+}
+
+.legend-keys .key.last {
+  width: 30%;
+  text-align: right;
+}
 
 /* Location Marker */
 
