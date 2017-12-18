@@ -279,27 +279,31 @@ export default {
 
         this.techChartData[drct] = {}
 
-        for (let ci in collapsed) {
-          let count = 8
-          if (drct === 'u') {
-            count = 10
-          }
+        for (let hcni in this.providerHoconums) {
+          for (let ci in collapsed) {
+            if (collapsed[ci].hoconum === this.providerHoconums[hcni]) {
+              let count = 8
+              if (drct === 'u') {
+                count = 10
+              }
 
-          let cData = []
-          cData[0] = 100.0
-          for (let i = 1; i < count; i++) {
-            cData[i] = 100.0 * parseFloat(collapsed[ci][drct + '_' + i.toString()]) / parseFloat(collapsed[ci][drct + '_1'])
-          }
+              let cData = []
+              cData[0] = 100.0
+              for (let i = 1; i < count; i++) {
+                cData[i] = 100.0 * parseFloat(collapsed[ci][drct + '_' + i.toString()]) / parseFloat(collapsed[ci][drct + '_1'])
+              }
+         
+              let series = {
+                label: this.getNameByHoconum(collapsed[ci].hoconum),
+                data: cData
+              }
 
-          let series = {
-            label: this.getNameByHoconum(collapsed[ci].hoconum),
-            data: cData
+              if (!this.techChartData[drct][collapsed[ci].tech]) {
+                this.techChartData[drct][collapsed[ci].tech] = []
+              }
+              this.techChartData[drct][collapsed[ci].tech].push(series)
+            }
           }
-
-          if (!this.techChartData[drct][collapsed[ci].tech]) {
-            this.techChartData[drct][collapsed[ci].tech] = []
-          }
-          this.techChartData[drct][collapsed[ci].tech].push(series)
         }
       }
     },
