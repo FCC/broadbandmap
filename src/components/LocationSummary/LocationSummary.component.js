@@ -165,12 +165,12 @@ export default {
       this.Map.fitBounds(envArray, {
         animate: false,
         easeTo: true,
-        maxZoom: 14,
         padding: 100
       })
 
       // Highlight the selected block
       this.Map.setFilter('block-highlighted', ['==', 'block_fips', fipsCode])
+      this.Map.setFilter('xlarge-blocks-highlighted', ['==', 'geoid10', fipsCode])
     },
     fetchProviderData (response) {
       let fipsCode = response.data.Results.block[0].FIPS
