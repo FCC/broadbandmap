@@ -57,7 +57,10 @@ export default {
         tooltips: {
           callbacks: {
             label: function (tooltipItems, data) {
-              let percentage = (tooltipItems.yLabel).toFixed(2)
+              let decimal2 = (tooltipItems.yLabel).toFixed(2)
+              let decimal4 = (tooltipItems.yLabel).toFixed(4)
+              let percentage = (parseFloat(decimal2) <= 0.00) ? decimal4 : decimal2
+
               return data.labels[tooltipItems.index].slice(0, 15) + ': ' + percentage + '%'
             }
           }
