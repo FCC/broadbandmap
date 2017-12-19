@@ -37,7 +37,7 @@ export const LayersLocation = [
       'line-color': '#6e599f',
       'line-width': 7
     },
-    'filter': ['in', 'bbox_arr', '']
+    'filter': ['in', 'block_fips', '']
   },
   ...layersCarto
 ]
