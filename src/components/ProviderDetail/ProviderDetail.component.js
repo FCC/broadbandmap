@@ -324,7 +324,7 @@ export default {
         }
 
         if (!found) {
-          let od = data[di]
+          let od = Object.assign({}, data[di])
           od.tech = this.getTechNameByCode(od.tech)
           outData.push(od)
         }
