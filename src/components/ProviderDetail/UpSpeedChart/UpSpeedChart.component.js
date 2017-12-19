@@ -27,7 +27,11 @@ export default {
     return {
       options: {
         legend: {
-          display: true
+          display: true,
+          position: 'bottom',
+          labels: {
+            boxWidth: 20
+          }
         },
         maintainAspectRatio: false,
         responsive: true,
