@@ -292,7 +292,7 @@ export default {
               for (let i = 1; i < count; i++) {
                 cData[i] = 100.0 * parseFloat(collapsed[ci][drct + '_' + i.toString()]) / parseFloat(collapsed[ci][drct + '_1'])
               }
-         
+
               let series = {
                 label: this.getNameByHoconum(collapsed[ci].hoconum),
                 data: cData
