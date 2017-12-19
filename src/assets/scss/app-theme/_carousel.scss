@@ -14,3 +14,18 @@
 .carousel-inner .item {
 	text-align: center
 }
+
+.carousel-indicators {
+  bottom: -25px
+}
+
+.carousel-indicators li, .carousel-indicators .active {
+  border-color: #266ad0;
+  width: 8px;
+  height: 8px;
+  margin: 0 4px;
+}
+
+.carousel-indicators .active {
+    background-color: #266ad0;
+}
