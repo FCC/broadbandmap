@@ -256,6 +256,7 @@ export default {
       let usPopulation = process.env.US_POPULATION
 
       let directions = ['u', 'd']
+      let collapsed = this.collapseTech(this.providerData)
 
       for (let di in ['u', 'd']) {
         let drct = directions[di]
@@ -274,8 +275,6 @@ export default {
             }
           }
         }
-
-        let collapsed = this.collapseTech(this.providerData)
 
         this.techChartData[drct] = {}
 
