@@ -9,7 +9,7 @@
   <div class="row">
     <nb-map class="col-xs-12 col-sm-12 col-md-7 col-lg-8" mapType="area" searchType="comparison" searchDefault="County" @map-init="mapInit" @map-zoomend="toggleLegendTitle"></nb-map>
     <nb-map-sidebar class="map-sidebar col-xs-12 col-sm-12 col-md-5 col-lg-4">
-      <h2 class="sub-title" slot="sidebar-title"><b>Sangamon County, IL</b></h2>      
+      <h2 class="sub-title" slot="sidebar-title"><b>{{ sidebarTitle }}</b></h2>      
       <div class="charts" slot="charts" v-if="showCharts">
         <carousel ref="carousel" icon-control-left="icon-prev" icon-control-right="icon-next" :interval="0">
           <slide>
@@ -26,29 +26,17 @@
       <section class="map-legend" slot="map-legend">
         <h5 v-if="!togLegendTitle"><b>Number of Broadband Providers</b></h5>
           <h5 v-if="togLegendTitle"><b>Population Weighted Average Number of Providers</b></h5>
-         <ul class="list-unstyled">
-          <li>
-            <div class="key-symbol" style="background-color: #ffffcc"></div> 0
-          </li>
-          <li>
-            <div class="key-symbol" style="background-color: #a1dab4"></div> 1
-          </li>
-          <li>
-            <div class="key-symbol" style="background-color: #41b6c4"></div> 2
-          </li>
-          <li>
-            <div class="key-symbol" style="background-color: #225ea8"></div> 3
-          </li>
-          <li>
-            <div class="key-symbol" style="background-color: #253494"></div> 4
-          </li>
-          <li>
-            <div class="key-symbol" style="background-color: #081d58"></div> 6
-          </li>
-          <li>
-            <div class="key-symbol" style="background-color: #000000"></div> 12 or more
-          </li>
-        </ul>
+          <div class="legend-gradient"></div>
+          <div class="legend-keys">
+            <ul>
+            <li class="key first">0</li>
+            <li class="key">1</li>
+            <li class="key">2</li>
+            <li class="key">3</li>
+            <li class="key">4</li>
+            <li class="key penultimate">6</li>
+            <li class="key last">12 or more</li></ul>
+          </div>
       </section>
     </nb-map-sidebar>
   </div>

@@ -100,11 +100,7 @@
 }
 
 .map-settings {
-  margin: 75px -100px;
   position: absolute;
-  @media(min-width: 480px) {
-    margin: 75px -125px;
-  }
   @media(min-width: 768px) {
     position: relative;
   }
@@ -262,7 +258,51 @@
 
 
 
+div.legend-gradient {
+  background: #ffffcc; /* Old browsers */
+  background: -moz-linear-gradient(left, #ffffcc 0%, #a1dab4 12%, #41b6c4 24%, #225ea8 36%, #253494 48%, #081d58 70%, #000000 100%); /* FF3.6-15 */
+  background: -webkit-linear-gradient(left, #ffffcc 0%,#a1dab4 12%,#41b6c4 24%,#225ea8 36%,#253494 48%,#081d58 70%,#000000 100%); /* Chrome10-25,Safari5.1-6 */
+  background: linear-gradient(to right, #ffffcc 0%,#a1dab4 12%,#41b6c4 24%,#225ea8 36%,#253494 48%,#081d58 70%,#000000 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffcc', endColorstr='#000000',GradientType=1 ); /* IE6-9 */
+  width: 65%;
+  height: 20px;
+}
 
+div.legend-keys {
+  width: 65%;
+  border-bottom: 1px solid #999;
+}
+
+.legend-keys ul {
+  padding: 0;
+  margin: 0 -2px;
+}
+
+.legend-keys ul li {
+  float: left;
+  list-style-type:none;
+  width: 12%;
+}
+
+.legend-keys ul li::before {
+  content: '|';
+  display: block;
+  margin-top: -3px;
+}
+
+.legend-keys .key.first {
+  padding-left: 0%;
+}
+
+.legend-keys .key.penultimate {
+  width: 10%;
+  text-align: right;
+}
+
+.legend-keys .key.last {
+  width: 30%;
+  text-align: right;
+}
 
 /* Location Marker */
 

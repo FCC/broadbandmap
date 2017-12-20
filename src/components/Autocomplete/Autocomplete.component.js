@@ -9,7 +9,7 @@ export default {
   },
   mixins: [urlValidation],
   // Bind vars passed in via the <Autocomplete> tag
-  props: ['placeholderText', 'searchType'],
+  props: ['placeholderText', 'searchType', 'originPage'],
   // Initialize vars
   data () {
     return {
@@ -27,7 +27,11 @@ export default {
       }
     },
     enterClicked (event) {
-      if (this.searchType !== 'Provider' && (typeof this.typeaheadModel === 'object' || this.searchType !== 'Address')) {
+      if (this.originPage && this.originPage === 'AreaComparison') {
+        // Don't go to geography - we are searching for state on AreaComparison and want to stay on the page
+      } else if (this.searchType === 'Provider') {
+        // Don't go to geography - we are searching for non-geographic entity
+      } else if (typeof this.typeaheadModel === 'object' || this.searchType !== 'Address') {
         this.gotoGeography(event)
       }
     },
@@ -72,7 +76,7 @@ export default {
           break
         case 'Congressional District':
           console.log('gotoGeography(), searchType= ' + this.searchType + ', typeaheadModel= ', this.typeaheadModel)
-          newURL = 'area-summary?type=district&geoid=' + this.typeaheadModel.geoid + '&bbox=' + this.typeaheadModel.bbox_arr
+          newURL = 'area-summary?type=cdist&geoid=' + this.typeaheadModel.geoid + '&bbox=' + this.typeaheadModel.bbox_arr
           this.$router.push(newURL)
           break
         case 'Tribal Area':

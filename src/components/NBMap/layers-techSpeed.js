@@ -30,31 +30,26 @@ export const layersTechSpeed = {
   '200': {
     id: 'all_200',
     source: '200',
-    maxzoom: 16,
     beforeLayer: 'block'
   },
   '10': {
     id: 'all_10',
     source: '10_1',
-    maxzoom: 16,
     beforeLayer: 'block'
   },
   '25': {
     id: 'all_25',
     source: '25_3',
-    maxzoom: 16,
     beforeLayer: 'block'
   },
   '50': {
     id: 'all_50',
     source: '50_5',
-    maxzoom: 16,
     beforeLayer: 'block'
   },
   '100': {
     id: 'all_100',
     source: '100_10',
-    maxzoom: 16,
     beforeLayer: 'block'
   }
 }
