@@ -30,7 +30,7 @@ export const updateMapLayers = {
       const vm = this
       const speed = propertyID.split('_')[1]
 
-      let layer = layersTechSpeed[speed]
+      let layer = layersTechSpeed[speed] === undefined ? layersTechSpeed['25'] : layersTechSpeed[speed]
       let lyrStyle = {}
 
       // Template for layer style
