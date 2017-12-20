@@ -44,6 +44,7 @@ export default {
             // Create the URL
             newURL = 'location-summary?lat=' + this.typeaheadModel.center[1].toFixed(6) + '&lon=' + this.typeaheadModel.center[0].toFixed(6) + '&place_name=' + encodeURIComponent(this.typeaheadModel.place_name)
             this.$router.push(newURL)
+            EventHub.$emit('updateAddrSearch')
           } else {
             // Call Modal component in app footer
             EventHub.$emit('openModal', 'No results found', 'Please enter and then select a valid U.S. address.')
