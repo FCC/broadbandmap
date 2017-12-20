@@ -19,7 +19,7 @@ export default {
         filterable: true
       },
       {
-        label: '% with 0',
+        label: '% with no providers',
         field: 'zero_providers',
         type: 'number',
         html: false,

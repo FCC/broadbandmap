@@ -100,11 +100,7 @@
 }
 
 .map-settings {
-  margin: 75px -100px;
   position: absolute;
-  @media(min-width: 480px) {
-    margin: 75px -125px;
-  }
   @media(min-width: 768px) {
     position: relative;
   }
