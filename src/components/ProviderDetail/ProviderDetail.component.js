@@ -63,6 +63,7 @@ export default {
           self.hoconum2Name[response.data[rdi].hoconum] = response.data[rdi].holdingcompanyname
           self.name2Hoconum[response.data[rdi].holdingcompanyname] = response.data[rdi].hoconum
         }
+        self.loadParamsFromUrl()
       })
       .catch(function (error) {
         if (error.response) {
@@ -226,6 +227,7 @@ export default {
         self.providerData = response.data
 
         self.calculateChartData()
+        self.updateUrlParams()
 
         // Display charts section
         self.showResults = true
@@ -235,6 +237,13 @@ export default {
           self.Map.resize()
           self.updateMap(self.Map)
         }, 100)
+
+        let providerBox = self.$refs.providerBox
+        // Populate list of provider Names
+        for (let pbi in providerBox) {
+          providerBox[pbi].typeaheadModel = {'holdingcompanyname': self.providerNames[pbi]}
+        }
+
       })
       .catch(function (error) {
         if (error.response) {
@@ -356,7 +365,59 @@ export default {
       if (code === '60') return 'satellite'
       if (code === '70') return 'fixedWireless'
       return 'other'
-    }
+    },
+    updateUrlParams () {
+      let routeQ = this.$route.query
+
+      let routeQP = {}
+      Object.keys(routeQ).map(prop => {
+        routeQP[prop] = routeQ[prop]
+      })
+
+      let hoconums = ''
+      for (let hci in this.providerHoconums) {
+        hoconums += this.providerHoconums[hci] + ","
+      }
+      hoconums = hoconums.replace(/,\s*$/, '')
+
+      routeQP.hoconums = hoconums
+
+      this.$router.replace({
+        name: 'ProviderDetail',
+        query: routeQP
+      })
+    },
+    loadParamsFromUrl () {
+      let routeQ = this.$route.query
+
+      let routeQP = {}
+      Object.keys(routeQ).map(prop => {
+        routeQP[prop] = routeQ[prop]
+      })
+
+      if (routeQP.hoconums) {
+        this.providerHoconums = routeQP.hoconums.split(',')
+
+        this.numProviders = 0
+        this.providers = []
+
+        for (let hcni in this.providerHoconums) {
+
+          let newProvider = {
+            id: Date.now(),
+            provider: this.getNameByHoconum(this.providerHoconums[hcni])
+          }
+
+          this.numProviders++
+          this.providers.push(newProvider)
+          this.providerNames.push(this.getNameByHoconum(this.providerHoconums[hcni]))
+
+          // Show the 'Add Provider' link
+          this.showLink = this.numProviders !== 3
+        }
+        this.fetchProviderData()
+      }
+    }   
   },
   computed: {
     getPlaceholderText: function () {
