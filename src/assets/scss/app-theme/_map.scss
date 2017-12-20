@@ -268,12 +268,12 @@ div.legend-gradient {
   background: -webkit-linear-gradient(left, #ffffcc 0%,#a1dab4 12%,#41b6c4 24%,#225ea8 36%,#253494 48%,#081d58 70%,#000000 100%); /* Chrome10-25,Safari5.1-6 */
   background: linear-gradient(to right, #ffffcc 0%,#a1dab4 12%,#41b6c4 24%,#225ea8 36%,#253494 48%,#081d58 70%,#000000 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffcc', endColorstr='#000000',GradientType=1 ); /* IE6-9 */
-  width: 50%;
+  width: 65%;
   height: 20px;
 }
 
 div.legend-keys {
-  width: 50%;
+  width: 65%;
   border-bottom: 1px solid #999;
 }
 
