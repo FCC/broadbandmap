@@ -57,6 +57,7 @@ export default {
     }
   },
   mounted () {
+    EventHub.$on('updateAddrSearch', this.updateURLParams)
     EventHub.$on('updateMapSettings', (selectedTech, selectedSpeed) => this.updateTechSpeed(selectedTech, selectedSpeed))
     EventHub.$on('removeLayers', (propertyID, removeAll) => this.removeLayers(propertyID, removeAll))
   },
@@ -66,38 +67,41 @@ export default {
   },
   methods: {
     mapInit (map, mapOptions) {
-      const vm = this
-
       this.Map = map
       this.mapOptions = mapOptions
 
       this.Map.on('style.load', () => {
         // If one or more technologies is selected, then reload the tech/speed layers when the base layer style is changed
         // Need to reload tech/speed layers so the labels will appear on top
-        if (!vm.removeAllLayers) {
+        if (!this.removeAllLayers) {
           // If no tech is selected use default tech and speed settings
           if (this.$route.query.selectedTech === undefined) {
-            vm.updateTechSpeed(vm.defaultTech, vm.defaultSpeed)
+            this.updateTechSpeed(this.defaultTech, this.defaultSpeed)
           }
 
           // If selectedTech parameter value is in the URL, use that value
           if (this.$route.query.selectedTech !== '') {
-            vm.updateTechSpeed(this.$route.query.selectedTech, this.$route.query.selectedSpeed)
+            this.updateTechSpeed(this.$route.query.selectedTech, this.$route.query.selectedSpeed)
           }
         }
         // Trigger reload of highlighted block when base layer style is changed
         this.validateURL()
-
-        vm.updateURLParams()
       })
     },
     validateURL () {
       // If valid latitude and longitude get the FIPS and highlight the census block
       if (this.isValidLatLon(this.$route.query.lat, this.$route.query.lon)) {
         this.getFIPS(this.$route.query.lat.trim(), this.$route.query.lon.trim())
+
       // If invalid lat or lon are passed in, remove from the query string
       } else if (this.$route.query.lat !== undefined || this.$route.query.lon !== undefined) {
-        this.$router.push('location-summary')
+        this.updateURLParams()
+      } else {
+        this.clearProviderTable()
+        this.Map.easeTo({
+          center: this.mapOptions.center,
+          zoom: this.mapOptions.zoom
+        })
       }
     },
     updateURLParams () {
@@ -182,7 +186,6 @@ export default {
       let fipsCode = ''
       let envelope = 0
       let envArray = []
-      let placeName = this.$route.query.place_name
 
       // Get FIPS and envelope from response data
       fipsCode = response.data.Results.block[0].FIPS
@@ -262,24 +265,7 @@ export default {
   watch: {
     // When query params change for the same route (URL slug)
     '$route' (to, from) {
-      // If valid latitude and longitude get the FIPS and highlight the census block
-      if (this.isValidLatLon(to.query.lat, to.query.lon)) {
-        let lat = parseFloat(to.query.lat.trim())
-        let lon = parseFloat(to.query.lon.trim())
-
-        this.getFIPS(lat, lon)
-
-      // If lat or lon become invalid, remove from the query string
-      } else if (this.$route.query.lat !== undefined || this.$route.query.lon !== undefined) {
-        this.$router.push('location-summary')
-      // Otherwise fly to national view
-      } else {
-        this.clearProviderTable()
-        this.Map.easeTo({
-          center: this.mapOptions.center,
-          zoom: this.mapOptions.zoom
-        })
-      }
+      this.validateURL()
     }
   }
 }
