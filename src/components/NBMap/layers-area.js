@@ -31,8 +31,8 @@ export const LayersArea = [
       visibility: 'visible'
     },
     paint: {
-      'line-color': '#6e599f',
-      'line-width': 7
+      'line-color': '#dd1ee4',
+      'line-width': 4
     },
     'filter': ['in', 'geoid', '']
   },
@@ -63,8 +63,8 @@ export const LayersArea = [
       visibility: 'visible'
     },
     paint: {
-      'line-color': '#6e599f',
-      'line-width': 7
+      'line-color': '#dd1ee4',
+      'line-width': 4
     },
     'filter': ['in', 'geoid', '']
   },
@@ -95,25 +95,10 @@ export const LayersArea = [
       visibility: 'visible'
     },
     paint: {
-      'line-color': '#6e599f',
-      'line-width': 7
+      'line-color': '#dd1ee4',
+      'line-width': 4
     },
     'filter': ['in', 'geoid', '']
-  },
-  {
-    id: 'cbsa',
-    source: {
-      type: 'vector',
-      url: 'mapbox://fcc.a7r386t6'
-    },
-    type: 'line',
-    'source-layer': 'nbm2_cbsa2016geojson',
-    layout: {
-      visibility: 'visible'
-    },
-    paint: {
-      'line-color': '#ffffff'
-    }
   },
   {
     id: 'cbsa-highlighted',
@@ -127,8 +112,8 @@ export const LayersArea = [
       visibility: 'visible'
     },
     paint: {
-      'line-color': '#6e599f',
-      'line-width': 7
+      'line-color': '#dd1ee4',
+      'line-width': 4
     },
     'filter': ['in', 'geoid', '']
   }
