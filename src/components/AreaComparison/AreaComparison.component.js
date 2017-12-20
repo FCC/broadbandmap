@@ -108,7 +108,6 @@ export default {
   },
   methods: {
     toggleSearchType (selectedVal) { // Change the search (geography) type (e.g. county, state, district, etc.)
-      console.log('selectedVal = ', selectedVal)
       let selectedOpt = this.searchTypes.comparison[selectedVal]
 
       this.searchType = selectedVal
@@ -119,9 +118,9 @@ export default {
       this.refreshingDropdown = true
 
       if (this.searchType) {
-        this.searchLabel = this.searchType
+        this.toggleSearchType(this.searchType)
       } else {
-        this.searchLabel = 'County'
+        this.toggleSearchType('County')
       }
 
       if (areaType === '') {
@@ -236,7 +235,6 @@ export default {
       this.updateUrlParams()
       // all data we need for query
       //console.log('CompareAreas input : ', this.$refs.autocomplete.typeaheadModel.geoid, this.selectedTech, this.selectedSpeed, this.searchType)
-      console.log('this.$refs.autocomplete.typeaheadModel = ', this.$refs.autocomplete.typeaheadModel)
 
       let socParams = {          
         type: this.typeDictionaryArea[this.searchType],
@@ -283,7 +281,6 @@ export default {
               lookupData[response.data[rdi].geoid] = response.data[rdi].name
             }
           }
-          //console.log(rawData, lookupData)
           self.assembleRows(rawData, lookupData)
         })
         .catch(function (error) {
@@ -373,7 +370,7 @@ export default {
                                         'name': this.stateGeoidToName[routeQP.geoid],
                                         'type': 'state'}
       }
-      this.compareAreas()
+      if (routeQP.searchtype || routeQP.searcharea || routeQP.geoid) this.compareAreas()
     }   
   },
   computed: {
