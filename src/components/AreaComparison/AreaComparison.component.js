@@ -64,6 +64,14 @@ export default {
         'Tribal Area': 'tribal',
         'CBSA (MSA)': 'cbsa'
       },
+      typeReverseDictionary: {
+        'county': 'County',
+        'state': 'State',
+        'cd': 'Congressional District',
+        'place': 'Census Place',
+        'tribal': 'Tribal Area',
+        'cbsa': 'CBSA (MSA)'
+      },
       typeDictionaryArea: {
         'County': 'county',
         'State': 'state',
@@ -80,12 +88,11 @@ export default {
         '100_10': '100'
       },
       stateGeoidToName: {},
-      stateNameToGeoid: {}
+      stateNameToGeoid: {},
+      areaForSearch: ''
     }
   },
   mounted () {
-    this.searchArea('')
-
     this.setSocrata()
     this.cacheStates()
 
@@ -101,15 +108,23 @@ export default {
   },
   methods: {
     toggleSearchType (selectedVal) { // Change the search (geography) type (e.g. county, state, district, etc.)
+      console.log('selectedVal = ', selectedVal)
       let selectedOpt = this.searchTypes.comparison[selectedVal]
 
       this.searchType = selectedVal
       this.searchLabel = selectedOpt.label
     },
     searchArea (areaType) { // Set the search area input value to nationwide or blank
+      this.areaForSearch = areaType
       this.refreshingDropdown = true
-      if (areaType === '') {
+
+      if (this.searchType) {
+        this.searchLabel = this.searchType
+      } else {
         this.searchLabel = 'County'
+      }
+
+      if (areaType === '') {
         this.searchOptsList = Object.assign({}, this.searchTypes.comparison)
         delete this.searchOptsList['State']
         delete this.searchOptsList['Tribal Area']
@@ -117,6 +132,7 @@ export default {
       } else {
         this.searchOptsList = Object.assign({}, this.searchTypes.comparison)
       }
+
       this.refreshingDropdown = false
       this.$refs.autocomplete.typeaheadModel = areaType
     },
@@ -166,6 +182,8 @@ export default {
           let sd = response.data[sdi]
           self.stateNameToGeoid[sd.name] = sd.geoid.toString()
           self.stateGeoidToName[sd.geoid.toString()] = sd.name
+     
+          self.loadParamsFromUrl()
         }
       })
       .catch(function (error) {
@@ -214,8 +232,11 @@ export default {
     },
     compareAreas() {
       const self = this
+
+      this.updateUrlParams()
       // all data we need for query
       //console.log('CompareAreas input : ', this.$refs.autocomplete.typeaheadModel.geoid, this.selectedTech, this.selectedSpeed, this.searchType)
+      console.log('this.$refs.autocomplete.typeaheadModel = ', this.$refs.autocomplete.typeaheadModel)
 
       let socParams = {          
         type: this.typeDictionaryArea[this.searchType],
@@ -296,7 +317,64 @@ export default {
         }
         console.log(error)
       })
-    }
+    },
+    updateUrlParams () {
+      let routeQ = this.$route.query
+
+      let routeQP = {}
+      Object.keys(routeQ).map(prop => {
+        routeQP[prop] = routeQ[prop]
+      })
+
+      if (this.searchType) {
+        routeQP.searchtype = this.typeDictionary[this.searchType]
+      } else {
+        delete routeQP.searchtype
+      }
+
+      if (this.areaForSearch && this.areaForSearch !== '') {
+        routeQP.searcharea = this.areaForSearch.toLowerCase()
+      } else {
+        delete routeQP.searcharea
+      }
+
+      if (this.$refs.autocomplete.typeaheadModel.geoid) {
+        routeQP.geoid = this.$refs.autocomplete.typeaheadModel.geoid
+      } else {
+        delete routeQP.geoid
+      }
+
+      this.$router.replace({
+        name: 'AreaComparison',
+        query: routeQP
+      })
+    },
+    loadParamsFromUrl () {
+      let routeQ = this.$route.query
+
+      let routeQP = {}
+      Object.keys(routeQ).map(prop => {
+        routeQP[prop] = routeQ[prop]
+      })
+
+      if (routeQP.searchtype) {
+        this.toggleSearchType(this.typeReverseDictionary[routeQP.searchtype])
+      }
+
+      if (routeQP.searcharea) {
+        this.searchArea(routeQP.searcharea.charAt(0).toUpperCase() + routeQP.searcharea.slice(1))
+      } else {
+        this.searchArea('')
+      }
+
+      if (routeQP.geoid) {
+        this.$refs.autocomplete.typeaheadModel = {
+                                        'geoid': routeQP.geoid, 
+                                        'name': this.stateGeoidToName[routeQP.geoid],
+                                        'type': 'state'}
+      }
+      this.compareAreas()
+    }   
   },
   computed: {
     getPlaceholderText: function () { // Set the geography type input placeholder text based on search type
