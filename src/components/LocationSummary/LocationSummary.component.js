@@ -53,9 +53,7 @@ export default {
         30: 'Other',
         60: 'Satellite',
         70: 'Fixed Wireless'
-      },
-      defaultTech: 'acfosw',
-      defaultSpeed: '25_3'
+      }
     }
   },
   mounted () {
@@ -78,14 +76,19 @@ export default {
         // Need to reload tech/speed layers so the labels will appear on top
         if (!vm.removeAllLayers) {
           // If no tech is selected use default tech and speed settings
-          if (vm.selectedTech === undefined) {
+          if (this.$route.query.selectedTech === undefined) {
             vm.updateTechSpeed(vm.defaultTech, vm.defaultSpeed)
-          } else {
-            vm.updateTechSpeed(vm.selectedTech, vm.selectedSpeed)
+          }
+
+          // If selectedTech parameter value is in the URL, use that value
+          if (this.$route.query.selectedTech !== '') {
+            vm.updateTechSpeed(this.$route.query.selectedTech, this.$route.query.selectedSpeed)
           }
         }
         // Trigger reload of highlighted block when base layer style is changed
         this.validateURL()
+
+        vm.updateURLParams()
       })
     },
     validateURL () {
@@ -97,6 +100,31 @@ export default {
         this.$router.push('location-summary')
       }
     },
+    updateURLParams () {
+      let routeQueryParams = {}
+
+      // Get existing route query parameters
+      let routeQuery = this.$route.query
+
+      // Get map zoom level
+      let zoomLevel = this.Map.getZoom()
+
+      // Add routeQuery properties to routeQueryParams
+      Object.keys(routeQuery).map(property => {
+        routeQueryParams[property] = routeQuery[property]
+      })
+
+      // Add select tech, selected speed, and zoom to routeQueryParams
+      routeQueryParams.selectedTech = this.selectedTech
+      routeQueryParams.selectedSpeed = this.selectedSpeed
+      routeQueryParams.zoom = zoomLevel
+
+      // Update URL fragment with routeQueryParams
+      this.$router.replace({
+        name: 'LocationSummary',
+        query: routeQueryParams
+      })
+    },
     // Called when map is clicked ('map-click' event emitted by NBMap component)
     getLatLon (event) {
       let lat = event.lngLat.lat.toFixed(6)
@@ -106,12 +134,14 @@ export default {
       this.getFIPS(lat, lon)
 
       // Update URL and query params
-      this.$router.push({
-        path: 'location-summary',
+      this.$router.replace({
+        name: 'LocationSummary',
         query: {
           lat: `${lat}`,
           lon: `${lon}`
         }})
+
+      this.updateURLParams()
     },
     getFIPS (lat, lon) { // Call block API and expect FIPS and bounding box in response
       const blockAPI = 'https://www.broadbandmap.gov/broadbandmap/census/block'
