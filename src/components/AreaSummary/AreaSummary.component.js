@@ -81,25 +81,25 @@ export default {
     fetchAreaData () {
       const self = this
 
+      // Hide charts before data refreshes
       this.showCharts = false
 
-      let type = ''
-      let id = 0
+      // Set defaults
+      let geogType = 'nation'
+      let geoid = 0
       let isValidType = ['state', 'county', 'place', 'cbsa', 'cdist', 'tribal'].indexOf(this.$route.query.type) !== -1
+
       // If the geoid and geography type are in the query string, use those
       if (typeof this.$route.query.type !== 'undefined' && isValidType && typeof this.$route.query.geoid !== 'undefined') {
-        type = this.$route.query.type
-        id = this.$route.query.geoid
-      // Set defaults
-      } else {
-        type = 'nation'
-        id = 0
+        geogType = this.$route.query.type
+        geoid = this.$route.query.geoid
       }
 
       // Call Socrata API - Area table for charts
       let socrataURL = ''
       let appToken = ''
       let httpHeaders = {}
+
       if (process.env.SOCRATA_ENV === 'DEV') {
         socrataURL = process.env.SOCRATA_DEV_AREA
         httpHeaders = {
@@ -113,6 +113,7 @@ export default {
       } else {
         console.log('ERROR: process.env.SOCRATA_ENV in .env file must be PROD or DEV, not ' + process.env.SOCRATA_ENV)
       }
+
       // Convert selectedSpeed to numeric value
       let speedNumeric = 0
       if (this.selectedSpeed === '200') {
@@ -126,13 +127,14 @@ export default {
       } else if (this.selectedSpeed === '100_10') {
         speedNumeric = 100
       }
+
       axios
       .get(socrataURL, {
         params: {
-          id: id,
-          type: type,
+          id: geoid,
+          type: geogType,
           tech: this.selectedTech,
-          //speed: speedNumeric,
+          // speed: speedNumeric,
           $order: 'speed',
           $$app_token: appToken
         },
@@ -170,7 +172,7 @@ export default {
       // END of "area" table query
 
       // If this is the nationwide view
-      if (id === 0) {
+      if (geoid === 0) {
         this.sidebarTitle = 'Nationwide'
         console.log('TODO: Revert the map back to the national view')
       // Otherwise this is a specific geography the user searched for
@@ -184,8 +186,8 @@ export default {
         axios
         .get(socrataURL, {
           params: {
-            geoid: id,
-            type: type,
+            geoid: geoid,
+            type: geogType,
             $$app_token: appToken
           },
           headers: httpHeaders
@@ -201,12 +203,13 @@ export default {
           this.Map.fitBounds(envArray, {
             animate: false,
             easeTo: true,
-            maxZoom: 14,
             padding: 100
           })
-          // Highlight the selected block
-          // this.Map.setFilter('block-highlighted', ['==', 'block_fips', fipsCode])
-        }.bind(this))
+
+          // Highlight the selected geography type based on geoid
+          this.Map.setFilter(geogType + '-highlighted', ['==', 'geoid', geoid])
+        }
+        .bind(this))
         .catch(function (error) {
           if (error.response) {
             // Server responded with a status code that falls out of the range of 2xx
@@ -259,7 +262,7 @@ export default {
         // Summarize
         for (let sdi in this.socrataData) {
           let sd = this.socrataData[sdi]
-          
+
           if (sd[label_field] === label) {
             chartData.datasets[0].data[li] += parseInt(sd.has_0)
             chartData.datasets[1].data[li] += parseInt(sd.has_1)
@@ -279,7 +282,6 @@ export default {
       return chartData
     },
     calculatePopChartData () {
-
       this.popChartData.datasets = [
         {data: [0, 0, 0, 0, 0]},
         {data: [0, 0, 0, 0, 0]},
@@ -289,24 +291,22 @@ export default {
       this.popChartData = this.aggregate(this.popChartData, 'speed', undefined)
     },
     calculateUrbanRuralChartData () {
-
       this.urbanRuralChartData.datasets = [
         {data: [0, 0]},
         {data: [0, 0]},
         {data: [0, 0]},
         {data: [0, 0]}
       ]
-      this.urbanRuralChartData = this.aggregate(this.urbanRuralChartData, 'urban_rural', {'Urban':'U', 'Rural':'R'})
+      this.urbanRuralChartData = this.aggregate(this.urbanRuralChartData, 'urban_rural', {'Urban': 'U', 'Rural': 'R'})
     },
     calculateTribalChartData () {
-
       this.tribalChartData.datasets = [
         {data: [0, 0]},
         {data: [0, 0]},
         {data: [0, 0]},
         {data: [0, 0]}
       ]
-      this.tribalChartData = this.aggregate(this.tribalChartData, 'tribal_non', {'Tribal':'T', 'Non-tribal':'N'})
+      this.tribalChartData = this.aggregate(this.tribalChartData, 'tribal_non', {'Tribal': 'T', 'Non-tribal': 'N'})
     }
 
   },
