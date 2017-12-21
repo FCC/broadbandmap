@@ -11,12 +11,12 @@ export default {
     let selectedSpeedVal = this.$route.query.selectedSpeed
 
     // If selectedTech is available in URL, use that value
-    if (selectedTechVal !== undefined) {
+    if (selectedTechVal !== undefined && selectedTechVal !== '') {
       this.selectedTechCategories = selectedTechVal.split('')
     }
 
     // If selectedSpeed is available in URL, use that value
-    if (selectedSpeedVal !== undefined) {
+    if (selectedSpeedVal !== undefined && selectedSpeedVal !== '') {
       this.selectedSpeed = selectedSpeedVal
     }
   },

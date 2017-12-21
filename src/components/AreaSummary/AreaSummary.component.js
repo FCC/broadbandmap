@@ -56,6 +56,7 @@ export default {
           // If no tech is selected use default tech and speed settings (calls common function in map-update-layers.js)
           if (this.$route.query.selectedTech === undefined) {
             this.updateTechSpeed(this.defaultTech, this.defaultSpeed)
+            return
           }
 
           // If selectedTech parameter value is in the URL, use that value
@@ -70,10 +71,9 @@ export default {
       })
     },
     validateURL () {
-      // If at least one query param was passed in, but "type" and "geoid" are not valid
-      if (Object.keys(this.$route.query).length && (!this.isValidQueryParam('type') || !this.isValidQueryParam('geoid'))) {
-        // Clear out any URL parameters that may exist (this has no effect if we're already looking at the default national view)
-        this.$router.push('area-summary')
+      // If at least one query param was passed in, but "selectedTech" and "selectedSpeed" are not valid
+      if (Object.keys(this.$route.query).length && (!this.isValidQueryParam('selectedTech') || !this.isValidQueryParam('selectedSpeed'))) {
+        this.updateURLParams()
       }
       // Update charts, map, and sidebar title
       this.fetchAreaData()
