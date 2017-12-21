@@ -17,8 +17,8 @@ export const LayersLocation = [
       visibility: 'visible'
     },
     paint: {
-      'line-color': '#6e599f',
-      'line-width': 7
+      'line-color': '#dd1ee4',
+      'line-width': 4
     },
     'filter': ['in', 'geoid10', '']
   },
@@ -34,8 +34,8 @@ export const LayersLocation = [
       visibility: 'visible'
     },
     paint: {
-      'line-color': '#6e599f',
-      'line-width': 7
+      'line-color': '#dd1ee4',
+      'line-width': 4
     },
     'filter': ['in', 'block_fips', '']
   },
