@@ -22,7 +22,7 @@ export default {
       defaultSpeed: '25_3',
       settlementType: 'Settlement Type',
       popChartData: {
-        labels: ['0.2', '10', '25', '50', '100'],
+        labels: ['0.2', '10/1', '25/3', '50/5', '100/10'],
         datasets: []
       },
       urbanRuralChartData: {
@@ -227,7 +227,7 @@ export default {
         {data: [0, 0, 0, 0, 0]},
         {data: [0, 0, 0, 0, 0]}
       ]
-      this.popChartData = this.aggregate(this.popChartData, 'speed', undefined)
+      this.popChartData = this.aggregate(this.popChartData, 'speed', {'0.2': '0.2', '10/1': '10', '25/3': '25', '50/5': '50', '100/10': '100'})
     },
     calculateUrbanRuralChartData () {
 
