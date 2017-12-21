@@ -6,7 +6,19 @@ export default {
   components: { Modal },
   props: [],
   mounted () {
+    // Get selectedTech and selectedSpeed values from URL query params
+    let selectedTechVal = this.$route.query.selectedTech
+    let selectedSpeedVal = this.$route.query.selectedSpeed
 
+    // If selectedTech is available in URL, use that value
+    if (selectedTechVal !== undefined) {
+      this.selectedTechCategories = selectedTechVal.split('')
+    }
+
+    // If selectedSpeed is available in URL, use that value
+    if (selectedSpeedVal !== undefined) {
+      this.selectedSpeed = selectedSpeedVal
+    }
   },
   data () {
     return {
@@ -89,7 +101,6 @@ export default {
         // set property ID = layer ID + selected speed
         propertyID = [selectedTech, this.selectedSpeed].join('_')
       }
-
       // if no tech or speed selected, remove all tech and speed map layers
       if (propertyID === '') {
         const removeAll = true
