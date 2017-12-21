@@ -1,9 +1,17 @@
 <div class="pg-providerDetails">
   <div class="container-fluid">
     <div class="row">
-      <div class="col-sm-12">
+      <div class="col-sm-9">
         <h1>View Service Provider Details</h1>
       </div>
+    <div class="col-sm-3 provider-title-bar" v-if="showResults">
+      <div class="nav-utility">
+        <!-- <tooltip text="Download data" placement="top">
+          <a href="#"><span class="icon icon-cloud-download"></span><span class="sr-only">Download Data</span></a>
+        </tooltip> -->
+        <bookmark-link></bookmark-link>
+      </div>      
+    </div>      
     </div>
     <div class="row">
       <div class="col-sm-12">
