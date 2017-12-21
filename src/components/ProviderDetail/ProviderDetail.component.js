@@ -6,10 +6,11 @@ import PopulationChart from './PopulationChart'
 import SpeedChart from './SpeedChart'
 import UpSpeedChart from './UpSpeedChart'
 import Autocomplete from '../Autocomplete'
+import BookmarkLink from '../BookmarkLink/'
 
 export default {
   name: 'ProviderDetail',
-  components: { Tooltip, nbMap, PopulationChart, SpeedChart, UpSpeedChart, Autocomplete },
+  components: { Tooltip, nbMap, PopulationChart, SpeedChart, UpSpeedChart, Autocomplete, BookmarkLink },
   props: [],
   mounted () {
     this.loadProviderLookup()

@@ -45,8 +45,8 @@ export const LayersCartographic = [
       visibility: 'visible'
     },
     paint: {
-      'line-color': '#6e599f',
-      'line-width': 7
+      'line-color': '#dd1ee4',
+      'line-width': 4
     },
     'filter': ['in', 'geoid', '']
   },
@@ -78,8 +78,8 @@ export const LayersCartographic = [
       visibility: 'visible'
     },
     paint: {
-      'line-color': '#6e599f',
-      'line-width': 7
+      'line-color': '#dd1ee4',
+      'line-width': 4
     },
     'filter': ['in', 'geoid', '']
   }
