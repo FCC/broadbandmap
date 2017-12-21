@@ -53,12 +53,11 @@ export default {
         30: 'Other',
         60: 'Satellite',
         70: 'Fixed Wireless'
-      },
-      defaultTech: 'acfosw',
-      defaultSpeed: '25_3'
+      }
     }
   },
   mounted () {
+    EventHub.$on('updateAddrSearch', this.updateURLParams)
     EventHub.$on('updateMapSettings', (selectedTech, selectedSpeed) => this.updateTechSpeed(selectedTech, selectedSpeed))
     EventHub.$on('removeLayers', (propertyID, removeAll) => this.removeLayers(propertyID, removeAll))
   },
@@ -68,20 +67,21 @@ export default {
   },
   methods: {
     mapInit (map, mapOptions) {
-      const vm = this
-
       this.Map = map
       this.mapOptions = mapOptions
 
       this.Map.on('style.load', () => {
         // If one or more technologies is selected, then reload the tech/speed layers when the base layer style is changed
         // Need to reload tech/speed layers so the labels will appear on top
-        if (!vm.removeAllLayers) {
+        if (!this.removeAllLayers) {
           // If no tech is selected use default tech and speed settings
-          if (vm.selectedTech === undefined) {
-            vm.updateTechSpeed(vm.defaultTech, vm.defaultSpeed)
-          } else {
-            vm.updateTechSpeed(vm.selectedTech, vm.selectedSpeed)
+          if (this.$route.query.selectedTech === undefined) {
+            this.updateTechSpeed(this.defaultTech, this.defaultSpeed)
+          }
+
+          // If selectedTech parameter value is in the URL, use that value
+          if (this.$route.query.selectedTech !== '') {
+            this.updateTechSpeed(this.$route.query.selectedTech, this.$route.query.selectedSpeed)
           }
         }
         // Trigger reload of highlighted block when base layer style is changed
@@ -92,10 +92,42 @@ export default {
       // If valid latitude and longitude get the FIPS and highlight the census block
       if (this.isValidLatLon(this.$route.query.lat, this.$route.query.lon)) {
         this.getFIPS(this.$route.query.lat.trim(), this.$route.query.lon.trim())
+
       // If invalid lat or lon are passed in, remove from the query string
       } else if (this.$route.query.lat !== undefined || this.$route.query.lon !== undefined) {
-        this.$router.push('location-summary')
+        this.updateURLParams()
+      } else {
+        this.clearProviderTable()
+        this.Map.easeTo({
+          center: this.mapOptions.center,
+          zoom: this.mapOptions.zoom
+        })
       }
+    },
+    updateURLParams () {
+      let routeQueryParams = {}
+
+      // Get existing route query parameters
+      let routeQuery = this.$route.query
+
+      // Get map zoom level
+      let zoomLevel = this.Map.getZoom()
+
+      // Add routeQuery properties to routeQueryParams
+      Object.keys(routeQuery).map(property => {
+        routeQueryParams[property] = routeQuery[property]
+      })
+
+      // Add select tech, selected speed, and zoom to routeQueryParams
+      routeQueryParams.selectedTech = this.selectedTech
+      routeQueryParams.selectedSpeed = this.selectedSpeed
+      routeQueryParams.zoom = zoomLevel
+
+      // Update URL fragment with routeQueryParams
+      this.$router.replace({
+        name: 'LocationSummary',
+        query: routeQueryParams
+      })
     },
     // Called when map is clicked ('map-click' event emitted by NBMap component)
     getLatLon (event) {
@@ -106,12 +138,14 @@ export default {
       this.getFIPS(lat, lon)
 
       // Update URL and query params
-      this.$router.push({
-        path: 'location-summary',
+      this.$router.replace({
+        name: 'LocationSummary',
         query: {
           lat: `${lat}`,
           lon: `${lon}`
         }})
+
+      this.updateURLParams()
     },
     getFIPS (lat, lon) { // Call block API and expect FIPS and bounding box in response
       const blockAPI = 'https://www.broadbandmap.gov/broadbandmap/census/block'
@@ -152,7 +186,6 @@ export default {
       let fipsCode = ''
       let envelope = 0
       let envArray = []
-      let placeName = this.$route.query.place_name
 
       // Get FIPS and envelope from response data
       fipsCode = response.data.Results.block[0].FIPS
@@ -165,12 +198,12 @@ export default {
       this.Map.fitBounds(envArray, {
         animate: false,
         easeTo: true,
-        maxZoom: 14,
         padding: 100
       })
 
       // Highlight the selected block
       this.Map.setFilter('block-highlighted', ['==', 'block_fips', fipsCode])
+      this.Map.setFilter('xlarge-blocks-highlighted', ['==', 'geoid10', fipsCode])
     },
     fetchProviderData (response) {
       let fipsCode = response.data.Results.block[0].FIPS
@@ -232,24 +265,7 @@ export default {
   watch: {
     // When query params change for the same route (URL slug)
     '$route' (to, from) {
-      // If valid latitude and longitude get the FIPS and highlight the census block
-      if (this.isValidLatLon(to.query.lat, to.query.lon)) {
-        let lat = parseFloat(to.query.lat.trim())
-        let lon = parseFloat(to.query.lon.trim())
-
-        this.getFIPS(lat, lon)
-
-      // If lat or lon become invalid, remove from the query string
-      } else if (this.$route.query.lat !== undefined || this.$route.query.lon !== undefined) {
-        this.$router.push('location-summary')
-      // Otherwise fly to national view
-      } else {
-        this.clearProviderTable()
-        this.Map.easeTo({
-          center: this.mapOptions.center,
-          zoom: this.mapOptions.zoom
-        })
-      }
+      this.validateURL()
     }
   }
 }

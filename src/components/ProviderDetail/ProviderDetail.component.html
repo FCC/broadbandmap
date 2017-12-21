@@ -1,9 +1,17 @@
 <div class="pg-providerDetails">
   <div class="container-fluid">
     <div class="row">
-      <div class="col-sm-12">
+      <div class="col-sm-9">
         <h1>View Service Provider Details</h1>
       </div>
+    <div class="col-sm-3 provider-title-bar" v-if="showResults">
+      <div class="nav-utility">
+        <!-- <tooltip text="Download data" placement="top">
+          <a href="#"><span class="icon icon-cloud-download"></span><span class="sr-only">Download Data</span></a>
+        </tooltip> -->
+        <bookmark-link></bookmark-link>
+      </div>      
+    </div>      
     </div>
     <div class="row">
       <div class="col-sm-12">
@@ -36,8 +44,8 @@
         <div class="col-sm-4">
           <div class="btn-speedType"><span>Speed:</span>
             <div class="btn-group" role="group" aria-label="Select download or upload speed.">
-              <button type="button" id="d-button" class="btn btn-default" :disabled="direction === 'd'" @click.prevent="setD">Download</button>
-              <button type="button" id="u-button" class="btn btn-default" :disabled="direction === 'u'" @click.prevent="setU">Upload</button>
+              <button type="button" id="d-button" class="btn btn-default" v-bind:class="{active: direction === 'd'}" @click.prevent="setD">Download</button>
+              <button type="button" id="u-button" class="btn btn-default" v-bind:class="{active: direction === 'u'}" @click.prevent="setU">Upload</button>
             </div>
           </div>
         </div>                                                                                             
@@ -74,9 +82,9 @@
                 </div>
                 <div class="col-sm-4">
                   <div class="nav-utility">
-                    <tooltip text="Download data" placement="top">
+                    <!-- <tooltip text="Download data" placement="top">
                       <a href="#"><span class="icon icon-cloud-download"></span><span class="sr-only">Download Data</span></a>
-                    </tooltip>
+                    </tooltip> -->
                     <tooltip text="About this map" placement="top">
                       <a href="#"><span class="icon icon-info-circle" data-toggle="tooltip" data-placement="top" title="" data-original-title="About"></span><span class="sr-only">About this map</span></a>
                     </tooltip>
@@ -103,9 +111,9 @@
                 </div>
                 <div class="col-sm-6">
                   <div class="nav-utility">
-                    <tooltip text="Download data" placement="top">
+                    <!-- <tooltip text="Download data" placement="top">
                       <a href="#"><span class="icon icon-cloud-download"></span><span class="sr-only">Download Data</span></a>
-                    </tooltip>
+                    </tooltip> -->
                     <tooltip text="About this map" placement="top">
                       <a href="#"><span class="icon icon-info-circle" data-toggle="tooltip" data-placement="top" title="" data-original-title="About"></span><span class="sr-only">About this map</span></a>
                     </tooltip>
@@ -130,9 +138,9 @@
                 </div>
                 <div class="col-sm-6">
                   <div class="nav-utility">
-                    <tooltip text="Download data" placement="top">
+                    <!-- <tooltip text="Download data" placement="top">
                       <a href="#"><span class="icon icon-cloud-download"></span><span class="sr-only">Download Data</span></a>
-                    </tooltip>
+                    </tooltip> -->
                     <tooltip text="About this map" placement="top">
                       <a href="#"><span class="icon icon-info-circle" data-toggle="tooltip" data-placement="top" title="" data-original-title="About"></span><span class="sr-only">About this map</span></a>
                     </tooltip>
@@ -155,9 +163,9 @@
                 </div>
                 <div class="col-sm-6">
                   <div class="nav-utility">
-                    <tooltip text="Download data" placement="top">
+                    <!-- <tooltip text="Download data" placement="top">
                       <a href="#"><span class="icon icon-cloud-download"></span><span class="sr-only">Download Data</span></a>
-                    </tooltip>
+                    </tooltip> -->
                     <tooltip text="About this map" placement="top">
                       <a href="#"><span class="icon icon-info-circle" data-toggle="tooltip" data-placement="top" title="" data-original-title="About"></span><span class="sr-only">About this map</span></a>
                     </tooltip>
@@ -182,9 +190,9 @@
                 </div>
                 <div class="col-sm-6">
                   <div class="nav-utility">
-                    <tooltip text="Download data" placement="top">
+                    <!-- <tooltip text="Download data" placement="top">
                       <a href="#"><span class="icon icon-cloud-download"></span><span class="sr-only">Download Data</span></a>
-                    </tooltip>
+                    </tooltip> -->
                     <tooltip text="About this map" placement="top">
                       <a href="#"><span class="icon icon-info-circle" data-toggle="tooltip" data-placement="top" title="" data-original-title="About"></span><span class="sr-only">About this map</span></a>
                     </tooltip>
@@ -207,9 +215,9 @@
                 </div>
                 <div class="col-sm-6">
                   <div class="nav-utility">
-                    <tooltip text="Download data" placement="top">
+                    <!-- <tooltip text="Download data" placement="top">
                       <a href="#"><span class="icon icon-cloud-download"></span><span class="sr-only">Download Data</span></a>
-                    </tooltip>
+                    </tooltip> -->
                     <tooltip text="About this map" placement="top">
                       <a href="#"><span class="icon icon-info-circle" data-toggle="tooltip" data-placement="top" title="" data-original-title="About"></span><span class="sr-only">About this map</span></a>
                     </tooltip>
@@ -234,9 +242,9 @@
                 </div>
                 <div class="col-sm-6">
                   <div class="nav-utility">
-                    <tooltip text="Download data" placement="top">
+                    <!-- <tooltip text="Download data" placement="top">
                       <a href="#"><span class="icon icon-cloud-download"></span><span class="sr-only">Download Data</span></a>
-                    </tooltip>
+                    </tooltip> -->
                     <tooltip text="About this map" placement="top">
                       <a href="#"><span class="icon icon-info-circle" data-toggle="tooltip" data-placement="top" title="" data-original-title="About"></span><span class="sr-only">About this map</span></a>
                     </tooltip>
@@ -259,9 +267,9 @@
                 </div>
                 <div class="col-sm-6">
                   <div class="nav-utility">
-                    <tooltip text="Download data" placement="top">
+                    <!-- <tooltip text="Download data" placement="top">
                       <a href="#"><span class="icon icon-cloud-download"></span><span class="sr-only">Download Data</span></a>
-                    </tooltip>
+                    </tooltip> -->
                     <tooltip text="About this map" placement="top">
                       <a href="#"><span class="icon icon-info-circle" data-toggle="tooltip" data-placement="top" title="" data-original-title="About"></span><span class="sr-only">About this map</span></a>
                     </tooltip>

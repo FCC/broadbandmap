@@ -20,6 +20,23 @@ export const LayersArea = [
     }
   },
   {
+    id: 'place-highlighted',
+    source: {
+      type: 'vector',
+      url: 'mapbox://fcc.6pgpraox'
+    },
+    type: 'line',
+    'source-layer': 'nbm2_place2016geojson',
+    layout: {
+      visibility: 'visible'
+    },
+    paint: {
+      'line-color': '#dd1ee4',
+      'line-width': 4
+    },
+    'filter': ['in', 'geoid', '']
+  },
+  {
     id: 'cd',
     source: {
       type: 'vector',
@@ -35,7 +52,24 @@ export const LayersArea = [
     }
   },
   {
-    id: 'tribe',
+    id: 'cd-highlighted',
+    source: {
+      type: 'vector',
+      url: 'mapbox://fcc.ao2kqazm'
+    },
+    type: 'line',
+    'source-layer': 'nbm2_county2016geojson',
+    layout: {
+      visibility: 'visible'
+    },
+    paint: {
+      'line-color': '#dd1ee4',
+      'line-width': 4
+    },
+    'filter': ['in', 'geoid', '']
+  },
+  {
+    id: 'tribal',
     source: {
       type: 'vector',
       url: 'mapbox://fcc.26rqlqpa'
@@ -50,7 +84,24 @@ export const LayersArea = [
     }
   },
   {
-    id: 'cbsa',
+    id: 'tribal-highlighted',
+    source: {
+      type: 'vector',
+      url: 'mapbox://fcc.26rqlqpa'
+    },
+    type: 'line',
+    'source-layer': 'nbm2_tribe2016geojson',
+    layout: {
+      visibility: 'visible'
+    },
+    paint: {
+      'line-color': '#dd1ee4',
+      'line-width': 4
+    },
+    'filter': ['in', 'geoid', '']
+  },
+  {
+    id: 'cbsa-highlighted',
     source: {
       type: 'vector',
       url: 'mapbox://fcc.a7r386t6'
@@ -61,7 +112,9 @@ export const LayersArea = [
       visibility: 'visible'
     },
     paint: {
-      'line-color': '#ffffff'
-    }
+      'line-color': '#dd1ee4',
+      'line-width': 4
+    },
+    'filter': ['in', 'geoid', '']
   }
 ]

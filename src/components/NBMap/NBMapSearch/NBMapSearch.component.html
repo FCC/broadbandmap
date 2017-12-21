@@ -1,4 +1,4 @@
-<div class="row">
+<div class="row map-search">
   <div class="col-sm-12 col-lg-10">
     <!-- Search wrapper -->
     <div class="search-wrapper input-group input-group-lg">
@@ -28,7 +28,13 @@
         <div></div>
       </div>
       <div class="map-settings input-group-btn">
-        <dropdown :menu-right="true">
+        <tooltip text="Settings" trigger="hover" placement="bottom">
+          <button class="btn-settings btn btn-default btn-lg" type="button" @click.prevent="openMapSettings">
+            <span class="icon icon-cog" data-toggle="tooltip" data-placement="top" title="Map Settings"></span>
+            <span class="sr-only">Settings</span>              
+          </button>
+        </tooltip>
+        <!-- <dropdown :menu-right="true">
           <tooltip text="Map settings" trigger="hover" placement="left">
             <button class="btn-settings btn btn-default btn-lg dropdown-toggle" data-role="trigger" aria-haspopup="true" aria-expanded="false" type="button">
               <span class="icon icon-cog" data-toggle="tooltip" data-placement="top" title="Map Settings"></span>
@@ -41,8 +47,8 @@
             <li><a href="#">Appearance</a></li>
             <li><a href="#">Controls</a></li>
           </template>
-        </dropdown>
-        <tooltip text="About this map" trigger="hover" placement="right">
+        </dropdown> -->
+        <tooltip text="About this map" trigger="hover" placement="bottom">
           <button class="btn btn-default btn-lg" type="button">
             <span class="icon icon-info-circle"></span>
           </button>

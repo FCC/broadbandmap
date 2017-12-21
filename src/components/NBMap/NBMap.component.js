@@ -4,7 +4,6 @@ import nbMapSearch from './NBMapSearch/'
 import EventHub from '../../_mixins/EventHub.js'
 import { LayersLocation } from './layers-location.js'
 import { LayersArea } from './layers-area.js'
-import { LayersProvider } from './layers-provider.js'
 
 import { urlValidation } from '../../_mixins/urlValidation.js'
 

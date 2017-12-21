@@ -6,6 +6,23 @@ let [blockLayer, ...layersCarto] = LayersCartographic
 export const LayersLocation = [
   blockLayer,
   {
+    id: 'xlarge-blocks-highlighted',
+    source: {
+      type: 'vector',
+      url: 'mapbox://fcc.xlarge_blocks'
+    },
+    type: 'line',
+    'source-layer': 'xlarge_blocks',
+    layout: {
+      visibility: 'visible'
+    },
+    paint: {
+      'line-color': '#dd1ee4',
+      'line-width': 4
+    },
+    'filter': ['in', 'geoid10', '']
+  },
+  {
     id: 'block-highlighted',
     source: {
       type: 'vector',
@@ -17,10 +34,10 @@ export const LayersLocation = [
       visibility: 'visible'
     },
     paint: {
-      'line-color': '#6e599f',
-      'line-width': 7
+      'line-color': '#dd1ee4',
+      'line-width': 4
     },
-    'filter': ['in', 'bbox_arr', '']
+    'filter': ['in', 'block_fips', '']
   },
   ...layersCarto
 ]

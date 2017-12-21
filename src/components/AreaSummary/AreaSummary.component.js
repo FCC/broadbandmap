@@ -18,8 +18,6 @@ export default {
     return {
       socrataData: [],
       showCharts: false,
-      defaultTech: 'acfosw',
-      defaultSpeed: '25_3',
       settlementType: 'Settlement Type',
       popChartData: {
         labels: ['0.2', '10/1', '25/3', '50/5', '100/10'],
@@ -33,13 +31,13 @@ export default {
         labels: ['Tribal', 'Non-tribal'],
         datasets: []
       },
-      chartStyles: {width: 'auto', height: '350px'}
+      chartStyles: {width: 'auto', height: '350px'},
+      sidebarTitle: ''
     }
   },
   mounted () {
-    EventHub.$on('updateMapSettings', function (selectedTech, selectedSpeed) {
-      this.updateTechSpeed(selectedTech, selectedSpeed) // calls common function in map-update-layers.js
-    }.bind(this))
+    EventHub.$on('updateGeogSearch', this.updateURLParams)
+    EventHub.$on('updateMapSettings', (selectedTech, selectedSpeed) => this.updateTechSpeed(selectedTech, selectedSpeed))
     EventHub.$on('removeLayers', (propertyID, removeAll) => this.removeLayers(propertyID, removeAll))
   },
   destroyed () {
@@ -48,56 +46,85 @@ export default {
   },
   methods: {
     mapInit (map, mapOptions) {
-      const vm = this
-
       this.Map = map
       this.mapOptions = mapOptions
 
       this.Map.on('style.load', () => {
         // If one or more technologies is selected, then reload the tech/speed layers when the base layer style is changed
         // Need to reload tech/speed layers so the labels will appear on top
-        if (!vm.removeAllLayers) {
+        if (!this.removeAllLayers) {
           // If no tech is selected use default tech and speed settings (calls common function in map-update-layers.js)
-          if (vm.selectedTech === undefined) {
-            vm.updateTechSpeed(vm.defaultTech, vm.defaultSpeed)
+          if (this.$route.query.selectedTech === undefined) {
+            this.updateTechSpeed(this.defaultTech, this.defaultSpeed)
+            return
+          }
+
+          // If selectedTech parameter value is in the URL, use that value
+          if (this.$route.query.selectedTech !== '') {
+            this.updateTechSpeed(this.$route.query.selectedTech, this.$route.query.selectedSpeed)
           } else {
-            vm.updateTechSpeed(vm.selectedTech, vm.selectedSpeed)
+            this.fetchAreaData()
           }
         }
+
+        this.validateURL()
       })
     },
     validateURL () {
-      // If at least one query param was passed in, but "type" and "geoid" are not valid
-      if (Object.keys(this.$route.query).length && (!this.isValidQueryParam('type') || !this.isValidQueryParam('geoid'))) {
-        // Clear out any URL parameters that may exist (this has no effect if we're already looking at the default national view)
-        this.$router.push('area-summary')
-        // Prevent duplicate call
-        return
+      // If at least one query param was passed in, but "selectedTech" and "selectedSpeed" are not valid
+      if (Object.keys(this.$route.query).length && (!this.isValidQueryParam('selectedTech') || !this.isValidQueryParam('selectedSpeed'))) {
+        this.updateURLParams()
       }
+      // Update charts, map, and sidebar title
       this.fetchAreaData()
+    },
+    updateURLParams () {
+      let routeQueryParams = {}
+
+      // Get existing route query parameters
+      let routeQuery = this.$route.query
+
+      // Get map zoom level
+      let zoomLevel = this.Map.getZoom()
+
+      // Add routeQuery properties to routeQueryParams
+      Object.keys(routeQuery).map(property => {
+        routeQueryParams[property] = routeQuery[property]
+      })
+
+      // Add select tech, selected speed, and zoom to routeQueryParams
+      routeQueryParams.selectedTech = this.selectedTech
+      routeQueryParams.selectedSpeed = this.selectedSpeed
+      // routeQueryParams.zoom = zoomLevel
+
+      // Update URL fragment with routeQueryParams
+      this.$router.replace({
+        name: 'AreaSummary',
+        query: routeQueryParams
+      })
     },
     fetchAreaData () {
       const self = this
 
+      // Hide charts before data refreshes
       this.showCharts = false
 
-      let type = ''
-      let id = 0
-      let isValidType = ['state', 'county', 'place', 'cbsa', 'district', 'tribal'].indexOf(this.$route.query.type) !== -1
+      // Set defaults
+      let geogType = 'nation'
+      let geoid = 0
+      let isValidType = ['state', 'county', 'place', 'cbsa', 'cdist', 'tribal'].indexOf(this.$route.query.type) !== -1
+
       // If the geoid and geography type are in the query string, use those
       if (typeof this.$route.query.type !== 'undefined' && isValidType && typeof this.$route.query.geoid !== 'undefined') {
-        type = this.$route.query.type
-        id = this.$route.query.geoid
-      // Set defaults
-      } else {
-        type = 'nation'
-        id = 0
+        geogType = this.$route.query.type
+        geoid = this.$route.query.geoid
       }
 
       // Call Socrata API - Area table for charts
       let socrataURL = ''
       let appToken = ''
       let httpHeaders = {}
+
       if (process.env.SOCRATA_ENV === 'DEV') {
         socrataURL = process.env.SOCRATA_DEV_AREA
         httpHeaders = {
@@ -111,6 +138,7 @@ export default {
       } else {
         console.log('ERROR: process.env.SOCRATA_ENV in .env file must be PROD or DEV, not ' + process.env.SOCRATA_ENV)
       }
+
       // Convert selectedSpeed to numeric value
       let speedNumeric = 0
       if (this.selectedSpeed === '200') {
@@ -124,20 +152,21 @@ export default {
       } else if (this.selectedSpeed === '100_10') {
         speedNumeric = 100
       }
+
       axios
       .get(socrataURL, {
         params: {
-          id: id,
-          type: type,
+          id: geoid,
+          type: geogType,
           tech: this.selectedTech,
-          //speed: speedNumeric,
+          // speed: speedNumeric,
           $order: 'speed',
           $$app_token: appToken
         },
         headers: httpHeaders
       })
       .then(function (response) {
-        console.log('Socrata AREA table response= ', response)
+        // console.log('Socrata AREA table response= ', response)
         self.socrataData = response.data
 
         if (self.socrataData.length > 0) {
@@ -165,6 +194,64 @@ export default {
         }
         console.log(error)
       })
+      // END of "area" table query
+
+      // If this is the nationwide view
+      if (geoid === 0) {
+        this.sidebarTitle = 'Nationwide'
+        // console.log('TODO: Revert the map back to the national view')
+      // Otherwise this is a specific geography the user searched for
+      } else {
+        // Query lookup table for this specific geography
+        if (process.env.SOCRATA_ENV === 'DEV') {
+          socrataURL = process.env.SOCRATA_DEV_LOOKUP
+        } else if (process.env.SOCRATA_ENV === 'PROD') {
+          socrataURL = process.env.SOCRATA_PROD_LOOKUP
+        }
+        axios
+        .get(socrataURL, {
+          params: {
+            geoid: geoid,
+            type: geogType,
+            $$app_token: appToken
+          },
+          headers: httpHeaders
+        })
+        .then(function (response) {
+          // console.log('Socrata GEOGRAPHY DETAILS query response= ', response)
+          // Display name of searched geography
+          this.sidebarTitle = response.data[0].name
+          // Get lat/lon pair
+          let bbox = response.data[0].bbox_arr.replace(/{/g, '').replace(/}/g, '')
+          let envArray = bbox.split(',')
+          // Zoom and center map to envelope
+          this.Map.fitBounds(envArray, {
+            animate: false,
+            easeTo: true,
+            padding: 100
+          })
+
+          // Highlight the selected geography type based on geoid
+          this.Map.setFilter(geogType + '-highlighted', ['==', 'geoid', geoid])
+        }
+        .bind(this))
+        .catch(function (error) {
+          if (error.response) {
+            // Server responded with a status code that falls out of the range of 2xx
+            console.log(error.response.data)
+            console.log(error.response.status)
+            console.log(error.response.headers)
+          } else if (error.request) {
+            // Request was made but no response was received
+            console.log(error.request)
+          } else {
+            // Something happened in setting up the request that triggered an Error
+            console.log('Error', error.message)
+          }
+          console.log(error)
+        })
+        // END of query to lookup table
+      }
     },
     dedupSocrataData () {
       let dedupList = []
@@ -200,7 +287,7 @@ export default {
         // Summarize
         for (let sdi in this.socrataData) {
           let sd = this.socrataData[sdi]
-          
+
           if (sd[label_field] === label) {
             chartData.datasets[0].data[li] += parseInt(sd.has_0)
             chartData.datasets[1].data[li] += parseInt(sd.has_1)
@@ -220,7 +307,6 @@ export default {
       return chartData
     },
     calculatePopChartData () {
-
       this.popChartData.datasets = [
         {data: [0, 0, 0, 0, 0]},
         {data: [0, 0, 0, 0, 0]},
@@ -230,24 +316,22 @@ export default {
       this.popChartData = this.aggregate(this.popChartData, 'speed', {'0.2': '0.2', '10/1': '10', '25/3': '25', '50/5': '50', '100/10': '100'})
     },
     calculateUrbanRuralChartData () {
-
       this.urbanRuralChartData.datasets = [
         {data: [0, 0]},
         {data: [0, 0]},
         {data: [0, 0]},
         {data: [0, 0]}
       ]
-      this.urbanRuralChartData = this.aggregate(this.urbanRuralChartData, 'urban_rural', {'Urban':'U', 'Rural':'R'})
+      this.urbanRuralChartData = this.aggregate(this.urbanRuralChartData, 'urban_rural', {'Urban': 'U', 'Rural': 'R'})
     },
     calculateTribalChartData () {
-
       this.tribalChartData.datasets = [
         {data: [0, 0]},
         {data: [0, 0]},
         {data: [0, 0]},
         {data: [0, 0]}
       ]
-      this.tribalChartData = this.aggregate(this.tribalChartData, 'tribal_non', {'Tribal':'T', 'Non-tribal':'N'})
+      this.tribalChartData = this.aggregate(this.tribalChartData, 'tribal_non', {'Tribal': 'T', 'Non-tribal': 'N'})
     }
 
   },

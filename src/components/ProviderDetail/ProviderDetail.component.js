@@ -6,10 +6,11 @@ import PopulationChart from './PopulationChart'
 import SpeedChart from './SpeedChart'
 import UpSpeedChart from './UpSpeedChart'
 import Autocomplete from '../Autocomplete'
+import BookmarkLink from '../BookmarkLink/'
 
 export default {
   name: 'ProviderDetail',
-  components: { Tooltip, nbMap, PopulationChart, SpeedChart, UpSpeedChart, Autocomplete },
+  components: { Tooltip, nbMap, PopulationChart, SpeedChart, UpSpeedChart, Autocomplete, BookmarkLink },
   props: [],
   mounted () {
     this.loadProviderLookup()
@@ -28,7 +29,8 @@ export default {
       techChartData: {},
       hoconum2Name: {},
       name2Hoconum: {},
-      searchType: 'Provider'
+      searchType: 'Provider',
+      layerColors: ['#ff848b', '#838eff', '#ffff95']
     }
   },
   methods: {
@@ -62,6 +64,7 @@ export default {
           self.hoconum2Name[response.data[rdi].hoconum] = response.data[rdi].holdingcompanyname
           self.name2Hoconum[response.data[rdi].holdingcompanyname] = response.data[rdi].hoconum
         }
+        self.loadParamsFromUrl()
       })
       .catch(function (error) {
         if (error.response) {
@@ -123,6 +126,67 @@ export default {
       // Fetch provider data
       this.fetchProviderData()
     },
+    updateMap (map) {
+      map.on('style.load', () => {
+        // Add a layer for each hoconum
+        this.providerHoconums.forEach((hoconum, index) => {
+          // Template for layer style
+          let layerStyle = {
+            id: '',
+            source: {
+              type: 'vector',
+              url: ''
+            },
+            type: 'fill',
+            'source-layer': '',
+            layout: {
+              visibility: 'visible'
+            },
+            paint: {
+              'fill-color': {
+                base: 1,
+                type: 'categorical',
+                property: 'hoconum',
+                stops: [
+                  ['130077', 'hsl(249, 86%, 56%)'],
+                  ['130317', 'hsl(359, 84%, 62%)']
+                ],
+                default: 'hsla(112, 93%, 71%, 0)'
+              },
+              'fill-opacity': 0.5,
+              'fill-color': this.layerColors[index]
+            },
+            'filter': ['in', 'hoconum', hoconum]
+          }
+
+          let layerLargeProv = {
+            id: 'large_prov_' + hoconum,
+            source: {
+              type: 'vector',
+              url: 'mapbox://fcc.prov_large_d16_v1'
+            },
+            'source-layer': 'large_prov'
+          }
+
+          let layerProvOther = {
+            id: 'prov_other_' + hoconum,
+            source: {
+              type: 'vector',
+              url: 'mapbox://fcc.prov_other_d16_v1'
+            },
+            'source-layer': 'other_prov'
+          }
+
+          // Merge layer style properties
+          let lyrLargeProv = Object.assign({}, layerStyle, layerLargeProv)
+          let lyrProvOther = Object.assign({}, layerStyle, layerProvOther)
+
+          // Add layer to map
+          map.addLayer(lyrProvOther, 'block')
+          map.addLayer(lyrLargeProv, 'block')
+        })
+      })
+    },
     // Call Socrata API - Lookup Table for geographies
     fetchProviderData () {
       const self = this
@@ -164,6 +228,7 @@ export default {
         self.providerData = response.data
 
         self.calculateChartData()
+        self.updateUrlParams()
 
         // Display charts section
         self.showResults = true
@@ -171,7 +236,15 @@ export default {
         // Resize the map once the charts section is visible
         setTimeout(() => {
           self.Map.resize()
+          self.updateMap(self.Map)
         }, 100)
+
+        let providerBox = self.$refs.providerBox
+        // Populate list of provider Names
+        for (let pbi in providerBox) {
+          providerBox[pbi].typeaheadModel = {'holdingcompanyname': self.providerNames[pbi]}
+        }
+
       })
       .catch(function (error) {
         if (error.response) {
@@ -193,6 +266,7 @@ export default {
       let usPopulation = process.env.US_POPULATION
 
       let directions = ['u', 'd']
+      let collapsed = this.collapseTech(this.providerData)
 
       for (let di in ['u', 'd']) {
         let drct = directions[di]
@@ -212,31 +286,33 @@ export default {
           }
         }
 
-        let collapsed = this.collapseTech(this.providerData)
-
         this.techChartData[drct] = {}
 
-        for (let ci in collapsed) {
-          let count = 8
-          if (drct === 'u') {
-            count = 10
-          }
+        for (let hcni in this.providerHoconums) {
+          for (let ci in collapsed) {
+            if (collapsed[ci].hoconum === this.providerHoconums[hcni]) {
+              let count = 8
+              if (drct === 'u') {
+                count = 10
+              }
 
-          let cData = []
-          cData[0] = 100.0
-          for (let i = 1; i < count; i++) {
-            cData[i] = 100.0 * parseFloat(collapsed[ci][drct + '_' + i.toString()]) / parseFloat(collapsed[ci][drct + '_1'])
-          }
+              let cData = []
+              cData[0] = 100.0
+              for (let i = 1; i < count; i++) {
+                cData[i] = 100.0 * parseFloat(collapsed[ci][drct + '_' + i.toString()]) / parseFloat(collapsed[ci][drct + '_1'])
+              }
 
-          let series = {
-            label: this.getNameByHoconum(collapsed[ci].hoconum),
-            data: cData
-          }
+              let series = {
+                label: this.getNameByHoconum(collapsed[ci].hoconum),
+                data: cData
+              }
 
-          if (!this.techChartData[drct][collapsed[ci].tech]) {
-            this.techChartData[drct][collapsed[ci].tech] = []
+              if (!this.techChartData[drct][collapsed[ci].tech]) {
+                this.techChartData[drct][collapsed[ci].tech] = []
+              }
+              this.techChartData[drct][collapsed[ci].tech].push(series)
+            }
           }
-          this.techChartData[drct][collapsed[ci].tech].push(series)
         }
       }
     },
@@ -258,7 +334,7 @@ export default {
         }
 
         if (!found) {
-          let od = data[di]
+          let od = Object.assign({}, data[di])
           od.tech = this.getTechNameByCode(od.tech)
           outData.push(od)
         }
@@ -290,7 +366,59 @@ export default {
       if (code === '60') return 'satellite'
       if (code === '70') return 'fixedWireless'
       return 'other'
-    }
+    },
+    updateUrlParams () {
+      let routeQ = this.$route.query
+
+      let routeQP = {}
+      Object.keys(routeQ).map(prop => {
+        routeQP[prop] = routeQ[prop]
+      })
+
+      let hoconums = ''
+      for (let hci in this.providerHoconums) {
+        hoconums += this.providerHoconums[hci] + ","
+      }
+      hoconums = hoconums.replace(/,\s*$/, '')
+
+      routeQP.hoconums = hoconums
+
+      this.$router.replace({
+        name: 'ProviderDetail',
+        query: routeQP
+      })
+    },
+    loadParamsFromUrl () {
+      let routeQ = this.$route.query
+
+      let routeQP = {}
+      Object.keys(routeQ).map(prop => {
+        routeQP[prop] = routeQ[prop]
+      })
+
+      if (routeQP.hoconums) {
+        this.providerHoconums = routeQP.hoconums.split(',')
+
+        this.numProviders = 0
+        this.providers = []
+
+        for (let hcni in this.providerHoconums) {
+
+          let newProvider = {
+            id: Date.now(),
+            provider: this.getNameByHoconum(this.providerHoconums[hcni])
+          }
+
+          this.numProviders++
+          this.providers.push(newProvider)
+          this.providerNames.push(this.getNameByHoconum(this.providerHoconums[hcni]))
+
+          // Show the 'Add Provider' link
+          this.showLink = this.numProviders !== 3
+        }
+        this.fetchProviderData()
+      }
+    }   
   },
   computed: {
     getPlaceholderText: function () {

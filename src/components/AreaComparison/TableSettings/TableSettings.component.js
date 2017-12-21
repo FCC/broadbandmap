@@ -2,23 +2,11 @@ import EventHub from '../../../_mixins/EventHub.js'
 import { Modal } from 'uiv'
 
 export default {
-  name: 'MapSettings',
+  name: 'TableSettings',
   components: { Modal },
   props: [],
   mounted () {
-    // Get selectedTech and selectedSpeed values from URL query params
-    let selectedTechVal = this.$route.query.selectedTech
-    let selectedSpeedVal = this.$route.query.selectedSpeed
 
-    // If selectedTech is available in URL, use that value
-    if (selectedTechVal !== undefined && selectedTechVal !== '') {
-      this.selectedTechCategories = selectedTechVal.split('')
-    }
-
-    // If selectedSpeed is available in URL, use that value
-    if (selectedSpeedVal !== undefined && selectedSpeedVal !== '') {
-      this.selectedSpeed = selectedSpeedVal
-    }
   },
   data () {
     return {
@@ -76,7 +64,7 @@ export default {
     }
   },
   created () {
-    EventHub.$on('openMapSettings', function () {
+    EventHub.$on('openTableSettings', function () {
       this.showModal = true
     }.bind(this))
   },
@@ -101,14 +89,15 @@ export default {
         // set property ID = layer ID + selected speed
         propertyID = [selectedTech, this.selectedSpeed].join('_')
       }
+
       // if no tech or speed selected, remove all tech and speed map layers
       if (propertyID === '') {
         const removeAll = true
-        EventHub.$emit('removeLayers', this.selectedPropertyID, removeAll)
+        EventHub.$emit('removeTableData', this.selectedPropertyID, removeAll)
       } else {
         this.selectedPropertyID = propertyID
         // Send technologies & speed to LocationSummary and AreaSummary components
-        EventHub.$emit('updateMapSettings', selectedTech, this.selectedSpeed)
+        EventHub.$emit('updateTableSettings', selectedTech, this.selectedSpeed)
       }
     },
     closeModal () {
