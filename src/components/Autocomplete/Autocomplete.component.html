@@ -11,13 +11,13 @@
         :open-on-focus="true"
         >
         <!-- Override the input template -->
-        <input id="addr" data-role="input" class="form-control input-lg" type="search" :placeholder="placeholderText" autocomplete="off" @keydown.prevent.enter="enterClicked" :disabled="typeaheadModel === 'Nationwide'">
+        <input id="addr" data-role="input" class="form-control input-lg" type="search" :placeholder="placeholderText" autocomplete="off" @keydown.prevent.enter="enterClicked" :readonly="typeaheadModel === 'Nationwide'">
         <!-- Override the typeahead template -->
         <template slot="item" slot-scope="props">
             <!-- Iterate through each address returned -->
             <li v-for="(item, index) in props.items" :class="{active:props.activeIndex===index}">
                 <!-- Link to this address -->
-                <a href="javascript:void(0)" @click="props.select(item)">
+                <a href="javascript:void(0)" @click="enterClicked(props.select(item))">
                     <!-- Highlight search keywords in this item -->
                     <span v-html="props.highlight(item)"></span>
                 </a>

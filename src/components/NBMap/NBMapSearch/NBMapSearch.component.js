@@ -84,6 +84,11 @@ export default {
     getPlaceholderText: function () {
       let srchType = this.searchTypes[this.type][this.searchType]
 
+      // Clear the search box when switching between search types
+      if (this.$refs.hasOwnProperty('autocomplete2')) {
+        this.$refs.autocomplete2.typeaheadModel = ''
+      }
+
       return srchType.hasOwnProperty('placeholderText') ? srchType.placeholderText : 'Enter ' + srchType.label
     },
     getTooltipText: function () {
