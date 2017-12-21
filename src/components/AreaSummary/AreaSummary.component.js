@@ -18,11 +18,9 @@ export default {
     return {
       socrataData: [],
       showCharts: false,
-      defaultTech: 'acfosw',
-      defaultSpeed: '25_3',
       settlementType: 'Settlement Type',
       popChartData: {
-        labels: ['0.2', '10', '25', '50', '100'],
+        labels: ['0.2', '10/1', '25/3', '50/5', '100/10'],
         datasets: []
       },
       urbanRuralChartData: {
@@ -38,9 +36,8 @@ export default {
     }
   },
   mounted () {
-    EventHub.$on('updateMapSettings', function (selectedTech, selectedSpeed) {
-      this.updateTechSpeed(selectedTech, selectedSpeed) // calls common function in map-update-layers.js
-    }.bind(this))
+    EventHub.$on('updateGeogSearch', this.updateURLParams)
+    EventHub.$on('updateMapSettings', (selectedTech, selectedSpeed) => this.updateTechSpeed(selectedTech, selectedSpeed))
     EventHub.$on('removeLayers', (propertyID, removeAll) => this.removeLayers(propertyID, removeAll))
   },
   destroyed () {
@@ -49,34 +46,62 @@ export default {
   },
   methods: {
     mapInit (map, mapOptions) {
-      const vm = this
-
       this.Map = map
       this.mapOptions = mapOptions
 
       this.Map.on('style.load', () => {
         // If one or more technologies is selected, then reload the tech/speed layers when the base layer style is changed
         // Need to reload tech/speed layers so the labels will appear on top
-        if (!vm.removeAllLayers) {
+        if (!this.removeAllLayers) {
           // If no tech is selected use default tech and speed settings (calls common function in map-update-layers.js)
-          if (vm.selectedTech === undefined) {
-            vm.updateTechSpeed(vm.defaultTech, vm.defaultSpeed)
+          if (this.$route.query.selectedTech === undefined) {
+            this.updateTechSpeed(this.defaultTech, this.defaultSpeed)
+            return
+          }
+
+          // If selectedTech parameter value is in the URL, use that value
+          if (this.$route.query.selectedTech !== '') {
+            this.updateTechSpeed(this.$route.query.selectedTech, this.$route.query.selectedSpeed)
           } else {
-            vm.updateTechSpeed(vm.selectedTech, vm.selectedSpeed)
+            this.fetchAreaData()
           }
         }
+
+        this.validateURL()
       })
     },
     validateURL () {
-      // If at least one query param was passed in, but "type" and "geoid" are not valid
-      if (Object.keys(this.$route.query).length && (!this.isValidQueryParam('type') || !this.isValidQueryParam('geoid'))) {
-        // Clear out any URL parameters that may exist (this has no effect if we're already looking at the default national view)
-        this.$router.push('area-summary')
-        // Prevent duplicate call
-        return
+      // If at least one query param was passed in, but "selectedTech" and "selectedSpeed" are not valid
+      if (Object.keys(this.$route.query).length && (!this.isValidQueryParam('selectedTech') || !this.isValidQueryParam('selectedSpeed'))) {
+        this.updateURLParams()
       }
       // Update charts, map, and sidebar title
       this.fetchAreaData()
+    },
+    updateURLParams () {
+      let routeQueryParams = {}
+
+      // Get existing route query parameters
+      let routeQuery = this.$route.query
+
+      // Get map zoom level
+      let zoomLevel = this.Map.getZoom()
+
+      // Add routeQuery properties to routeQueryParams
+      Object.keys(routeQuery).map(property => {
+        routeQueryParams[property] = routeQuery[property]
+      })
+
+      // Add select tech, selected speed, and zoom to routeQueryParams
+      routeQueryParams.selectedTech = this.selectedTech
+      routeQueryParams.selectedSpeed = this.selectedSpeed
+      // routeQueryParams.zoom = zoomLevel
+
+      // Update URL fragment with routeQueryParams
+      this.$router.replace({
+        name: 'AreaSummary',
+        query: routeQueryParams
+      })
     },
     fetchAreaData () {
       const self = this
@@ -141,7 +166,7 @@ export default {
         headers: httpHeaders
       })
       .then(function (response) {
-        console.log('Socrata AREA table response= ', response)
+        // console.log('Socrata AREA table response= ', response)
         self.socrataData = response.data
 
         if (self.socrataData.length > 0) {
@@ -174,7 +199,7 @@ export default {
       // If this is the nationwide view
       if (geoid === 0) {
         this.sidebarTitle = 'Nationwide'
-        console.log('TODO: Revert the map back to the national view')
+        // console.log('TODO: Revert the map back to the national view')
       // Otherwise this is a specific geography the user searched for
       } else {
         // Query lookup table for this specific geography
@@ -193,7 +218,7 @@ export default {
           headers: httpHeaders
         })
         .then(function (response) {
-          console.log('Socrata GEOGRAPHY DETAILS query response= ', response)
+          // console.log('Socrata GEOGRAPHY DETAILS query response= ', response)
           // Display name of searched geography
           this.sidebarTitle = response.data[0].name
           // Get lat/lon pair
@@ -288,7 +313,7 @@ export default {
         {data: [0, 0, 0, 0, 0]},
         {data: [0, 0, 0, 0, 0]}
       ]
-      this.popChartData = this.aggregate(this.popChartData, 'speed', undefined)
+      this.popChartData = this.aggregate(this.popChartData, 'speed', {'0.2': '0.2', '10/1': '10', '25/3': '25', '50/5': '50', '100/10': '100'})
     },
     calculateUrbanRuralChartData () {
       this.urbanRuralChartData.datasets = [

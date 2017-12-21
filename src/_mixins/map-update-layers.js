@@ -30,7 +30,7 @@ export const updateMapLayers = {
       const vm = this
       const speed = propertyID.split('_')[1]
 
-      let layer = layersTechSpeed[speed]
+      let layer = layersTechSpeed[speed] === undefined ? layersTechSpeed['25'] : layersTechSpeed[speed]
       let lyrStyle = {}
 
       // Template for layer style
@@ -88,14 +88,23 @@ export const updateMapLayers = {
           vm.Map.removeLayer(layer.id)
         }
       }
+
+      // Set selected Tech and Speed to empty when all layers are removed
+      if (removeAll) {
+        this.selectedTech = ''
+        this.selectedSpeed = ''
+        this.updateURLParams()
+      }
     },
-    // Called by mounted() and Map.on('load')
     updateTechSpeed (selectedTech, selectedSpeed) { // e.g. acfosw, 25_3
       let propertyID = [selectedTech, selectedSpeed].join('_')
 
       // When base layer style is changed, the selected tech & speed layers will be reloaded
       this.selectedTech = selectedTech
       this.selectedSpeed = selectedSpeed
+
+      // Update URL params when selected Tech and Speed change
+      this.updateURLParams()
 
       // Add layer sources if they don't exist already
       if (this.Map.getSource('25_3') === undefined) {
@@ -107,12 +116,6 @@ export const updateMapLayers = {
 
       // add new map layers
       this.addLayers(propertyID)
-
-      // If this is the Area Summary page
-      if (this.$route.path === '/area-summary') {
-        // Update charts
-        this.validateURL()
-      }
     },
     toggleLegendTitle (zoomLevel) {
       this.togLegendTitle = zoomLevel <= 10
