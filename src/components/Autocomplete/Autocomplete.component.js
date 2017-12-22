@@ -20,21 +20,34 @@ export default {
       itemKey: ''
     }
   },
+  mounted () {
+    // Check query string for initial values
+    this.populateTypeahead()
+  },
   methods: {
-    searchButtonClicked () {
+    searchButtonClicked (evnt) {
       if (this.searchType !== 'Provider') {
         this.gotoGeography()
       }
     },
-    enterClicked () {
+    enterClicked (event) {
+      console.log('\nenterClicked')
+      // console.log(item)
+
       if (this.originPage !== 'AreaComparison' || this.originPage === 'ProviderDetail') {
         if (typeof this.typeaheadModel === 'object' || this.searchType !== 'Address') {
           this.gotoGeography()
         }
+
+        if (event && event.keyCode === 13) {
+          setTimeout(() => {
+            this.gotoGeography(event)
+          }, 100)
+        }
       }
     },
     // Called when user pressed enter or clicked search
-    gotoGeography () {
+    gotoGeography (event) {
       let newURL = ''
       switch (this.searchType) {
         case 'Address':
@@ -227,9 +240,6 @@ export default {
         this.asyncSrc = 'https://api.mapbox.com/geocoding/v5/mapbox.places/' + encodeURIComponent(this.typeaheadModel) + '.json?country=us&limit=10&access_token=' + process.env.MAPBOX_ACCESS_TOKEN + '&'
       }
     }
-  },
-  // Check query string for initial values
-  mounted () {
-    this.populateTypeahead()
   }
+
 }
