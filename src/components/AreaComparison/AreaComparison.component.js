@@ -50,7 +50,7 @@ export default {
       searchType: 'County',
       refreshingDropdown: false,
       selectedTech: 'acfosw',
-      selectedSpeed: '0.2',
+      selectedSpeed: '25_3',
       selectedState: undefined,
       socrataURL: '',
       socrataLookupURL: '',
@@ -81,7 +81,7 @@ export default {
         'CBSA (MSA)': 'cbsa'
       },
       speedDictionary: {
-        '0.2': '0.2',
+        '200': '0.2',
         '10_1': '10',
         '25_3': '25',
         '50_5': '50',
@@ -142,7 +142,7 @@ export default {
     updateTechSpeed (selectedTech, selectedSpeed) {
       this.selectedTech = selectedTech
       this.selectedSpeed = selectedSpeed
-      this.compareAreas()
+      if (this.rows && this.rows.length > 0) this.compareAreas()
     },
     removeData () {
       this.rows = []

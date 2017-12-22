@@ -6,10 +6,10 @@
         <fieldset>
           <legend>Technologies</legend>
           <div role="group">
-            <div class="checkbox" v-for="technology in technologies">
-              <input type="checkbox" name="tech" :id="technology.name" :value="technology.value" @change="saveSettings" v-model="selectedTechCategories">
-              <label :for="technology.name">
-                {{ technology.name }}
+            <div class="checkbox" v-for="(ttechnology, index) in technologies">
+              <input type="checkbox" name="ttech" :id="'ttechnology'+index" :value="ttechnology.value" @change="saveSettings" v-model="selectedTechCategories">
+              <label :for="'ttechnology'+index">
+                {{ ttechnology.name }}
               </label>
             </div>            
           </div>
@@ -19,10 +19,10 @@
         <fieldset>
           <legend>Speed (Mbps)</legend>
           <div role="group">
-            <div class="radio" v-for="(speed, index) in speeds">
-              <input type="radio" name="speed" :id="'speed'+index" :value="speed.value" @change="saveSettings" v-model="selectedSpeed">
-              <label :for="'speed'+index">
-                &gt; {{ speed.name }}
+            <div class="radio" v-for="(tspeed, index) in speeds">
+              <input type="radio" name="tspeed" :id="'tspeed'+index" :value="tspeed.value" @change="saveSettings" v-model="selectedSpeed">
+              <label :for="'tspeed'+index">
+                &gt; {{ tspeed.name }}
               </label>
             </div>            
           </div>

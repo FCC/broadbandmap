@@ -6,9 +6,9 @@
         <fieldset>
           <legend>Technologies</legend>
           <div role="group">
-            <div class="checkbox" v-for="technology in technologies">
-              <input type="checkbox" name="tech" :id="technology.name" :value="technology.value" @change="saveSettings" v-model="selectedTechCategories">
-              <label :for="technology.name">
+            <div class="checkbox" v-for="(technology, index) in technologies">
+              <input type="checkbox" name="tech" :id="'technology'+index" :value="technology.value" @change="saveSettings" v-model="selectedTechCategories">
+              <label :for="'technology'+index">
                 {{ technology.name }}
               </label>
             </div>            
