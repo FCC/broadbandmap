@@ -253,7 +253,6 @@ export default {
         for (let pbi in providerBox) {
           providerBox[pbi].typeaheadModel = {'holdingcompanyname': self.providerNames[pbi]}
         }
-
       })
       .catch(function (error) {
         if (error.response) {
@@ -389,7 +388,7 @@ export default {
       if (this.providerHoconums && this.providerHoconums.length > 0) {
         let hoconums = ''
         for (let hci in this.providerHoconums) {
-          hoconums += this.providerHoconums[hci] + ","
+          hoconums += this.providerHoconums[hci] + ','
         }
         hoconums = hoconums.replace(/,\s*$/, '')
 
@@ -453,7 +452,6 @@ export default {
         this.providers = []
 
         for (let hcni in this.providerHoconums) {
-
           let newProvider = {
             id: new Date().getTime() + hcni
           }
@@ -467,7 +465,7 @@ export default {
         }
         this.fetchProviderData()
       }
-    }   
+    }
   },
   computed: {
     getPlaceholderText: function () {
