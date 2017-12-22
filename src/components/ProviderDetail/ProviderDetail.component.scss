@@ -158,3 +158,14 @@ hr {
   // vertical-align: bottom;
   white-space: nowrap;
 }
+
+/* Nav Utility */ 
+.provider-title-bar .nav-utility {
+  margin-top: 14px;
+}
+
+/* Alert message */
+.alert-warning {
+  display: block;
+  max-width: 600px;
+}

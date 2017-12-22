@@ -1,18 +1,29 @@
 <div class="pg-providerDetails">
   <div class="container-fluid">
     <div class="row">
-      <div class="col-sm-12">
+      <div class="col-sm-9">
         <h1>View Service Provider Details</h1>
       </div>
+    <div class="col-sm-3 provider-title-bar" v-if="showResults">
+      <div class="nav-utility">
+        <!-- <tooltip text="Download data" placement="top">
+          <a href="#"><span class="icon icon-cloud-download"></span><span class="sr-only">Download Data</span></a>
+        </tooltip> -->
+        <bookmark-link></bookmark-link>
+      </div>      
+    </div>      
     </div>
     <div class="row">
       <div class="col-sm-12">
         <form class="provider-input">
           <p>Get detailed information on as many as 3 service providers at a time.</p>
+          <div class="alert alert-warning" role="alert">
+            <p>Invalid provider name</p>
+          </div>
           <div class="input-provider">
             <template v-for="provider in providers">
               <div class="input-group input-group-lg" :key="provider.id">
-                <Autocomplete ref="providerBox" :placeholderText="getPlaceholderText" :searchType="searchType" v-model="provider.id"></Autocomplete>
+                <Autocomplete ref="providerBox" :placeholderText="getPlaceholderText" :searchType="searchType" originPage="ProviderDetail" v-model="provider.id"></Autocomplete>
                 <span class="input-group-btn">
                 <button class="btn btn-default btn-remove" type="button" @click.prevent="removeProvider(provider.id)"><span class="icon icon-close"></span></button>
                 </span>

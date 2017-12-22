@@ -6,10 +6,11 @@ import PopulationChart from './PopulationChart'
 import SpeedChart from './SpeedChart'
 import UpSpeedChart from './UpSpeedChart'
 import Autocomplete from '../Autocomplete'
+import BookmarkLink from '../BookmarkLink/'
 
 export default {
   name: 'ProviderDetail',
-  components: { Tooltip, nbMap, PopulationChart, SpeedChart, UpSpeedChart, Autocomplete },
+  components: { Tooltip, nbMap, PopulationChart, SpeedChart, UpSpeedChart, Autocomplete, BookmarkLink },
   props: [],
   mounted () {
     this.loadProviderLookup()
@@ -243,7 +244,6 @@ export default {
         for (let pbi in providerBox) {
           providerBox[pbi].typeaheadModel = {'holdingcompanyname': self.providerNames[pbi]}
         }
-
       })
       .catch(function (error) {
         if (error.response) {
@@ -342,9 +342,11 @@ export default {
     },
     setU () {
       this.direction = 'u'
+      this.updateUrlParams()
     },
     setD () {
       this.direction = 'd'
+      this.updateUrlParams()
     },
     // Hoconum lookup by provider name
     getHoconumByName (name) {
@@ -374,13 +376,23 @@ export default {
         routeQP[prop] = routeQ[prop]
       })
 
-      let hoconums = ''
-      for (let hci in this.providerHoconums) {
-        hoconums += this.providerHoconums[hci] + ","
-      }
-      hoconums = hoconums.replace(/,\s*$/, '')
+      if (this.providerHoconums && this.providerHoconums.length > 0) {
+        let hoconums = ''
+        for (let hci in this.providerHoconums) {
+          hoconums += this.providerHoconums[hci] + ','
+        }
+        hoconums = hoconums.replace(/,\s*$/, '')
 
-      routeQP.hoconums = hoconums
+        routeQP.hoconums = hoconums
+      } else {
+        delete routeQP.hoconums
+      }
+
+      if (this.direction) {
+        routeQP.direction = this.direction
+      } else {
+        delete routeQP.direction
+      }
 
       this.$router.replace({
         name: 'ProviderDetail',
@@ -395,6 +407,10 @@ export default {
         routeQP[prop] = routeQ[prop]
       })
 
+      if (routeQP.direction) {
+        this.direction = routeQP.direction
+      }
+
       if (routeQP.hoconums) {
         this.providerHoconums = routeQP.hoconums.split(',')
 
@@ -402,10 +418,8 @@ export default {
         this.providers = []
 
         for (let hcni in this.providerHoconums) {
-
           let newProvider = {
-            id: Date.now(),
-            provider: this.getNameByHoconum(this.providerHoconums[hcni])
+            id: new Date().getTime() + hcni
           }
 
           this.numProviders++
@@ -417,7 +431,7 @@ export default {
         }
         this.fetchProviderData()
       }
-    }   
+    }
   },
   computed: {
     getPlaceholderText: function () {

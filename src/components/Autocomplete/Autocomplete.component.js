@@ -21,22 +21,20 @@ export default {
     }
   },
   methods: {
-    searchButtonClicked (event) {
+    searchButtonClicked () {
       if (this.searchType !== 'Provider') {
-        this.gotoGeography(event)
+        this.gotoGeography()
       }
     },
-    enterClicked (event) {
-      if (this.originPage && this.originPage === 'AreaComparison') {
-        // Don't go to geography - we are searching for state on AreaComparison and want to stay on the page
-      } else if (this.searchType === 'Provider') {
-        // Don't go to geography - we are searching for non-geographic entity
-      } else if (typeof this.typeaheadModel === 'object' || this.searchType !== 'Address') {
-        this.gotoGeography(event)
+    enterClicked () {
+      if (this.originPage !== 'AreaComparison' || this.originPage === 'ProviderDetail') {
+        if (typeof this.typeaheadModel === 'object' || this.searchType !== 'Address') {
+          this.gotoGeography()
+        }
       }
     },
     // Called when user pressed enter or clicked search
-    gotoGeography (event) {
+    gotoGeography () {
       let newURL = ''
       switch (this.searchType) {
         case 'Address':
@@ -44,6 +42,7 @@ export default {
             // Create the URL
             newURL = 'location-summary?lat=' + this.typeaheadModel.center[1].toFixed(6) + '&lon=' + this.typeaheadModel.center[0].toFixed(6) + '&place_name=' + encodeURIComponent(this.typeaheadModel.place_name)
             this.$router.push(newURL)
+            EventHub.$emit('updateAddrSearch')
           } else {
             // Call Modal component in app footer
             EventHub.$emit('openModal', 'No results found', 'Please enter and then select a valid U.S. address.')
@@ -54,43 +53,51 @@ export default {
           if (coordinatesArray.length === 2 && this.isValidLatLon(coordinatesArray[0], coordinatesArray[1])) {
             newURL = 'location-summary?lat=' + coordinatesArray[0].trim() + '&lon=' + coordinatesArray[1].trim()
             this.$router.push(newURL)
+            EventHub.$emit('updateAddrSearch')
           } else {
             // Call Modal component in app footer
             EventHub.$emit('openModal', 'No results found', 'Please enter valid coordinates in "latitude, longitude" format.')
           }
           break
         case 'State':
-          console.log('gotoGeography(), searchType= ' + this.searchType + ', typeaheadModel= ', this.typeaheadModel)
+          // console.log('gotoGeography(), searchType= ' + this.searchType + ', typeaheadModel= ', this.typeaheadModel)
           newURL = 'area-summary?type=state&geoid=' + this.typeaheadModel.geoid + '&bbox=' + this.typeaheadModel.bbox_arr
           this.$router.push(newURL)
+          EventHub.$emit('updateGeogSearch')
           break
         case 'CBSA (MSA)':
-          console.log('gotoGeography(), searchType= ' + this.searchType + ', typeaheadModel= ', this.typeaheadModel)
+          // console.log('gotoGeography(), searchType= ' + this.searchType + ', typeaheadModel= ', this.typeaheadModel)
           newURL = 'area-summary?type=cbsa&geoid=' + this.typeaheadModel.geoid + '&bbox=' + this.typeaheadModel.bbox_arr
           this.$router.push(newURL)
+          EventHub.$emit('updateGeogSearch')
           break
         case 'County':
-          console.log('gotoGeography(), searchType= ' + this.searchType + ', typeaheadModel= ', this.typeaheadModel)
+          // console.log('gotoGeography(), searchType= ' + this.searchType + ', typeaheadModel= ', this.typeaheadModel)
           newURL = 'area-summary?type=county&geoid=' + this.typeaheadModel.geoid + '&bbox=' + this.typeaheadModel.bbox_arr
           this.$router.push(newURL)
+          EventHub.$emit('updateGeogSearch')
           break
         case 'Congressional District':
-          console.log('gotoGeography(), searchType= ' + this.searchType + ', typeaheadModel= ', this.typeaheadModel)
+          // console.log('gotoGeography(), searchType= ' + this.searchType + ', typeaheadModel= ', this.typeaheadModel)
           newURL = 'area-summary?type=cdist&geoid=' + this.typeaheadModel.geoid + '&bbox=' + this.typeaheadModel.bbox_arr
           this.$router.push(newURL)
+          EventHub.$emit('updateGeogSearch')
           break
         case 'Tribal Area':
-          console.log('gotoGeography(), searchType= ' + this.searchType + ', typeaheadModel= ', this.typeaheadModel)
+          // console.log('gotoGeography(), searchType= ' + this.searchType + ', typeaheadModel= ', this.typeaheadModel)
           newURL = 'area-summary?type=tribal&geoid=' + this.typeaheadModel.geoid + '&bbox=' + this.typeaheadModel.bbox_arr
           this.$router.push(newURL)
+          EventHub.$emit('updateGeogSearch')
           break
         case 'Census Place':
-          console.log('gotoGeography(), searchType= ' + this.searchType + ', typeaheadModel= ', this.typeaheadModel)
+          // console.log('gotoGeography(), searchType= ' + this.searchType + ', typeaheadModel= ', this.typeaheadModel)
           newURL = 'area-summary?type=place&geoid=' + this.typeaheadModel.geoid + '&bbox=' + this.typeaheadModel.bbox_arr
           this.$router.push(newURL)
+          EventHub.$emit('updateGeogSearch')
           break
         default:
-          console.log('DEBUG: No handler in gotoGeography() for searchType = ' + this.searchType)
+          // console.log('DEBUG: No handler in gotoGeography() for searchType = ' + this.searchType)
+          break
       }
     },
     // Called by data() on init, and when searchType changes
@@ -190,7 +197,7 @@ export default {
         headers: httpHeaders
       })
       .then(function (response) {
-        console.log('Socrata response= ', response)
+        // console.log('Socrata response= ', response)
         self.dataSource = response.data
       })
       .catch(function (error) {
