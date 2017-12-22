@@ -141,7 +141,7 @@ export default {
     updateTechSpeed (selectedTech, selectedSpeed) {
       this.selectedTech = selectedTech
       this.selectedSpeed = selectedSpeed
-      this.compareAreas()
+      if (this.rows && this.rows.length > 0) this.compareAreas()
     },
     removeData () {
       this.rows = []
