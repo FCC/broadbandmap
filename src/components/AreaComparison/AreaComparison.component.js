@@ -89,7 +89,8 @@ export default {
       },
       stateGeoidToName: {},
       stateNameToGeoid: {},
-      areaForSearch: ''
+      areaForSearch: '',
+      validationError: ''
     }
   },
   mounted () {
@@ -231,8 +232,9 @@ export default {
     },
     compareAreas() {
       const self = this
+      this.validationError = ''
+      this.rows = []
 
-      this.updateUrlParams()
       // all data we need for query
       //console.log('CompareAreas input : ', this.$refs.autocomplete.typeaheadModel.geoid, this.selectedTech, this.selectedSpeed, this.searchType)
 
@@ -245,9 +247,26 @@ export default {
         $select: 'id,sum(has_0),sum(has_1),sum(has_2),sum(has_3plus)',
         $group: 'id'
       }
-      if (this.$refs.autocomplete.typeaheadModel.geoid) {
+
+      if (typeof this.$refs.autocomplete.typeaheadModel === 'string' && this.$refs.autocomplete.typeaheadModel !== 'Nationwide') {
+        // Try to interpret as state name
+        let value = this.$refs.autocomplete.typeaheadModel
+        if (value in this.stateNameToGeoid) {
+          this.$refs.autocomplete.typeaheadModel = {
+                                          'geoid': this.stateNameToGeoid[value], 
+                                          'name': value,
+                                          'type': 'state'}
+        } else {
+          this.validationError = 'Invalid state specified : ' + value
+          return
+        }
+      }
+
+      if (this.$refs.autocomplete.typeaheadModel !== 'Nationwide' && this.$refs.autocomplete.typeaheadModel.geoid) {
         socParams['$WHERE'] = "starts_with(id,'" + this.$refs.autocomplete.typeaheadModel.geoid + "')"
       }
+
+      this.updateUrlParams()
 
       axios
       .get(this.socrataURL, {
@@ -329,12 +348,6 @@ export default {
         delete routeQP.searchtype
       }
 
-      if (this.areaForSearch && this.areaForSearch !== '') {
-        routeQP.searcharea = this.areaForSearch.toLowerCase()
-      } else {
-        delete routeQP.searcharea
-      }
-
       if (this.$refs.autocomplete.typeaheadModel.geoid) {
         routeQP.geoid = this.$refs.autocomplete.typeaheadModel.geoid
       } else {
@@ -355,22 +368,33 @@ export default {
       })
 
       if (routeQP.searchtype) {
-        this.toggleSearchType(this.typeReverseDictionary[routeQP.searchtype])
-      }
-
-      if (routeQP.searcharea) {
-        this.searchArea(routeQP.searcharea.charAt(0).toUpperCase() + routeQP.searcharea.slice(1))
-      } else {
-        this.searchArea('')
+        if (routeQP.searchtype in this.typeReverseDictionary) {
+          this.toggleSearchType(this.typeReverseDictionary[routeQP.searchtype])
+        } else {
+          this.validationError = 'Invalid search type : ' + routeQP.searchtype + '. Defaulting to County.'
+          this.toggleSearchType('County')
+        }
       }
 
       if (routeQP.geoid) {
-        this.$refs.autocomplete.typeaheadModel = {
-                                        'geoid': routeQP.geoid, 
-                                        'name': this.stateGeoidToName[routeQP.geoid],
-                                        'type': 'state'}
+        if (routeQP.geoid in this.stateGeoidToName) {
+          this.$refs.autocomplete.typeaheadModel = {
+                                          'geoid': routeQP.geoid, 
+                                          'name': this.stateGeoidToName[routeQP.geoid],
+                                          'type': 'state'}
+        } else {
+          this.validationError = 'Invalid geoid : ' + routeQP.geoid
+          return
+        }
+      } else {
+        if (routeQP.searchtype) {
+          this.searchArea('Nationwide')
+        } else {
+          this.searchArea('')
+        }
       }
-      if (routeQP.searchtype || routeQP.searcharea || routeQP.geoid) this.compareAreas()
+
+      if (routeQP.searchtype || routeQP.geoid) this.compareAreas()
     }   
   },
   computed: {

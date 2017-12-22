@@ -30,7 +30,8 @@ export default {
       hoconum2Name: {},
       name2Hoconum: {},
       searchType: 'Provider',
-      layerColors: ['#ff848b', '#838eff', '#ffff95']
+      layerColors: ['#ff848b', '#838eff', '#ffff95'],
+      validationError: ''
     }
   },
   methods: {
@@ -107,11 +108,19 @@ export default {
       this.showLink = this.numProviders < 3
     },
     viewDetails () {
+      this.validationError = ''
+
       let providerBox = this.$refs.providerBox
       // Create list of provider Names
       this.providerNames = []
       for (let pbi in providerBox) {
-        this.providerNames.push(providerBox[pbi].typeaheadModel.holdingcompanyname)
+        //console.log('box content : ', providerBox[pbi])
+        if (providerBox[pbi].typeaheadModel.holdingcompanyname) {
+          this.providerNames.push(providerBox[pbi].typeaheadModel.holdingcompanyname)
+        } else {
+          this.validationError = 'Invalid provider name(s)'
+          return
+        }
       }
 
       // Create list of provider Hoconums
@@ -408,11 +417,36 @@ export default {
       })
 
       if (routeQP.direction) {
-        this.direction = routeQP.direction
+        console.log('routeQP.direction = ', routeQP.direction)
+        if (routeQP.direction === 'u' || routeQP.direction === 'd') {
+          this.direction = routeQP.direction
+        } else {
+          this.validationError = 'Invalid direction : ' + routeQP.direction
+          return
+        }
       }
 
       if (routeQP.hoconums) {
-        this.providerHoconums = routeQP.hoconums.split(',')
+        
+        let hoconums = routeQP.hoconums.split(',')
+        if (hoconums.length > 3) {
+          this.validationError = 'Too many providers specified in URL. Selection must be limited to 3.'
+          return
+        } else {
+          let unknownHoconum = undefined
+          for (let hci in hoconums) {
+            if (!(hoconums[hci] in this.hoconum2Name)) {
+              unknownHoconum = hoconums[hci]
+              break
+            }
+          }
+          if (unknownHoconum) {
+            this.validationError = 'Invalid provider ID : ' + unknownHoconum
+            return
+          } else {
+            this.providerHoconums = hoconums
+          }
+        }
 
         this.numProviders = 0
         this.providers = []
