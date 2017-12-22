@@ -307,7 +307,7 @@ export default {
               let cData = []
               cData[0] = 100.0
               for (let i = 1; i < count; i++) {
-                cData[i] = 100.0 * parseFloat(collapsed[ci][drct + '_' + i.toString()]) / parseFloat(collapsed[ci][drct + '_1'])
+                cData[i] = 100.0 * parseFloat(collapsed[ci][drct + '_' + (i+1).toString()]) / parseFloat(collapsed[ci][drct + '_1'])
               }
 
               let series = {
