@@ -387,10 +387,14 @@ export default {
           return
         }
       } else {
-        this.searchArea('Nationwide')
+        if (routeQP.searchtype) {
+          this.searchArea('Nationwide')
+        } else {
+          this.searchArea('')
+        }
       }
 
-      if (routeQP.searchtype || routeQP.searcharea || routeQP.geoid) this.compareAreas()
+      if (routeQP.searchtype || routeQP.geoid) this.compareAreas()
     }   
   },
   computed: {
