@@ -27,16 +27,13 @@ export default {
   methods: {
     searchButtonClicked (evnt) {
       if (this.searchType !== 'Provider') {
-        this.gotoGeography()
+        this.gotoGeography(event)
       }
     },
     enterClicked (event) {
-      console.log('\nenterClicked')
-      // console.log(item)
-
       if (this.originPage !== 'AreaComparison' || this.originPage === 'ProviderDetail') {
         if (typeof this.typeaheadModel === 'object' || this.searchType !== 'Address') {
-          this.gotoGeography()
+          this.gotoGeography(event)
         }
 
         if (event && event.keyCode === 13) {
@@ -92,7 +89,7 @@ export default {
           break
         case 'Congressional District':
           // console.log('gotoGeography(), searchType= ' + this.searchType + ', typeaheadModel= ', this.typeaheadModel)
-          newURL = 'area-summary?type=cdist&geoid=' + this.typeaheadModel.geoid + '&bbox=' + this.typeaheadModel.bbox_arr
+          newURL = 'area-summary?type=cd&geoid=' + this.typeaheadModel.geoid + '&bbox=' + this.typeaheadModel.bbox_arr
           this.$router.push(newURL)
           EventHub.$emit('updateGeogSearch')
           break

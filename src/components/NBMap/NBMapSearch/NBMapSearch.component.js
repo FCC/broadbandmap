@@ -56,7 +56,7 @@ export default {
           this.searchType = 'CBSA (MSA)'
         } else if (this.$route.query.type === 'county') {
           this.searchType = 'County'
-        } else if (this.$route.query.type === 'cdist') {
+        } else if (this.$route.query.type === 'cd') {
           this.searchType = 'Congressional District'
         } else if (this.$route.query.type === 'tribal') {
           this.searchType = 'Tribal Area'

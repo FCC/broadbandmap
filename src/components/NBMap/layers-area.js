@@ -27,10 +27,10 @@ export const LayersArea = [
     id: 'cd-highlighted',
     source: {
       type: 'vector',
-      url: 'mapbox://fcc.ao2kqazm'
+      url: 'mapbox://fcc.dpum4fkf'
     },
     type: 'line',
-    'source-layer': 'nbm2_county2016geojson',
+    'source-layer': 'nbm2_cd115_2016geojson',
     layout: {
       visibility: 'visible'
     },
