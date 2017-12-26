@@ -33,24 +33,29 @@ export default {
     },
     enterClicked (event) {
       if (this.originPage !== 'AreaComparison' || this.originPage !== 'ProviderDetail') {
+        // Prevent duplicate search calls
         if (this.selectedItem.hasOwnProperty('place_name') && this.selectedItem.place_name === this.typeaheadModel) {
           return
         }
 
-        if (this.searchType === 'Address' && this.typeaheadModel === this.$route.query.place_name) {
+        // Prevent duplicate search calls
+        if (this.searchType === 'Address' && document.getElementById('addr').value === this.$route.query.place_name) {
           return
         }
 
+        // If search button is clicked if search query has not been geocoded
         if (this.searchType === 'Address' && typeof this.typeaheadModel === 'string' && event.type === 'click') {
           EventHub.$emit('openModal', 'No results found', 'Please enter and then select a valid U.S. address.')
           return
         }
 
+        // If search query has been geocoded, gotoGeography
         if (this.typeaheadModel.hasOwnProperty('id') || this.searchType !== 'Address') {
           this.selectedItem = this.typeaheadModel
           this.gotoGeography(event)
         }
 
+        // When enter key is pressed, gotoGeography
         if (event && event.keyCode === 13) {
           setTimeout(() => {
             this.selectedItem = this.typeaheadModel
