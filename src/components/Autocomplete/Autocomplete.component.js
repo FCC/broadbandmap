@@ -17,7 +17,8 @@ export default {
       dataSource: [],
       asyncSrc: '',
       asyncKey: '',
-      itemKey: ''
+      itemKey: '',
+      selectedItem: {}
     }
   },
   mounted () {
@@ -25,22 +26,34 @@ export default {
     this.populateTypeahead()
   },
   methods: {
-    searchButtonClicked (evnt) {
+    searchButtonClicked (event) {
       if (this.searchType !== 'Provider') {
-        this.gotoGeography()
+        this.enterClicked(event)
       }
     },
     enterClicked (event) {
-      console.log('\nenterClicked')
-      // console.log(item)
+      if (this.originPage !== 'AreaComparison' || this.originPage !== 'ProviderDetail') {
+        if (this.selectedItem.hasOwnProperty('place_name') && this.selectedItem.place_name === this.typeaheadModel) {
+          return
+        }
 
-      if (this.originPage !== 'AreaComparison' || this.originPage === 'ProviderDetail') {
-        if (typeof this.typeaheadModel === 'object' || this.searchType !== 'Address') {
-          this.gotoGeography()
+        if (this.searchType === 'Address' && this.typeaheadModel === this.$route.query.place_name) {
+          return
+        }
+
+        if (this.searchType === 'Address' && typeof this.typeaheadModel === 'string' && event.type === 'click') {
+          EventHub.$emit('openModal', 'No results found', 'Please enter and then select a valid U.S. address.')
+          return
+        }
+
+        if (this.typeaheadModel.hasOwnProperty('id') || this.searchType !== 'Address') {
+          this.selectedItem = this.typeaheadModel
+          this.gotoGeography(event)
         }
 
         if (event && event.keyCode === 13) {
           setTimeout(() => {
+            this.selectedItem = this.typeaheadModel
             this.gotoGeography(event)
           }, 100)
         }
@@ -49,6 +62,7 @@ export default {
     // Called when user pressed enter or clicked search
     gotoGeography (event) {
       let newURL = ''
+
       switch (this.searchType) {
         case 'Address':
           if (typeof this.typeaheadModel === 'object' && typeof this.typeaheadModel.id === 'string') {
@@ -74,9 +88,11 @@ export default {
           break
         case 'State':
           // console.log('gotoGeography(), searchType= ' + this.searchType + ', typeaheadModel= ', this.typeaheadModel)
-          newURL = 'area-summary?type=state&geoid=' + this.typeaheadModel.geoid + '&bbox=' + this.typeaheadModel.bbox_arr
-          this.$router.push(newURL)
-          EventHub.$emit('updateGeogSearch')
+          if (this.originPage !== 'AreaComparison') {
+            newURL = 'area-summary?type=state&geoid=' + this.typeaheadModel.geoid + '&bbox=' + this.typeaheadModel.bbox_arr
+            this.$router.push(newURL)
+            EventHub.$emit('updateGeogSearch')
+          }
           break
         case 'CBSA (MSA)':
           // console.log('gotoGeography(), searchType= ' + this.searchType + ', typeaheadModel= ', this.typeaheadModel)
