@@ -12,7 +12,6 @@ export const urlValidation = {
       return (typeof address === 'string' && address.length)
     },
     isValidQueryParam (param) {
-      console.log()
       return (typeof this.$route.query[param] === 'string' && this.$route.query[param].length)
     }
   }
