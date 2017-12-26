@@ -113,7 +113,7 @@ export default {
           break
         case 'Congressional District':
           // console.log('gotoGeography(), searchType= ' + this.searchType + ', typeaheadModel= ', this.typeaheadModel)
-          newURL = 'area-summary?type=cdist&geoid=' + this.typeaheadModel.geoid + '&bbox=' + this.typeaheadModel.bbox_arr
+          newURL = 'area-summary?type=cd&geoid=' + this.typeaheadModel.geoid + '&bbox=' + this.typeaheadModel.bbox_arr
           this.$router.push(newURL)
           EventHub.$emit('updateGeogSearch')
           break
@@ -200,6 +200,7 @@ export default {
         appToken = process.env.SOCRATA_PROD_APP_TOKEN
         axiosParams = {
           $select: 'holdingcompanyname',
+          $where: 'consumer=1',
           $group: 'holdingcompanyname',
           $limit: 5000,
           $$app_token: appToken

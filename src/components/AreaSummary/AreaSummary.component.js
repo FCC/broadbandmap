@@ -112,7 +112,7 @@ export default {
       // Set defaults
       let geogType = 'nation'
       let geoid = 0
-      let isValidType = ['state', 'county', 'place', 'cbsa', 'cdist', 'tribal'].indexOf(this.$route.query.type) !== -1
+      let isValidType = ['state', 'county', 'place', 'cbsa', 'cd', 'tribal'].indexOf(this.$route.query.type) !== -1
 
       // If the geoid and geography type are in the query string, use those
       if (typeof this.$route.query.type !== 'undefined' && isValidType && typeof this.$route.query.geoid !== 'undefined') {
