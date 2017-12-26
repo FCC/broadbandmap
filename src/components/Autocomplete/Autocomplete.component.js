@@ -179,6 +179,7 @@ export default {
         appToken = process.env.SOCRATA_PROD_APP_TOKEN
         axiosParams = {
           $select: 'holdingcompanyname',
+          $where: 'consumer=1',
           $group: 'holdingcompanyname',
           $limit: 5000,
           $$app_token: appToken
