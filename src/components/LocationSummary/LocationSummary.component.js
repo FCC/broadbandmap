@@ -98,10 +98,13 @@ export default {
         this.updateURLParams()
       } else {
         this.clearProviderTable()
+
         this.Map.easeTo({
           center: this.mapOptions.center,
           zoom: this.mapOptions.zoom
         })
+
+        this.updateURLParams()
       }
     },
     updateURLParams () {
