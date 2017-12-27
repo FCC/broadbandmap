@@ -1,23 +1,25 @@
-import EventHub from '../../../_mixins/EventHub.js'
 import { Modal } from 'uiv'
+import EventHub from '../../../_mixins/EventHub.js'
+import { urlValidation } from '../../../_mixins/urlValidation.js'
 
 export default {
   name: 'MapSettings',
   components: { Modal },
+  mixins: [urlValidation],
   props: [],
   mounted () {
     // Get selectedTech and selectedSpeed values from URL query params
-    let selectedTechVal = this.$route.query.selectedTech
-    let selectedSpeedVal = this.$route.query.selectedSpeed
+    let tech = this.$route.query.selectedTech
+    let speed = this.$route.query.selectedSpeed
 
     // If selectedTech is available in URL, use that value
-    if (selectedTechVal !== undefined && selectedTechVal !== '') {
-      this.selectedTechCategories = selectedTechVal.split('')
+    if (this.isValidTech(tech)) {
+      this.selectedTechCategories = tech.toLowerCase().split('')
     }
 
     // If selectedSpeed is available in URL, use that value
-    if (selectedSpeedVal !== undefined && selectedSpeedVal !== '') {
-      this.selectedSpeed = selectedSpeedVal
+    if (this.isValidSpeed(speed)) {
+      this.selectedSpeed = speed
     }
   },
   data () {
