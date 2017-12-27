@@ -265,7 +265,7 @@ export default {
               sd.has_0 === dedupList[ddli].has_0 &&
               sd.has_1 === dedupList[ddli].has_1 &&
               sd.has_2 === dedupList[ddli].has_2 &&
-              sd.has_3plus === dedupList[ddli].has_3plus) {
+              sd.has_3more === dedupList[ddli].has_3more) {
             found = true
             break
           }
@@ -274,7 +274,7 @@ export default {
           // Duplicate, must be ignored
           continue
         } else {
-          dedupList.push({speed: sd.speed, has_0: sd.has_0, has_1: sd.has_1, has_2: sd.has_2, has_3plus: sd.has_3plus})
+          dedupList.push({speed: sd.speed, has_0: sd.has_0, has_1: sd.has_1, has_2: sd.has_2, has_3more: sd.has_3more})
           dedupedSocrataData.push(sd)
         }
       }
@@ -292,7 +292,7 @@ export default {
             chartData.datasets[0].data[li] += parseInt(sd.has_0)
             chartData.datasets[1].data[li] += parseInt(sd.has_1)
             chartData.datasets[2].data[li] += parseInt(sd.has_2)
-            chartData.datasets[3].data[li] += parseInt(sd.has_3plus)
+            chartData.datasets[3].data[li] += parseInt(sd.has_3more)
           }
         }
         // Normalize
