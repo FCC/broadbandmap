@@ -13,6 +13,22 @@ export const urlValidation = {
     },
     isValidQueryParam (param) {
       return (typeof this.$route.query[param] === 'string' && this.$route.query[param].length)
+    },
+    isValidTech (selectedTech) {
+      let hasNumbers = /\d/.test(selectedTech)
+
+      if (selectedTech && selectedTech.length < 7 && !hasNumbers) {
+        let invalidChars = selectedTech.toLowerCase().match(/[^acfosw]/g)
+
+        return invalidChars === null
+      } else {
+        return false
+      }
+    },
+    isValidSpeed (selectedSpeed) {
+      const speeds = ['200', '10_1', '25_3', '50_5', '100_10']
+
+      return speeds.indexOf(selectedSpeed) > -1
     }
   }
 }
