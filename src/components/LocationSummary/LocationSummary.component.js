@@ -74,14 +74,14 @@ export default {
         // If one or more technologies is selected, then reload the tech/speed layers when the base layer style is changed
         // Need to reload tech/speed layers so the labels will appear on top
         if (!this.removeAllLayers) {
-          // If no tech is selected use default tech and speed settings
-          if (this.$route.query.selectedTech === undefined) {
-            this.updateTechSpeed(this.defaultTech, this.defaultSpeed)
-          }
+          let tech = this.$route.query.selectedTech
+          let speed = this.$route.query.selectedSpeed
 
-          // If selectedTech parameter value is in the URL, use that value
-          if (this.$route.query.selectedTech !== '') {
-            this.updateTechSpeed(this.$route.query.selectedTech, this.$route.query.selectedSpeed)
+          // If tech/speed query params are invalid, use default tech and speed
+          if (!this.isValidTech(tech) || !this.isValidSpeed(speed)) {
+            this.updateTechSpeed(this.defaultTech, this.defaultSpeed)
+          } else {
+            this.updateTechSpeed(tech.toLowerCase(), speed)
           }
         }
         // Trigger reload of highlighted block when base layer style is changed
@@ -103,8 +103,6 @@ export default {
           center: this.mapOptions.center,
           zoom: this.mapOptions.zoom
         })
-
-        this.updateURLParams()
       }
     },
     updateURLParams () {

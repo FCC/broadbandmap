@@ -53,17 +53,14 @@ export default {
         // If one or more technologies is selected, then reload the tech/speed layers when the base layer style is changed
         // Need to reload tech/speed layers so the labels will appear on top
         if (!this.removeAllLayers) {
-          // If no tech is selected use default tech and speed settings (calls common function in map-update-layers.js)
-          if (this.$route.query.selectedTech === undefined) {
-            this.updateTechSpeed(this.defaultTech, this.defaultSpeed)
-            return
-          }
+          let tech = this.$route.query.selectedTech
+          let speed = this.$route.query.selectedSpeed
 
-          // If selectedTech parameter value is in the URL, use that value
-          if (this.$route.query.selectedTech !== '') {
-            this.updateTechSpeed(this.$route.query.selectedTech, this.$route.query.selectedSpeed)
+          // If tech/speed query params are invalid, use default tech and speed
+          if (!this.isValidTech(tech) || !this.isValidSpeed(speed)) {
+            this.updateTechSpeed(this.defaultTech, this.defaultSpeed)
           } else {
-            this.fetchAreaData()
+            this.updateTechSpeed(tech.toLowerCase(), speed)
           }
         }
 
@@ -265,7 +262,7 @@ export default {
               sd.has_0 === dedupList[ddli].has_0 &&
               sd.has_1 === dedupList[ddli].has_1 &&
               sd.has_2 === dedupList[ddli].has_2 &&
-              sd.has_3plus === dedupList[ddli].has_3plus) {
+              sd.has_3more === dedupList[ddli].has_3more) {
             found = true
             break
           }
@@ -274,7 +271,7 @@ export default {
           // Duplicate, must be ignored
           continue
         } else {
-          dedupList.push({speed: sd.speed, has_0: sd.has_0, has_1: sd.has_1, has_2: sd.has_2, has_3plus: sd.has_3plus})
+          dedupList.push({speed: sd.speed, has_0: sd.has_0, has_1: sd.has_1, has_2: sd.has_2, has_3more: sd.has_3more})
           dedupedSocrataData.push(sd)
         }
       }
@@ -292,7 +289,7 @@ export default {
             chartData.datasets[0].data[li] += parseInt(sd.has_0)
             chartData.datasets[1].data[li] += parseInt(sd.has_1)
             chartData.datasets[2].data[li] += parseInt(sd.has_2)
-            chartData.datasets[3].data[li] += parseInt(sd.has_3plus)
+            chartData.datasets[3].data[li] += parseInt(sd.has_3more)
           }
         }
         // Normalize

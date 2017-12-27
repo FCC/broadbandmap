@@ -106,7 +106,7 @@ export default {
     // When query params change for the same route (URL slug)
     '$route' (to, from) {
       this.receiveSearchType()
-      console.log(this.searchType)
+
       // Update search input field value with place_name
       if (this.searchType === 'Address') {
         if (to.query.place_name !== undefined) {

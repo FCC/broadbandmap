@@ -23,7 +23,7 @@ export default {
   },
   mounted () {
     // Check query string for initial values
-    this.populateTypeahead()
+    this.$nextTick(this.populateTypeahead)
   },
   methods: {
     searchButtonClicked (event) {
@@ -219,6 +219,7 @@ export default {
         } else {
           console.log('ERROR: process.env.SOCRATA_ENV in .env file must be PROD or DEV, not ' + process.env.SOCRATA_ENV)
         }
+
         axiosParams = {
           type: fetchType,
           $limit: 50000, // i.e. more than the default 1000
@@ -226,13 +227,13 @@ export default {
           $$app_token: appToken
         }
       }
+
       axios
       .get(socrataURL, {
         params: axiosParams,
         headers: httpHeaders
       })
       .then(function (response) {
-        // console.log('Socrata response= ', response)
         self.dataSource = response.data
       })
       .catch(function (error) {
