@@ -228,8 +228,14 @@ export default {
             padding: 100
           })
 
+          // Clear existing geography highlight
+          if (this.prevGeogType !== undefined) {
+            this.Map.setFilter(this.prevGeogType + '-highlighted', ['==', 'geoid', ''])
+          }
+
           // Highlight the selected geography type based on geoid
           this.Map.setFilter(geogType + '-highlighted', ['==', 'geoid', geoid])
+          this.prevGeogType = geogType
         }
         .bind(this))
         .catch(function (error) {
