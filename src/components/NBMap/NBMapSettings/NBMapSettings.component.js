@@ -52,8 +52,12 @@ export default {
       selectedTechCategories: ['a', 'c', 'f', 'w', 's', 'o'],
       speeds: [
         {
-          name: '0.2',
+          name: '0.2/0.2',
           value: '200'
+        },
+        {
+          name: '4/1',
+          value: '4_1'
         },
         {
           name: '10/1',
@@ -63,13 +67,18 @@ export default {
           name: '25/3',
           value: '25_3'
         },
-        {
-          name: '50/5',
-          value: '50_5'
-        },
+
         {
           name: '100/10',
           value: '100_10'
+        },
+        {
+          name: '250/25',
+          value: '250_25'
+        },
+        {
+          name: '1000/100',
+          value: '1000_100'
         }],
       selectedSpeed: '25_3',
       selectedPropertyID: ''
