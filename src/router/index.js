@@ -14,7 +14,6 @@ Vue.use(Router)
 const titleText = ' | Fixed Broadband Deployment Data | Federal Communications Commission'
 
 const router = new Router({
-  base: '/nbm2/DEV/',
   linkActiveClass: 'active',
   linkExactActiveClass: 'active',
   routes: [

@@ -41,10 +41,17 @@ Prerequisites: Node.js (>=6.x), npm version 3+ and Git.
    ```   
 
 ### Deployment
-1. Build the app.
+1. Set the assets path in ./config/index.js based on environment (DEV, ST, AT)
+   ```
+   assetsPublicPath: 'http://nelson:7028/nbm2/DEV/'
+   ```
+   
+2. Build the app.
    ```
    npm run build
    ```   
+3. Copy files from the ```dist``` folder to ```nelson/nbm2/[environment]```.
+
    
 ### Project Info
 [NBM2 JIRA Project](https://jira.fcc.gov/browse/GISNBM2/)
