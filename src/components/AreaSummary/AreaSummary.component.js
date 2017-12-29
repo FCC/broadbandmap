@@ -205,6 +205,7 @@ export default {
         } else if (process.env.SOCRATA_ENV === 'PROD') {
           socrataURL = process.env.SOCRATA_PROD_LOOKUP
         }
+
         axios
         .get(socrataURL, {
           params: {
@@ -218,9 +219,11 @@ export default {
           // console.log('Socrata GEOGRAPHY DETAILS query response= ', response)
           // Display name of searched geography
           this.sidebarTitle = response.data[0].name
+
           // Get lat/lon pair
           let bbox = response.data[0].bbox_arr.replace(/{/g, '').replace(/}/g, '')
           let envArray = bbox.split(',')
+
           // Zoom and center map to envelope
           this.Map.fitBounds(envArray, {
             animate: false,
@@ -228,8 +231,14 @@ export default {
             padding: 100
           })
 
+          // Clear existing geography highlight
+          if (this.prevGeogType !== undefined) {
+            this.Map.setFilter(this.prevGeogType + '-highlighted', ['==', 'geoid', ''])
+          }
+
           // Highlight the selected geography type based on geoid
           this.Map.setFilter(geogType + '-highlighted', ['==', 'geoid', geoid])
+          this.prevGeogType = geogType
         }
         .bind(this))
         .catch(function (error) {

@@ -32,7 +32,7 @@ export default {
       }
     },
     enterClicked (event) {
-      if (this.originPage !== 'AreaComparison' || this.originPage !== 'ProviderDetail') {
+      if (this.originPage !== 'AreaComparison' && this.originPage !== 'ProviderDetail') {
         // Prevent duplicate search calls
         if (this.selectedItem.hasOwnProperty('place_name') && this.selectedItem.place_name === this.typeaheadModel) {
           return
@@ -51,12 +51,16 @@ export default {
 
         // If search query has been geocoded, gotoGeography
         if (this.typeaheadModel.hasOwnProperty('id') || this.searchType !== 'Address') {
-          this.selectedItem = this.typeaheadModel
-          this.gotoGeography(event)
+          // bizarre timeout because of stupid logic
+          setTimeout(() => {
+            this.selectedItem = this.typeaheadModel
+            this.gotoGeography(event)
+          }, 100)
         }
 
         // When enter key is pressed, gotoGeography
-        if (event && event.keyCode === 13) {
+        if (event && event.keyCode === 13 && this.searchType === 'Address') {
+          // bizarre timeout because of stupid logic
           setTimeout(() => {
             this.selectedItem = this.typeaheadModel
             this.gotoGeography(event)
