@@ -46,7 +46,7 @@ export default {
         responsive: true,
         scales: {
           xAxes: [{
-            barThickness: 50,
+            barThickness: 35,
             stacked: true,
             scaleLabel: {
               display: true,
