@@ -32,7 +32,8 @@ export default {
         datasets: []
       },
       chartStyles: {width: 'auto', height: '350px'},
-      sidebarTitle: ''
+      sidebarTitle: '',
+      mapSpeedToSocrata : {'200':'0.2', '4_1':'4', '10_1':'10', '25_3':'25', '100_10':'100', '250_25':'250', '1000/100':'1000'}
     }
   },
   mounted () {
@@ -298,7 +299,7 @@ export default {
         for (let sdi in this.socrataData) {
           let sd = this.socrataData[sdi]
 
-          if (sd[label_field] === label) {
+          if (sd[label_field] === label && (label_field === 'speed' || sd.speed === this.mapSpeedToSocrata[this.selectedSpeed]) ) {
             chartData.datasets[0].data[li] += parseInt(sd.has_0)
             chartData.datasets[1].data[li] += parseInt(sd.has_1)
             chartData.datasets[2].data[li] += parseInt(sd.has_2)
