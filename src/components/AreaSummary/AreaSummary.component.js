@@ -1,4 +1,5 @@
 import { Carousel, Slide } from 'uiv'
+import { Spinner } from 'spin.js'
 import axios from 'axios'
 
 import nbMap from '../NBMap/'
@@ -11,7 +12,7 @@ import { updateMapLayers } from '../../_mixins/map-update-layers.js'
 
 export default {
   name: 'AreaSummary',
-  components: { Carousel, Slide, nbMap, nbMapSidebar, StackedBarChart },
+  components: { Carousel, Slide, Spinner, nbMap, nbMapSidebar, StackedBarChart },
   props: [],
   mixins: [urlValidation, updateMapLayers],
   data () {
@@ -33,13 +34,39 @@ export default {
       },
       chartStyles: {width: 'auto', height: '350px'},
       sidebarTitle: '',
-      mapSpeedToSocrata : {'200':'0.2', '4_1':'4', '10_1':'10', '25_3':'25', '100_10':'100', '250_25':'250', '1000/100':'1000'}
+      mapSpeedToSocrata: {'200': '0.2', '4_1': '4', '10_1': '10', '25_3': '25', '100_10': '100', '250_25': '250', '1000/100': '1000'}
     }
   },
   mounted () {
     EventHub.$on('updateGeogSearch', this.updateURLParams)
     EventHub.$on('updateMapSettings', (selectedTech, selectedSpeed) => this.updateTechSpeed(selectedTech, selectedSpeed))
     EventHub.$on('removeLayers', (propertyID, removeAll) => this.removeLayers(propertyID, removeAll))
+
+    // Options for spinner graphic
+    this.spinnerOpts = {
+      lines: 9, // The number of lines to draw
+      length: 19, // The length of each line
+      width: 9, // The line thickness
+      radius: 13, // The radius of the inner circle
+      scale: 0.7, // Scales overall size of the spinner
+      corners: 1, // Corner roundness (0..1)
+      color: '#ffcc44 ', // CSS color or array of colors
+      fadeColor: 'transparent', // CSS color or array of colors
+      opacity: 0.2, // Opacity of the lines
+      rotate: 71, // The rotation offset
+      direction: 1, // 1: clockwise, -1: counterclockwise
+      speed: 1.4, // Rounds per second
+      trail: 64, // Afterglow percentage
+      fps: 20, // Frames per second when using setTimeout() as a fallback in IE 9
+      zIndex: 2e9, // The z-index (defaults to 2000000000)
+      className: 'spinner', // The CSS class to assign to the spinner
+      top: '25%', // Top position relative to parent
+      left: '50%', // Left position relative to parent
+      shadow: 'none', // Box-shadow for the lines
+      position: 'relative' // Element positioning
+    }
+
+    this.spinnerTarget = document.getElementById('spinner')
   },
   destroyed () {
     EventHub.$off('updateMapSettings')
@@ -102,10 +129,15 @@ export default {
       })
     },
     fetchAreaData () {
+      console.log('fetchAreaData')
+
       const self = this
 
       // Hide charts before data refreshes
       this.showCharts = false
+
+      // Display spinner while chart data loads
+      this.spinner = new Spinner(this.spinnerOpts).spin(this.spinnerTarget)
 
       // Set defaults
       let geogType = 'nation'
@@ -179,6 +211,7 @@ export default {
           self.calculateTribalChartData()
 
           self.showCharts = true
+          self.spinner.stop()
         }
       })
       .catch(function (error) {
@@ -299,7 +332,7 @@ export default {
         for (let sdi in this.socrataData) {
           let sd = this.socrataData[sdi]
 
-          if (sd[label_field] === label && (label_field === 'speed' || sd.speed === this.mapSpeedToSocrata[this.selectedSpeed]) ) {
+          if (sd[label_field] === label && (label_field === 'speed' || sd.speed === this.mapSpeedToSocrata[this.selectedSpeed])) {
             chartData.datasets[0].data[li] += parseInt(sd.has_0)
             chartData.datasets[1].data[li] += parseInt(sd.has_1)
             chartData.datasets[2].data[li] += parseInt(sd.has_2)
