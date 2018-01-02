@@ -205,7 +205,7 @@ export default {
     assembleRows(rawData, lookupData) {
       this.rows = []
       for (let rdi in rawData) {
-        let totalPop = parseInt(rawData[rdi].sum_has_0) + parseInt(rawData[rdi].sum_has_1) + parseInt(rawData[rdi].sum_has_2) + parseInt(rawData[rdi].sum_has_3plus)
+        let totalPop = parseInt(rawData[rdi].sum_has_0) + parseInt(rawData[rdi].sum_has_1) + parseInt(rawData[rdi].sum_has_2) + parseInt(rawData[rdi].sum_has_3more)
         if (!totalPop) totalPop = 1
         
         let areaName = ''
@@ -226,7 +226,7 @@ export default {
           zero_providers: (100.0 * parseFloat(rawData[rdi].sum_has_0) / (1.0 * totalPop)).toFixed(2),
           one_provider: (100.0 * parseFloat(rawData[rdi].sum_has_1) / (1.0 * totalPop)).toFixed(2),
           two_provider: (100.0 * parseFloat(rawData[rdi].sum_has_2) / (1.0 * totalPop)).toFixed(2),
-          three_provider: (100.0 * parseFloat(rawData[rdi].sum_has_3plus) / (1.0 * totalPop)).toFixed(2),
+          three_provider: (100.0 * parseFloat(rawData[rdi].sum_has_3more) / (1.0 * totalPop)).toFixed(2),
         })
       }
     },
@@ -244,7 +244,7 @@ export default {
         speed: this.speedDictionary[this.selectedSpeed],
         $limit: 50000,
         $$app_token: this.appToken,
-        $select: 'id,sum(has_0),sum(has_1),sum(has_2),sum(has_3plus)',
+        $select: 'id,sum(has_0),sum(has_1),sum(has_2),sum(has_3more)',
         $group: 'id'
       }
 
@@ -378,6 +378,7 @@ export default {
 
       if (routeQP.geoid) {
         if (routeQP.geoid in this.stateGeoidToName) {
+          this.searchArea('')
           this.$refs.autocomplete.typeaheadModel = {
                                           'geoid': routeQP.geoid, 
                                           'name': this.stateGeoidToName[routeQP.geoid],

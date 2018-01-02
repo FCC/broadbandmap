@@ -20,7 +20,7 @@ export default {
       showCharts: false,
       settlementType: 'Settlement Type',
       popChartData: {
-        labels: ['0.2', '10/1', '25/3', '50/5', '100/10'],
+        labels: ['0.2/0.2', '4/1', '10/1', '25/3', '100/10', '250/25', '1000/100'],
         datasets: []
       },
       urbanRuralChartData: {
@@ -32,7 +32,8 @@ export default {
         datasets: []
       },
       chartStyles: {width: 'auto', height: '350px'},
-      sidebarTitle: ''
+      sidebarTitle: '',
+      mapSpeedToSocrata : {'200':'0.2', '4_1':'4', '10_1':'10', '25_3':'25', '100_10':'100', '250_25':'250', '1000/100':'1000'}
     }
   },
   mounted () {
@@ -140,14 +141,18 @@ export default {
       let speedNumeric = 0
       if (this.selectedSpeed === '200') {
         speedNumeric = 0.2
+      } else if (this.selectedSpeed === '4_1') {
+        speedNumeric = 4
       } else if (this.selectedSpeed === '10_1') {
         speedNumeric = 10
       } else if (this.selectedSpeed === '25_3') {
         speedNumeric = 25
-      } else if (this.selectedSpeed === '50_5') {
-        speedNumeric = 50
       } else if (this.selectedSpeed === '100_10') {
         speedNumeric = 100
+      } else if (this.selectedSpeed === '250_25') {
+        speedNumeric = 250
+      } else if (this.selectedSpeed === '1000_100') {
+        speedNumeric = 1000
       }
 
       axios
@@ -169,7 +174,7 @@ export default {
         if (self.socrataData.length > 0) {
           self.dedupSocrataData()
 
-          self.calculatePopChartData()
+          self.calculatepopChartData()
           self.calculateUrbanRuralChartData()
           self.calculateTribalChartData()
 
@@ -294,7 +299,7 @@ export default {
         for (let sdi in this.socrataData) {
           let sd = this.socrataData[sdi]
 
-          if (sd[label_field] === label) {
+          if (sd[label_field] === label && (label_field === 'speed' || sd.speed === this.mapSpeedToSocrata[this.selectedSpeed]) ) {
             chartData.datasets[0].data[li] += parseInt(sd.has_0)
             chartData.datasets[1].data[li] += parseInt(sd.has_1)
             chartData.datasets[2].data[li] += parseInt(sd.has_2)
@@ -312,14 +317,15 @@ export default {
       }
       return chartData
     },
-    calculatePopChartData () {
+    calculatepopChartData () {
       this.popChartData.datasets = [
-        {data: [0, 0, 0, 0, 0]},
-        {data: [0, 0, 0, 0, 0]},
-        {data: [0, 0, 0, 0, 0]},
-        {data: [0, 0, 0, 0, 0]}
+        {data: [0, 0, 0, 0, 0, 0, 0]},
+        {data: [0, 0, 0, 0, 0, 0, 0]},
+        {data: [0, 0, 0, 0, 0, 0, 0]},
+        {data: [0, 0, 0, 0, 0, 0, 0]}
       ]
-      this.popChartData = this.aggregate(this.popChartData, 'speed', {'0.2': '0.2', '10/1': '10', '25/3': '25', '50/5': '50', '100/10': '100'})
+
+      this.popChartData = this.aggregate(this.popChartData, 'speed', {'0.2/0.2': '0.2', '4/1': '4', '10/1': '10', '25/3': '25', '100/10': '100', '250/25': '250', '1000/100': '1000'})
     },
     calculateUrbanRuralChartData () {
       this.urbanRuralChartData.datasets = [
