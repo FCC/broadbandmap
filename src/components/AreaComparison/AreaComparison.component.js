@@ -378,6 +378,7 @@ export default {
 
       if (routeQP.geoid) {
         if (routeQP.geoid in this.stateGeoidToName) {
+          this.searchArea('')
           this.$refs.autocomplete.typeaheadModel = {
                                           'geoid': routeQP.geoid, 
                                           'name': this.stateGeoidToName[routeQP.geoid],
