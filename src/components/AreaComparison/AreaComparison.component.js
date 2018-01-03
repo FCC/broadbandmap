@@ -75,7 +75,7 @@ export default {
       typeDictionaryArea: {
         'County': 'county',
         'State': 'state',
-        'Congressional District': 'cdist',
+        'Congressional District': 'cd',
         'Census Place': 'place',
         'Tribal Area': 'tribal',
         'CBSA (MSA)': 'cbsa'
