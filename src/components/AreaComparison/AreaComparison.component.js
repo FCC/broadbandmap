@@ -101,7 +101,6 @@ export default {
       this.updateTechSpeed(selectedTech, selectedSpeed)
     }.bind(this))
     EventHub.$on('removeTableData', (propertyID, removeAll) => this.removeData())
-
   },
   destroyed () {
     EventHub.$off('updateTableSettings')
@@ -164,7 +163,7 @@ export default {
         console.log('ERROR: process.env.SOCRATA_ENV in .env file must be PROD or DEV, not ' + process.env.SOCRATA_ENV)
       }
     },
-    cacheStates() {
+    cacheStates () {
       const self = this
 
       axios
@@ -182,7 +181,7 @@ export default {
           let sd = response.data[sdi]
           self.stateNameToGeoid[sd.name] = sd.geoid.toString()
           self.stateGeoidToName[sd.geoid.toString()] = sd.name
-     
+
           self.loadParamsFromUrl()
         }
       })
@@ -202,43 +201,43 @@ export default {
         console.log(error)
       })
     },
-    assembleRows(rawData, lookupData) {
+    assembleRows (rawData, lookupData) {
       this.rows = []
       for (let rdi in rawData) {
         let totalPop = parseInt(rawData[rdi].sum_has_0) + parseInt(rawData[rdi].sum_has_1) + parseInt(rawData[rdi].sum_has_2) + parseInt(rawData[rdi].sum_has_3more)
         if (!totalPop) totalPop = 1
-        
+
         let areaName = ''
         if (this.searchType === 'Congressional District') {
           areaName = lookupData[rawData[rdi].id] + '-' + rawData[rdi].id.toString()
         } else {
           areaName = lookupData[rawData[rdi].id]
         }
-        
-       if (!this.$refs.autocomplete.typeaheadModel.geoid && 
+
+        if (!this.$refs.autocomplete.typeaheadModel.geoid &&
             Object.keys(this.stateGeoidToName).length > 0 &&
             (this.searchType === 'County' || this.searchType === 'Census Place' || this.searchType === 'Congressional District')) {
           areaName += ', ' + this.stateGeoidToName[rawData[rdi].id.substring(0, 2)]
         }
-   
+
         this.rows.push({
           area_name: areaName,
           zero_providers: (100.0 * parseFloat(rawData[rdi].sum_has_0) / (1.0 * totalPop)).toFixed(2),
           one_provider: (100.0 * parseFloat(rawData[rdi].sum_has_1) / (1.0 * totalPop)).toFixed(2),
           two_provider: (100.0 * parseFloat(rawData[rdi].sum_has_2) / (1.0 * totalPop)).toFixed(2),
-          three_provider: (100.0 * parseFloat(rawData[rdi].sum_has_3more) / (1.0 * totalPop)).toFixed(2),
+          three_provider: (100.0 * parseFloat(rawData[rdi].sum_has_3more) / (1.0 * totalPop)).toFixed(2)
         })
       }
     },
-    compareAreas() {
+    compareAreas () {
       const self = this
       this.validationError = ''
       this.rows = []
 
       // all data we need for query
-      //console.log('CompareAreas input : ', this.$refs.autocomplete.typeaheadModel.geoid, this.selectedTech, this.selectedSpeed, this.searchType)
+      // console.log('CompareAreas input : ', this.$refs.autocomplete.typeaheadModel.geoid, this.selectedTech, this.selectedSpeed, this.searchType)
 
-      let socParams = {          
+      let socParams = {
         type: this.typeDictionaryArea[this.searchType],
         tech: this.selectedTech,
         speed: this.speedDictionary[this.selectedSpeed],
@@ -253,9 +252,9 @@ export default {
         let value = this.$refs.autocomplete.typeaheadModel
         if (value in this.stateNameToGeoid) {
           this.$refs.autocomplete.typeaheadModel = {
-                                          'geoid': this.stateNameToGeoid[value], 
-                                          'name': value,
-                                          'type': 'state'}
+            'geoid': this.stateNameToGeoid[value],
+            'name': value,
+            'type': 'state'}
         } else {
           this.validationError = 'Invalid state specified : ' + value
           return
@@ -276,7 +275,7 @@ export default {
       .then(function (response) {
         let rawData = response.data
         // Got raw data. Now fetch geography names for join
-        let socLookupParams = {          
+        let socLookupParams = {
           type: self.typeDictionary[self.searchType],
           $limit: 50000,
           $$app_token: self.appToken,
@@ -295,7 +294,7 @@ export default {
           let lookupData = {}
           for (let rdi in response.data) {
             if (response.data[rdi].type === 'tribal') {
-              lookupData[response.data[rdi].geoid.replace(/\D/g,'')] = response.data[rdi].name
+              lookupData[response.data[rdi].geoid.replace(/\D/g, '')] = response.data[rdi].name
             } else {
               lookupData[response.data[rdi].geoid] = response.data[rdi].name
             }
@@ -380,9 +379,9 @@ export default {
         if (routeQP.geoid in this.stateGeoidToName) {
           this.searchArea('')
           this.$refs.autocomplete.typeaheadModel = {
-                                          'geoid': routeQP.geoid, 
-                                          'name': this.stateGeoidToName[routeQP.geoid],
-                                          'type': 'state'}
+            'geoid': routeQP.geoid,
+            'name': this.stateGeoidToName[routeQP.geoid],
+            'type': 'state'}
         } else {
           this.validationError = 'Invalid geoid : ' + routeQP.geoid
           return
@@ -396,7 +395,10 @@ export default {
       }
 
       if (routeQP.searchtype || routeQP.geoid) this.compareAreas()
-    }   
+    },
+    openAboutAreaCompare () {
+      EventHub.$emit('openAboutAreaCompare')
+    }
   },
   computed: {
     getPlaceholderText: function () { // Set the geography type input placeholder text based on search type
