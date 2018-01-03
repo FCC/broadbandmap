@@ -78,6 +78,13 @@ export default {
     },
     openMapSettings () {
       EventHub.$emit('openMapSettings')
+    },
+    openAboutModal () {
+      if (this.$route.name === 'LocationSummary') {
+        EventHub.$emit('openAboutLocSummary')
+      } else {
+        EventHub.$emit('openAboutAreaSummary')
+      }
     }
   },
   computed: {

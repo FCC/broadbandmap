@@ -1,0 +1,25 @@
+<modal v-model="showModal" title="About Location Summary" @hide="" ref="modal">
+  <section>
+    <h2>About the map</h2>
+    <p>This map displays data showing the number of providers reporting fixed-broadband service around the country. As you zoom in, you will see more granular broadband data. When zoomed out, the map displays the population-weighted average number of broadband providers (at the county or census tract) level; at higher zoom levels (as you zoom in closer), the map displays the number of providers in each census block.</p>
+    <p>You can chose the technologies, and downstream and upstream speeds, displayed in this map in the "Select Broadband" menu, accessible when you click on the gear icon [picture of gear icon]. By default, the map shows all technologies and broadband at a speed of at least 25 Mbps downstream / 3 Mbps upstream.</p>
+    <p>Census blocks without any land do not appear on the map, though providers do sometimes report service in such areas. In addition, census blocks and tracts without any population are shown as [**TBD**].</p>
+    <p>[**add text about there possibly being fewer providers than listed on the table**]</p>
+  </section>
+  <hr>
+  <section>
+    <h2>About the table</h2>
+    <p>The table provides a list of all providers reporting fixed broadband service regardless of the selected technology or speed for the location chosen. Broadband providers may not offer service to every home in a census block. If you do not see data in the table, click on the map to select a location; or enter an address, or latitude and longitude, in the search bar at the top of the map.</p>
+  </section>
+  <hr>
+  <section>
+    <h2>Map controls</h2>
+    <p>By clicking on the gear icon <button class="btn btn-default btn-lg" type="button"><span class="icon icon-cog"></span></button>, you can update the map. The "Select Broadband" menu allows you to change the speed and technologies displayed on the map.</p>
+    <p>[**include description of map tilt and compass here; and copy to other map pages**]</p>
+    <p>For more information about data sources, visit the <router-link to="/about">About</router-link> page</p>
+  </section>  
+  <div slot="footer">
+    <!-- <button class="btn btn-default" type="button" @click="closeModal">Close</button> -->
+    <button class="btn btn-default pull-right" type="button" @click="closeModal">Close</button>
+  </div>
+</modal>
