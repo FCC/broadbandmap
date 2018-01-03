@@ -9,12 +9,27 @@
       <a id="main-content" class="sr-only"></a>
       <section>
         <h2>Fixed Broadband Deployment</h2>
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquam, similique! Laboriosam harum, placeat vel facilis dolorum, maxime. Itaque necessitatibus neque unde, enim, earum amet veniam blanditiis maiores tempore ipsum eum! Lorem ipsum dolor sit amet, consectetur adipisicing elit. Debitis, reprehenderit tenetur dolor voluptatem eum, dolorum. Temporibus, illum, quasi eos debitis, harum id ad nesciunt ea, delectus aperiam adipisci rem magni.</p>
+        <p>This website provides a visualization of the fixed-broadband deployment data collected on FCC Form 477. Facilities-based providers of broadband service report Form 477 data in June and December each year. For more information about Form 477, to download the data, or to see reports generated from the dataset, please refer to the links at right.</p>
+
+        <p>Providers report fixed-broadband deployment data at the census block level. Form 477 data are reported using 2010 Census blocks. Providers may not offer service to every home in every block in which they report service. The calculations used to create the graphs treat every location as having service, and may therefore over-estimate broadband coverage, particularly in areas with large census blocks.</p>
+      </section>
+      <hr>
+      <section>
+        <h2>Block-level estimates for housing units, population and households</h2>
+        <p>The U.S. Census Bureau publishes block-level figures for housing units, population and households only with data from the decennial census. Rather than rely on data from 2010, this site instead relies on block-level estimates that account for increases or decreases in population over time; and the construction of new homes. See <a href="https://www.fcc.gov/reports-research/data/staff-block-estimates">Staff Block Estimates</a> for more information.</p>
+        <p>The methodology used to create those block-level estimates is likely to over-state the number of blocks in which people reside (rather than under-state). As such these estimates may under-estimate population-weighted figures for broadband coverage.</p>
       </section>
       <hr>
       <section>
         <h2>How to Use This Site</h2>
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquam, similique! Laboriosam harum, placeat vel facilis dolorum, maxime. Itaque necessitatibus neque unde, enim, earum amet veniam blanditiis maiores tempore ipsum eum! Lorem ipsum dolor sit amet, consectetur adipisicing elit. Debitis, reprehenderit tenetur dolor voluptatem eum, dolorum. Temporibus, illum, quasi eos debitis, harum id ad nesciunt ea, delectus aperiam adipisci rem magni.</p>
+        <p>This website allows you to explore various facets of fixed-broadband deployment.</p>
+        <p>The site allows users to choose a from a list of technologies (ADSL, cable modem, FTTP, fixed wireless, satellite and other), and a list of broadband speeds (at least 200 kbps, at least 10 Mbps downstream / 1 Mbps upstream, at least 25/3, at least 100/10 or at least 250/25) in creating the maps and graphs on each page.</p>
+        <ul>
+          <li>To see the providers that report service at a given location, go to the  <router-link to="/location-summary">Location Summary</router-link> page and enter and address or click on a location.</li>
+          <li>To see a map of broadband and get summary data about a particular area, go to the <router-link to="/area-summary">Area Summary</router-link> page, choose the type of area, and use the search bar.</li>
+          <li>To learn more about the technologies and speeds reported by each provider, or to compare providers' footprints, go to the <router-link to="/provider-detail">Provider Detail</router-link> page and search for up to three providers at a time.</li>
+          <li>To get information about different areas, and compare to other areas, go to the <router-link to="/area-comparison">Area Comparison</router-link> page.</li>
+        </ul>
       </section>
       <hr>
       <section>
@@ -23,26 +38,11 @@
         <ul>
           <li><a href="#">Socrata API's for tables and graphs</a></li>
           <li><a href="#">Mapbox embed directions</a></li>
-          <li><a href="#">Census-block API </a></li>
-        </ul>
-        <h3 class="h4">Embed a map layer into your Web site</h3>
-        <ul>
-          <li>Step 1</li>
-          <li>Step 2</li>
-          <li>Step 3</li>
+          <li><a href="#">Census-block API</a></li>
         </ul>
         <h3 class="h4">Github</h3>
         <ul>
-          <li><a href="#">Repository</a></li>
-        </ul>
-      </section>
-      <hr>
-      <section>
-        <h2>FAQ</h2>
-        <ul>
-          <li>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</li>
-          <li>Placeat omnis consectetur inventore velit explicabo officia quisquam ut voluptatum adipisci repudiandae, aperiam, sunt, aliquid eligendi illo voluptate nisi exercitationem beatae quaerat.</li>
-          <li>Modi aspernatur nisi facere.</li>
+          <li><a href="https://github.com/FCC/broadbandmap">Repository</a></li>
         </ul>
       </section>
     </div>
@@ -52,22 +52,22 @@
           <h3 class="panel-title">Related Links</h3>
         </div>
         <div class="panel-body">
-          <p><b>Form 477</b></p>
+          <p><b>Form 477 Information and Data</b></p>
           <ul class="list-unstyled">
-            <li><a href="#">General Form 477 Resources</a></li>
-            <li><a href="#">Form 477 reports (IAS and VTS)</a></li>
-            <li><a href="#">Form 477 additional data</a></li>
-            <li><a href="#">Form 477 orders</a></li>
+            <li><a href="https://www.fcc.gov/general/form-477-resources-filers">General Form 477 Resources</a></li>
+            <li><a href="https://www.fcc.gov/general/form-477-orders-and-releases">Form 477 Orders</a></li>
+            <li><a href="https://www.fcc.gov/general/broadband-deployment-data-fcc-form-477">Fixed-broadband deployment data</a></li>
+            <li><a href="https://www.fcc.gov/mobile-deployment-form-477-data">Mobile-broadband deployment data</a></li>
+            <li><a href="https://www.fcc.gov/general/form-477-census-tract-data-internet-access-services">Fixed-broadband subscription data</a></li>
+            <li><a href="https://www.fcc.gov/general/fcc-form-477-additional-data">Form 477 additional data</a></li>
           </ul>
           <hr>
-          <p><b>Data and Reports</b></p>
+          <p><b>Reports</b></p>
           <ul class="list-unstyled">
-            <li><a href="#">Mobile maps and data</a></li>
-            <li><a href="#">Fixed-broadband subscription data</a></li>
-            <li><a href="#">Mobile competition report</a></li>
-            <li><a href="#">BPR/Section 706 report</a></li>
-            <li><a href="#">Broadband classroom</a></li>
-            <li><a href="#">Data download</a></li>
+            <li><a href="https://www.fcc.gov/internet-access-services-reports">Internet Access Services (IAS) report</a></li>
+            <li><a href="https://www.fcc.gov/voice-telephone-services-report">Voice Telephone Services (VTS) report</a></li>
+            <li><a href="https://www.fcc.gov/reports-research/reports/mobile-wireless-competition-reports/mobile-wireless-competition-report-20th">Mobile competition report (20th)</a></li>
+            <li><a href="#">BPR/Section 706 report [**Link to be updated**]</a></li>
           </ul>
         </div>
       </div>
