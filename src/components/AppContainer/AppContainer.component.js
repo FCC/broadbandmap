@@ -2,11 +2,12 @@ import AppHeader from '@/components/AppHeader/'
 import SystemAlert from '@/components/SystemAlert/'
 import MapSettings from '@/components/NBMap/NBMapSettings/'
 import TableSettings from '@/components/AreaComparison/TableSettings/'
+import AboutLocationSummary from '@/components/LocationSummary/AboutLocationSummary/'
 import AppFooter from '@/components/AppFooter/'
 
 export default {
   name: 'AppContainer',
-  components: { AppHeader, SystemAlert, MapSettings, TableSettings, AppFooter },
+  components: { AppHeader, SystemAlert, MapSettings, TableSettings, AboutLocationSummary, AppFooter },
   props: [],
   mounted () {
 

@@ -78,6 +78,9 @@ export default {
     },
     openMapSettings () {
       EventHub.$emit('openMapSettings')
+    },
+    openAboutLocSummary () {
+      EventHub.$emit('openAboutLocSummary')
     }
   },
   computed: {
