@@ -2,17 +2,17 @@ import { Modal } from 'uiv'
 import EventHub from '../../../_mixins/EventHub.js'
 
 export default {
-  name: 'AboutLocationSummary',
+  name: 'AboutProviderDetail',
   components: { Modal },
   mixins: [],
   props: [],
   mounted () {
-    EventHub.$on('openAboutLocSummary', function () {
+    EventHub.$on('openAboutProvider', function () {
       this.showModal = true
     }.bind(this))
   },
   destroyed () {
-    EventHub.$off('openAboutLocSummary')
+    EventHub.$off('openAboutProvider')
   },
   data () {
     return {

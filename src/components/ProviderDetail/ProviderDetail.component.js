@@ -1,5 +1,7 @@
 import axios from 'axios'
 import { Tooltip } from 'uiv'
+
+import EventHub from '../../_mixins/EventHub.js'
 import nbMap from '../NBMap/'
 
 import PopulationChart from './PopulationChart'
@@ -10,7 +12,7 @@ import BookmarkLink from '../BookmarkLink/'
 
 export default {
   name: 'ProviderDetail',
-  components: { Tooltip, nbMap, PopulationChart, SpeedChart, UpSpeedChart, Autocomplete, BookmarkLink },
+  components: { Tooltip, EventHub, nbMap, PopulationChart, SpeedChart, UpSpeedChart, Autocomplete, BookmarkLink },
   props: [],
   mounted () {
     this.loadProviderLookup()
@@ -114,7 +116,7 @@ export default {
       // Create list of provider Names
       this.providerNames = []
       for (let pbi in providerBox) {
-        //console.log('box content : ', providerBox[pbi])
+        // console.log('box content : ', providerBox[pbi])
         if (providerBox[pbi].typeaheadModel.holdingcompanyname) {
           this.providerNames.push(providerBox[pbi].typeaheadModel.holdingcompanyname)
         } else {
@@ -307,7 +309,7 @@ export default {
               let cData = []
               cData[0] = 100.0
               for (let i = 1; i < count; i++) {
-                cData[i] = 100.0 * parseFloat(collapsed[ci][drct + '_' + (i+1).toString()]) / parseFloat(collapsed[ci][drct + '_1'])
+                cData[i] = 100.0 * parseFloat(collapsed[ci][drct + '_' + (i + 1).toString()]) / parseFloat(collapsed[ci][drct + '_1'])
               }
 
               let series = {
@@ -417,7 +419,6 @@ export default {
       })
 
       if (routeQP.direction) {
-        console.log('routeQP.direction = ', routeQP.direction)
         if (routeQP.direction === 'u' || routeQP.direction === 'd') {
           this.direction = routeQP.direction
         } else {
@@ -427,13 +428,12 @@ export default {
       }
 
       if (routeQP.hoconums) {
-        
         let hoconums = routeQP.hoconums.split(',')
         if (hoconums.length > 3) {
           this.validationError = 'Too many providers specified in URL. Selection must be limited to 3.'
           return
         } else {
-          let unknownHoconum = undefined
+          let unknownHoconum
           for (let hci in hoconums) {
             if (!(hoconums[hci] in this.hoconum2Name)) {
               unknownHoconum = hoconums[hci]
@@ -465,6 +465,9 @@ export default {
         }
         this.fetchProviderData()
       }
+    },
+    openAboutProvider () {
+      EventHub.$emit('openAboutProvider')
     }
   },
   computed: {

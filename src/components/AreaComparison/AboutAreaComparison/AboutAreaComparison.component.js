@@ -2,17 +2,17 @@ import { Modal } from 'uiv'
 import EventHub from '../../../_mixins/EventHub.js'
 
 export default {
-  name: 'AboutLocationSummary',
+  name: 'AboutAreaComparison',
   components: { Modal },
   mixins: [],
   props: [],
   mounted () {
-    EventHub.$on('openAboutLocSummary', function () {
+    EventHub.$on('openAboutAreaCompare', function () {
       this.showModal = true
     }.bind(this))
   },
   destroyed () {
-    EventHub.$off('openAboutLocSummary')
+    EventHub.$off('openAboutAreaCompare')
   },
   data () {
     return {
