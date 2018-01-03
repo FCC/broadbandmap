@@ -276,6 +276,7 @@ export default {
         }
 
         if (this.searchType !== 'CBSA (MSA)' || 
+           !this.$refs.autocomplete.typeaheadModel.geoid ||
            (this.$refs.autocomplete.typeaheadModel.geoid && areaName.indexOf(this.abbreviationByGeoID[this.$refs.autocomplete.typeaheadModel.geoid]) > 0)) {
           this.rows.push({
             area_name: areaName,
