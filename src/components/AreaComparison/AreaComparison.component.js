@@ -1,3 +1,4 @@
+import { Spinner } from 'spin.js'
 import axios from 'axios'
 import { Dropdown, Tooltip } from 'uiv'
 
@@ -8,7 +9,7 @@ import searchGeogTypes from '../../_mixins/search-geog-types.js'
 
 export default {
   name: 'AreaComparison',
-  components: { Tooltip, Dropdown, Autocomplete, BookmarkLink },
+  components: { Tooltip, Dropdown, Autocomplete, BookmarkLink, Spinner },
   mixins: [searchGeogTypes],
   props: [],
   data () {
@@ -163,6 +164,32 @@ export default {
       this.updateTechSpeed(selectedTech, selectedSpeed)
     }.bind(this))
     EventHub.$on('removeTableData', (propertyID, removeAll) => this.removeData())
+
+    // Options for spinner graphic
+    this.spinnerOpts = {
+      lines: 9, // The number of lines to draw
+      length: 19, // The length of each line
+      width: 9, // The line thickness
+      radius: 13, // The radius of the inner circle
+      scale: 0.7, // Scales overall size of the spinner
+      corners: 1, // Corner roundness (0..1)
+      color: '#ffcc44 ', // CSS color or array of colors
+      fadeColor: 'transparent', // CSS color or array of colors
+      opacity: 0.2, // Opacity of the lines
+      rotate: 71, // The rotation offset
+      direction: 1, // 1: clockwise, -1: counterclockwise
+      speed: 1.4, // Rounds per second
+      trail: 64, // Afterglow percentage
+      fps: 20, // Frames per second when using setTimeout() as a fallback in IE 9
+      zIndex: 2e9, // The z-index (defaults to 2000000000)
+      className: 'spinner', // The CSS class to assign to the spinner
+      top: '25%', // Top position relative to parent
+      left: '50%', // Left position relative to parent
+      shadow: 'none', // Box-shadow for the lines
+      position: 'relative' // Element positioning
+    }
+
+    this.spinnerTarget = document.getElementById('spinner')
   },
   destroyed () {
     EventHub.$off('updateTableSettings')
@@ -328,6 +355,9 @@ export default {
 
       this.updateUrlParams()
 
+      // Display spinner while chart data loads
+      this.spinner = new Spinner(this.spinnerOpts).spin(this.spinnerTarget)
+
       axios
       .get(this.socrataURL, {
         params: socParams,
@@ -359,6 +389,7 @@ export default {
             lookupData[response.data[rdi].geoid] = response.data[rdi].name
           }
           self.assembleRows(rawData, lookupData, self.$refs.autocomplete.typeaheadModel.geoid)
+          self.spinner.stop()
         })
         .catch(function (error) {
           if (error.response) {
