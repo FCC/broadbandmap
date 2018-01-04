@@ -159,6 +159,7 @@ export default {
   mounted () {
     this.setSocrata()
     this.cacheStates()
+    this.justMounted = true
 
     EventHub.$on('updateTableSettings', function (selectedTech, selectedSpeed) {
       this.updateTechSpeed(selectedTech, selectedSpeed)
@@ -229,7 +230,7 @@ export default {
     updateTechSpeed (selectedTech, selectedSpeed) {
       this.selectedTech = selectedTech
       this.selectedSpeed = selectedSpeed
-      if (this.rows && this.rows.length > 0) this.compareAreas()
+      if (!this.justMounted) this.compareAreas()
     },
     removeData () {
       this.rows = []
@@ -307,6 +308,7 @@ export default {
             two_provider: (100.0 * parseFloat(rawData[rdi].sum_has_2) / (1.0 * totalPop)).toFixed(2),
             three_provider: (100.0 * parseFloat(rawData[rdi].sum_has_3more) / (1.0 * totalPop)).toFixed(2)
           })
+          this.justMounted = false
         }
       }
     },
