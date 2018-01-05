@@ -50,7 +50,7 @@ export default {
             stacked: true,
             scaleLabel: {
               display: true,
-              labelString: 'Speed (Mbps downstream\\upstream)'
+              labelString: 'Speed (Mbps downstream/upstream)'
             }
           }],
           yAxes: [{

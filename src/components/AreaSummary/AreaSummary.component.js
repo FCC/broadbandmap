@@ -137,7 +137,11 @@ export default {
       this.showCharts = false
 
       // Display spinner while chart data loads
-      this.spinner = new Spinner(this.spinnerOpts).spin(this.spinnerTarget)
+      if (!this.spinner) {
+        this.spinner = new Spinner(this.spinnerOpts).spin(this.spinnerTarget)
+      } else {
+        this.spinner.spin(this.spinnerTarget)
+      }
 
       // Set defaults
       let geogType = 'nation'
