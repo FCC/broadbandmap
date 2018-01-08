@@ -26,7 +26,7 @@ export const urlValidation = {
       }
     },
     isValidSpeed (selectedSpeed) {
-      const speeds = ['200', '10_1', '25_3', '50_5', '100_10']
+      const speeds = ['200', '4_1', '10_1', '25_3', '100_10', '250_25', '1000_100']
 
       return speeds.indexOf(selectedSpeed) > -1
     }
