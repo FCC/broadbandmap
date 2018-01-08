@@ -112,7 +112,7 @@ export default {
       let routeQuery = this.$route.query
 
       // Get map zoom level
-      let zoomLevel = this.Map.getZoom()
+      // let zoomLevel = this.Map.getZoom()
 
       // Add routeQuery properties to routeQueryParams
       Object.keys(routeQuery).map(property => {
@@ -122,7 +122,7 @@ export default {
       // Add select tech, selected speed, and zoom to routeQueryParams
       routeQueryParams.selectedTech = this.selectedTech
       routeQueryParams.selectedSpeed = this.selectedSpeed
-      routeQueryParams.zoom = zoomLevel
+      // routeQueryParams.zoom = zoomLevel
 
       // Update URL fragment with routeQueryParams
       this.$router.replace({
