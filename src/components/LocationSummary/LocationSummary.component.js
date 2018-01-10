@@ -3,7 +3,6 @@ import nbMap from '../NBMap/'
 import EventHub from '../../_mixins/EventHub.js'
 import nbMapSidebar from '../NBMap/NBMapSidebar/'
 import { urlValidation } from '../../_mixins/urlValidation.js'
-import { sourcesTechSpeed, layersTechSpeed } from '../NBMap/layers-techSpeed.js'
 import { updateMapLayers } from '../../_mixins/map-update-layers.js'
 export default {
   name: 'LocationSummary',
@@ -149,18 +148,19 @@ export default {
       this.updateURLParams()
     },
     getFIPS (lat, lon) { // Call block API and expect FIPS and bounding box in response
-      const blockAPI = 'https://www.broadbandmap.gov/broadbandmap/census/block'
+      const blockAPI = process.env.BLOCK_API
 
       axios
           .get(blockAPI, {
             params: {
               longitude: lon,
               latitude: lat,
-              format: 'json'
+              format: 'json',
+              showall: false
             }
           })
           .then(response => {
-            if (response.data.Results.block.length !== 0) {
+            if (response.data.Block.bbox.length !== 0) {
               this.highlightBlock(response, lat, lon)
               this.fetchProviderData(response)
             } else {
@@ -185,15 +185,13 @@ export default {
     },
     highlightBlock (response, lat, lon) { // Highlight census block when map is searched
       let fipsCode = ''
-      let envelope = 0
-      let envArray = []
+      let envArray = response.data.Block.bbox
 
       // Get FIPS and envelope from response data
-      fipsCode = response.data.Results.block[0].FIPS
+      fipsCode = response.data.Block.FIPS
+
       // Display on page
       this.censusBlock = fipsCode
-      envelope = response.data.Results.block[0].envelope
-      envArray = [envelope.minx, envelope.miny, envelope.maxx, envelope.maxy]
 
       // Zoom and center map to envelope
       this.Map.fitBounds(envArray, {
@@ -207,7 +205,8 @@ export default {
       this.Map.setFilter('xlarge-blocks-highlighted', ['==', 'geoid10', fipsCode])
     },
     fetchProviderData (response) {
-      let fipsCode = response.data.Results.block[0].FIPS
+      let fipsCode = response.data.Block.FIPS
+
       axios
       .get(process.env.SOCRATA_PROD_FULL, {
         params: {
