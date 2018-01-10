@@ -293,7 +293,7 @@ export default {
     assembleRows (rawData, lookupData, geoid) {
       this.rows = []
       for (let rdi in rawData) {
-        let totalPop = parseInt(rawData[rdi].sum_has_0) + parseInt(rawData[rdi].sum_has_1) + parseInt(rawData[rdi].sum_has_2) + parseInt(rawData[rdi].sum_has_3more)
+        let totalPop = parseInt(rawData[rdi].sum_has_0) + parseInt(rawData[rdi].sum_has_1more) + parseInt(rawData[rdi].sum_has_2more) + parseInt(rawData[rdi].sum_has_3more)
         if (!totalPop) totalPop = 1
 
         let areaName = lookupData[rawData[rdi].id]
@@ -304,8 +304,8 @@ export default {
           this.rows.push({
             area_name: areaName,
             zero_providers: (100.0 * parseFloat(rawData[rdi].sum_has_0) / (1.0 * totalPop)).toFixed(2),
-            one_provider: (100.0 * parseFloat(rawData[rdi].sum_has_1) / (1.0 * totalPop)).toFixed(2),
-            two_provider: (100.0 * parseFloat(rawData[rdi].sum_has_2) / (1.0 * totalPop)).toFixed(2),
+            one_provider: (100.0 * parseFloat(rawData[rdi].sum_has_1more) / (1.0 * totalPop)).toFixed(2),
+            two_provider: (100.0 * parseFloat(rawData[rdi].sum_has_2more) / (1.0 * totalPop)).toFixed(2),
             three_provider: (100.0 * parseFloat(rawData[rdi].sum_has_3more) / (1.0 * totalPop)).toFixed(2)
           })
           this.justMounted = false
@@ -326,7 +326,7 @@ export default {
         speed: this.speedDictionary[this.selectedSpeed],
         $limit: 50000,
         $$app_token: this.appToken,
-        $select: 'id,sum(has_0),sum(has_1),sum(has_2),sum(has_3more)',
+        $select: 'id,sum(has_0),sum(has_1more),sum(has_2more),sum(has_3more)',
         $group: 'id'
       }
 
