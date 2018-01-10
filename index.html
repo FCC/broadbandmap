@@ -1,53 +1,58 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <link rel="canonical" href="https://www.fcc.gov/">
-    <link rel="shortlink" href="https://www.fcc.gov/">
-    <meta property="og:site_name" content="Federal Communications Commission ULS">
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://www.fcc.gov/maps" />
-    <meta property="og:title" content="Federal Communications Commission">
-    <meta property="og:description" content="The United States of America">
-    <title>Fixed Broadband Deployment Data &laquo; FCC</title>
-    <meta name="description" content="Fixed Broadband Deployment">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="shortcut icon" href="https://www.fcc.gov/sites/all/themes/fcc/favicon.ico" type="image/vnd.microsoft.icon" />
-    <meta name="MobileOptimized" content="width">
-    <meta name="HandheldFriendly" content="true">
-    <meta name="viewport" content="width=device-width">
-    <meta http-equiv="cleartype" content="on">
-    <link href="//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,700italic,400,300,700" rel="stylesheet" />  
-    <link href='https://api.mapbox.com/mapbox-gl-js/v0.40.1/mapbox-gl.css' rel='stylesheet' />
-    <script>
-    (function(i, s, o, g, r, a, m) {
-        i['GoogleAnalyticsObject'] = r;
-        i[r] = i[r] || function() {
-            (i[r].q = i[r].q || []).push(arguments)
-        }, i[r].l = 1 * new Date();
-        a = s.createElement(o),
-            m = s.getElementsByTagName(o)[0];
-        a.async = 1;
-        a.src = g;
-        m.parentNode.insertBefore(a, m)
-    })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
 
-    ga('create', 'UA-16888309-1', 'auto');
-    ga('send', 'pageview');
-    </script>
-  </head>
-  <body>
-    <div id="app"></div>
-    <script src="https://api.mapbox.com/mapbox-gl-js/v0.40.1/mapbox-gl.js" integrity="sha384-8oG1K48BiH+jMiPNLQFjsAO605WPQX73Syzte4PXVAH/O3vZ/VWsu/pD4V+bONt7" crossorigin="anonymous"></script>
-  </body>
+<head>
+  <meta charset="utf-8">
+  <link rel="canonical" href="https://www.fcc.gov/">
+  <link rel="shortlink" href="https://www.fcc.gov/">
+  <meta property="og:site_name" content="Federal Communications Commission ULS">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://www.fcc.gov/maps" />
+  <meta property="og:title" content="Federal Communications Commission">
+  <meta property="og:description" content="The United States of America">
+  <title>Fixed Broadband Deployment Data &laquo; FCC</title>
+  <meta name="description" content="Fixed Broadband Deployment">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="shortcut icon" href="https://www.fcc.gov/sites/all/themes/fcc/favicon.ico" type="image/vnd.microsoft.icon" />
+  <meta name="MobileOptimized" content="width">
+  <meta name="HandheldFriendly" content="true">
+  <meta name="viewport" content="width=device-width">
+  <meta http-equiv="cleartype" content="on">
+  <link href="//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,700italic,400,300,700" rel="stylesheet" />
+  <link href='https://api.mapbox.com/mapbox-gl-js/v0.40.1/mapbox-gl.css' rel='stylesheet' />
   <script>
-    window.addEventListener('hashchange', function() {
-        var currentPage = location.hash.split('#')[1].split('?')[0];
-        var currentTitle = document.title.split(' |')[0];
-        ga('set', {
-            page: currentPage,
-            title: currentTitle
-        });
-    });
+  (function(i, s, o, g, r, a, m) {
+    i['GoogleAnalyticsObject'] = r;
+    i[r] = i[r] || function() {
+      (i[r].q = i[r].q || []).push(arguments)
+    }, i[r].l = 1 * new Date();
+    a = s.createElement(o),
+      m = s.getElementsByTagName(o)[0];
+    a.async = 1;
+    a.src = g;
+    m.parentNode.insertBefore(a, m)
+  })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+
+  ga('create', 'UA-16888309-1', 'auto');
+  ga('send', 'pageview');
+
   </script>
+</head>
+
+<body>
+  <div id="app"></div>
+  <script src="https://api.mapbox.com/mapbox-gl-js/v0.40.1/mapbox-gl.js" integrity="sha384-8oG1K48BiH+jMiPNLQFjsAO605WPQX73Syzte4PXVAH/O3vZ/VWsu/pD4V+bONt7" crossorigin="anonymous"></script>
+  <script>
+  window.addEventListener('hashchange', function() {
+    var currentPage = location.hash.split('#')[1].split('?')[0];
+    var currentTitle = document.title.split(' |')[0];
+    ga('set', {
+      page: currentPage,
+      title: currentTitle
+    });
+  });
+
+  </script>
+</body>
+
 </html>
