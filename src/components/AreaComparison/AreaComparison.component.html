@@ -23,8 +23,14 @@
         <div class="alert alert-warning" role="alert" v-if="validationError">
           <p>{{ validationError }}</p>
         </div>
+        <div class="input-state">
+          <p><a href="#" @click.prevent="searchArea('')">Enter a state</a> or <a href="#" @click.prevent="searchArea('Nationwide')">search Nationwide</a></p>
+          <div class="input-group-lg">
+            <Autocomplete class="search-state" ref="autocomplete" searchType="State" originPage="AreaComparison" placeholderText="Nationwide" v-model="selectedState"></Autocomplete>
+          </div>
+        </div>
         <div class="input-geography">
-          <p>Select geography type</p>
+          <p>Select area</p>
           <div class="input-group input-group-lg">
             <div class="input-group-btn">
               <dropdown :disabled="refreshingDropdown">
@@ -40,12 +46,7 @@
             </div>
           </div>
         </div>
-        <div class="input-state">
-          <p><a href="#" @click.prevent="searchArea('')">Enter a state</a> or <a href="#" @click.prevent="searchArea('Nationwide')">search Nationwide</a></p>
-          <div class="input-group-lg">
-            <Autocomplete class="search-state" ref="autocomplete" searchType="State" originPage="AreaComparison" placeholderText="Enter state" v-model="selectedState"></Autocomplete>
-          </div>
-        </div>
+        
         <div class="btns map-settings input-group-btn">
           <button class="btn btn-lg btn-primary" type="button" @click.prevent="compareAreas">Compare</button>
           <tooltip text="Table settings" trigger="hover" placement="top">
@@ -62,7 +63,7 @@
   <div class="row" v-if="rows.length > 0">
     <div class="col-sm-10">
       <div class="table-container">
-        <vue-good-table styleClass="table-fixed table table-stripped" :columns="columns" :rows="rows" :globalSearch="false" :defaultSortBy="{field: 'area_name', type: 'asc'}" :paginate="true" perPage="200" :lineNumbers="false" />
+        <vue-good-table styleClass="table-fixed table table-stripped" :columns="columns" :rows="rows" :globalSearch="false" :defaultSortBy="{field: 'area_name', type: 'asc'}" :paginate="true" perPage="200" :lineNumbers="false" globalSearch="true" />
       </div>
     </div>
   </div>

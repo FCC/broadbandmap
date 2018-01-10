@@ -296,7 +296,7 @@ export default {
         let totalPop = parseInt(rawData[rdi].sum_has_0) + parseInt(rawData[rdi].sum_has_1more) + parseInt(rawData[rdi].sum_has_2more) + parseInt(rawData[rdi].sum_has_3more)
         if (!totalPop) totalPop = 1
 
-        let areaName = lookupData[rawData[rdi].id]
+        let areaName = lookupData[rawData[rdi].id] === undefined ? '' : lookupData[rawData[rdi].id]
 
         if (this.searchType !== 'CBSA (MSA)' ||
            !this.$refs.autocomplete.typeaheadModel.geoid ||
@@ -478,11 +478,7 @@ export default {
           return
         }
       } else {
-        if (routeQP.searchtype) {
-          this.searchArea('Nationwide')
-        } else {
-          this.searchArea('')
-        }
+        this.searchArea('Nationwide')
       }
 
       if (routeQP.searchtype || routeQP.geoid) this.compareAreas()
