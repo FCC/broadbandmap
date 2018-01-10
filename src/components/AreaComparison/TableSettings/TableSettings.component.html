@@ -22,7 +22,7 @@
             <div class="radio" v-for="(tspeed, index) in speeds">
               <input type="radio" name="tspeed" :id="'tspeed'+index" :value="tspeed.value" @change="saveSettings" v-model="selectedSpeed">
               <label :for="'tspeed'+index">
-                &gt; {{ tspeed.name }}
+                &ge; {{ tspeed.name }}
               </label>
             </div>            
           </div>
