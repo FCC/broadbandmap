@@ -1,10 +1,10 @@
 // This file is used by the Location Summary page
 import { LayersCartographic } from './layers-cartographic.js'
 
-let [blockLayer, ...layersCarto] = LayersCartographic
+let [...layersCarto] = LayersCartographic
 
 export const LayersLocation = [
-  blockLayer,
+  ...layersCarto,
   {
     id: 'xlarge-blocks-highlighted',
     source: {
@@ -38,6 +38,5 @@ export const LayersLocation = [
       'line-width': 4
     },
     'filter': ['in', 'block_fips', '']
-  },
-  ...layersCarto
+  }
 ]

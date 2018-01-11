@@ -3,21 +3,6 @@
 
 export const LayersCartographic = [
   {
-    id: 'block',
-    source: {
-      type: 'vector',
-      url: 'mapbox://fcc.9tcqhtt6'
-    },
-    type: 'line',
-    'source-layer': 'nbm2_block2010geojson',
-    layout: {
-      visibility: 'none'
-    },
-    paint: {
-      'line-color': '#484896'
-    }
-  },
-  {
     id: 'county',
     source: {
       type: 'vector',
