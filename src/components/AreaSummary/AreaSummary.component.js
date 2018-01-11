@@ -29,7 +29,7 @@ export default {
         datasets: []
       },
       tribalChartData: {
-        labels: ['Tribal', 'Non-tribal'],
+        labels: ['Non-tribal', 'Tribal'],
         datasets: []
       },
       chartStyles: {width: 'auto', height: '350px'},
@@ -110,7 +110,7 @@ export default {
       let routeQuery = this.$route.query
 
       // Get map zoom level
-      let zoomLevel = this.Map.getZoom()
+      // let zoomLevel = this.Map.getZoom()
 
       // Add routeQuery properties to routeQueryParams
       Object.keys(routeQuery).map(property => {
@@ -129,8 +129,6 @@ export default {
       })
     },
     fetchAreaData () {
-      console.log('fetchAreaData')
-
       const self = this
 
       // Hide charts before data refreshes
@@ -174,7 +172,8 @@ export default {
       }
 
       // Convert selectedSpeed to numeric value
-      let speedNumeric = 0
+     /* let speedNumeric = 0
+
       if (this.selectedSpeed === '200') {
         speedNumeric = 0.2
       } else if (this.selectedSpeed === '4_1') {
@@ -189,7 +188,7 @@ export default {
         speedNumeric = 250
       } else if (this.selectedSpeed === '1000_100') {
         speedNumeric = 1000
-      }
+      } */
 
       axios
       .get(socrataURL, {
@@ -391,7 +390,7 @@ export default {
     // When query params change for the same route (URL slug)
     '$route' (to, from) {
       // Dirty fix to prevent data not loading to diagrams on "clean" URL
-      if (from.fullPath != from.path) this.validateURL()
+      if (from.fullPath !== from.path) this.validateURL()
     }
   }
 }

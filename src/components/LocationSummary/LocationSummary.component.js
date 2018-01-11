@@ -1,9 +1,12 @@
 import axios from 'axios'
+
 import nbMap from '../NBMap/'
-import EventHub from '../../_mixins/EventHub.js'
 import nbMapSidebar from '../NBMap/NBMapSidebar/'
+
+import EventHub from '../../_mixins/EventHub.js'
 import { urlValidation } from '../../_mixins/urlValidation.js'
 import { updateMapLayers } from '../../_mixins/map-update-layers.js'
+
 export default {
   name: 'LocationSummary',
   components: { axios, nbMap, nbMapSidebar },
