@@ -41,37 +41,37 @@ export const layersTechSpeed = {
   '200': {
     id: 'jun16_10feb17_200',
     source: '200',
-    beforeLayer: 'block-highlighted'
+    beforeLayer: 'block'
   },
   '4': {
     id: 'jun16_10feb17_4',
     source: '4_1',
-    beforeLayer: 'block-highlighted'
+    beforeLayer: 'block'
   },
   '10': {
     id: 'jun16_10feb17_10',
     source: '10_1',
-    beforeLayer: 'block-highlighted'
+    beforeLayer: 'block'
   },
   '25': {
     id: 'jun16_10feb17_25',
     source: '25_3',
-    beforeLayer: 'block-highlighted'
+    beforeLayer: 'block'
   },
 
   '100': {
     id: 'jun16_10feb17_100',
     source: '100_10',
-    beforeLayer: 'block-highlighted'
+    beforeLayer: 'block'
   },
   '250': {
     id: 'jun16_10feb17_250',
     source: '250_25',
-    beforeLayer: 'block-highlighted'
+    beforeLayer: 'block'
   },
   '1000': {
     id: 'jun16_10feb17_1000',
     source: '1000_100',
-    beforeLayer: 'block-highlighted'
+    beforeLayer: 'block'
   }
 }
