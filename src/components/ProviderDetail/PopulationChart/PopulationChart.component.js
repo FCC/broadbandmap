@@ -1,4 +1,3 @@
-import VueCharts from 'vue-chartjs'
 import { Bar } from 'vue-chartjs'
 
 export default {
