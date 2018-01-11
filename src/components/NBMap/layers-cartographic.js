@@ -11,7 +11,7 @@ export const LayersCartographic = [
     type: 'line',
     'source-layer': 'nbm2_block2010geojson',
     layout: {
-      visibility: 'visible'
+      visibility: 'none'
     },
     paint: {
       'line-color': '#484896'

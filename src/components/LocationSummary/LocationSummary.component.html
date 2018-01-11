@@ -11,13 +11,6 @@
     <nb-map-sidebar class="map-sidebar col-xs-12 col-sm-12 col-md-5 col-lg-4">
       <h2 class="sub-title" slot="sidebar-title"><b>All Providers Reporting Service</b></h2>
       <p v-if="censusBlock != ''" slot="sidebar-description">Census block ID: {{ censusBlock }}</p>
-      <!-- Insert into NBMapSidebar sub-component's "charts" slot -->
-      <div class="charts" slot="charts">
-        <!-- Good Table plugin for Vue -->
-        <vue-good-table v-if="providerRows.length" styleClass="table-fixed table table-stripped" :columns="providerColumns" :rows="providerRows" :defaultSortBy="{field: 'down', type: 'desc'}" :paginate="false" :lineNumbers="false" />
-        <div v-if="!providerRows.length">Please click on the map or search for a location</div>
-      </div>
-      <!-- Insert into NBMapSidebar sub-component's "map-legend" slot -->
       <section class="map-legend" slot="map-legend">        
           <h5 v-if="!togLegendTitle"><b>Number of Broadband Providers</b></h5>
           <h5 v-if="togLegendTitle"><b>Population Weighted Average Number of Providers</b></h5>
@@ -33,6 +26,14 @@
             <li class="key last">12 or more</li></ul>
           </div>     
       </section>
+      <!-- Insert into NBMapSidebar sub-component's "charts" slot -->
+      <div class="charts" slot="charts">
+        <!-- Good Table plugin for Vue -->
+        <vue-good-table v-if="providerRows.length" styleClass="table-fixed table table-stripped" :columns="providerColumns" :rows="providerRows" :defaultSortBy="{field: 'down', type: 'desc'}" :paginate="false" :lineNumbers="false" />
+        <div v-if="!providerRows.length">Please click on the map or search for a location</div>
+      </div>
+      <!-- Insert into NBMapSidebar sub-component's "map-legend" slot -->
+      
     </nb-map-sidebar>
   </div>
 </div>

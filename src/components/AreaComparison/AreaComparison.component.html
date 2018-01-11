@@ -24,9 +24,9 @@
           <p>{{ validationError }}</p>
         </div>
         <div class="input-state">
-          <p><a href="#" @click.prevent="searchArea('')">Enter a state</a> or <a href="#" @click.prevent="searchArea('Nationwide')">search Nationwide</a></p>
+          <p><a href="#" @click.prevent="searchArea('Nationwide')">Search Nationwide</a> or <a href="#" @click.prevent="searchArea('')">enter a state</a></p>
           <div class="input-group-lg">
-            <Autocomplete class="search-state" ref="autocomplete" searchType="State" originPage="AreaComparison" placeholderText="Nationwide" v-model="selectedState"></Autocomplete>
+            <Autocomplete class="search-state" ref="autocomplete" searchType="State" originPage="AreaComparison" placeholderText="Enter state" v-model="selectedState"></Autocomplete>
           </div>
         </div>
         <div class="input-geography">
