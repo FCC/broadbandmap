@@ -1,4 +1,3 @@
-import VueCharts from 'vue-chartjs'
 import { Bar } from 'vue-chartjs'
 
 export default {
@@ -9,25 +8,28 @@ export default {
   mounted () {
     let chartData = [{
       label: '0 providers',
-      backgroundColor: '#e6eecf'
+      backgroundColor: '#e6eecf',
+      hoverBackgroundColor: '#e6eecf'
     },
     {
       label: '1 provider',
-      backgroundColor: '#9bc4c1'
+      backgroundColor: '#9bc4c1',
+      hoverBackgroundColor: '#9bc4c1'
     },
     {
       label: '2 providers',
-      backgroundColor: '#68a8b7'
+      backgroundColor: '#68a8b7',
+      hoverBackgroundColor: '#68a8b7'
     },
     {
       label: '3 or more providers',
-      backgroundColor: '#2e557a'
+      backgroundColor: '#2e557a',
+      hoverBackgroundColor: '#2e557a'
     }]
 
     // Merge props 'data' with chartData labels and datasets
     chartData.forEach((chData, index) => {
-      this.data.datasets[index].label = chData.label
-      this.data.datasets[index].backgroundColor = chData.backgroundColor
+      this.data.datasets[index] = Object.assign(this.data.datasets[index], chData)
     })
 
     if (this.xaxis) {
