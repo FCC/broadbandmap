@@ -46,17 +46,9 @@
   <div class="provider-charts" v-if="showResults">
     <div class="container-fluid">
       <div class="row">
-        <div class="col-sm-8">
+        <div class="col-sm-9">
           <h3>Provider coverage overlap and population coverage</h3>
-        </div>
-        <div class="col-sm-4">
-          <div class="btn-speedType"><span>Speed:</span>
-            <div class="btn-group" role="group" aria-label="Select download or upload speed.">
-              <button type="button" id="d-button" class="btn btn-default" v-bind:class="{active: direction === 'd'}" @click.prevent="setD">Download</button>
-              <button type="button" id="u-button" class="btn btn-default" v-bind:class="{active: direction === 'u'}" @click.prevent="setU">Upload</button>
-            </div>
-          </div>
-        </div>
+        </div>        
       </div>
       <div class="row">
         <div class="col-sm-12 col-md-8">
@@ -108,7 +100,20 @@
         </div>
       </div>
       <hr>
-      <h3>Percent of each provider's broadband footprint with each speed based on technology</h3>
+     
+       <div class="row">
+        <div class="col-sm-9">
+          <h3>Percent of each provider's broadband footprint with each speed based on technology</h3>
+        </div>
+        <div class="col-sm-3">
+          <div class="btn-speedType"><span>Speed:</span>
+            <div class="btn-group" role="group" aria-label="Select download or upload speed.">
+              <button type="button" id="d-button" class="btn btn-default" v-bind:class="{active: direction === 'd'}" @click.prevent="setD">Download</button>
+              <button type="button" id="u-button" class="btn btn-default" v-bind:class="{active: direction === 'u'}" @click.prevent="setU">Upload</button>
+            </div>
+          </div>
+        </div>
+      </div>
       <div class="row">
         <div class="col-sm-12 col-lg-8">
           <div class="panel-chart panel panel-default">
