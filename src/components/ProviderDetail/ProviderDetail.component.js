@@ -154,16 +154,6 @@ export default {
               visibility: 'visible'
             },
             paint: {
-              'fill-color': {
-                base: 1,
-                type: 'categorical',
-                property: 'hoconum',
-                stops: [
-                  ['130077', 'hsl(249, 86%, 56%)'],
-                  ['130317', 'hsl(359, 84%, 62%)']
-                ],
-                default: 'hsla(112, 93%, 71%, 0)'
-              },
               'fill-opacity': 0.5,
               'fill-color': this.layerColors[index]
             },
