@@ -12,11 +12,14 @@ export default {
     }
 
     let backgroundColors = [process.env.CHART_COLOR_01, process.env.CHART_COLOR_02, process.env.CHART_COLOR_03]
+    let hoverBackgroundColor = [process.env.CHART_COLOR_01, process.env.CHART_COLOR_02, process.env.CHART_COLOR_03]
 
     // merge the prop data array with chartData.datasets
     for (let i = 0; i < this.data.length; i++) {
       chartData.datasets[i] = {}
       chartData.datasets[i]['backgroundColor'] = backgroundColors[i]
+      chartData.datasets[i]['hoverBackgroundColor'] = hoverBackgroundColor[i]
+
       chartData.datasets[i] = Object.assign(chartData.datasets[i], this.data[i])
     }
 
