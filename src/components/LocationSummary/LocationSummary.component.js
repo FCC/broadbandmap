@@ -106,47 +106,45 @@ export default {
           zoom: this.mapOptions.zoom
         })
       }
+
+      this.updateTechSpeed(this.$route.query.selectedTech, this.$route.query.selectedSpeed)
     },
     updateURLParams () {
-      let routeQueryParams = {}
+      // If lat is undefined get the value from URL param
+      if (this.lat === undefined || this.lon === undefined) {
+        if (this.isValidLatLon(this.$route.query.lat, this.$route.query.lon)) {
+          this.lat = this.$route.query.lat
+          this.lon = this.$route.query.lon
+        }
+      }
 
-      // Get existing route query parameters
-      let routeQuery = this.$route.query
+      // Update route parameters
+      let routeQuery = {
+        lat: this.lat,
+        lon: this.lon,
+        selectedTech: this.selectedTech,
+        selectedSpeed: this.selectedSpeed
+      }
 
       // Get map zoom level
       // let zoomLevel = this.Map.getZoom()
 
-      // Add routeQuery properties to routeQueryParams
-      Object.keys(routeQuery).map(property => {
-        routeQueryParams[property] = routeQuery[property]
-      })
-
-      // Add select tech, selected speed, and zoom to routeQueryParams
-      routeQueryParams.selectedTech = this.selectedTech
-      routeQueryParams.selectedSpeed = this.selectedSpeed
-      // routeQueryParams.zoom = zoomLevel
-
-      // Update URL fragment with routeQueryParams
-      this.$router.replace({
+      // Update URL fragment
+      this.$router.push({
         name: 'LocationSummary',
-        query: routeQueryParams
+        query: routeQuery
       })
+
+      this.lat = undefined
+      this.lon = undefined
     },
     // Called when map is clicked ('map-click' event emitted by NBMap component)
     getLatLon (event) {
-      let lat = event.lngLat.lat.toFixed(6)
-      let lon = event.lngLat.lng.toFixed(6)
+      this.lat = event.lngLat.lat.toFixed(6)
+      this.lon = event.lngLat.lng.toFixed(6)
 
       // Get FIPS
-      this.getFIPS(lat, lon)
-
-      // Update URL and query params
-      this.$router.replace({
-        name: 'LocationSummary',
-        query: {
-          lat: `${lat}`,
-          lon: `${lon}`
-        }})
+      this.getFIPS(this.lat, this.lon)
 
       this.updateURLParams()
     },
@@ -259,10 +257,22 @@ export default {
         })
       }
     },
-    // Remove Census block & provider table results
-    clearProviderTable () {
+    clearProviderTable () { // Remove Census block & provider table results
       this.censusBlock = ''
       this.providerRows = []
+    },
+    viewNationwide () {
+      let routeQuery = this.$route.query
+
+      this.clearProviderTable()
+
+      this.$router.push({
+        name: 'LocationSummary',
+        query: {
+          selectedTech: routeQuery.selectedTech,
+          selectedSpeed: routeQuery.selectedSpeed
+        }
+      })
     }
   },
   watch: {

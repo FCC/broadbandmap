@@ -380,11 +380,18 @@ export default {
         {data: [0, 0]}
       ]
       this.tribalChartData = this.aggregate(this.tribalChartData, 'tribal_non', {'Tribal': 'T', 'Non-tribal': 'N'})
+    },
+    viewNW () {
+      let routeQuery = this.$route.query
+
+      this.$router.push({
+        name: 'AreaSummary',
+        query: {
+          selectedTech: routeQuery.selectedTech,
+          selectedSpeed: routeQuery.selectedSpeed
+        }
+      })
     }
-
-  },
-  computed: {
-
   },
   watch: {
     // When query params change for the same route (URL slug)

@@ -216,6 +216,9 @@ export default {
         center: [-94.96, 38.82],
         zoom: 3
       })
+
+      // Trigger map initialize event
+      this.$emit('map-viewNationwide', this.Map)
     }
   },
   computed: {
