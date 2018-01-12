@@ -110,11 +110,17 @@ export default {
       // If all layers are removed, update tech/speed layers based on URL history
       if (!this.removeAllLayers) {
         this.updateTechSpeed(this.$route.query.selectedTech, this.$route.query.selectedSpeed)
-      } else {
-        this.removeAllLayers = false
       }
     },
     updateURLParams () {
+      let routeQueryParams = {}
+
+      // Get existing route query parameters
+      let routeQuery = this.$route.query
+
+      // Get map zoom level
+      // let zoomLevel = this.Map.getZoom()
+
       // If lat is undefined get the value from URL param
       if (this.lat === undefined || this.lon === undefined) {
         if (this.isValidLatLon(this.$route.query.lat, this.$route.query.lon)) {
@@ -123,28 +129,29 @@ export default {
         }
       }
 
-      // Update route parameters
-      let routeQuery = {
-        lat: this.lat,
-        lon: this.lon,
-        selectedTech: this.selectedTech,
-        selectedSpeed: this.selectedSpeed
-      }
+      // Add routeQuery properties to routeQueryParams
+      Object.keys(routeQuery).map(property => {
+        routeQueryParams[property] = routeQuery[property]
+      })
 
-      // Get map zoom level
-      // let zoomLevel = this.Map.getZoom()
+      // Add select tech, selected speed, and zoom to routeQueryParams
+      routeQueryParams.selectedTech = this.selectedTech
+      routeQueryParams.selectedSpeed = this.selectedSpeed
+      routeQueryParams.lat = this.lat
+      routeQueryParams.lon = this.lon
+      // routeQueryParams.zoom = zoomLevel
 
       // Update URL fragment
       this.$router.push({
         name: 'LocationSummary',
-        query: routeQuery
+        query: routeQueryParams
       })
 
-      this.lat = undefined
-      this.lon = undefined
+      // Reset lat, lon
+      this.lat = (function () { })()
+      this.lon = (function () { })()
     },
-    // Called when map is clicked ('map-click' event emitted by NBMap component)
-    getLatLon (event) {
+    getLatLon (event) {  // Called when map is clicked ('map-click' event emitted by NBMap component)
       this.lat = event.lngLat.lat.toFixed(6)
       this.lon = event.lngLat.lng.toFixed(6)
 
