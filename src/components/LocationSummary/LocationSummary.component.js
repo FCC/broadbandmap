@@ -91,7 +91,7 @@ export default {
       })
     },
     validateURL () {
-      // If valid latitude and longitude get the FIPS and highlight the census block
+      // If valid latitude and longitude, get the FIPS and highlight the census block
       if (this.isValidLatLon(this.$route.query.lat, this.$route.query.lon)) {
         this.getFIPS(this.$route.query.lat.trim(), this.$route.query.lon.trim())
 
@@ -107,7 +107,12 @@ export default {
         })
       }
 
-      this.updateTechSpeed(this.$route.query.selectedTech, this.$route.query.selectedSpeed)
+      // If all layers are removed, update tech/speed layers based on URL history
+      if (!this.removeAllLayers) {
+        this.updateTechSpeed(this.$route.query.selectedTech, this.$route.query.selectedSpeed)
+      } else {
+        this.removeAllLayers = false
+      }
     },
     updateURLParams () {
       // If lat is undefined get the value from URL param
