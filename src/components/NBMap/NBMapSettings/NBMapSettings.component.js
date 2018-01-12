@@ -78,6 +78,15 @@ export default {
       // Reset modal data when page changes
       if (to.name !== from.name) {
         Object.assign(this.$data, this.$options.data.call(this))
+      } else {
+        // When route params change, update selected tech and speed in Settings modal
+        let tech = this.$route.query.selectedTech
+        let speed = this.$route.query.selectedSpeed
+
+        if (this.isValidTech(tech) && this.isValidSpeed(speed)) {
+          this.selectedTechCategories = this.$route.query.selectedTech.split('')
+          this.selectedSpeed = this.$route.query.selectedSpeed
+        }
       }
     }
   }
