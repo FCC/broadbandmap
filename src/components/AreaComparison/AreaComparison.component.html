@@ -63,7 +63,7 @@
   <div class="row" v-if="rows.length > 0">
     <div class="col-sm-10">
       <div class="table-container">
-        <vue-good-table styleClass="table-fixed table table-stripped" :columns="columns" :rows="rows" :globalSearch="false" :defaultSortBy="{field: 'area_name', type: 'asc'}" :paginate="true" perPage="200" :lineNumbers="false" globalSearch="true" />
+        <vue-good-table styleClass="table-fixed table table-stripped" :columns="columns" :rows="rows" globalSearch="true" :defaultSortBy="{field: 'area_name', type: 'asc'}" :paginate="true" perPage="200" :lineNumbers="false" />
       </div>
     </div>
   </div>
