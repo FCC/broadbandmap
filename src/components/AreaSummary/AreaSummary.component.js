@@ -216,6 +216,10 @@ export default {
           self.showCharts = true
           self.spinner.stop()
         }
+
+        if (self.selectedTech === '') {
+          self.spinner.stop()
+        }
       })
       .catch(function (error) {
         if (error.response) {
