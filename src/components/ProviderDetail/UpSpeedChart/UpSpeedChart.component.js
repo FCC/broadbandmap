@@ -60,6 +60,9 @@ export default {
             scaleLabel: {
               display: true,
               labelString: 'Speed'
+            },
+            ticks: {
+              fontStyle: 'bold'
             }
           }],
           yAxes: [{
@@ -69,6 +72,7 @@ export default {
               labelString: 'Percentage'
             },
             ticks: {
+              fontStyle: 'bold',
               beginAtZero: true
             },
             gridLines: {

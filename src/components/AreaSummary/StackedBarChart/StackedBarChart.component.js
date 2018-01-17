@@ -53,6 +53,9 @@ export default {
             scaleLabel: {
               display: true,
               labelString: 'Speed (Mbps downstream/upstream)'
+            },
+            ticks: {
+              fontStyle: 'bold'
             }
           }],
           yAxes: [{
@@ -66,6 +69,7 @@ export default {
             },
             ticks: {
               beginAtZero: true,
+              fontStyle: 'bold',
               max: 100
             }
           }]
