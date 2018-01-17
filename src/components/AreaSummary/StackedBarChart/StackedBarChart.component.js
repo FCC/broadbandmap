@@ -3,7 +3,7 @@ import { Bar } from 'vue-chartjs'
 export default {
   name: 'StackedBarChart',
   components: { },
-  props: ['data', 'xaxis'],
+  props: ['data', 'xaxis', 'barThickness'],
   extends: Bar,
   mounted () {
     let chartData = [{
@@ -48,7 +48,7 @@ export default {
         responsive: true,
         scales: {
           xAxes: [{
-            barThickness: 35,
+            barThickness: this.barThickness,
             stacked: true,
             scaleLabel: {
               display: true,

@@ -52,17 +52,17 @@
         <carousel ref="carousel" icon-control-left="icon-prev" icon-control-right="icon-next" :interval="0">
           <slide>
             <div class="chart-slide">
-              <stacked-bar-chart :data="popChartData" :styles="chartStyles"></stacked-bar-chart>
+              <stacked-bar-chart :data="popChartData" :styles="chartStyles" :barThickness="35"></stacked-bar-chart>
             </div>
           </slide>
           <slide>
             <div class="chart-slide">
-              <stacked-bar-chart :data="urbanRuralChartData" :styles="chartStyles" :xaxis="settlementType"></stacked-bar-chart>
+              <stacked-bar-chart :data="urbanRuralChartData" :styles="chartStyles" :xaxis="settlementType" :barThickness="50"></stacked-bar-chart>
             </div>
           </slide>
           <slide>
             <div class="chart-slide">
-              <stacked-bar-chart :data="tribalChartData" :styles="chartStyles" :xaxis="settlementType"></stacked-bar-chart>
+              <stacked-bar-chart :data="tribalChartData" :styles="chartStyles" :xaxis="settlementType" :barThickness="50"></stacked-bar-chart>
             </div>
           </slide>
         </carousel>
