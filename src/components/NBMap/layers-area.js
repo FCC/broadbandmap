@@ -9,10 +9,10 @@ export const LayersArea = [
     id: 'place-highlighted',
     source: {
       type: 'vector',
-      url: 'mapbox://fcc.6pgpraox'
+      url: 'mapbox://fcc.v1_place'
     },
     type: 'line',
-    'source-layer': 'nbm2_place2016geojson',
+    'source-layer': 'place_2016geojson',
     layout: {
       visibility: 'visible'
     },
@@ -27,10 +27,10 @@ export const LayersArea = [
     id: 'cd-highlighted',
     source: {
       type: 'vector',
-      url: 'mapbox://fcc.dpum4fkf'
+      url: 'mapbox://fcc.v1_cd115'
     },
     type: 'line',
-    'source-layer': 'nbm2_cd115_2016geojson',
+    'source-layer': 'cd115_2016geojson',
     layout: {
       visibility: 'visible'
     },
@@ -45,10 +45,10 @@ export const LayersArea = [
     id: 'tribal-highlighted',
     source: {
       type: 'vector',
-      url: 'mapbox://fcc.26rqlqpa'
+      url: 'mapbox://fcc.v1_tribal'
     },
     type: 'line',
-    'source-layer': 'nbm2_tribe2016geojson',
+    'source-layer': 'tribal_2016geojson',
     layout: {
       visibility: 'visible'
     },
@@ -62,10 +62,10 @@ export const LayersArea = [
     id: 'cbsa-highlighted',
     source: {
       type: 'vector',
-      url: 'mapbox://fcc.a7r386t6'
+      url: 'mapbox://fcc.v1_cbsa'
     },
     type: 'line',
-    'source-layer': 'nbm2_cbsa2016geojson',
+    'source-layer': 'cbsa_2016geojson',
     layout: {
       visibility: 'visible'
     },

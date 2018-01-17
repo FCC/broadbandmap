@@ -9,10 +9,10 @@ export const LayersLocation = [
     id: 'xlarge-blocks-highlighted',
     source: {
       type: 'vector',
-      url: 'mapbox://fcc.xlarge_blocks'
+      url: 'mapbox://fcc.v1_xl_blocks'
     },
     type: 'line',
-    'source-layer': 'xlarge_blocks',
+    'source-layer': 'xl_blocks_2010',
     layout: {
       visibility: 'visible'
     },
