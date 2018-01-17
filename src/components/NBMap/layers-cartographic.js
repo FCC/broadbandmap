@@ -2,30 +2,15 @@
 // Used by Location and Area Summary maps
 
 export const LayersCartographic = [
-  {
-    id: 'county',
-    source: {
-      type: 'vector',
-      url: 'mapbox://fcc.ao2kqazm'
-    },
-    type: 'line',
-    'source-layer': 'nbm2_county2016geojson',
-    layout: {
-      visibility: 'visible'
-    },
-    paint: {
-      'line-color': '#74994e'
-    },
-    maxzoom: 10
-  },
+
   {
     id: 'county-highlighted',
     source: {
       type: 'vector',
-      url: 'mapbox://fcc.ao2kqazm'
+      url: 'mapbox://fcc.v1_county'
     },
     type: 'line',
-    'source-layer': 'nbm2_county2016geojson',
+    'source-layer': 'county_2016geojson',
     layout: {
       visibility: 'visible'
     },
@@ -39,10 +24,10 @@ export const LayersCartographic = [
     id: 'state',
     source: {
       type: 'vector',
-      url: 'mapbox://fcc.1r5um5ls'
+      url: 'mapbox://fcc.v1_state'
     },
     type: 'line',
-    'source-layer': 'nbm2_state2016geojson',
+    'source-layer': 'state_2016geojson',
     layout: {
       visibility: 'visible'
     },
@@ -55,10 +40,10 @@ export const LayersCartographic = [
     id: 'state-highlighted',
     source: {
       type: 'vector',
-      url: 'mapbox://fcc.1r5um5ls'
+      url: 'mapbox://fcc.v1_state'
     },
     type: 'line',
-    'source-layer': 'nbm2_state2016geojson',
+    'source-layer': 'state_2016geojson',
     layout: {
       visibility: 'visible'
     },
