@@ -311,9 +311,6 @@ export default {
                 this.techChartData[drct][collapsed[ci].tech] = []
               }
               this.techChartData[drct][collapsed[ci].tech].push(series)
-
-              // Add provider names to chart data so legend colors are consistent
-              this.techChartData[drct][collapsed[ci].tech].providerNames = this.providerNames
             }
           }
         }

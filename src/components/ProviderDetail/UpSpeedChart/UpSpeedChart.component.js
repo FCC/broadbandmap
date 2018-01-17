@@ -3,7 +3,7 @@ import { Bar } from 'vue-chartjs'
 export default {
   name: 'UpSpeedChart',
   components: { },
-  props: ['data'],
+  props: ['data', 'providers'],
   extends: Bar,
   mounted () {
     const chartColors = {
@@ -12,7 +12,7 @@ export default {
       2: process.env.CHART_COLOR_03
     }
 
-    const providers = this.data.providerNames
+    const providers = this.providers
 
     let backgroundColors = []
     let hoverBackgroundColor = []
