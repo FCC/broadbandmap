@@ -2,7 +2,22 @@
 // Used by Location and Area Summary maps
 
 export const LayersCartographic = [
-
+  {
+    id: 'county',
+    source: {
+      type: 'vector',
+      url: 'mapbox://fcc.v1_county'
+    },
+    type: 'line',
+    'source-layer': 'county_2016geojson',
+    layout: {
+      visibility: 'visible'
+    },
+    paint: {
+      'line-color': '#74994e'
+    },
+    maxzoom: 10
+  },
   {
     id: 'county-highlighted',
     source: {
