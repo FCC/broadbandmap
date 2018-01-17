@@ -1,77 +1,84 @@
 export const sourcesTechSpeed = [
   {
     id: '200',
-    url: 'mapbox://fcc.3mn2ckcc',
+    url: 'mapbox://fcc.d16_v1_200',
     type: 'vector'
   },
   {
     id: '4_1',
-    url: 'mapbox://fcc.5p7gp0op',
+    url: 'mapbox://fcc.d16_v1_4',
     type: 'vector'
   },
   {
     id: '10_1',
-    url: 'mapbox://fcc.97d0gam3',
+    url: 'mapbox://fcc.d16_v1_10',
     type: 'vector'
   },
   {
     id: '25_3',
-    url: 'mapbox://fcc.4ai93o1d',
+    url: 'mapbox://fcc.d16_v1_25',
     type: 'vector'
   },
 
   {
     id: '100_10',
-    url: 'mapbox://fcc.btj2xg09',
+    url: 'mapbox://fcc.d16_v1_100',
     type: 'vector'
   },
   {
     id: '250_25',
-    url: 'mapbox://fcc.7vjqng1m',
+    url: 'mapbox://fcc.d16_v1_250',
     type: 'vector'
   },
   {
     id: '1000_100',
-    url: 'mapbox://fcc.4tg286y5',
+    url: 'mapbox://fcc.d16_v1_1000',
     type: 'vector'
   }
 ]
 
 export const layersTechSpeed = {
   '200': {
-    id: 'jun16_10feb17_200',
+    id: 'dec2016_7nov17_200',
     source: '200',
-    beforeLayer: 'county'
+    beforeLayer: 'county-highlighted',
+    'filter': ['!=', 'h2only_undev', 1]
   },
   '4': {
-    id: 'jun16_10feb17_4',
+    id: 'dec2016_7nov17_4',
     source: '4_1',
-    beforeLayer: 'county'
+    beforeLayer: 'county-highlighted',
+    'filter': ['!=', 'h2only_undev', 1]
   },
   '10': {
-    id: 'jun16_10feb17_10',
+    id: 'dec2016_7nov17_10',
     source: '10_1',
-    beforeLayer: 'county'
+    beforeLayer: 'county-highlighted',
+    'filter': ['!=', 'h2only_undev', 1]
   },
   '25': {
-    id: 'jun16_10feb17_25',
+    id: 'dec2016_7nov17_25',
     source: '25_3',
-    beforeLayer: 'county'
+    beforeLayer: 'county-highlighted',
+    'filter': ['!=', 'h2only_undev', 1]
   },
 
   '100': {
-    id: 'jun16_10feb17_100',
+    id: 'dec2016_7nov17_100',
     source: '100_10',
-    beforeLayer: 'county'
+    beforeLayer: 'county-highlighted',
+    'filter': ['!=', 'h2only_undev', 1]
   },
   '250': {
-    id: 'jun16_10feb17_250',
+    id: 'dec2016_7nov17_250',
     source: '250_25',
-    beforeLayer: 'county'
+    beforeLayer: 'county-highlighted',
+    'filter': ['!=', 'h2only_undev', 1]
   },
   '1000': {
-    id: 'jun16_10feb17_1000',
+    id: 'dec2016_7nov17_1000',
     source: '1000_100',
-    beforeLayer: 'county'
+    beforeLayer: 'county-highlighted',
+    'filter': ['!=', 'h2only_undev', 1]
   }
 }
