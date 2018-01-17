@@ -14,9 +14,6 @@ export default {
   name: 'ProviderDetail',
   components: { Tooltip, EventHub, nbMap, PopulationChart, SpeedChart, UpSpeedChart, Autocomplete, BookmarkLink },
   props: [],
-  mounted () {
-    this.loadProviderLookup()
-  },
   data () {
     return {
       providers: [{id: Date.now()}],
@@ -35,6 +32,9 @@ export default {
       layerColors: ['#ff848b', '#838eff', '#ffff95'],
       validationError: ''
     }
+  },
+  mounted () {
+    this.loadProviderLookup()
   },
   methods: {
     mapInit (map) {
@@ -154,16 +154,6 @@ export default {
               visibility: 'visible'
             },
             paint: {
-              'fill-color': {
-                base: 1,
-                type: 'categorical',
-                property: 'hoconum',
-                stops: [
-                  ['130077', 'hsl(249, 86%, 56%)'],
-                  ['130317', 'hsl(359, 84%, 62%)']
-                ],
-                default: 'hsla(112, 93%, 71%, 0)'
-              },
               'fill-opacity': 0.5,
               'fill-color': this.layerColors[index]
             },
@@ -174,18 +164,18 @@ export default {
             id: 'large_prov_' + hoconum,
             source: {
               type: 'vector',
-              url: 'mapbox://fcc.prov_large_d16_v1'
+              url: 'mapbox://fcc.d16_v1_prov_lg'
             },
-            'source-layer': 'large_prov'
+            'source-layer': 'dec2016_7nov17_prov_lg'
           }
 
           let layerProvOther = {
             id: 'prov_other_' + hoconum,
             source: {
               type: 'vector',
-              url: 'mapbox://fcc.prov_other_d16_v1'
+              url: 'mapbox://fcc.d16_v1_prov_other'
             },
-            'source-layer': 'other_prov'
+            'source-layer': 'dec2016_7nov17_prov_other'
           }
 
           // Merge layer style properties
@@ -321,6 +311,9 @@ export default {
                 this.techChartData[drct][collapsed[ci].tech] = []
               }
               this.techChartData[drct][collapsed[ci].tech].push(series)
+
+              // Add provider names to chart data so legend colors are consistent
+              this.techChartData[drct][collapsed[ci].tech].providerNames = this.providerNames
             }
           }
         }

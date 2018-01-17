@@ -1,9 +1,12 @@
 import axios from 'axios'
+
 import nbMap from '../NBMap/'
-import EventHub from '../../_mixins/EventHub.js'
 import nbMapSidebar from '../NBMap/NBMapSidebar/'
+
+import EventHub from '../../_mixins/EventHub.js'
 import { urlValidation } from '../../_mixins/urlValidation.js'
 import { updateMapLayers } from '../../_mixins/map-update-layers.js'
+
 export default {
   name: 'LocationSummary',
   components: { axios, nbMap, nbMapSidebar },
@@ -88,7 +91,7 @@ export default {
       })
     },
     validateURL () {
-      // If valid latitude and longitude get the FIPS and highlight the census block
+      // If valid latitude and longitude, get the FIPS and highlight the census block
       if (this.isValidLatLon(this.$route.query.lat, this.$route.query.lon)) {
         this.getFIPS(this.$route.query.lat.trim(), this.$route.query.lon.trim())
 
@@ -103,6 +106,11 @@ export default {
           zoom: this.mapOptions.zoom
         })
       }
+
+      // If all layers are removed, update tech/speed layers based on URL history
+      if (!this.removeAllLayers) {
+        this.updateTechSpeed(this.$route.query.selectedTech, this.$route.query.selectedSpeed)
+      }
     },
     updateURLParams () {
       let routeQueryParams = {}
@@ -113,6 +121,14 @@ export default {
       // Get map zoom level
       // let zoomLevel = this.Map.getZoom()
 
+      // If lat is undefined get the value from URL param
+      if (this.lat === undefined || this.lon === undefined) {
+        if (this.isValidLatLon(this.$route.query.lat, this.$route.query.lon)) {
+          this.lat = this.$route.query.lat
+          this.lon = this.$route.query.lon
+        }
+      }
+
       // Add routeQuery properties to routeQueryParams
       Object.keys(routeQuery).map(property => {
         routeQueryParams[property] = routeQuery[property]
@@ -121,29 +137,26 @@ export default {
       // Add select tech, selected speed, and zoom to routeQueryParams
       routeQueryParams.selectedTech = this.selectedTech
       routeQueryParams.selectedSpeed = this.selectedSpeed
+      routeQueryParams.lat = this.lat
+      routeQueryParams.lon = this.lon
       // routeQueryParams.zoom = zoomLevel
 
-      // Update URL fragment with routeQueryParams
-      this.$router.replace({
+      // Update URL fragment
+      this.$router.push({
         name: 'LocationSummary',
         query: routeQueryParams
       })
+
+      // Reset lat, lon
+      this.lat = (function () { })()
+      this.lon = (function () { })()
     },
-    // Called when map is clicked ('map-click' event emitted by NBMap component)
-    getLatLon (event) {
-      let lat = event.lngLat.lat.toFixed(6)
-      let lon = event.lngLat.lng.toFixed(6)
+    getLatLon (event) {  // Called when map is clicked ('map-click' event emitted by NBMap component)
+      this.lat = event.lngLat.lat.toFixed(6)
+      this.lon = event.lngLat.lng.toFixed(6)
 
       // Get FIPS
-      this.getFIPS(lat, lon)
-
-      // Update URL and query params
-      this.$router.replace({
-        name: 'LocationSummary',
-        query: {
-          lat: `${lat}`,
-          lon: `${lon}`
-        }})
+      this.getFIPS(this.lat, this.lon)
 
       this.updateURLParams()
     },
@@ -256,10 +269,22 @@ export default {
         })
       }
     },
-    // Remove Census block & provider table results
-    clearProviderTable () {
+    clearProviderTable () { // Remove Census block & provider table results
       this.censusBlock = ''
       this.providerRows = []
+    },
+    viewNationwide () {
+      let routeQuery = this.$route.query
+
+      this.clearProviderTable()
+
+      this.$router.push({
+        name: 'LocationSummary',
+        query: {
+          selectedTech: routeQuery.selectedTech,
+          selectedSpeed: routeQuery.selectedSpeed
+        }
+      })
     }
   },
   watch: {

@@ -1,4 +1,3 @@
-import VueCharts from 'vue-chartjs'
 import { Bar } from 'vue-chartjs'
 
 export default {
@@ -7,17 +6,35 @@ export default {
   props: ['data'],
   extends: Bar,
   mounted () {
+    const chartColors = {
+      0: process.env.CHART_COLOR_01,
+      1: process.env.CHART_COLOR_02,
+      2: process.env.CHART_COLOR_03
+    }
+
+    const providers = this.data.providerNames
+
+    let backgroundColors = []
+    let hoverBackgroundColor = []
+
+    this.data.forEach(d => {
+      let providerIndx = providers.indexOf(d.label)
+
+      backgroundColors.push(chartColors[providerIndx])
+      hoverBackgroundColor.push(chartColors[providerIndx])
+    })
+
     let chartData = {
       labels: ['any', '10', '25', '50', '100', '250', '500', '1000'],
       datasets: []
     }
 
-    let backgroundColors = [process.env.CHART_COLOR_01, process.env.CHART_COLOR_02, process.env.CHART_COLOR_03]
-
     // merge the prop data array with chartData.datasets
     for (let i = 0; i < this.data.length; i++) {
       chartData.datasets[i] = {}
       chartData.datasets[i]['backgroundColor'] = backgroundColors[i]
+      chartData.datasets[i]['hoverBackgroundColor'] = hoverBackgroundColor[i]
+
       chartData.datasets[i] = Object.assign(chartData.datasets[i], this.data[i])
     }
 
@@ -71,6 +88,12 @@ export default {
           }
         }
       }
+    }
+  },
+  methods: {
+    getProviderNames (providerNames) {
+      // console.log(providerNames)
+
     }
   }
 }

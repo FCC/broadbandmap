@@ -75,7 +75,7 @@ export default {
         container: 'map-container',
         style: this.baseLayers[0].styleURL,
         logoPosition: 'bottom-left',
-        maxZoom: 16,
+        maxZoom: 22,
         minZoom: 0,
         center: [-94.96, 38.82],
         zoom: 3
@@ -216,6 +216,9 @@ export default {
         center: [-94.96, 38.82],
         zoom: 3
       })
+
+      // Trigger map initialize event
+      this.$emit('map-viewNationwide', this.Map)
     }
   },
   computed: {

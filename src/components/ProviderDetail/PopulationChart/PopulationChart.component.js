@@ -1,4 +1,3 @@
-import VueCharts from 'vue-chartjs'
 import { Bar } from 'vue-chartjs'
 
 export default {
@@ -13,7 +12,13 @@ export default {
           backgroundColor: [
             process.env.CHART_COLOR_01,
             process.env.CHART_COLOR_02,
-            process.env.CHART_COLOR_03]
+            process.env.CHART_COLOR_03
+          ],
+          hoverBackgroundColor: [
+            process.env.CHART_COLOR_01,
+            process.env.CHART_COLOR_02,
+            process.env.CHART_COLOR_03
+          ]
         }
       ]
     }
