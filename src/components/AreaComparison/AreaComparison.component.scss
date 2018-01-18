@@ -1,8 +1,7 @@
 /* Search form */
+
 .search-geography {
-  background-color: #f2f2f2;
   margin-bottom: 20px;
-  padding: 15px 15px 60px;
   &:after {
     clear: both;
     content: " ";
@@ -25,10 +24,27 @@
   }
 }
 
-.input-geography, .input-state {
+.techSettings {
+  border-top: none;
+  clear: both; 
+  margin: 0;
+  padding: 20px 0 5px 0;
+  .btn-settings {
+    font-size: 14px;
+    margin: 0 0 5px;
+    padding: 0;
+    .icon {
+      font-size: 16px;
+      margin-left: 10px;
+    }
+  }
+}
+
+.input-geography,
+.input-state {
   float: none;
   margin: 0 15px 15px 0;
-   width: 100%;
+  width: 100%;
   @media(min-width: 992px) {
     float: left;
   }
@@ -36,7 +52,7 @@
 
 .input-geography {
   @media(min-width: 220px) {
-    width: 150px;
+    max-width: 135px;
   }
 }
 
@@ -46,8 +62,7 @@
   }
 }
 
-.input-group-lg {
-}
+.input-group-lg {}
 
 .btn-primary {
   margin-right: 15px;
@@ -56,23 +71,33 @@
 .dropdown .btn {
   // border: none;
   font-size: 18px;
-  height: 46px;  
+  height: 46px;
   margin-right: -1px;
 }
 
+
+
 /* Download and about links */
+
 .nav-utility {
   font-size: 20px;
   margin: 0 0 10px;
   text-align: right;
-  
+
   .btn {
     font-size: 20px;
     padding: 0 12px 0 0;
   }
 }
 
+
+
 /* Search results table */
+
+.results {
+  background-color: #f2f2f2;
+}
+
 .search-geography-results {
   margin-bottom: 100px;
 }
@@ -81,7 +106,10 @@
   margin: 0 15px;
 }
 
+
+
 /* vue-good-table plugin styles */
+
 .good-table {
   table {
     display: flex;
@@ -112,7 +140,10 @@
   }
 }
 
-/* Nav Utility */ 
+
+
+/* Nav Utility */
+
 .nav-utility {
   margin-top: 14px;
 }

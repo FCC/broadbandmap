@@ -6,6 +6,7 @@ import EventHub from '../../_mixins/EventHub.js'
 import Autocomplete from '@/components/Autocomplete/index.vue'
 import BookmarkLink from '@/components/BookmarkLink/'
 import searchGeogTypes from '../../_mixins/search-geog-types.js'
+import { technologies } from '../../_mixins/tech-speeds.js'
 
 export default {
   name: 'AreaComparison',
@@ -20,28 +21,28 @@ export default {
         filterable: true
       },
       {
-        label: '% population with no providers',
+        label: 'no providers',
         field: 'zero_providers',
         type: 'number',
         html: false,
         filterable: false
       },
       {
-        label: '% population with 1 or more providers',
+        label: '1 or more providers',
         field: 'one_provider',
         type: 'number',
         html: false,
         filterable: false
       },
       {
-        label: '% population with 2 or more providers',
+        label: '2 or more providers',
         field: 'two_provider',
         type: 'number',
         html: false,
         filterable: false
       },
       {
-        label: '% population with 3 or more providers',
+        label: '3 or more providers',
         field: 'three_provider',
         type: 'number',
         html: false,
@@ -53,6 +54,9 @@ export default {
       selectedTech: 'acfosw',
       selectedSpeed: '25_3',
       selectedState: undefined,
+      technologies: technologies,
+      tech: '',
+      speed: '',
       socrataURL: '',
       socrataLookupURL: '',
       appToken: '',
@@ -161,10 +165,13 @@ export default {
     this.cacheStates()
     this.justMounted = true
 
-    EventHub.$on('updateTableSettings', function (selectedTech, selectedSpeed) {
-      this.updateTechSpeed(selectedTech, selectedSpeed)
-    }.bind(this))
+    EventHub.$on('updateTableSettings', (selectedTech, selectedSpeed) => this.updateTechSpeed(selectedTech, selectedSpeed))
     EventHub.$on('removeTableData', (propertyID, removeAll) => this.removeData())
+
+    if (this.$route.query.selectedTech === undefined) {
+      console.log('line 175 ')
+      this.updateUrlParams()
+    }
 
     // Options for spinner graphic
     this.spinnerOpts = {
@@ -228,9 +235,44 @@ export default {
       EventHub.$emit('openTableSettings')
     },
     updateTechSpeed (selectedTech, selectedSpeed) {
+      let techCodes = []
+      let techArr = []
+
       this.selectedTech = selectedTech
       this.selectedSpeed = selectedSpeed
+
       if (!this.justMounted) this.compareAreas()
+
+       // Display tech and speed
+      if (selectedTech !== undefined) {
+        techCodes = selectedTech.split('')
+
+        techCodes.forEach(code => {
+          this.technologies.filter(tech => {
+            if (tech.value === code) {
+              techArr.push(tech.name)
+            }
+          })
+        })
+      }
+
+      // Move 'Other' to end of the list of technologies
+      let otherIndex = techArr.indexOf('Other')
+      if (otherIndex > -1) {
+        techArr.splice(otherIndex, 1)
+        techArr.sort().push('Other')
+        this.tech = techArr.join(', ')
+      } else {
+        this.tech = techArr.sort().join(', ')
+      }
+
+      if (selectedTech !== undefined) {
+        this.speed = selectedSpeed.split('_').join('/')
+      }
+
+      if (this.speed === '200') {
+        this.speed = '0.2/0.2'
+      }
     },
     removeData () {
       this.rows = []
@@ -270,9 +312,9 @@ export default {
           let sd = response.data[sdi]
           self.stateNameToGeoid[sd.name] = sd.geoid.toString()
           self.stateGeoidToName[sd.geoid.toString()] = sd.name
-
-          self.loadParamsFromUrl()
         }
+
+        self.loadParamsFromUrl()
       })
       .catch(function (error) {
         if (error.response) {
@@ -305,8 +347,8 @@ export default {
             this.rows.push({
               area_name: areaName,
               zero_providers: (100.0 * parseFloat(rawData[rdi].sum_has_0) / (1.0 * totalPop)).toFixed(2),
-              one_provider:   (100.0 * (parseFloat(rawData[rdi].sum_has_1) + parseFloat(rawData[rdi].sum_has_2) + parseFloat(rawData[rdi].sum_has_3more)) / (1.0 * totalPop)).toFixed(2),
-              two_provider:   (100.0 * (parseFloat(rawData[rdi].sum_has_2) + parseFloat(rawData[rdi].sum_has_3more))/ (1.0 * totalPop)).toFixed(2),
+              one_provider: (100.0 * (parseFloat(rawData[rdi].sum_has_1) + parseFloat(rawData[rdi].sum_has_2) + parseFloat(rawData[rdi].sum_has_3more)) / (1.0 * totalPop)).toFixed(2),
+              two_provider: (100.0 * (parseFloat(rawData[rdi].sum_has_2) + parseFloat(rawData[rdi].sum_has_3more)) / (1.0 * totalPop)).toFixed(2),
               three_provider: (100.0 * parseFloat(rawData[rdi].sum_has_3more) / (1.0 * totalPop)).toFixed(2)
             })
             this.justMounted = false
@@ -434,6 +476,11 @@ export default {
         routeQP[prop] = routeQ[prop]
       })
 
+      if (this.selectedTech) {
+        routeQP.selectedTech = this.selectedTech
+        routeQP.selectedSpeed = this.selectedSpeed
+      }
+
       if (this.searchType) {
         routeQP.searchtype = this.typeDictionary[this.searchType]
       } else {
@@ -484,6 +531,10 @@ export default {
       }
 
       if (routeQP.searchtype || routeQP.geoid) this.compareAreas()
+
+      if (routeQ.selectedTech && routeQ.selectedSpeed) {
+        this.updateTechSpeed(routeQ.selectedTech, routeQ.selectedSpeed)
+      }
     },
     openAboutAreaCompare () {
       EventHub.$emit('openAboutAreaCompare')
