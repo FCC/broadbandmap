@@ -15,7 +15,7 @@
   },
   "dependencies": {
     "chart.js": "^2.7.1",
-    "vue": "^2.5.2",
+    "vue": "^2.5.13",
     "vue-router": "^2.8.1"
   },
   "devDependencies": {
