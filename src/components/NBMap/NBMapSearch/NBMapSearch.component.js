@@ -56,7 +56,7 @@ export default {
           this.searchType = 'CBSA (MSA)'
         } else if (this.$route.query.type === 'county') {
           this.searchType = 'County'
-        } else if (this.$route.query.type === 'cdist') {
+        } else if (this.$route.query.type === 'cd') {
           this.searchType = 'Congressional District'
         } else if (this.$route.query.type === 'tribal') {
           this.searchType = 'Tribal Area'
@@ -78,11 +78,23 @@ export default {
     },
     openMapSettings () {
       EventHub.$emit('openMapSettings')
+    },
+    openAboutModal () {
+      if (this.$route.name === 'LocationSummary') {
+        EventHub.$emit('openAboutLocSummary')
+      } else {
+        EventHub.$emit('openAboutAreaSummary')
+      }
     }
   },
   computed: {
     getPlaceholderText: function () {
       let srchType = this.searchTypes[this.type][this.searchType]
+
+      // Clear the search box when switching between search types
+      if (this.$refs.hasOwnProperty('autocomplete2')) {
+        this.$refs.autocomplete2.typeaheadModel = ''
+      }
 
       return srchType.hasOwnProperty('placeholderText') ? srchType.placeholderText : 'Enter ' + srchType.label
     },
@@ -103,8 +115,12 @@ export default {
       this.receiveSearchType()
 
       // Update search input field value with place_name
-      if (to.query.place_name !== undefined) {
-        this.$refs.autocomplete2.typeaheadModel = to.query.place_name
+      if (this.searchType === 'Address') {
+        if (to.query.place_name !== undefined) {
+          this.$refs.autocomplete2.typeaheadModel = to.query.place_name
+        } else {
+          this.$refs.autocomplete2.typeaheadModel = ''
+        }
       }
 
       // Update search input field value with lat, lon

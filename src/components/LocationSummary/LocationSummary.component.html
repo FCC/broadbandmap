@@ -7,32 +7,52 @@
     </div>
   </div>
   <div class="row">
-    <nb-map class="col-xs-12 col-sm-12 col-md-7 col-lg-8" mapType="location" searchType="location" searchDefault="Address" @map-init="mapInit" @map-click="getLatLon" @map-zoomend="toggleLegendTitle"></nb-map>
+    <nb-map class="col-xs-12 col-sm-12 col-md-7 col-lg-8" mapType="location" searchType="location" searchDefault="Address" @map-init="mapInit" @map-click="getLatLon" @map-zoomend="toggleLegendTitle" @map-viewNationwide="viewNationwide"></nb-map>
     <nb-map-sidebar class="map-sidebar col-xs-12 col-sm-12 col-md-5 col-lg-4">
       <h2 class="sub-title" slot="sidebar-title"><b>All Providers Reporting Service</b></h2>
       <p v-if="censusBlock != ''" slot="sidebar-description">Census block ID: {{ censusBlock }}</p>
-      <!-- Insert into NBMapSidebar sub-component's "charts" slot -->
-      <div class="charts" slot="charts">
-        <!-- Good Table plugin for Vue -->
-        <vue-good-table v-if="providerRows.length" styleClass="table-fixed table table-stripped" :columns="providerColumns" :rows="providerRows" :defaultSortBy="{field: 'down', type: 'desc'}" :paginate="false" :lineNumbers="false" />
-        <div v-if="!providerRows.length">Please click on the map or search for a location</div>
-      </div>
-      <!-- Insert into NBMapSidebar sub-component's "map-legend" slot -->
-      <section class="map-legend" slot="map-legend">        
-          <h5 v-if="!togLegendTitle"><b>Number of Broadband Providers</b></h5>
-          <h5 v-if="togLegendTitle"><b>Population Weighted Average Number of Providers</b></h5>
-          <div class="legend-gradient"></div>
-          <div class="legend-keys">
-            <ul>
+      <div class="map-legend" slot="map-legend">
+        <h5 v-if="!togLegendTitle"><b>Number of Broadband Providers</b></h5>
+        <h5 v-if="togLegendTitle"><b>Population Weighted Average Number of Providers</b></h5>
+        <div class="legend-gradient"></div>
+        <div class="legend-keys">
+          <ul>
             <li class="key first">0</li>
             <li class="key">1</li>
             <li class="key">2</li>
             <li class="key">3</li>
             <li class="key">4</li>
             <li class="key penultimate">6</li>
-            <li class="key last">12 or more</li></ul>
-          </div>     
-      </section>
+            <li class="key last">12 or more</li>
+          </ul>
+        </div>
+        
+      </div>
+      <div class="techSpeed" slot="techSpeed">
+        <div class="row">
+          <div class="col-sm-6">
+            <h5><b>Broadband</b></h5>
+          </div>
+          <div class="col-sm-6 text-right">
+            <tooltip text="Settings" trigger="hover" placement="left">
+              <button class="btn-settings btn btn-link" type="button" @click.prevent="openMapSettings">
+                <span class="icon icon-cog" data-toggle="tooltip" data-placement="top" title="Map Settings"></span>
+                <span class="sr-only">Settings</span>
+              </button>
+            </tooltip>
+          </div>
+        </div>
+        <dl class="dl-horizontal">
+          <dt>Technology</dt>
+          <dd><span v-if="tech !== ''">{{ tech }}</span><span v-if="tech ===''">(none)</span></dd>
+          <dt>Speed</dt>
+          <dd><span v-if="speed !== ''">&ge; {{ speed }} Mbps</span><span v-if="speed ===''">(none)</span></dd>
+        </dl>
+      </div>
+      <div class="charts" slot="charts">
+        <vue-good-table v-if="providerRows.length" styleClass="table-fixed table table-stripped" :columns="providerColumns" :rows="providerRows" :defaultSortBy="{field: 'down', type: 'desc'}" :paginate="false" :lineNumbers="false" />
+        <div v-if="!providerRows.length">Please click on the map or search for a location</div>
+      </div>
     </nb-map-sidebar>
   </div>
 </div>

@@ -1,4 +1,5 @@
 import { Carousel, Slide } from 'uiv'
+import { Spinner } from 'spin.js'
 import axios from 'axios'
 
 import nbMap from '../NBMap/'
@@ -11,7 +12,7 @@ import { updateMapLayers } from '../../_mixins/map-update-layers.js'
 
 export default {
   name: 'AreaSummary',
-  components: { Carousel, Slide, nbMap, nbMapSidebar, StackedBarChart },
+  components: { Carousel, Slide, Spinner, nbMap, nbMapSidebar, StackedBarChart },
   props: [],
   mixins: [urlValidation, updateMapLayers],
   data () {
@@ -20,7 +21,7 @@ export default {
       showCharts: false,
       settlementType: 'Settlement Type',
       popChartData: {
-        labels: ['0.2', '10/1', '25/3', '50/5', '100/10'],
+        labels: ['0.2/0.2', '4/1', '10/1', '25/3', '100/10', '250/25', '1000/100'],
         datasets: []
       },
       urbanRuralChartData: {
@@ -28,17 +29,44 @@ export default {
         datasets: []
       },
       tribalChartData: {
-        labels: ['Tribal', 'Non-tribal'],
+        labels: ['Non-tribal', 'Tribal'],
         datasets: []
       },
       chartStyles: {width: 'auto', height: '350px'},
-      sidebarTitle: ''
+      sidebarTitle: '',
+      mapSpeedToSocrata: {'200': '0.2', '4_1': '4', '10_1': '10', '25_3': '25', '100_10': '100', '250_25': '250', '1000/100': '1000'}
     }
   },
   mounted () {
     EventHub.$on('updateGeogSearch', this.updateURLParams)
     EventHub.$on('updateMapSettings', (selectedTech, selectedSpeed) => this.updateTechSpeed(selectedTech, selectedSpeed))
     EventHub.$on('removeLayers', (propertyID, removeAll) => this.removeLayers(propertyID, removeAll))
+
+    // Options for spinner graphic
+    this.spinnerOpts = {
+      lines: 9, // The number of lines to draw
+      length: 19, // The length of each line
+      width: 9, // The line thickness
+      radius: 13, // The radius of the inner circle
+      scale: 0.7, // Scales overall size of the spinner
+      corners: 1, // Corner roundness (0..1)
+      color: '#ffcc44 ', // CSS color or array of colors
+      fadeColor: 'transparent', // CSS color or array of colors
+      opacity: 0.2, // Opacity of the lines
+      rotate: 71, // The rotation offset
+      direction: 1, // 1: clockwise, -1: counterclockwise
+      speed: 1.4, // Rounds per second
+      trail: 64, // Afterglow percentage
+      fps: 20, // Frames per second when using setTimeout() as a fallback in IE 9
+      zIndex: 2e9, // The z-index (defaults to 2000000000)
+      className: 'spinner', // The CSS class to assign to the spinner
+      top: '25%', // Top position relative to parent
+      left: '50%', // Left position relative to parent
+      shadow: 'none', // Box-shadow for the lines
+      position: 'relative' // Element positioning
+    }
+
+    this.spinnerTarget = document.getElementById('spinner')
   },
   destroyed () {
     EventHub.$off('updateMapSettings')
@@ -53,17 +81,14 @@ export default {
         // If one or more technologies is selected, then reload the tech/speed layers when the base layer style is changed
         // Need to reload tech/speed layers so the labels will appear on top
         if (!this.removeAllLayers) {
-          // If no tech is selected use default tech and speed settings (calls common function in map-update-layers.js)
-          if (this.$route.query.selectedTech === undefined) {
-            this.updateTechSpeed(this.defaultTech, this.defaultSpeed)
-            return
-          }
+          let tech = this.$route.query.selectedTech
+          let speed = this.$route.query.selectedSpeed
 
-          // If selectedTech parameter value is in the URL, use that value
-          if (this.$route.query.selectedTech !== '') {
-            this.updateTechSpeed(this.$route.query.selectedTech, this.$route.query.selectedSpeed)
+          // If tech/speed query params are invalid, use default tech and speed
+          if (!this.isValidTech(tech) || !this.isValidSpeed(speed)) {
+            this.updateTechSpeed(this.defaultTech, this.defaultSpeed)
           } else {
-            this.fetchAreaData()
+            this.updateTechSpeed(tech.toLowerCase(), speed)
           }
         }
 
@@ -85,7 +110,7 @@ export default {
       let routeQuery = this.$route.query
 
       // Get map zoom level
-      let zoomLevel = this.Map.getZoom()
+      // let zoomLevel = this.Map.getZoom()
 
       // Add routeQuery properties to routeQueryParams
       Object.keys(routeQuery).map(property => {
@@ -109,10 +134,17 @@ export default {
       // Hide charts before data refreshes
       this.showCharts = false
 
+      // Display spinner while chart data loads
+      if (!this.spinner) {
+        this.spinner = new Spinner(this.spinnerOpts).spin(this.spinnerTarget)
+      } else {
+        this.spinner.spin(this.spinnerTarget)
+      }
+
       // Set defaults
       let geogType = 'nation'
       let geoid = 0
-      let isValidType = ['state', 'county', 'place', 'cbsa', 'cdist', 'tribal'].indexOf(this.$route.query.type) !== -1
+      let isValidType = ['state', 'county', 'place', 'cbsa', 'cd', 'tribal'].indexOf(this.$route.query.type) !== -1
 
       // If the geoid and geography type are in the query string, use those
       if (typeof this.$route.query.type !== 'undefined' && isValidType && typeof this.$route.query.geoid !== 'undefined') {
@@ -140,18 +172,23 @@ export default {
       }
 
       // Convert selectedSpeed to numeric value
-      let speedNumeric = 0
+     /* let speedNumeric = 0
+
       if (this.selectedSpeed === '200') {
         speedNumeric = 0.2
+      } else if (this.selectedSpeed === '4_1') {
+        speedNumeric = 4
       } else if (this.selectedSpeed === '10_1') {
         speedNumeric = 10
       } else if (this.selectedSpeed === '25_3') {
         speedNumeric = 25
-      } else if (this.selectedSpeed === '50_5') {
-        speedNumeric = 50
       } else if (this.selectedSpeed === '100_10') {
         speedNumeric = 100
-      }
+      } else if (this.selectedSpeed === '250_25') {
+        speedNumeric = 250
+      } else if (this.selectedSpeed === '1000_100') {
+        speedNumeric = 1000
+      } */
 
       axios
       .get(socrataURL, {
@@ -172,11 +209,16 @@ export default {
         if (self.socrataData.length > 0) {
           self.dedupSocrataData()
 
-          self.calculatePopChartData()
+          self.calculatepopChartData()
           self.calculateUrbanRuralChartData()
           self.calculateTribalChartData()
 
           self.showCharts = true
+          self.spinner.stop()
+        }
+
+        if (self.selectedTech === '') {
+          self.spinner.stop()
         }
       })
       .catch(function (error) {
@@ -208,6 +250,7 @@ export default {
         } else if (process.env.SOCRATA_ENV === 'PROD') {
           socrataURL = process.env.SOCRATA_PROD_LOOKUP
         }
+
         axios
         .get(socrataURL, {
           params: {
@@ -221,9 +264,11 @@ export default {
           // console.log('Socrata GEOGRAPHY DETAILS query response= ', response)
           // Display name of searched geography
           this.sidebarTitle = response.data[0].name
+
           // Get lat/lon pair
           let bbox = response.data[0].bbox_arr.replace(/{/g, '').replace(/}/g, '')
           let envArray = bbox.split(',')
+
           // Zoom and center map to envelope
           this.Map.fitBounds(envArray, {
             animate: false,
@@ -231,8 +276,14 @@ export default {
             padding: 100
           })
 
+          // Clear existing geography highlight
+          if (this.prevGeogType !== undefined) {
+            this.Map.setFilter(this.prevGeogType + '-highlighted', ['==', 'geoid', ''])
+          }
+
           // Highlight the selected geography type based on geoid
           this.Map.setFilter(geogType + '-highlighted', ['==', 'geoid', geoid])
+          this.prevGeogType = geogType
         }
         .bind(this))
         .catch(function (error) {
@@ -265,7 +316,7 @@ export default {
               sd.has_0 === dedupList[ddli].has_0 &&
               sd.has_1 === dedupList[ddli].has_1 &&
               sd.has_2 === dedupList[ddli].has_2 &&
-              sd.has_3plus === dedupList[ddli].has_3plus) {
+              sd.has_3more === dedupList[ddli].has_3more) {
             found = true
             break
           }
@@ -274,7 +325,7 @@ export default {
           // Duplicate, must be ignored
           continue
         } else {
-          dedupList.push({speed: sd.speed, has_0: sd.has_0, has_1: sd.has_1, has_2: sd.has_2, has_3plus: sd.has_3plus})
+          dedupList.push({speed: sd.speed, has_0: sd.has_0, has_1: sd.has_1, has_2: sd.has_2, has_3more: sd.has_3more})
           dedupedSocrataData.push(sd)
         }
       }
@@ -288,11 +339,11 @@ export default {
         for (let sdi in this.socrataData) {
           let sd = this.socrataData[sdi]
 
-          if (sd[label_field] === label) {
+          if (sd[label_field] === label && (label_field === 'speed' || sd.speed === this.mapSpeedToSocrata[this.selectedSpeed])) {
             chartData.datasets[0].data[li] += parseInt(sd.has_0)
             chartData.datasets[1].data[li] += parseInt(sd.has_1)
             chartData.datasets[2].data[li] += parseInt(sd.has_2)
-            chartData.datasets[3].data[li] += parseInt(sd.has_3plus)
+            chartData.datasets[3].data[li] += parseInt(sd.has_3more)
           }
         }
         // Normalize
@@ -306,14 +357,15 @@ export default {
       }
       return chartData
     },
-    calculatePopChartData () {
+    calculatepopChartData () {
       this.popChartData.datasets = [
-        {data: [0, 0, 0, 0, 0]},
-        {data: [0, 0, 0, 0, 0]},
-        {data: [0, 0, 0, 0, 0]},
-        {data: [0, 0, 0, 0, 0]}
+        {data: [0, 0, 0, 0, 0, 0, 0]},
+        {data: [0, 0, 0, 0, 0, 0, 0]},
+        {data: [0, 0, 0, 0, 0, 0, 0]},
+        {data: [0, 0, 0, 0, 0, 0, 0]}
       ]
-      this.popChartData = this.aggregate(this.popChartData, 'speed', {'0.2': '0.2', '10/1': '10', '25/3': '25', '50/5': '50', '100/10': '100'})
+
+      this.popChartData = this.aggregate(this.popChartData, 'speed', {'0.2/0.2': '0.2', '4/1': '4', '10/1': '10', '25/3': '25', '100/10': '100', '250/25': '250', '1000/100': '1000'})
     },
     calculateUrbanRuralChartData () {
       this.urbanRuralChartData.datasets = [
@@ -332,16 +384,24 @@ export default {
         {data: [0, 0]}
       ]
       this.tribalChartData = this.aggregate(this.tribalChartData, 'tribal_non', {'Tribal': 'T', 'Non-tribal': 'N'})
+    },
+    viewNW () {
+      let routeQuery = this.$route.query
+
+      this.$router.push({
+        name: 'AreaSummary',
+        query: {
+          selectedTech: routeQuery.selectedTech,
+          selectedSpeed: routeQuery.selectedSpeed
+        }
+      })
     }
-
-  },
-  computed: {
-
   },
   watch: {
     // When query params change for the same route (URL slug)
     '$route' (to, from) {
-      this.validateURL()
+      // Dirty fix to prevent data not loading to diagrams on "clean" URL
+      if (from.fullPath !== from.path) this.validateURL()
     }
   }
 }

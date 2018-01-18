@@ -1,5 +1,7 @@
 import axios from 'axios'
 import { Tooltip } from 'uiv'
+
+import EventHub from '../../_mixins/EventHub.js'
 import nbMap from '../NBMap/'
 
 import PopulationChart from './PopulationChart'
@@ -10,11 +12,8 @@ import BookmarkLink from '../BookmarkLink/'
 
 export default {
   name: 'ProviderDetail',
-  components: { Tooltip, nbMap, PopulationChart, SpeedChart, UpSpeedChart, Autocomplete, BookmarkLink },
+  components: { Tooltip, EventHub, nbMap, PopulationChart, SpeedChart, UpSpeedChart, Autocomplete, BookmarkLink },
   props: [],
-  mounted () {
-    this.loadProviderLookup()
-  },
   data () {
     return {
       providers: [{id: Date.now()}],
@@ -30,8 +29,12 @@ export default {
       hoconum2Name: {},
       name2Hoconum: {},
       searchType: 'Provider',
-      layerColors: ['#ff848b', '#838eff', '#ffff95']
+      layerColors: ['#ff848b', '#838eff', '#ffff95'],
+      validationError: ''
     }
+  },
+  mounted () {
+    this.loadProviderLookup()
   },
   methods: {
     mapInit (map) {
@@ -107,11 +110,19 @@ export default {
       this.showLink = this.numProviders < 3
     },
     viewDetails () {
+      this.validationError = ''
+
       let providerBox = this.$refs.providerBox
       // Create list of provider Names
       this.providerNames = []
       for (let pbi in providerBox) {
-        this.providerNames.push(providerBox[pbi].typeaheadModel.holdingcompanyname)
+        // console.log('box content : ', providerBox[pbi])
+        if (providerBox[pbi].typeaheadModel.holdingcompanyname) {
+          this.providerNames.push(providerBox[pbi].typeaheadModel.holdingcompanyname)
+        } else {
+          this.validationError = 'Invalid provider name(s)'
+          return
+        }
       }
 
       // Create list of provider Hoconums
@@ -143,16 +154,6 @@ export default {
               visibility: 'visible'
             },
             paint: {
-              'fill-color': {
-                base: 1,
-                type: 'categorical',
-                property: 'hoconum',
-                stops: [
-                  ['130077', 'hsl(249, 86%, 56%)'],
-                  ['130317', 'hsl(359, 84%, 62%)']
-                ],
-                default: 'hsla(112, 93%, 71%, 0)'
-              },
               'fill-opacity': 0.5,
               'fill-color': this.layerColors[index]
             },
@@ -163,18 +164,18 @@ export default {
             id: 'large_prov_' + hoconum,
             source: {
               type: 'vector',
-              url: 'mapbox://fcc.prov_large_d16_v1'
+              url: 'mapbox://fcc.d16_v1_prov_lg'
             },
-            'source-layer': 'large_prov'
+            'source-layer': 'dec2016_7nov17_prov_lg'
           }
 
           let layerProvOther = {
             id: 'prov_other_' + hoconum,
             source: {
               type: 'vector',
-              url: 'mapbox://fcc.prov_other_d16_v1'
+              url: 'mapbox://fcc.d16_v1_prov_other'
             },
-            'source-layer': 'other_prov'
+            'source-layer': 'dec2016_7nov17_prov_other'
           }
 
           // Merge layer style properties
@@ -244,7 +245,6 @@ export default {
         for (let pbi in providerBox) {
           providerBox[pbi].typeaheadModel = {'holdingcompanyname': self.providerNames[pbi]}
         }
-
       })
       .catch(function (error) {
         if (error.response) {
@@ -299,7 +299,7 @@ export default {
               let cData = []
               cData[0] = 100.0
               for (let i = 1; i < count; i++) {
-                cData[i] = 100.0 * parseFloat(collapsed[ci][drct + '_' + i.toString()]) / parseFloat(collapsed[ci][drct + '_1'])
+                cData[i] = 100.0 * parseFloat(collapsed[ci][drct + '_' + (i + 1).toString()]) / parseFloat(collapsed[ci][drct + '_1'])
               }
 
               let series = {
@@ -380,7 +380,7 @@ export default {
       if (this.providerHoconums && this.providerHoconums.length > 0) {
         let hoconums = ''
         for (let hci in this.providerHoconums) {
-          hoconums += this.providerHoconums[hci] + ","
+          hoconums += this.providerHoconums[hci] + ','
         }
         hoconums = hoconums.replace(/,\s*$/, '')
 
@@ -409,17 +409,39 @@ export default {
       })
 
       if (routeQP.direction) {
-        this.direction = routeQP.direction
+        if (routeQP.direction === 'u' || routeQP.direction === 'd') {
+          this.direction = routeQP.direction
+        } else {
+          this.validationError = 'Invalid direction : ' + routeQP.direction
+          return
+        }
       }
 
       if (routeQP.hoconums) {
-        this.providerHoconums = routeQP.hoconums.split(',')
+        let hoconums = routeQP.hoconums.split(',')
+        if (hoconums.length > 3) {
+          this.validationError = 'Too many providers specified in URL. Selection must be limited to 3.'
+          return
+        } else {
+          let unknownHoconum
+          for (let hci in hoconums) {
+            if (!(hoconums[hci] in this.hoconum2Name)) {
+              unknownHoconum = hoconums[hci]
+              break
+            }
+          }
+          if (unknownHoconum) {
+            this.validationError = 'Invalid provider ID : ' + unknownHoconum
+            return
+          } else {
+            this.providerHoconums = hoconums
+          }
+        }
 
         this.numProviders = 0
         this.providers = []
 
         for (let hcni in this.providerHoconums) {
-
           let newProvider = {
             id: new Date().getTime() + hcni
           }
@@ -433,7 +455,10 @@ export default {
         }
         this.fetchProviderData()
       }
-    }   
+    },
+    openAboutProvider () {
+      EventHub.$emit('openAboutProvider')
+    }
   },
   computed: {
     getPlaceholderText: function () {

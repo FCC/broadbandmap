@@ -17,27 +17,61 @@ export default {
       dataSource: [],
       asyncSrc: '',
       asyncKey: '',
-      itemKey: ''
+      itemKey: '',
+      selectedItem: {}
     }
+  },
+  mounted () {
+    // Check query string for initial values
+    this.$nextTick(this.populateTypeahead)
   },
   methods: {
     searchButtonClicked (event) {
       if (this.searchType !== 'Provider') {
-        this.gotoGeography(event)
+        this.enterClicked(event)
       }
     },
     enterClicked (event) {
-      if (this.originPage && this.originPage === 'AreaComparison') {
-        // Don't go to geography - we are searching for state on AreaComparison and want to stay on the page
-      } else if (this.searchType === 'Provider') {
-        // Don't go to geography - we are searching for non-geographic entity
-      } else if (typeof this.typeaheadModel === 'object' || this.searchType !== 'Address') {
-        this.gotoGeography(event)
+      if (this.originPage !== 'AreaComparison' && this.originPage !== 'ProviderDetail') {
+        // Prevent duplicate search calls
+        if (this.selectedItem.hasOwnProperty('place_name') && this.selectedItem.place_name === this.typeaheadModel) {
+          return
+        }
+
+        // Prevent duplicate search calls
+        if (this.searchType === 'Address' && document.getElementById('addr').value === this.$route.query.place_name) {
+          return
+        }
+
+        // If search button is clicked if search query has not been geocoded
+        if (this.searchType === 'Address' && typeof this.typeaheadModel === 'string' && event.type === 'click') {
+          EventHub.$emit('openModal', 'No results found', 'Please enter and then select a valid U.S. address.')
+          return
+        }
+
+        // If search query has been geocoded, gotoGeography
+        if (this.typeaheadModel.hasOwnProperty('id') || this.searchType !== 'Address') {
+          // bizarre timeout because of stupid logic
+          setTimeout(() => {
+            this.selectedItem = this.typeaheadModel
+            this.gotoGeography(event)
+          }, 100)
+        }
+
+        // When enter key is pressed, gotoGeography
+        if (event && event.keyCode === 13 && this.searchType === 'Address') {
+          // bizarre timeout because of stupid logic
+          setTimeout(() => {
+            this.selectedItem = this.typeaheadModel
+            this.gotoGeography(event)
+          }, 100)
+        }
       }
     },
     // Called when user pressed enter or clicked search
     gotoGeography (event) {
       let newURL = ''
+
       switch (this.searchType) {
         case 'Address':
           if (typeof this.typeaheadModel === 'object' && typeof this.typeaheadModel.id === 'string') {
@@ -55,50 +89,53 @@ export default {
           if (coordinatesArray.length === 2 && this.isValidLatLon(coordinatesArray[0], coordinatesArray[1])) {
             newURL = 'location-summary?lat=' + coordinatesArray[0].trim() + '&lon=' + coordinatesArray[1].trim()
             this.$router.push(newURL)
-            EventHub.$emit('updateGeogSearch')
+            EventHub.$emit('updateAddrSearch')
           } else {
             // Call Modal component in app footer
             EventHub.$emit('openModal', 'No results found', 'Please enter valid coordinates in "latitude, longitude" format.')
           }
           break
         case 'State':
-          console.log('gotoGeography(), searchType= ' + this.searchType + ', typeaheadModel= ', this.typeaheadModel)
-          newURL = 'area-summary?type=state&geoid=' + this.typeaheadModel.geoid + '&bbox=' + this.typeaheadModel.bbox_arr
-          this.$router.push(newURL)
-          EventHub.$emit('updateGeogSearch')
+          // console.log('gotoGeography(), searchType= ' + this.searchType + ', typeaheadModel= ', this.typeaheadModel)
+          if (this.originPage !== 'AreaComparison') {
+            newURL = 'area-summary?type=state&geoid=' + this.typeaheadModel.geoid + '&bbox=' + this.typeaheadModel.bbox_arr
+            this.$router.push(newURL)
+            EventHub.$emit('updateGeogSearch')
+          }
           break
         case 'CBSA (MSA)':
-          console.log('gotoGeography(), searchType= ' + this.searchType + ', typeaheadModel= ', this.typeaheadModel)
+          // console.log('gotoGeography(), searchType= ' + this.searchType + ', typeaheadModel= ', this.typeaheadModel)
           newURL = 'area-summary?type=cbsa&geoid=' + this.typeaheadModel.geoid + '&bbox=' + this.typeaheadModel.bbox_arr
           this.$router.push(newURL)
           EventHub.$emit('updateGeogSearch')
           break
         case 'County':
-          console.log('gotoGeography(), searchType= ' + this.searchType + ', typeaheadModel= ', this.typeaheadModel)
+          // console.log('gotoGeography(), searchType= ' + this.searchType + ', typeaheadModel= ', this.typeaheadModel)
           newURL = 'area-summary?type=county&geoid=' + this.typeaheadModel.geoid + '&bbox=' + this.typeaheadModel.bbox_arr
           this.$router.push(newURL)
           EventHub.$emit('updateGeogSearch')
           break
         case 'Congressional District':
-          console.log('gotoGeography(), searchType= ' + this.searchType + ', typeaheadModel= ', this.typeaheadModel)
-          newURL = 'area-summary?type=cdist&geoid=' + this.typeaheadModel.geoid + '&bbox=' + this.typeaheadModel.bbox_arr
+          // console.log('gotoGeography(), searchType= ' + this.searchType + ', typeaheadModel= ', this.typeaheadModel)
+          newURL = 'area-summary?type=cd&geoid=' + this.typeaheadModel.geoid + '&bbox=' + this.typeaheadModel.bbox_arr
           this.$router.push(newURL)
           EventHub.$emit('updateGeogSearch')
           break
         case 'Tribal Area':
-          console.log('gotoGeography(), searchType= ' + this.searchType + ', typeaheadModel= ', this.typeaheadModel)
+          // console.log('gotoGeography(), searchType= ' + this.searchType + ', typeaheadModel= ', this.typeaheadModel)
           newURL = 'area-summary?type=tribal&geoid=' + this.typeaheadModel.geoid + '&bbox=' + this.typeaheadModel.bbox_arr
           this.$router.push(newURL)
           EventHub.$emit('updateGeogSearch')
           break
         case 'Census Place':
-          console.log('gotoGeography(), searchType= ' + this.searchType + ', typeaheadModel= ', this.typeaheadModel)
+          // console.log('gotoGeography(), searchType= ' + this.searchType + ', typeaheadModel= ', this.typeaheadModel)
           newURL = 'area-summary?type=place&geoid=' + this.typeaheadModel.geoid + '&bbox=' + this.typeaheadModel.bbox_arr
           this.$router.push(newURL)
           EventHub.$emit('updateGeogSearch')
           break
         default:
-          console.log('DEBUG: No handler in gotoGeography() for searchType = ' + this.searchType)
+          // console.log('DEBUG: No handler in gotoGeography() for searchType = ' + this.searchType)
+          break
       }
     },
     // Called by data() on init, and when searchType changes
@@ -167,6 +204,7 @@ export default {
         appToken = process.env.SOCRATA_PROD_APP_TOKEN
         axiosParams = {
           $select: 'holdingcompanyname',
+          $where: 'consumer=1',
           $group: 'holdingcompanyname',
           $limit: 5000,
           $$app_token: appToken
@@ -185,6 +223,7 @@ export default {
         } else {
           console.log('ERROR: process.env.SOCRATA_ENV in .env file must be PROD or DEV, not ' + process.env.SOCRATA_ENV)
         }
+
         axiosParams = {
           type: fetchType,
           $limit: 50000, // i.e. more than the default 1000
@@ -192,13 +231,13 @@ export default {
           $$app_token: appToken
         }
       }
+
       axios
       .get(socrataURL, {
         params: axiosParams,
         headers: httpHeaders
       })
       .then(function (response) {
-        console.log('Socrata response= ', response)
         self.dataSource = response.data
       })
       .catch(function (error) {
@@ -228,9 +267,6 @@ export default {
         this.asyncSrc = 'https://api.mapbox.com/geocoding/v5/mapbox.places/' + encodeURIComponent(this.typeaheadModel) + '.json?country=us&limit=10&access_token=' + process.env.MAPBOX_ACCESS_TOKEN + '&'
       }
     }
-  },
-  // Check query string for initial values
-  mounted () {
-    this.populateTypeahead()
   }
+
 }

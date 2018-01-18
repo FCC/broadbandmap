@@ -1,15 +1,23 @@
 // Used by LocationSummary and AreaSummary and referenced in NBMapSettings components
 // Common functions for updating tech and speed layers
-
+import { Tooltip } from 'uiv'
+import EventHub from './EventHub.js'
 import { sourcesTechSpeed, layersTechSpeed } from '@/components/NBMap/layers-techSpeed.js'
+import { technologies } from './tech-speeds.js'
 
 export const updateMapLayers = {
+  components: { Tooltip },
   data () {
     return {
       defaultTech: 'acfosw',
       defaultSpeed: '25_3',
       removeAllLayers: false,
-      togLegendTitle: true
+      togLegendTitle: true,
+      selectedTech: '',
+      selectedSpeed: '',
+      technologies: technologies,
+      tech: '',
+      speed: ''
     }
   },
   methods: {
@@ -93,11 +101,17 @@ export const updateMapLayers = {
       if (removeAll) {
         this.selectedTech = ''
         this.selectedSpeed = ''
+
+        this.tech = ''
+        this.speed = ''
+
         this.updateURLParams()
       }
     },
     updateTechSpeed (selectedTech, selectedSpeed) { // e.g. acfosw, 25_3
       let propertyID = [selectedTech, selectedSpeed].join('_')
+      let techCodes = []
+      let techArr = []
 
       // When base layer style is changed, the selected tech & speed layers will be reloaded
       this.selectedTech = selectedTech
@@ -116,6 +130,40 @@ export const updateMapLayers = {
 
       // add new map layers
       this.addLayers(propertyID)
+
+      // Update tech and speed in sidebar legend
+      if (selectedTech !== undefined) {
+        techCodes = selectedTech.split('')
+
+        techCodes.forEach(code => {
+          this.technologies.filter(tech => {
+            if (tech.value === code) {
+              techArr.push(tech.name)
+            }
+          })
+        })
+      }
+
+      // Move 'Other' to end of the list of technologies
+      let otherIndex = techArr.indexOf('Other')
+      if (otherIndex > -1) {
+        techArr.splice(otherIndex, 1)
+        techArr.sort().push('Other')
+        this.tech = techArr.join(', ')
+      } else {
+        this.tech = techArr.sort().join(', ')
+      }
+
+      if (selectedTech !== undefined) {
+        this.speed = selectedSpeed.split('_').join('/')
+      }
+
+      if (this.speed === '200') {
+        this.speed = '0.2/0.2'
+      }
+    },
+    openMapSettings () {
+      EventHub.$emit('openMapSettings')
     },
     toggleLegendTitle (zoomLevel) {
       this.togLegendTitle = zoomLevel <= 10

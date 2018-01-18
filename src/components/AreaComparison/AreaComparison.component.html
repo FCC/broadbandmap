@@ -1,59 +1,101 @@
-<div class="container-fluid">
-  <div class="row">
-    <div class="col-sm-9">
-      <h1>Compare Broadband Availability in Different Areas</h1>
-    </div>
-    <div class="col-sm-3" v-if="rows.length > 0">
-      <div class="nav-utility">
-        <!-- <tooltip text="Download data" placement="top">
+<div class="pg-areaCompare">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-sm-9">
+        <h1>Compare Broadband Availability in Different Areas</h1>
+      </div>
+      <div class="col-sm-3">
+        <div class="nav-utility">
+          <!-- <tooltip text="Download data" placement="top">
           <a href="#"><span class="icon icon-cloud-download"></span><span class="sr-only">Download Data</span></a>
         </tooltip> -->
-        <bookmark-link></bookmark-link>
-      </div>      
-    </div>
-  </div>
-  <div class="row">
-    <div class="col-sm-12">
-      <form class="search-geography">
-        <div class="input-geography">
-          <p>Select geography type</p>
-          <div class="input-group input-group-lg">
-            <div class="input-group-btn">
-              <dropdown :disabled="refreshingDropdown">
-                <button data-role="trigger" aria-expanded="false" class="btn btn-default dropdown-toggle" type="button">
-                  <span id="btn-label">{{ searchLabel }}</span> <span class="caret"></span>
-                </button>
-                <template slot="dropdown" @click="toggleSearchType">
-                  <li v-for="(value, key) in searchOptsList">
-                    <a href="#" @click.self.prevent="toggleSearchType(key)">{{ key }}</a>
-                  </li>
-                </template>
-              </dropdown>
-            </div>
-          </div>
-        </div>
-        <div class="input-state">
-          <p><a href="#" @click.prevent="searchArea('')">Enter a state</a> or <a href="#" @click.prevent="searchArea('Nationwide')">search Nationwide</a></p>
-          <div class="input-group-lg">
-            <Autocomplete class="search-state" ref="autocomplete" searchType="State" originPage="AreaComparison" placeholderText="Enter state" v-model="selectedState"></Autocomplete>
-          </div>
-        </div>
-        <div class="btns map-settings input-group-btn">
-          <button class="btn btn-lg btn-primary" type="button" @click.prevent="compareAreas">Compare</button>
-          <tooltip text="Table settings" trigger="hover" placement="top">
-            <button class="btn-settings btn btn-default btn-lg" data-role="trigger" type="button" @click.prevent="openTableSettings">
-              <span class="icon icon-cog" data-toggle="tooltip" data-placement="top" title="Table Settings"></span>
-              <span class="sr-only">Table settings</span>
+          <tooltip text="About this map" trigger="hover" placement="bottom">
+            <button class="btn btn-link" type="button" @click.prevent="openAboutAreaCompare">
+              <span class="icon icon-info-circle"></span>
             </button>
           </tooltip>
+          <bookmark-link v-if="rows.length > 0"></bookmark-link>
         </div>
-      </form>
+      </div>
     </div>
+    <div class="row">
+      <div class="col-sm-12">
+        <form class="search-geography">
+          <div class="alert alert-warning" role="alert" v-if="validationError">
+            <p>{{ validationError }}</p>
+          </div>
+          <div class="row">
+            <div class="col-sm-12">
+              <div class="input-state">
+                <p><a href="#" @click.prevent="searchArea('Nationwide')">Search Nationwide</a> or <a href="#" @click.prevent="searchArea('')">enter a state</a></p>
+                <div class="input-group-lg">
+                  <Autocomplete class="search-state" ref="autocomplete" searchType="State" originPage="AreaComparison" placeholderText="Enter state" v-model="selectedState"></Autocomplete>
+                </div>
+              </div>
+              <div class="input-geography">
+                <p>Select area</p>
+                <div class="input-group input-group-lg">
+                  <div class="input-group-btn">
+                    <dropdown :disabled="refreshingDropdown">
+                      <button data-role="trigger" aria-expanded="false" class="btn btn-default dropdown-toggle" type="button">
+                        <span id="btn-label">{{ searchLabel }}</span> <span class="caret"></span>
+                      </button>
+                      <template slot="dropdown" @click="toggleSearchType">
+                        <li v-for="(value, key) in searchOptsList">
+                          <a href="#" @click.self.prevent="toggleSearchType(key)">{{ key }}</a>
+                        </li>
+                      </template>
+                    </dropdown>
+                  </div>
+                </div>
+              </div>
+              <div class="btns">
+                <button class="btn btn-lg btn-primary" type="button" @click.prevent="compareAreas">Compare</button>
+                <tooltip text="Table settings" trigger="hover" placement="right">
+                  <button class="btn-settings btn btn-default btn-lg" data-role="trigger" type="button" @click.prevent="openTableSettings">
+                    <span class="icon icon-cog"></span>
+                    <span class="sr-only">settings</span>
+                  </button>
+                </tooltip>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+    <div id="spinner" slot="spinner"></div>
   </div>
-  <div class="row" v-if="rows.length > 0">
-    <div class="col-sm-10">
-      <div class="table-container">
-        <vue-good-table styleClass="table-fixed table table-stripped" :columns="columns" :rows="rows" :globalSearch="false" :defaultSortBy="{field: 'area_name', type: 'asc'}" :paginate="true" perPage="200" :lineNumbers="false"/>
+  <div class="results">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-sm-6">
+          <div class="techSpeed techSettings">
+            <div>
+              <button class="btn-settings btn btn-link" data-role="trigger" type="button" @click.prevent="openTableSettings">Broadband<span class="icon icon-cog"></span></button>
+              <!-- <tooltip text="Table settings" trigger="hover" placement="right">
+                  <button class="btn-settings btn btn-link" data-role="trigger" type="button" @click.prevent="openTableSettings">
+                    <span class="icon icon-cog"></span>
+                    <span class="sr-only">settings</span>
+                  </button>
+                </tooltip> -->
+            </div>
+            <dl class="dl-horizontal">
+              <dt>Technology</dt>
+              <dd><span v-if="tech !== ''">{{ tech }}</span><span v-if="tech ===''">(none)</span></dd>
+              <dt>Speed</dt>
+              <dd><span v-if="speed !== ''">&ge; {{ speed }} Mbps</span><span v-if="speed ===''">(none)</span></dd>
+            </dl>
+          </div>
+        </div>
+      </div>
+      <div class="row" v-if="rows.length > 0">
+        <div class="col-sm-10">
+          <br>
+          <h3>Percentage of population with broadband providers</h3>
+          <div class="table-container panel panel-default">
+            <vue-good-table styleClass="table-fixed table table-stripped" :columns="columns" :rows="rows" globalSearch="true" :defaultSortBy="{field: 'area_name', type: 'asc'}" :paginate="true" perPage="200" :lineNumbers="false" :responsive="false" />
+          </div>
+        </div>
       </div>
     </div>
   </div>

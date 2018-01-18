@@ -14,7 +14,6 @@ Vue.use(Router)
 const titleText = ' | Fixed Broadband Deployment Data | Federal Communications Commission'
 
 const router = new Router({
-  base: '/nbm2/DEV/',
   linkActiveClass: 'active',
   linkExactActiveClass: 'active',
   routes: [
@@ -70,7 +69,11 @@ const router = new Router({
       path: '*',
       redirect: 'PageNotFound'
     }
-  ]
+  ],
+  scrollBehavior (to, from, savedPosition) {
+    // Make the page scroll to top
+    return { x: 0, y: 0 }
+  }
 })
 
 router.beforeEach((to, from, next) => {

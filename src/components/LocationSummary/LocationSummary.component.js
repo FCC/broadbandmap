@@ -1,10 +1,12 @@
 import axios from 'axios'
+
 import nbMap from '../NBMap/'
-import EventHub from '../../_mixins/EventHub.js'
 import nbMapSidebar from '../NBMap/NBMapSidebar/'
+
+import EventHub from '../../_mixins/EventHub.js'
 import { urlValidation } from '../../_mixins/urlValidation.js'
-import { sourcesTechSpeed, layersTechSpeed } from '../NBMap/layers-techSpeed.js'
 import { updateMapLayers } from '../../_mixins/map-update-layers.js'
+
 export default {
   name: 'LocationSummary',
   components: { axios, nbMap, nbMapSidebar },
@@ -74,14 +76,14 @@ export default {
         // If one or more technologies is selected, then reload the tech/speed layers when the base layer style is changed
         // Need to reload tech/speed layers so the labels will appear on top
         if (!this.removeAllLayers) {
-          // If no tech is selected use default tech and speed settings
-          if (this.$route.query.selectedTech === undefined) {
-            this.updateTechSpeed(this.defaultTech, this.defaultSpeed)
-          }
+          let tech = this.$route.query.selectedTech
+          let speed = this.$route.query.selectedSpeed
 
-          // If selectedTech parameter value is in the URL, use that value
-          if (this.$route.query.selectedTech !== '') {
-            this.updateTechSpeed(this.$route.query.selectedTech, this.$route.query.selectedSpeed)
+          // If tech/speed query params are invalid, use default tech and speed
+          if (!this.isValidTech(tech) || !this.isValidSpeed(speed)) {
+            this.updateTechSpeed(this.defaultTech, this.defaultSpeed)
+          } else {
+            this.updateTechSpeed(tech.toLowerCase(), speed)
           }
         }
         // Trigger reload of highlighted block when base layer style is changed
@@ -89,7 +91,7 @@ export default {
       })
     },
     validateURL () {
-      // If valid latitude and longitude get the FIPS and highlight the census block
+      // If valid latitude and longitude, get the FIPS and highlight the census block
       if (this.isValidLatLon(this.$route.query.lat, this.$route.query.lon)) {
         this.getFIPS(this.$route.query.lat.trim(), this.$route.query.lon.trim())
 
@@ -98,10 +100,18 @@ export default {
         this.updateURLParams()
       } else {
         this.clearProviderTable()
+
         this.Map.easeTo({
           center: this.mapOptions.center,
           zoom: this.mapOptions.zoom
         })
+
+        this.updateURLParams()
+      }
+
+      // If all layers are removed, update tech/speed layers based on URL history
+      if (!this.removeAllLayers) {
+        this.updateTechSpeed(this.$route.query.selectedTech, this.$route.query.selectedSpeed)
       }
     },
     updateURLParams () {
@@ -111,7 +121,15 @@ export default {
       let routeQuery = this.$route.query
 
       // Get map zoom level
-      let zoomLevel = this.Map.getZoom()
+      // let zoomLevel = this.Map.getZoom()
+
+      // If lat is undefined get the value from URL param
+      if (this.lat === undefined || this.lon === undefined) {
+        if (this.isValidLatLon(this.$route.query.lat, this.$route.query.lon)) {
+          this.lat = this.$route.query.lat
+          this.lon = this.$route.query.lon
+        }
+      }
 
       // Add routeQuery properties to routeQueryParams
       Object.keys(routeQuery).map(property => {
@@ -121,45 +139,43 @@ export default {
       // Add select tech, selected speed, and zoom to routeQueryParams
       routeQueryParams.selectedTech = this.selectedTech
       routeQueryParams.selectedSpeed = this.selectedSpeed
-      routeQueryParams.zoom = zoomLevel
+      routeQueryParams.lat = this.lat
+      routeQueryParams.lon = this.lon
+      // routeQueryParams.zoom = zoomLevel
 
-      // Update URL fragment with routeQueryParams
-      this.$router.replace({
+      // Update URL fragment
+      this.$router.push({
         name: 'LocationSummary',
         query: routeQueryParams
       })
+
+      // Reset lat, lon
+      this.lat = (function () { })()
+      this.lon = (function () { })()
     },
-    // Called when map is clicked ('map-click' event emitted by NBMap component)
-    getLatLon (event) {
-      let lat = event.lngLat.lat.toFixed(6)
-      let lon = event.lngLat.lng.toFixed(6)
+    getLatLon (event) {  // Called when map is clicked ('map-click' event emitted by NBMap component)
+      this.lat = event.lngLat.lat.toFixed(6)
+      this.lon = event.lngLat.lng.toFixed(6)
 
       // Get FIPS
-      this.getFIPS(lat, lon)
-
-      // Update URL and query params
-      this.$router.replace({
-        name: 'LocationSummary',
-        query: {
-          lat: `${lat}`,
-          lon: `${lon}`
-        }})
+      this.getFIPS(this.lat, this.lon)
 
       this.updateURLParams()
     },
     getFIPS (lat, lon) { // Call block API and expect FIPS and bounding box in response
-      const blockAPI = 'https://www.broadbandmap.gov/broadbandmap/census/block'
+      const blockAPI = process.env.BLOCK_API
 
       axios
           .get(blockAPI, {
             params: {
               longitude: lon,
               latitude: lat,
-              format: 'json'
+              format: 'json',
+              showall: false
             }
           })
           .then(response => {
-            if (response.data.Results.block.length !== 0) {
+            if (response.data.Block.bbox.length !== 0) {
               this.highlightBlock(response, lat, lon)
               this.fetchProviderData(response)
             } else {
@@ -184,15 +200,13 @@ export default {
     },
     highlightBlock (response, lat, lon) { // Highlight census block when map is searched
       let fipsCode = ''
-      let envelope = 0
-      let envArray = []
+      let envArray = response.data.Block.bbox
 
       // Get FIPS and envelope from response data
-      fipsCode = response.data.Results.block[0].FIPS
+      fipsCode = response.data.Block.FIPS
+
       // Display on page
       this.censusBlock = fipsCode
-      envelope = response.data.Results.block[0].envelope
-      envArray = [envelope.minx, envelope.miny, envelope.maxx, envelope.maxy]
 
       // Zoom and center map to envelope
       this.Map.fitBounds(envArray, {
@@ -206,7 +220,8 @@ export default {
       this.Map.setFilter('xlarge-blocks-highlighted', ['==', 'geoid10', fipsCode])
     },
     fetchProviderData (response) {
-      let fipsCode = response.data.Results.block[0].FIPS
+      let fipsCode = response.data.Block.FIPS
+
       axios
       .get(process.env.SOCRATA_PROD_FULL, {
         params: {
@@ -256,10 +271,22 @@ export default {
         })
       }
     },
-    // Remove Census block & provider table results
-    clearProviderTable () {
+    clearProviderTable () { // Remove Census block & provider table results
       this.censusBlock = ''
       this.providerRows = []
+    },
+    viewNationwide () {
+      let routeQuery = this.$route.query
+
+      this.clearProviderTable()
+
+      this.$router.push({
+        name: 'LocationSummary',
+        query: {
+          selectedTech: routeQuery.selectedTech,
+          selectedSpeed: routeQuery.selectedSpeed
+        }
+      })
     }
   },
   watch: {

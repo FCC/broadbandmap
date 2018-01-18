@@ -1,18 +1,18 @@
 // This file is used by the Location Summary page
 import { LayersCartographic } from './layers-cartographic.js'
 
-let [blockLayer, ...layersCarto] = LayersCartographic
+let [...layersCarto] = LayersCartographic
 
 export const LayersLocation = [
-  blockLayer,
+  ...layersCarto,
   {
     id: 'xlarge-blocks-highlighted',
     source: {
       type: 'vector',
-      url: 'mapbox://fcc.xlarge_blocks'
+      url: 'mapbox://fcc.v1_xl_blocks'
     },
     type: 'line',
-    'source-layer': 'xlarge_blocks',
+    'source-layer': 'xl_blocks_2010',
     layout: {
       visibility: 'visible'
     },
@@ -38,6 +38,5 @@ export const LayersLocation = [
       'line-width': 4
     },
     'filter': ['in', 'block_fips', '']
-  },
-  ...layersCarto
+  }
 ]

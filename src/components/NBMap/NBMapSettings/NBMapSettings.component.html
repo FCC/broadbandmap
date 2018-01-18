@@ -1,14 +1,14 @@
 <modal v-model="showModal" title="Settings" @hide="" ref="modal">
   <form>
     <h3>Select Broadband</h3>
-    <div class="row">
+    <div class="row settings">
       <div class="col-sm-6">
         <fieldset>
           <legend>Technologies</legend>
           <div role="group">
-            <div class="checkbox" v-for="technology in technologies">
-              <input type="checkbox" name="tech" :id="technology.name" :value="technology.value" @change="saveSettings" v-model="selectedTechCategories">
-              <label :for="technology.name">
+            <div class="checkbox" v-for="(technology, index) in technologies">
+              <input type="checkbox" name="tech" :id="'technology'+index" :value="technology.value" @change="saveSettings" v-model="selectedTechCategories">
+              <label :for="'technology'+index">
                 {{ technology.name }}
               </label>
             </div>            
@@ -22,7 +22,7 @@
             <div class="radio" v-for="(speed, index) in speeds">
               <input type="radio" name="speed" :id="'speed'+index" :value="speed.value" @change="saveSettings" v-model="selectedSpeed">
               <label :for="'speed'+index">
-                &gt; {{ speed.name }}
+                &ge; {{ speed.name }}
               </label>
             </div>            
           </div>

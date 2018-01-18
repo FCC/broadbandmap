@@ -1,76 +1,34 @@
-import EventHub from '../../../_mixins/EventHub.js'
 import { Modal } from 'uiv'
+import EventHub from '../../../_mixins/EventHub.js'
+import { urlValidation } from '../../../_mixins/urlValidation.js'
+import { technologies, speeds } from '../../../_mixins/tech-speeds.js'
 
 export default {
   name: 'MapSettings',
   components: { Modal },
+  mixins: [urlValidation],
   props: [],
   mounted () {
     // Get selectedTech and selectedSpeed values from URL query params
-    let selectedTechVal = this.$route.query.selectedTech
-    let selectedSpeedVal = this.$route.query.selectedSpeed
+    let tech = this.$route.query.selectedTech
+    let speed = this.$route.query.selectedSpeed
 
     // If selectedTech is available in URL, use that value
-    if (selectedTechVal !== undefined && selectedTechVal !== '') {
-      this.selectedTechCategories = selectedTechVal.split('')
+    if (this.isValidTech(tech)) {
+      this.selectedTechCategories = tech.toLowerCase().split('')
     }
 
     // If selectedSpeed is available in URL, use that value
-    if (selectedSpeedVal !== undefined && selectedSpeedVal !== '') {
-      this.selectedSpeed = selectedSpeedVal
+    if (this.isValidSpeed(speed)) {
+      this.selectedSpeed = speed
     }
   },
   data () {
     return {
       showModal: false,
-      technologies: [
-        {
-          name: 'ADSL',
-          value: 'a'
-        },
-        {
-          name: 'Cable',
-          value: 'c'
-        },
-        {
-          name: 'Fiber',
-          value: 'f'
-        },
-        {
-          name: 'Fixed Wireless',
-          value: 'w'
-        },
-        {
-          name: 'Satellite',
-          value: 's'
-        },
-        {
-          name: 'Other',
-          value: 'o'
-        }
-      ],
+      technologies: technologies,
       selectedTechCategories: ['a', 'c', 'f', 'w', 's', 'o'],
-      speeds: [
-        {
-          name: '0.2',
-          value: '200'
-        },
-        {
-          name: '10/1',
-          value: '10_1'
-        },
-        {
-          name: '25/3',
-          value: '25_3'
-        },
-        {
-          name: '50/5',
-          value: '50_5'
-        },
-        {
-          name: '100/10',
-          value: '100_10'
-        }],
+      speeds: speeds,
       selectedSpeed: '25_3',
       selectedPropertyID: ''
     }
@@ -120,6 +78,15 @@ export default {
       // Reset modal data when page changes
       if (to.name !== from.name) {
         Object.assign(this.$data, this.$options.data.call(this))
+      } else {
+        // When route params change, update selected tech and speed in Settings modal
+        let tech = this.$route.query.selectedTech
+        let speed = this.$route.query.selectedSpeed
+
+        if (this.isValidTech(tech) && this.isValidSpeed(speed)) {
+          this.selectedTechCategories = this.$route.query.selectedTech.split('')
+          this.selectedSpeed = this.$route.query.selectedSpeed
+        }
       }
     }
   }

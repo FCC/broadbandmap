@@ -94,6 +94,11 @@ hr {
   a:last-child {
     margin-left: 5px;
   }
+  .btn {
+    border: none;
+    font-size: 20px;
+    padding: 0 12px 0 0;
+  }
 }
 
 .panel {
@@ -162,4 +167,10 @@ hr {
 /* Nav Utility */ 
 .provider-title-bar .nav-utility {
   margin-top: 14px;
+}
+
+/* Alert message */
+.alert-warning {
+  display: block;
+  max-width: 600px;
 }

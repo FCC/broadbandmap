@@ -12,8 +12,23 @@ export const urlValidation = {
       return (typeof address === 'string' && address.length)
     },
     isValidQueryParam (param) {
-      console.log()
       return (typeof this.$route.query[param] === 'string' && this.$route.query[param].length)
+    },
+    isValidTech (selectedTech) {
+      let hasNumbers = /\d/.test(selectedTech)
+
+      if (selectedTech && selectedTech.length < 7 && !hasNumbers) {
+        let invalidChars = selectedTech.toLowerCase().match(/[^acfosw]/g)
+
+        return invalidChars === null
+      } else {
+        return false
+      }
+    },
+    isValidSpeed (selectedSpeed) {
+      const speeds = ['200', '4_1', '10_1', '25_3', '100_10', '250_25', '1000_100']
+
+      return speeds.indexOf(selectedSpeed) > -1
     }
   }
 }

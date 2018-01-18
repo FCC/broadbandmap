@@ -1,3 +1,4 @@
+import { Spinner } from 'spin.js'
 import axios from 'axios'
 import { Dropdown, Tooltip } from 'uiv'
 
@@ -5,10 +6,11 @@ import EventHub from '../../_mixins/EventHub.js'
 import Autocomplete from '@/components/Autocomplete/index.vue'
 import BookmarkLink from '@/components/BookmarkLink/'
 import searchGeogTypes from '../../_mixins/search-geog-types.js'
+import { technologies } from '../../_mixins/tech-speeds.js'
 
 export default {
   name: 'AreaComparison',
-  components: { Tooltip, Dropdown, Autocomplete, BookmarkLink },
+  components: { Tooltip, Dropdown, Autocomplete, BookmarkLink, Spinner },
   mixins: [searchGeogTypes],
   props: [],
   data () {
@@ -19,28 +21,28 @@ export default {
         filterable: true
       },
       {
-        label: '% with no providers',
+        label: 'no providers',
         field: 'zero_providers',
         type: 'number',
         html: false,
         filterable: false
       },
       {
-        label: '% with 1 or more',
+        label: '1 or more providers',
         field: 'one_provider',
         type: 'number',
         html: false,
         filterable: false
       },
       {
-        label: '% with 2 or more',
+        label: '2 or more providers',
         field: 'two_provider',
         type: 'number',
         html: false,
         filterable: false
       },
       {
-        label: '% with 3 or more',
+        label: '3 or more providers',
         field: 'three_provider',
         type: 'number',
         html: false,
@@ -50,8 +52,11 @@ export default {
       searchType: 'County',
       refreshingDropdown: false,
       selectedTech: 'acfosw',
-      selectedSpeed: '0.2',
+      selectedSpeed: '25_3',
       selectedState: undefined,
+      technologies: technologies,
+      tech: '',
+      speed: '',
       socrataURL: '',
       socrataLookupURL: '',
       appToken: '',
@@ -75,13 +80,13 @@ export default {
       typeDictionaryArea: {
         'County': 'county',
         'State': 'state',
-        'Congressional District': 'cdist',
+        'Congressional District': 'cd',
         'Census Place': 'place',
         'Tribal Area': 'tribal',
         'CBSA (MSA)': 'cbsa'
       },
       speedDictionary: {
-        '0.2': '0.2',
+        '200': '0.2',
         '10_1': '10',
         '25_3': '25',
         '50_5': '50',
@@ -89,18 +94,110 @@ export default {
       },
       stateGeoidToName: {},
       stateNameToGeoid: {},
-      areaForSearch: ''
+      areaForSearch: '',
+      validationError: '',
+      abbreviationByGeoID: {
+        '01': 'AL',
+        '02': 'AK',
+        '04': 'AZ',
+        '05': 'AR',
+        '06': 'CA',
+        '08': 'CO',
+        '09': 'CT',
+        '10': 'DE',
+        '11': 'DC',
+        '12': 'FL',
+        '13': 'GA',
+        '15': 'HI',
+        '16': 'ID',
+        '17': 'IL',
+        '18': 'IN',
+        '19': 'IA',
+        '20': 'KS',
+        '21': 'KY',
+        '22': 'LA',
+        '23': 'ME',
+        '24': 'MD',
+        '25': 'MA',
+        '26': 'MI',
+        '27': 'MN',
+        '28': 'MS',
+        '29': 'MO',
+        '30': 'MT',
+        '31': 'NE',
+        '32': 'NV',
+        '33': 'NH',
+        '34': 'NJ',
+        '35': 'NM',
+        '36': 'NY',
+        '37': 'NC',
+        '38': 'ND',
+        '39': 'OH',
+        '40': 'OK',
+        '41': 'OR',
+        '42': 'PA',
+        '44': 'RI',
+        '45': 'SC',
+        '46': 'SD',
+        '47': 'TN',
+        '48': 'TX',
+        '49': 'UT',
+        '50': 'VT',
+        '51': 'VA',
+        '53': 'WA',
+        '54': 'WV',
+        '55': 'WI',
+        '56': 'WY',
+        '60': 'AS',
+        '64': 'FM',
+        '66': 'GU',
+        '68': 'MH',
+        '69': 'MP',
+        '70': 'PW',
+        '72': 'PR',
+        '74': 'UM',
+        '78': 'VI'
+      }
     }
   },
   mounted () {
     this.setSocrata()
     this.cacheStates()
+    this.justMounted = true
 
-    EventHub.$on('updateTableSettings', function (selectedTech, selectedSpeed) {
-      this.updateTechSpeed(selectedTech, selectedSpeed)
-    }.bind(this))
+    EventHub.$on('updateTableSettings', (selectedTech, selectedSpeed) => this.updateTechSpeed(selectedTech, selectedSpeed))
     EventHub.$on('removeTableData', (propertyID, removeAll) => this.removeData())
 
+    if (this.$route.query.selectedTech === undefined) {
+      console.log('line 175 ')
+      this.updateUrlParams()
+    }
+
+    // Options for spinner graphic
+    this.spinnerOpts = {
+      lines: 9, // The number of lines to draw
+      length: 19, // The length of each line
+      width: 9, // The line thickness
+      radius: 13, // The radius of the inner circle
+      scale: 0.7, // Scales overall size of the spinner
+      corners: 1, // Corner roundness (0..1)
+      color: '#ffcc44 ', // CSS color or array of colors
+      fadeColor: 'transparent', // CSS color or array of colors
+      opacity: 0.2, // Opacity of the lines
+      rotate: 71, // The rotation offset
+      direction: 1, // 1: clockwise, -1: counterclockwise
+      speed: 1.4, // Rounds per second
+      trail: 64, // Afterglow percentage
+      fps: 20, // Frames per second when using setTimeout() as a fallback in IE 9
+      zIndex: 2e9, // The z-index (defaults to 2000000000)
+      className: 'spinner', // The CSS class to assign to the spinner
+      top: '25%', // Top position relative to parent
+      left: '50%', // Left position relative to parent
+      shadow: 'none', // Box-shadow for the lines
+      position: 'relative' // Element positioning
+    }
+
+    this.spinnerTarget = document.getElementById('spinner')
   },
   destroyed () {
     EventHub.$off('updateTableSettings')
@@ -127,7 +224,6 @@ export default {
         this.searchOptsList = Object.assign({}, this.searchTypes.comparison)
         delete this.searchOptsList['State']
         delete this.searchOptsList['Tribal Area']
-        delete this.searchOptsList['CBSA (MSA)']
       } else {
         this.searchOptsList = Object.assign({}, this.searchTypes.comparison)
       }
@@ -139,9 +235,44 @@ export default {
       EventHub.$emit('openTableSettings')
     },
     updateTechSpeed (selectedTech, selectedSpeed) {
+      let techCodes = []
+      let techArr = []
+
       this.selectedTech = selectedTech
       this.selectedSpeed = selectedSpeed
-      this.compareAreas()
+
+      if (!this.justMounted) this.compareAreas()
+
+       // Display tech and speed
+      if (selectedTech !== undefined) {
+        techCodes = selectedTech.split('')
+
+        techCodes.forEach(code => {
+          this.technologies.filter(tech => {
+            if (tech.value === code) {
+              techArr.push(tech.name)
+            }
+          })
+        })
+      }
+
+      // Move 'Other' to end of the list of technologies
+      let otherIndex = techArr.indexOf('Other')
+      if (otherIndex > -1) {
+        techArr.splice(otherIndex, 1)
+        techArr.sort().push('Other')
+        this.tech = techArr.join(', ')
+      } else {
+        this.tech = techArr.sort().join(', ')
+      }
+
+      if (selectedTech !== undefined) {
+        this.speed = selectedSpeed.split('_').join('/')
+      }
+
+      if (this.speed === '200') {
+        this.speed = '0.2/0.2'
+      }
     },
     removeData () {
       this.rows = []
@@ -163,7 +294,7 @@ export default {
         console.log('ERROR: process.env.SOCRATA_ENV in .env file must be PROD or DEV, not ' + process.env.SOCRATA_ENV)
       }
     },
-    cacheStates() {
+    cacheStates () {
       const self = this
 
       axios
@@ -181,9 +312,9 @@ export default {
           let sd = response.data[sdi]
           self.stateNameToGeoid[sd.name] = sd.geoid.toString()
           self.stateGeoidToName[sd.geoid.toString()] = sd.name
-     
-          self.loadParamsFromUrl()
         }
+
+        self.loadParamsFromUrl()
       })
       .catch(function (error) {
         if (error.response) {
@@ -201,52 +332,75 @@ export default {
         console.log(error)
       })
     },
-    assembleRows(rawData, lookupData) {
+    assembleRows (rawData, lookupData, geoid) {
       this.rows = []
       for (let rdi in rawData) {
-        let totalPop = parseInt(rawData[rdi].sum_has_0) + parseInt(rawData[rdi].sum_has_1) + parseInt(rawData[rdi].sum_has_2) + parseInt(rawData[rdi].sum_has_3plus)
+        let totalPop = parseInt(rawData[rdi].sum_has_0) + parseInt(rawData[rdi].sum_has_1) + parseInt(rawData[rdi].sum_has_2) + parseInt(rawData[rdi].sum_has_3more)
         if (!totalPop) totalPop = 1
-        
-        let areaName = ''
-        if (this.searchType === 'Congressional District') {
-          areaName = lookupData[rawData[rdi].id] + '-' + rawData[rdi].id.toString()
-        } else {
-          areaName = lookupData[rawData[rdi].id]
+
+        let areaName = lookupData[rawData[rdi].id]
+
+        if (this.searchType !== 'CBSA (MSA)' ||
+           !this.$refs.autocomplete.typeaheadModel.geoid ||
+           (this.$refs.autocomplete.typeaheadModel.geoid && areaName.indexOf(this.abbreviationByGeoID[this.$refs.autocomplete.typeaheadModel.geoid]) > 0)) {
+          if (areaName) {
+            this.rows.push({
+              area_name: areaName,
+              zero_providers: (100.0 * parseFloat(rawData[rdi].sum_has_0) / (1.0 * totalPop)).toFixed(2),
+              one_provider: (100.0 * (parseFloat(rawData[rdi].sum_has_1) + parseFloat(rawData[rdi].sum_has_2) + parseFloat(rawData[rdi].sum_has_3more)) / (1.0 * totalPop)).toFixed(2),
+              two_provider: (100.0 * (parseFloat(rawData[rdi].sum_has_2) + parseFloat(rawData[rdi].sum_has_3more)) / (1.0 * totalPop)).toFixed(2),
+              three_provider: (100.0 * parseFloat(rawData[rdi].sum_has_3more) / (1.0 * totalPop)).toFixed(2)
+            })
+            this.justMounted = false
+          }
         }
-        
-       if (!this.$refs.autocomplete.typeaheadModel.geoid && 
-            Object.keys(this.stateGeoidToName).length > 0 &&
-            (this.searchType === 'County' || this.searchType === 'Census Place' || this.searchType === 'Congressional District')) {
-          areaName += ', ' + this.stateGeoidToName[rawData[rdi].id.substring(0, 2)]
-        }
-   
-        this.rows.push({
-          area_name: areaName,
-          zero_providers: (100.0 * parseFloat(rawData[rdi].sum_has_0) / (1.0 * totalPop)).toFixed(2),
-          one_provider: (100.0 * parseFloat(rawData[rdi].sum_has_1) / (1.0 * totalPop)).toFixed(2),
-          two_provider: (100.0 * parseFloat(rawData[rdi].sum_has_2) / (1.0 * totalPop)).toFixed(2),
-          three_provider: (100.0 * parseFloat(rawData[rdi].sum_has_3plus) / (1.0 * totalPop)).toFixed(2),
-        })
       }
     },
-    compareAreas() {
+    compareAreas () {
       const self = this
+      this.validationError = ''
+      this.rows = []
 
-      this.updateUrlParams()
       // all data we need for query
-      //console.log('CompareAreas input : ', this.$refs.autocomplete.typeaheadModel.geoid, this.selectedTech, this.selectedSpeed, this.searchType)
+      // console.log('CompareAreas input : ', this.$refs.autocomplete.typeaheadModel.geoid, this.selectedTech, this.selectedSpeed, this.searchType)
 
-      let socParams = {          
+      let socParams = {
         type: this.typeDictionaryArea[this.searchType],
         tech: this.selectedTech,
         speed: this.speedDictionary[this.selectedSpeed],
         $limit: 50000,
         $$app_token: this.appToken,
-        $select: 'id,sum(has_0),sum(has_1),sum(has_2),sum(has_3plus)',
+        $select: 'id,sum(has_0),sum(has_1),sum(has_2),sum(has_3more)',
         $group: 'id'
       }
-      if (this.$refs.autocomplete.typeaheadModel.geoid) {
-        socParams['$WHERE'] = "starts_with(id,'" + this.$refs.autocomplete.typeaheadModel.geoid + "')"
+
+      if (typeof this.$refs.autocomplete.typeaheadModel === 'string' && this.$refs.autocomplete.typeaheadModel !== 'Nationwide') {
+        // Try to interpret as state name
+        let value = this.$refs.autocomplete.typeaheadModel
+        if (value in this.stateNameToGeoid) {
+          this.$refs.autocomplete.typeaheadModel = {
+            'geoid': this.stateNameToGeoid[value],
+            'name': value,
+            'type': 'state'}
+        } else {
+          this.validationError = 'Invalid state specified : ' + value
+          return
+        }
+      }
+
+      if (this.$refs.autocomplete.typeaheadModel !== 'Nationwide' && this.$refs.autocomplete.typeaheadModel.geoid) {
+        if (this.searchType !== 'CBSA (MSA)') {
+          socParams['$WHERE'] = "starts_with(id,'" + this.$refs.autocomplete.typeaheadModel.geoid + "')"
+        }
+      }
+
+      this.updateUrlParams()
+
+      // Display spinner while chart data loads
+      if (!this.spinner) {
+        this.spinner = new Spinner(this.spinnerOpts).spin(this.spinnerTarget)
+      } else {
+        this.spinner.spin(this.spinnerTarget)
       }
 
       axios
@@ -257,14 +411,16 @@ export default {
       .then(function (response) {
         let rawData = response.data
         // Got raw data. Now fetch geography names for join
-        let socLookupParams = {          
+        let socLookupParams = {
           type: self.typeDictionary[self.searchType],
           $limit: 50000,
           $$app_token: self.appToken,
           $select: 'geoid,name,type'
         }
         if (self.$refs.autocomplete.typeaheadModel.geoid) {
-          socLookupParams['$WHERE'] = "starts_with(geoid,'" + self.$refs.autocomplete.typeaheadModel.geoid + "')"
+          if (self.searchType !== 'CBSA (MSA)') {
+            socLookupParams['$WHERE'] = "starts_with(geoid,'" + self.$refs.autocomplete.typeaheadModel.geoid + "')"
+          }
         }
 
         axios
@@ -275,13 +431,10 @@ export default {
         .then(function (response) {
           let lookupData = {}
           for (let rdi in response.data) {
-            if (response.data[rdi].type === 'tribal') {
-              lookupData[response.data[rdi].geoid.replace(/\D/g,'')] = response.data[rdi].name
-            } else {
-              lookupData[response.data[rdi].geoid] = response.data[rdi].name
-            }
+            lookupData[response.data[rdi].geoid] = response.data[rdi].name
           }
-          self.assembleRows(rawData, lookupData)
+          self.assembleRows(rawData, lookupData, self.$refs.autocomplete.typeaheadModel.geoid)
+          self.spinner.stop()
         })
         .catch(function (error) {
           if (error.response) {
@@ -323,16 +476,15 @@ export default {
         routeQP[prop] = routeQ[prop]
       })
 
+      if (this.selectedTech) {
+        routeQP.selectedTech = this.selectedTech
+        routeQP.selectedSpeed = this.selectedSpeed
+      }
+
       if (this.searchType) {
         routeQP.searchtype = this.typeDictionary[this.searchType]
       } else {
         delete routeQP.searchtype
-      }
-
-      if (this.areaForSearch && this.areaForSearch !== '') {
-        routeQP.searcharea = this.areaForSearch.toLowerCase()
-      } else {
-        delete routeQP.searcharea
       }
 
       if (this.$refs.autocomplete.typeaheadModel.geoid) {
@@ -355,23 +507,38 @@ export default {
       })
 
       if (routeQP.searchtype) {
-        this.toggleSearchType(this.typeReverseDictionary[routeQP.searchtype])
-      }
-
-      if (routeQP.searcharea) {
-        this.searchArea(routeQP.searcharea.charAt(0).toUpperCase() + routeQP.searcharea.slice(1))
-      } else {
-        this.searchArea('')
+        if (routeQP.searchtype in this.typeReverseDictionary) {
+          this.toggleSearchType(this.typeReverseDictionary[routeQP.searchtype])
+        } else {
+          this.validationError = 'Invalid search type : ' + routeQP.searchtype + '. Defaulting to County.'
+          this.toggleSearchType('County')
+        }
       }
 
       if (routeQP.geoid) {
-        this.$refs.autocomplete.typeaheadModel = {
-                                        'geoid': routeQP.geoid, 
-                                        'name': this.stateGeoidToName[routeQP.geoid],
-                                        'type': 'state'}
+        if (routeQP.geoid in this.stateGeoidToName) {
+          this.searchArea('')
+          this.$refs.autocomplete.typeaheadModel = {
+            'geoid': routeQP.geoid,
+            'name': this.stateGeoidToName[routeQP.geoid],
+            'type': 'state'}
+        } else {
+          this.validationError = 'Invalid geoid : ' + routeQP.geoid
+          return
+        }
+      } else {
+        this.searchArea('Nationwide')
       }
-      if (routeQP.searchtype || routeQP.searcharea || routeQP.geoid) this.compareAreas()
-    }   
+
+      if (routeQP.searchtype || routeQP.geoid) this.compareAreas()
+
+      if (routeQ.selectedTech && routeQ.selectedSpeed) {
+        this.updateTechSpeed(routeQ.selectedTech, routeQ.selectedSpeed)
+      }
+    },
+    openAboutAreaCompare () {
+      EventHub.$emit('openAboutAreaCompare')
+    }
   },
   computed: {
     getPlaceholderText: function () { // Set the geography type input placeholder text based on search type

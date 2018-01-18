@@ -1,12 +1,27 @@
-import EventHub from '../../../_mixins/EventHub.js'
 import { Modal } from 'uiv'
+
+import EventHub from '../../../_mixins/EventHub.js'
+import { urlValidation } from '../../../_mixins/urlValidation.js'
 
 export default {
   name: 'TableSettings',
   components: { Modal },
+  mixins: [urlValidation],
   props: [],
   mounted () {
+    // Get selectedTech and selectedSpeed values from URL query params
+    let tech = this.$route.query.selectedTech
+    let speed = this.$route.query.selectedSpeed
 
+    // If selectedTech is available in URL, use that value
+    if (this.isValidTech(tech)) {
+      this.selectedTechCategories = tech.toLowerCase().split('')
+    }
+
+    // If selectedSpeed is available in URL, use that value
+    if (this.isValidSpeed(speed)) {
+      this.selectedSpeed = speed
+    }
   },
   data () {
     return {
@@ -40,8 +55,12 @@ export default {
       selectedTechCategories: ['a', 'c', 'f', 'w', 's', 'o'],
       speeds: [
         {
-          name: '0.2',
+          name: '0.2/0.2',
           value: '200'
+        },
+        {
+          name: '4/1',
+          value: '4_1'
         },
         {
           name: '10/1',
@@ -51,13 +70,18 @@ export default {
           name: '25/3',
           value: '25_3'
         },
-        {
-          name: '50/5',
-          value: '50_5'
-        },
+
         {
           name: '100/10',
           value: '100_10'
+        },
+        {
+          name: '250/25',
+          value: '250_25'
+        },
+        {
+          name: '1000/100',
+          value: '1000_100'
         }],
       selectedSpeed: '25_3',
       selectedPropertyID: ''
