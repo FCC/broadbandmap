@@ -43,6 +43,9 @@ export default {
             scaleLabel: {
               display: true,
               labelString: 'Provider'
+            },
+            ticks: {
+              fontStyle: 'bold'
             }
           }],
           yAxes: [{
@@ -55,7 +58,8 @@ export default {
               display: true
             },
             ticks: {
-              beginAtZero: true
+              beginAtZero: true,
+              fontStyle: 'bold'
             }
           }]
         },
