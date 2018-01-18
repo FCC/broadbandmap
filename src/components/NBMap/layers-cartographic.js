@@ -16,7 +16,8 @@ export const LayersCartographic = [
     paint: {
       'line-color': '#74994e'
     },
-    maxzoom: 10
+    maxzoom: 10,
+    minzoom: 6
   },
   {
     id: 'county-highlighted',
