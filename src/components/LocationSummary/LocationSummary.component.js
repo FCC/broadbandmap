@@ -105,6 +105,8 @@ export default {
           center: this.mapOptions.center,
           zoom: this.mapOptions.zoom
         })
+
+        this.updateURLParams()
       }
 
       // If all layers are removed, update tech/speed layers based on URL history

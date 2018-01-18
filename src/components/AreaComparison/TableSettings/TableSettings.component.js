@@ -1,12 +1,27 @@
-import EventHub from '../../../_mixins/EventHub.js'
 import { Modal } from 'uiv'
+
+import EventHub from '../../../_mixins/EventHub.js'
+import { urlValidation } from '../../../_mixins/urlValidation.js'
 
 export default {
   name: 'TableSettings',
   components: { Modal },
+  mixins: [urlValidation],
   props: [],
   mounted () {
+    // Get selectedTech and selectedSpeed values from URL query params
+    let tech = this.$route.query.selectedTech
+    let speed = this.$route.query.selectedSpeed
 
+    // If selectedTech is available in URL, use that value
+    if (this.isValidTech(tech)) {
+      this.selectedTechCategories = tech.toLowerCase().split('')
+    }
+
+    // If selectedSpeed is available in URL, use that value
+    if (this.isValidSpeed(speed)) {
+      this.selectedSpeed = speed
+    }
   },
   data () {
     return {

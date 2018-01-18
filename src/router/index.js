@@ -69,7 +69,11 @@ const router = new Router({
       path: '*',
       redirect: 'PageNotFound'
     }
-  ]
+  ],
+  scrollBehavior (to, from, savedPosition) {
+    // Make the page scroll to top
+    return { x: 0, y: 0 }
+  }
 })
 
 router.beforeEach((to, from, next) => {

@@ -132,16 +132,17 @@ export const updateMapLayers = {
       this.addLayers(propertyID)
 
       // Update tech and speed in sidebar legend
-      techCodes = selectedTech.split('')
+      if (selectedTech !== undefined) {
+        techCodes = selectedTech.split('')
 
-      techCodes.forEach(code => {
-        // techArr.push(this.technologies[code])
-        this.technologies.filter(tech => {
-          if (tech.value === code) {
-            techArr.push(tech.name)
-          }
+        techCodes.forEach(code => {
+          this.technologies.filter(tech => {
+            if (tech.value === code) {
+              techArr.push(tech.name)
+            }
+          })
         })
-      })
+      }
 
       // Move 'Other' to end of the list of technologies
       let otherIndex = techArr.indexOf('Other')
@@ -153,7 +154,9 @@ export const updateMapLayers = {
         this.tech = techArr.sort().join(', ')
       }
 
-      this.speed = selectedSpeed.split('_').join('/')
+      if (selectedTech !== undefined) {
+        this.speed = selectedSpeed.split('_').join('/')
+      }
 
       if (this.speed === '200') {
         this.speed = '0.2/0.2'

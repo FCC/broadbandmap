@@ -133,9 +133,9 @@
                   </div>
                 </div>
               </div>
-              <speed-chart :width="392" :height="270" :data="techChartData.d.all" v-if="direction === 'd' && techChartData.d.all"></speed-chart>
+              <speed-chart :width="392" :height="270" :data="techChartData.d.all" :providers="providerNames" v-if="direction === 'd' && techChartData.d.all"></speed-chart>
               <div v-if="direction === 'd' && !techChartData.d.all">Data Not Available</div>
-              <up-speed-chart :width="392" :height="270" :data="techChartData.u.all" v-if="direction === 'u' && techChartData.u.all"></up-speed-chart>
+              <up-speed-chart :width="392" :height="270" :data="techChartData.u.all" :providers="providerNames" v-if="direction === 'u' && techChartData.u.all"></up-speed-chart>
               <div v-if="direction === 'u' && !techChartData.u.all">Data Not Available</div>
             </div>
           </div>
@@ -160,9 +160,9 @@
                   </div>
                 </div>
               </div>
-              <speed-chart :width="392" :height="270" :data="techChartData.d.adsl" v-if="direction === 'd' && techChartData.d.adsl"></speed-chart>
+              <speed-chart :width="392" :height="270" :data="techChartData.d.adsl" :providers="providerNames" v-if="direction === 'd' && techChartData.d.adsl"></speed-chart>
               <div v-if="direction === 'd' && !techChartData.d.adsl">Data Not Available</div>
-              <up-speed-chart :width="392" :height="270" :data="techChartData.u.adsl" v-if="direction === 'u' && techChartData.u.adsl"></up-speed-chart>
+              <up-speed-chart :width="392" :height="270" :data="techChartData.u.adsl" :providers="providerNames" v-if="direction === 'u' && techChartData.u.adsl"></up-speed-chart>
               <div v-if="direction === 'u' && !techChartData.u.adsl">Data Not Available</div>
             </div>
           </div>
@@ -185,9 +185,9 @@
                   </div>
                 </div>
               </div>
-              <speed-chart :width="392" :height="270" :data="techChartData.d.cable" v-if="direction === 'd' && techChartData.d.cable"></speed-chart>
+              <speed-chart :width="392" :height="270" :data="techChartData.d.cable" :providers="providerNames" v-if="direction === 'd' && techChartData.d.cable"></speed-chart>
               <div v-if="direction === 'd' && !techChartData.d.cable">Data Not Available</div>
-              <up-speed-chart :width="392" :height="270" :data="techChartData.u.cable" v-if="direction === 'u' && techChartData.u.cable"></up-speed-chart>
+              <up-speed-chart :width="392" :height="270" :data="techChartData.u.cable" :providers="providerNames" v-if="direction === 'u' && techChartData.u.cable"></up-speed-chart>
               <div v-if="direction === 'u' && !techChartData.u.cable">Data Not Available</div>
             </div>
           </div>
@@ -212,9 +212,9 @@
                   </div>
                 </div>
               </div>
-              <speed-chart :width="392" :height="270" :data="techChartData.d.fiber" v-if="direction === 'd' && techChartData.d.fiber"></speed-chart>
+              <speed-chart :width="392" :height="270" :data="techChartData.d.fiber" :providers="providerNames" v-if="direction === 'd' && techChartData.d.fiber"></speed-chart>
               <div v-if="direction === 'd' && !techChartData.d.fiber">Data Not Available</div>
-              <up-speed-chart :width="392" :height="270" :data="techChartData.u.fiber" v-if="direction === 'u' && techChartData.u.fiber"></up-speed-chart>
+              <up-speed-chart :width="392" :height="270" :data="techChartData.u.fiber" :providers="providerNames" v-if="direction === 'u' && techChartData.u.fiber"></up-speed-chart>
               <div v-if="direction === 'u' && !techChartData.u.fiber">Data Not Available</div>
             </div>
           </div>
@@ -237,9 +237,9 @@
                   </div>
                 </div>
               </div>
-              <speed-chart :width="392" :height="270" :data="techChartData.d.fixedWireless" v-if="direction === 'd' && techChartData.d.fixedWireless"></speed-chart>
+              <speed-chart :width="392" :height="270" :data="techChartData.d.fixedWireless" :providers="providerNames" v-if="direction === 'd' && techChartData.d.fixedWireless"></speed-chart>
               <div v-if="direction === 'd' && !techChartData.d.fixedWireless">Data Not Available</div>
-              <up-speed-chart :width="392" :height="270" :data="techChartData.u.fixedWireless" v-if="direction === 'u' && techChartData.u.fixedWireless"></up-speed-chart>
+              <up-speed-chart :width="392" :height="270" :data="techChartData.u.fixedWireless" :providers="providerNames" v-if="direction === 'u' && techChartData.u.fixedWireless"></up-speed-chart>
               <div v-if="direction === 'u' && !techChartData.u.fixedWireless">Data Not Available</div>
             </div>
           </div>
@@ -264,9 +264,9 @@
                   </div>
                 </div>
               </div>
-              <speed-chart :width="392" :height="270" :data="techChartData.d.satellite" v-if="direction === 'd' && techChartData.d.satellite"></speed-chart>
+              <speed-chart :width="392" :height="270" :data="techChartData.d.satellite" :providers="providerNames" v-if="direction === 'd' && techChartData.d.satellite"></speed-chart>
               <div v-if="direction === 'd' && !techChartData.d.satellite">Data Not Available</div>
-              <up-speed-chart :width="392" :height="270" :data="techChartData.u.satellite" v-if="direction === 'u' && techChartData.u.satellite"></up-speed-chart>
+              <up-speed-chart :width="392" :height="270" :data="techChartData.u.satellite" :providers="providerNames" v-if="direction === 'u' && techChartData.u.satellite"></up-speed-chart>
               <div v-if="direction === 'u' && !techChartData.u.satellite">Data Not Available</div>
             </div>
           </div>
@@ -289,9 +289,9 @@
                   </div>
                 </div>
               </div>
-              <speed-chart :width="392" :height="270" :data="techChartData.d.other" v-if="direction === 'd' && techChartData.d.other"></speed-chart>
+              <speed-chart :width="392" :height="270" :data="techChartData.d.other" :providers="providerNames" v-if="direction === 'd' && techChartData.d.other"></speed-chart>
               <div v-if="direction === 'd' && !techChartData.d.other">Data Not Available</div>
-              <up-speed-chart :width="392" :height="270" :data="techChartData.u.other" v-if="direction === 'u' && techChartData.u.other"></up-speed-chart>
+              <up-speed-chart :width="392" :height="270" :data="techChartData.u.other" :providers="providerNames" v-if="direction === 'u' && techChartData.u.other"></up-speed-chart>
               <div v-if="direction === 'u' && !techChartData.u.other">Data Not Available</div>
             </div>
           </div>

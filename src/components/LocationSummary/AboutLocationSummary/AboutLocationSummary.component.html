@@ -16,7 +16,7 @@
     <h2>Map controls</h2>
     <p>By clicking on the gear icon <button class="btn btn-default btn-lg" type="button"><span class="icon icon-cog"></span></button>, you can update the map. The "Select Broadband" menu allows you to change the speed and technologies displayed on the map.</p>
     <p>[**include description of map tilt and compass here; and copy to other map pages**]</p>
-    <p>For more information about data sources, visit the <router-link to="/about">About</router-link> page</p>
+    <p>For more information about data sources, visit the <router-link to="/about" @click.native="closeModal">About</router-link> page</p>
   </section>  
   <div slot="footer">
     <!-- <button class="btn btn-default" type="button" @click="closeModal">Close</button> -->
