@@ -50,7 +50,7 @@
         </dl>
       </div>
       <div class="charts" slot="charts">
-        <vue-good-table v-if="providerRows.length" styleClass="table-fixed table table-stripped" :columns="providerColumns" :rows="providerRows" :defaultSortBy="{field: 'down', type: 'desc'}" :paginate="false" :lineNumbers="false" />
+        <vue-good-table v-if="providerRows.length" styleClass="table-fixed table table-stripped" :columns="providerColumns" :rows="providerRows" :defaultSortBy="{field: 'down', type: 'desc'}" :paginate="false" :lineNumbers="false" :responsive="false" />
         <div v-if="!providerRows.length">Please click on the map or search for a location</div>
       </div>
     </nb-map-sidebar>
