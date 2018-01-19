@@ -194,6 +194,11 @@
   &.hide-pane {
     @media(min-width: 992px) {
       position: absolute;
+      right: -41.6vw;
+      
+    }
+    @media(min-width: 1200px) {
+      position: absolute;
       right: -33.2vw;
     }
     aside {
