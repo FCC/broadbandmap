@@ -81,4 +81,10 @@ router.beforeEach((to, from, next) => {
   next()
 })
 
+router.afterEach(function (transition) {
+  window.ga('set', 'page', transition.fullPath)
+  window.ga('set', 'title', transition.meta.title)
+  window.ga('send', 'pageview')
+})
+
 export default router
