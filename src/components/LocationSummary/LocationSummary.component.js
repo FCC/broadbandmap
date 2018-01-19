@@ -107,6 +107,9 @@ export default {
         })
 
         this.updateURLParams()
+
+        // Hide alert message for no providers
+        this.noProviders = false
       }
 
       // If all layers are removed, update tech/speed layers based on URL history
@@ -290,6 +293,9 @@ export default {
           selectedSpeed: routeQuery.selectedSpeed
         }
       })
+
+      // Hide alert message for no providers
+      this.noProviders = false
     }
   },
   watch: {
