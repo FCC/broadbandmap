@@ -270,6 +270,9 @@ export default {
           up: data[index].maxadup
         })
       }
+
+      // Trigger warning message when num. providers = 0
+      this.noProviders = !(this.providerRows.length > 0)
     },
     clearProviderTable () { // Remove Census block & provider table results
       this.censusBlock = ''
