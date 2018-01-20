@@ -52,7 +52,7 @@
       <div class="charts" slot="charts">
         <vue-good-table v-if="providerRows.length" styleClass="table-fixed table table-stripped" :columns="providerColumns" :rows="providerRows" :defaultSortBy="{field: 'down', type: 'desc'}" :paginate="false" :lineNumbers="false" :responsive="false" />
         
-        <div class="alert alert-warning" v-if="!providerRows.length">
+        <div class="alert alert-info" v-if="!providerRows.length">
           <p v-if="noProviders">No providers reported in the selected census block.</p>
           <p>Please click on the map or search for a location.</p>          
         </div>
