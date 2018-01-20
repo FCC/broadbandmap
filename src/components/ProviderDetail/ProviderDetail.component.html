@@ -22,7 +22,7 @@
       <div class="col-sm-12">
         <form class="provider-input">
           <p>Get detailed information on as many as 3 service providers at a time.</p>
-          <div class="alert alert-warning" role="alert" v-if="validationError">
+          <div class="alert alert-info" role="alert" v-if="validationError">
             <p>{{ validationError }}</p>
           </div>
           <div class="input-provider">
@@ -48,7 +48,7 @@
       <div class="row">
         <div class="col-sm-9">
           <h3>Provider coverage overlap and population coverage</h3>
-        </div>        
+        </div>
       </div>
       <div class="row">
         <div class="col-sm-12 col-md-7 col-lg-8">
@@ -92,16 +92,21 @@
                 </div>
               </div>
               <population-chart :width="392" :height="350" :data="popChartData.d" v-if="direction === 'd' && popChartData.d"></population-chart>
-              <div v-if="direction === 'd' && !popChartData.d">Data Not Available</div>
+              <div class="alert alert-info" v-if="direction === 'd' && !popChartData.d">
+                <p v-if="providerNames.length > 0">Data not available.</p>
+                <p v-if="providerNames.length === 0">Please select a provider.</p>
+              </div>
               <population-chart :width="392" :height="350" :data="popChartData.u" v-if="direction === 'u' && popChartData.u"></population-chart>
-              <div v-if="direction === 'u' && !popChartData.u">Data Not Available</div>
+              <div class="alert alert-info" v-if="direction === 'u' && !popChartData.u">
+                <p v-if="providerNames.length > 0">Data not available.</p>
+                <p v-if="providerNames.length === 0">Please select a provider.</p>
+              </div>
             </div>
           </div>
         </div>
       </div>
       <hr>
-     
-       <div class="row">
+      <div class="row">
         <div class="col-sm-9">
           <h3>Percent of each provider's broadband footprint with each speed based on technology</h3>
         </div>
@@ -134,9 +139,15 @@
                 </div>
               </div>
               <speed-chart :width="392" :height="270" :data="techChartData.d.all" :providers="providerNames" v-if="direction === 'd' && techChartData.d.all"></speed-chart>
-              <div v-if="direction === 'd' && !techChartData.d.all">Data Not Available</div>
+              <div class="alert alert-info" v-if="direction === 'd' && !techChartData.d.all">
+                <p v-if="providerNames.length > 0">Data not available.</p>
+                <p v-if="providerNames.length === 0">Please select a provider.</p>
+              </div>
               <up-speed-chart :width="392" :height="270" :data="techChartData.u.all" :providers="providerNames" v-if="direction === 'u' && techChartData.u.all"></up-speed-chart>
-              <div v-if="direction === 'u' && !techChartData.u.all">Data Not Available</div>
+              <div class="alert alert-info" v-if="direction === 'u' && !techChartData.u.all">
+                <p v-if="providerNames.length > 0">Data not available.</p>
+                <p v-if="providerNames.length === 0">Please select a provider.</p>
+              </div>
             </div>
           </div>
         </div>
@@ -161,9 +172,15 @@
                 </div>
               </div>
               <speed-chart :width="392" :height="270" :data="techChartData.d.adsl" :providers="providerNames" v-if="direction === 'd' && techChartData.d.adsl"></speed-chart>
-              <div v-if="direction === 'd' && !techChartData.d.adsl">Data Not Available</div>
+              <div class="alert alert-info" v-if="direction === 'd' && !techChartData.d.adsl">
+                <p v-if="providerNames.length > 0">Data not available.</p>
+                <p v-if="providerNames.length === 0">Please select a provider.</p>
+              </div>
               <up-speed-chart :width="392" :height="270" :data="techChartData.u.adsl" :providers="providerNames" v-if="direction === 'u' && techChartData.u.adsl"></up-speed-chart>
-              <div v-if="direction === 'u' && !techChartData.u.adsl">Data Not Available</div>
+              <div class="alert alert-info" v-if="direction === 'u' && !techChartData.u.adsl">
+                <p v-if="providerNames.length > 0">Data not available.</p>
+                <p v-if="providerNames.length === 0">Please select a provider.</p>
+              </div>
             </div>
           </div>
         </div>
@@ -186,9 +203,15 @@
                 </div>
               </div>
               <speed-chart :width="392" :height="270" :data="techChartData.d.cable" :providers="providerNames" v-if="direction === 'd' && techChartData.d.cable"></speed-chart>
-              <div v-if="direction === 'd' && !techChartData.d.cable">Data Not Available</div>
+              <div class="alert alert-info" v-if="direction === 'd' && !techChartData.d.cable">
+                <p v-if="providerNames.length > 0">Data not available.</p>
+                <p v-if="providerNames.length === 0">Please select a provider.</p>
+              </div>
               <up-speed-chart :width="392" :height="270" :data="techChartData.u.cable" :providers="providerNames" v-if="direction === 'u' && techChartData.u.cable"></up-speed-chart>
-              <div v-if="direction === 'u' && !techChartData.u.cable">Data Not Available</div>
+              <div class="alert alert-info" v-if="direction === 'u' && !techChartData.u.cable">
+                <p v-if="providerNames.length > 0">Data not available.</p>
+                <p v-if="providerNames.length === 0">Please select a provider.</p>
+              </div>
             </div>
           </div>
         </div>
@@ -213,9 +236,15 @@
                 </div>
               </div>
               <speed-chart :width="392" :height="270" :data="techChartData.d.fiber" :providers="providerNames" v-if="direction === 'd' && techChartData.d.fiber"></speed-chart>
-              <div v-if="direction === 'd' && !techChartData.d.fiber">Data Not Available</div>
+              <div class="alert alert-info" v-if="direction === 'd' && !techChartData.d.fiber">
+                <p v-if="providerNames.length > 0">Data not available.</p>
+                <p v-if="providerNames.length === 0">Please select a provider.</p>
+              </div>
               <up-speed-chart :width="392" :height="270" :data="techChartData.u.fiber" :providers="providerNames" v-if="direction === 'u' && techChartData.u.fiber"></up-speed-chart>
-              <div v-if="direction === 'u' && !techChartData.u.fiber">Data Not Available</div>
+              <div class="alert alert-info" v-if="direction === 'u' && !techChartData.u.fiber">
+                <p v-if="providerNames.length > 0">Data not available.</p>
+                <p v-if="providerNames.length === 0">Please select a provider.</p>
+              </div>
             </div>
           </div>
         </div>
@@ -238,9 +267,15 @@
                 </div>
               </div>
               <speed-chart :width="392" :height="270" :data="techChartData.d.fixedWireless" :providers="providerNames" v-if="direction === 'd' && techChartData.d.fixedWireless"></speed-chart>
-              <div v-if="direction === 'd' && !techChartData.d.fixedWireless">Data Not Available</div>
+              <div class="alert alert-info" v-if="direction === 'd' && !techChartData.d.fixedWireless">
+                <p v-if="providerNames.length > 0">Data not available.</p>
+                <p v-if="providerNames.length === 0">Please select a provider.</p>
+              </div>
               <up-speed-chart :width="392" :height="270" :data="techChartData.u.fixedWireless" :providers="providerNames" v-if="direction === 'u' && techChartData.u.fixedWireless"></up-speed-chart>
-              <div v-if="direction === 'u' && !techChartData.u.fixedWireless">Data Not Available</div>
+              <div class="alert alert-info" v-if="direction === 'u' && !techChartData.u.fixedWireless">
+                <p v-if="providerNames.length > 0">Data not available.</p>
+                <p v-if="providerNames.length === 0">Please select a provider.</p>
+              </div>
             </div>
           </div>
         </div>
@@ -265,9 +300,15 @@
                 </div>
               </div>
               <speed-chart :width="392" :height="270" :data="techChartData.d.satellite" :providers="providerNames" v-if="direction === 'd' && techChartData.d.satellite"></speed-chart>
-              <div v-if="direction === 'd' && !techChartData.d.satellite">Data Not Available</div>
+              <div class="alert alert-info" v-if="direction === 'd' && !techChartData.d.satellite">
+                <p v-if="providerNames.length > 0">Data not available.</p>
+                <p v-if="providerNames.length === 0">Please select a provider.</p>
+              </div>
               <up-speed-chart :width="392" :height="270" :data="techChartData.u.satellite" :providers="providerNames" v-if="direction === 'u' && techChartData.u.satellite"></up-speed-chart>
-              <div v-if="direction === 'u' && !techChartData.u.satellite">Data Not Available</div>
+              <div class="alert alert-info" v-if="direction === 'u' && !techChartData.u.satellite">
+                <p v-if="providerNames.length > 0">Data not available.</p>
+                <p v-if="providerNames.length === 0">Please select a provider.</p>
+              </div>
             </div>
           </div>
         </div>
@@ -290,9 +331,15 @@
                 </div>
               </div>
               <speed-chart :width="392" :height="270" :data="techChartData.d.other" :providers="providerNames" v-if="direction === 'd' && techChartData.d.other"></speed-chart>
-              <div v-if="direction === 'd' && !techChartData.d.other">Data Not Available</div>
+              <div class="alert alert-info" v-if="direction === 'd' && !techChartData.d.other">
+                <p v-if="providerNames.length > 0">Data not available.</p>
+                <p v-if="providerNames.length === 0">Please select a provider.</p>
+              </div>
               <up-speed-chart :width="392" :height="270" :data="techChartData.u.other" :providers="providerNames" v-if="direction === 'u' && techChartData.u.other"></up-speed-chart>
-              <div v-if="direction === 'u' && !techChartData.u.other">Data Not Available</div>
+              <div class="alert alert-info" v-if="direction === 'u' && !techChartData.u.other">
+                <p v-if="providerNames.length > 0">Data not available.</p>
+                <p v-if="providerNames.length === 0">Please select a provider.</p>
+              </div>
             </div>
           </div>
         </div>
