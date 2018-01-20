@@ -71,8 +71,10 @@ const router = new Router({
     }
   ],
   scrollBehavior (to, from, savedPosition) {
-    // Make the page scroll to top
-    return { x: 0, y: 0 }
+    // Make the page scroll to top when route changes
+    if (to.name !== from.name) {
+      return { x: 0, y: 0 }
+    }
   }
 })
 
