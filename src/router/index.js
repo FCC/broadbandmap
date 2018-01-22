@@ -71,14 +71,22 @@ const router = new Router({
     }
   ],
   scrollBehavior (to, from, savedPosition) {
-    // Make the page scroll to top
-    return { x: 0, y: 0 }
+    // Make the page scroll to top when route changes
+    if (to.name !== from.name) {
+      return { x: 0, y: 0 }
+    }
   }
 })
 
 router.beforeEach((to, from, next) => {
   document.title = to.meta.title + titleText
   next()
+})
+
+router.afterEach(function (transition) {
+  window.ga('set', 'page', transition.fullPath)
+  window.ga('set', 'title', transition.meta.title)
+  window.ga('send', 'pageview')
 })
 
 export default router

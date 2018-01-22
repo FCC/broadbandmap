@@ -107,6 +107,9 @@ export default {
         })
 
         this.updateURLParams()
+
+        // Hide alert message for no providers
+        this.noProviders = false
       }
 
       // If all layers are removed, update tech/speed layers based on URL history
@@ -270,6 +273,9 @@ export default {
           up: data[index].maxadup
         })
       }
+
+      // Trigger warning message when num. providers = 0
+      this.noProviders = !(this.providerRows.length > 0)
     },
     clearProviderTable () { // Remove Census block & provider table results
       this.censusBlock = ''
@@ -287,6 +293,9 @@ export default {
           selectedSpeed: routeQuery.selectedSpeed
         }
       })
+
+      // Hide alert message for no providers
+      this.noProviders = false
     }
   },
   watch: {
