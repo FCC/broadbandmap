@@ -117,12 +117,17 @@ export default {
         this.updateTechSpeed(this.$route.query.selectedTech, this.$route.query.selectedSpeed)
       }
     },
-    updateURLParams () {
+    updateURLParams (event) {
       let routeQueryParams = {}
 
       // Get existing route query parameters
       let routeQuery = this.$route.query
 
+      if (event !== undefined) {
+        if (event.hasOwnProperty('type') && event.type === 'click') {
+          delete routeQuery.place_name
+        }
+      }
       // Get map zoom level
       // let zoomLevel = this.Map.getZoom()
 
@@ -163,7 +168,7 @@ export default {
       // Get FIPS
       this.getFIPS(this.lat, this.lon)
 
-      this.updateURLParams()
+      this.updateURLParams(event)
     },
     getFIPS (lat, lon) { // Call block API and expect FIPS and bounding box in response
       const blockAPI = process.env.BLOCK_API
