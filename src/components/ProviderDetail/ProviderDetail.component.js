@@ -138,7 +138,7 @@ export default {
       this.fetchProviderData()
     },
     updateMap (map) {
-      map.on('style.load', () => {
+      map.on('load', () => {
         // Add a layer for each hoconum
         this.providerHoconums.forEach((hoconum, index) => {
           // Template for layer style
