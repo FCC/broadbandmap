@@ -36,16 +36,16 @@ const router = new Router({
       meta: { title: 'Area Summary' }
     },
     {
-      path: '/provider-detail',
-      name: 'ProviderDetail',
-      component: ProviderDetail,
-      meta: { title: 'Provider Detail' }
-    },
-    {
       path: '/area-comparison',
       name: 'AreaComparison',
       component: AreaComparison,
       meta: { title: 'Area Comparison' }
+    },
+    {
+      path: '/provider-detail',
+      name: 'ProviderDetail',
+      component: ProviderDetail,
+      meta: { title: 'Provider Detail' }
     },
     {
       path: '/data-download',
