@@ -72,12 +72,13 @@ export default {
       // Define default map options
       this.mapOptions = {
         attributionControl: false,
+        center: [-94.96, 38.82],
         container: 'map-container',
-        style: this.baseLayers[0].styleURL,
         logoPosition: 'bottom-left',
         maxZoom: 22,
         minZoom: 0,
-        center: [-94.96, 38.82],
+        pitchWithRotate: false,
+        style: this.baseLayers[0].styleURL,
         zoom: 3
       }
 
@@ -176,6 +177,10 @@ export default {
         let zoomLevel = map.getZoom()
 
         vm.$emit('map-zoomend', zoomLevel)
+      })
+
+      map.on('dragend', function (event) {
+        vm.$emit('map-dragend', event)
       })
     },
     switchBaseLayer: function (layerId) {
