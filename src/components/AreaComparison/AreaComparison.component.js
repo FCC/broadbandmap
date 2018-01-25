@@ -18,37 +18,34 @@ export default {
       columns: [{
         label: 'Area',
         field: 'area_name',
-        filterable: true
+        html: false
       },
       {
         label: 'no providers',
         field: 'zero_providers',
         type: 'number',
-        html: false,
-        filterable: false
+        html: false
       },
       {
         label: '1 or more providers',
         field: 'one_provider',
         type: 'number',
-        html: false,
-        filterable: false
+        html: false
       },
       {
         label: '2 or more providers',
         field: 'two_provider',
         type: 'number',
-        html: false,
-        filterable: false
+        html: false
       },
       {
         label: '3 or more providers',
         field: 'three_provider',
         type: 'number',
-        html: false,
-        filterable: false
+        html: false
       }],
       rows: [],
+      nwData: [],
       searchType: 'County',
       refreshingDropdown: false,
       selectedTech: 'acfosw',
@@ -161,12 +158,14 @@ export default {
     }
   },
   mounted () {
-    this.setSocrata()
-    this.cacheStates()
-    this.justMounted = true
-
     EventHub.$on('updateTableSettings', (selectedTech, selectedSpeed) => this.updateTechSpeed(selectedTech, selectedSpeed))
     EventHub.$on('removeTableData', (propertyID, removeAll) => this.removeData(propertyID, removeAll))
+
+    this.setSocrata()
+    this.cacheStates()
+    this.getNWData()
+
+    this.justMounted = true
 
     if (this.$route.query.selectedTech === undefined) {
       this.updateUrlParams()
@@ -221,6 +220,7 @@ export default {
 
       if (areaType === '') {
         this.searchOptsList = Object.assign({}, this.searchTypes.comparison)
+        this.toggleSearchType('County')
         delete this.searchOptsList['State']
         delete this.searchOptsList['Tribal Area']
       } else {
@@ -338,27 +338,71 @@ export default {
         console.log(error)
       })
     },
+    getNWData () {
+      const self = this
+
+      let socParams = {
+        type: 'nation',
+        tech: 'acfosw',
+        speed: '25',
+        $limit: 5,
+        $$app_token: this.appToken,
+        $select: 'id,sum(has_0),sum(has_1),sum(has_2),sum(has_3more)',
+        $group: 'id'
+      }
+
+      axios
+      .get(this.socrataURL, {
+        params: socParams,
+        headers: this.httpHeaders
+      })
+      .then(function (response) {
+        self.assembleRows(response.data)
+      })
+      .catch(function (error) {
+        if (error.response) {
+          // Server responded with a status code that falls out of the range of 2xx
+          console.log(error.response.data)
+          console.log(error.response.status)
+          console.log(error.response.headers)
+        } else if (error.request) {
+          // Request was made but no response was received
+          console.log(error.request)
+        } else {
+          // Something happened in setting up the request that triggered an Error
+          console.log('Error', error.message)
+        }
+        console.log(error)
+      })
+    },
     assembleRows (rawData, lookupData, geoid) {
       this.rows = []
+
       for (let rdi in rawData) {
         let totalPop = parseInt(rawData[rdi].sum_has_0) + parseInt(rawData[rdi].sum_has_1) + parseInt(rawData[rdi].sum_has_2) + parseInt(rawData[rdi].sum_has_3more)
         if (!totalPop) totalPop = 1
 
-        let areaName = lookupData[rawData[rdi].id]
+        let areaName = lookupData ? lookupData[rawData[rdi].id] : 'Nationwide'
 
         if (this.searchType !== 'CBSA (MSA)' ||
            !this.$refs.autocomplete.typeaheadModel.geoid ||
            (this.$refs.autocomplete.typeaheadModel.geoid && areaName.indexOf(this.abbreviationByGeoID[this.$refs.autocomplete.typeaheadModel.geoid]) > 0)) {
-          if (areaName) {
-            this.rows.push({
-              area_name: areaName,
-              zero_providers: (100.0 * parseFloat(rawData[rdi].sum_has_0) / (1.0 * totalPop)).toFixed(2),
-              one_provider: (100.0 * (parseFloat(rawData[rdi].sum_has_1) + parseFloat(rawData[rdi].sum_has_2) + parseFloat(rawData[rdi].sum_has_3more)) / (1.0 * totalPop)).toFixed(2),
-              two_provider: (100.0 * (parseFloat(rawData[rdi].sum_has_2) + parseFloat(rawData[rdi].sum_has_3more)) / (1.0 * totalPop)).toFixed(2),
-              three_provider: (100.0 * parseFloat(rawData[rdi].sum_has_3more) / (1.0 * totalPop)).toFixed(2)
-            })
-            this.justMounted = false
+          let rowData = {
+            area_name: areaName,
+            zero_providers: (100.0 * parseFloat(rawData[rdi].sum_has_0) / (1.0 * totalPop)).toFixed(2),
+            one_provider: (100.0 * (parseFloat(rawData[rdi].sum_has_1) + parseFloat(rawData[rdi].sum_has_2) + parseFloat(rawData[rdi].sum_has_3more)) / (1.0 * totalPop)).toFixed(2),
+            two_provider: (100.0 * (parseFloat(rawData[rdi].sum_has_2) + parseFloat(rawData[rdi].sum_has_3more)) / (1.0 * totalPop)).toFixed(2),
+            three_provider: (100.0 * parseFloat(rawData[rdi].sum_has_3more) / (1.0 * totalPop)).toFixed(2)
           }
+
+          if (areaName === 'Nationwide') {
+            this.nwData = []
+            this.nwData.push(rowData)
+          } else {
+            this.rows.push(rowData)
+          }
+
+          this.justMounted = false
         }
       }
     },
@@ -441,6 +485,9 @@ export default {
           }
           self.assembleRows(rawData, lookupData, self.$refs.autocomplete.typeaheadModel.geoid)
           self.spinner.stop()
+
+          // Display search type in results heading
+          self.searchGeogType = self.searchType
         })
         .catch(function (error) {
           if (error.response) {
