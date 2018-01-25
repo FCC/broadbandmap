@@ -24,7 +24,7 @@
       <section>
         <h2>How to Use This Site</h2>
         <p>This website allows you to explore various facets of fixed-broadband deployment.</p>
-        <p>The site allows users to choose a from a list of technologies (ADSL, cable modem, FTTP, fixed wireless, satellite and other), and a list of broadband speeds (at least 200 kbps, at least 10 Mbps downstream / 1 Mbps upstream, at least 25/3, at least 100/10 or at least 250/25) in creating the maps and graphs on each page.</p>
+        <p>The site allows users to choose a from a list of <router-link to="/about#techCodes" aria-describedby="footnote-label" id="techCodes-ref">technologies</router-link> (ADSL, cable modem, FTTP, fixed wireless, satellite and other), and a list of broadband speeds (at least 200 kbps, at least 10 Mbps downstream / 1 Mbps upstream, at least 25/3, at least 100/10 or at least 250/25) in creating the maps and graphs on each page.</p>
         <ul>
           <li>To see the providers that report service at a given location, go to the
             <router-link to="/location-summary">Location Summary</router-link> page and enter and address or click on a location.</li>
@@ -36,6 +36,13 @@
             <router-link to="/area-comparison">Area Comparison</router-link> page.</li>
         </ul>
         <p>For more information about the Form 477 data collection or the data, please refer to the <b>Related Links</b> sidebar.</p>
+        <hr>
+        <h2 class="sr-only" id="footnote-label">Footnotes</h2>
+        <ol class="list-footnotes">
+          <li id="techCodes">The technology codes from 477 for each technology group are as follows: ADSL includes technology codes 10 (Asymmetric xDSL), 11 (ADSL2) and 12 (VDSL); Cable includes codes 40 (Cable Modem), 41 (DOCSIS 1, 1.1 and 2.0), 42 (DOCSIS 3.0) and 43 (DOCSIS 3.1); Fiber or Fiber to the Premises (FTTP) includes code 50 (Optical Carrier/Fiber to the End User); Fixed Wireless includes cod 70 (Terrestrial Fixed Wireless); Satellite includes code 60 (Satellite); and Other includes codes 20 (Symmetric xDSL), 30 (Other Copper Wireline), 90 (Electric Power Line) and 0 (All Other).
+            <router-link to="/about#techCodes-ref" aria-label="Back to content">&#x21A9;</router-link>
+          </li>
+        </ol>
       </section>
       <hr>
       <section>
@@ -51,18 +58,120 @@
       <hr>
       <section>
         <h2>For Developers</h2>
-        <h3 class="h4">API's</h3>
-        <ul>
-          <li><a href="#">Socrata API's for tables and graphs</a></li>
-          <li><a href="#">Mapbox embed directions</a></li>
-          <li><a href="#">Census-block API</a></li>
-        </ul>
+        <h3 class="h4">Embed a Map Layer into your Website</h3>
+        <p>This application includes map data for a total of 441 combinations of broadband technology and speed. All the map data are available as tilesets and available for public use; the Github link below will take you to a respository that contains all the code used to make use of the map data. It is not practical for the Commission to make all 441 technology/speed combinations available as web-map layers. However, we are able to do so for a limited number of layers. Instructions for accessing such layers is below.</p>
+        <p><b>Note:</b> In order to access these layers, in the various formats below, you need a Mapbox access token. We are including a public access token in the links below since we want to make it easy for people to access broadband data in whatever format is most useful. However, if we find that the access token is being abused, and in particular being used to access maps unrelated to the broadband map, we will have no choice but to deactivate the token, and require end users to get their own token.</p>
+        
+        <h3 class="h4">Preview a map or use the map data in common GIS applications</h3>
+        <p>Insert the <b>style id</b> from the list below into the Mapbox URL that will be used in the third-party application or service.</p>                
+        
+        <table class="table-mapEmbed table table-bordered table-striped">
+          <thead>
+            <tr>
+              <th>Technology and
+                <br>Speed Combination at 25/3 Mbps</th>
+              <th>Style ID</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th>All</th>
+              <td>cjchutqar66e02snp0n3c7eyu</td>
+            </tr>
+            <tr>
+              <th>Terrestrial</th>
+              <td>cjchzx0107d9i2roiovptcnxz</td>
+            </tr>
+            <tr>
+              <th>Wired</th>
+              <td>cjchzwjce0fbf2sn5jzcalgx8</td>
+            </tr>
+          </tbody>
+        </table>
+        <br>
+        <table class="table-mapEmbed table table-bordered">
+          <thead>
+            <tr>
+              <th>Example Map Preview</th>
+              <th>Mapbox URL</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th>All technologies at 25/3 Mbps</th>
+              <td>
+                <a href="https://api.mapbox.com/styles/v1/fcc/cjchutqar66e02snp0n3c7eyu.html?fresh=true&title=true&access_token=pk.eyJ1IjoiZmNjIiwiYSI6ImNqY2h2MnAxbDJhZjIycXBnN3cxb3FnYzAifQ.-JIKXvGZ-ZI2m7L8f92Lew#3.0/37.000000/-95.000000/0" target="_blank">https://api.mapbox.com/styles/v1/fcc/<b>cjchutqar66e02snp0n3c7eyu</b>.html?fresh=true&title=true&access_token=pk.eyJ1IjoiZmNjIiwiYSI6ImNqY2h2MnAxbDJhZjIycXBnN3cxb3FnYzAifQ.-JIKXvGZ-ZI2m7L8f92Lew#3.0/37.000000/-95.000000/0</a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <br>
+        <table class="table-mapEmbed table table-bordered table-striped">
+          <thead>
+            <tr>
+              <th>Application or Service</th>
+              <th>Mapbox URL</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th>Carto</th>
+              <td>
+                <p>Also specify xyz in URL if needed.</p>
+                <router-link to="/about/#">https://api.mapbox.com/styles/v1/fcc/<b>[style id]</b>/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoiZmNjIiwiYSI6ImNqY2h2MnAxbDJhZjIycXBnN3cxb3FnYzAifQ.-JIKXvGZ-ZI2m7L8f92Lew</router-link>
+              </td>
+            </tr>
+            <tr>
+              <th>ArcGIS</th>
+              <td>
+                <router-link to="/about/#">https://api.mapbox.com/styles/v1/fcc/<b>[style id]</b>/tiles/256/{level}/{col}/{row}@2x?access_token=pk.eyJ1IjoiZmNjIiwiYSI6ImNqY2h2MnAxbDJhZjIycXBnN3cxb3FnYzAifQ.-JIKXvGZ-ZI2m7L8f92Lew</router-link>
+              </td>
+            </tr>
+            <tr>
+              <th>Tableau (9.3 or higher)</th>
+              <td>
+                <router-link to="/about/#">https://api.mapbox.com/styles/v1/fcc/<b>[style id]</b>.html?title=true&access_token=pk.eyJ1IjoiZmNjIiwiYSI6ImNqY2h2MnAxbDJhZjIycXBnN3cxb3FnYzAifQ.-JIKXvGZ-ZI2m7L8f92Lew#3.0/37.000000/-95.000000/0</router-link>
+              </td>
+            </tr>
+            <tr>
+              <th>Fulcrum</th>
+              <td>
+                <p>Also specify xyz in URL if needed.</p>
+                <router-link to="/about/#">https://api.mapbox.com/styles/v1/fcc/<b>[style id]</b>/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoiZmNjIiwiYSI6ImNqY2h2MnAxbDJhZjIycXBnN3cxb3FnYzAifQ.-JIKXvGZ-ZI2m7L8f92Lew</router-link>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <br>
+        <table class="table-mapEmbed table table-bordered table-striped">
+          <thead>
+            <tr>
+              <th>WMTS Service</th>
+              <th>Mapbox URL</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th>ArcMap</th>
+              <td>
+                <router-link to="/about/#">https://api.mapbox.com/styles/v1/fcc/<b>[style id]</b>/wmts?access_token=pk.eyJ1IjoiZmNjIiwiYSI6ImNqY2h2MnAxbDJhZjIycXBnN3cxb3FnYzAifQ.-JIKXvGZ-ZI2m7L8f92Lew</router-link>
+              </td>
+            </tr>
+            <tr>
+              <th>QGIS</th>
+              <td>
+                <router-link to="/about/#">https://api.mapbox.com/styles/v1/fcc/<b>[style id]</b>/wmts?access_token=pk.eyJ1IjoiZmNjIiwiYSI6ImNqY2h2MnAxbDJhZjIycXBnN3cxb3FnYzAifQ.-JIKXvGZ-ZI2m7L8f92Lew</router-link>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <hr>        
         <h3 class="h4">Github</h3>
         <ul>
-          <li><a href="https://github.com/FCC/broadbandmap">Repository</a></li>
+          <li><a href="https://github.com/FCC/broadbandmap" target="_blank">Broadband Map Repository</a></li>
         </ul>
       </section>
-      <hr>
+      
     </div>
     <div class="col-sm-4">
       <div class="panel-sidebar panel panel-default">
@@ -87,6 +196,7 @@
             <li><a href="https://www.fcc.gov/reports-research/reports/mobile-wireless-competition-reports/mobile-wireless-competition-report-20th">Mobile competition report (20th)</a></li>
             <li><a href="#">BPR/Section 706 report [**Link to be updated**]</a></li>
           </ul>
+          <hr>
           <p><b>Mobile-Broadband Maps</b></p>
           <ul class="list-unstyled">
             <li><a href="https://www.fcc.gov/maps/nationwide-mobile-wireless-coverage-ye-2016/">Mobile Coverage</a></li>
