@@ -75,6 +75,13 @@ const router = new Router({
     if (to.name !== from.name) {
       return { x: 0, y: 0 }
     }
+
+    // Handle anchor links
+    if (to.hash) {
+      return {
+        selector: to.hash
+      }
+    }
   }
 })
 
