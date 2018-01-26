@@ -56,11 +56,13 @@
           </slide>
           <slide>
             <div class="chart-slide">
+              <p class="text-center"><span><b>Urban Total</b> = {{ urbanTotal }}</span> <span><b>Rural Total</b> = {{ ruralTotal }}</span></p>
               <stacked-bar-chart :data="urbanRuralChartData" :styles="chartStyles" :xaxis="settlementType" :barThickness="50"></stacked-bar-chart>
             </div>
           </slide>
           <slide>
             <div class="chart-slide">
+              <p class="text-center"><span><b>Non-tribal Total</b> = {{ nonTribalTotal }}</span> <span><b>Tribal Total</b> = {{ tribalTotal }}</span></p>
               <stacked-bar-chart :data="tribalChartData" :styles="chartStyles" :xaxis="settlementType" :barThickness="50"></stacked-bar-chart>
             </div>
           </slide>
