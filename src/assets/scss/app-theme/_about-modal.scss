@@ -1,0 +1,43 @@
+.modal-body {
+  >section > h2 {
+    margin-top: 0;
+  }
+}
+
+.table-mapControls {
+  th:first-child,
+  td:first-child {
+    text-align: center;
+  }
+
+
+
+  .icon {
+    font-size: 18px;
+  }
+
+  .icon-cog,
+  .icon-globe,
+  .icon-link {
+    padding-top: 2px;
+  }
+
+  .icon-layers {
+    margin-top: -2px;
+  }
+
+  .mapboxgl-ctrl-icon {
+    display: block;
+    height: 30px;
+    padding: 0;
+    width: 30px;
+  }
+
+  .mapboxgl-ctrl-icon:not(.mapboxgl-ctrl-compass) {
+    margin-top: -5px;
+  }
+
+  .mapboxgl-ctrl-compass-arrow {
+    padding: 0;
+  }
+}

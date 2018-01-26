@@ -1,5 +1,70 @@
 <modal v-model="showModal" title="About Provider Detail" @hide="" ref="modal">
-  About Provider Detail
+  <section>
+    <h2>About the map</h2>
+    <p>This map will display the residential broadband footprint of up to three providers at one time. Use the search box to look for a provider's name and add the footprint to the map. Click on the "Add Provider" link to get additional search boxes to add additional footprints (up to three).</p>
+  </section>
+  <hr>
+  <section>
+    <h2>About the graphs</h2>
+    <p>The graphs on the page provide more information about each provider's reported residential broadband service. The top-most graph displays the fraction of each provider’s reported service availability, as a function of reported broadband speed. Subsequent graphs show the fraction of each provider's footprint that relies on each technology, as a function of speed.</p>
+    <p>Choose "Download" or "Upload" speed, at the top of the page to change whether the graphs display information about download speeds or upload speeds.</p>
+    <p>Broadband providers report data at the census block level, and may not offer service to every home in every block in which they report service. The calculations used to create the graphs treat every location as having service, and may therefore over-estimate broadband coverage, particularly in areas with large census blocks.</p>
+  </section>
+  <hr>
+  <section>
+    <h2>About provider names</h2>
+    <p>Service providers that file data with the Commission identify themselves using several different names: provider name; DBA (doing business as) name; and holding company name (parent company). These names are self-reported; and providers take different approaches to the names they use for marketing and advertising their services.
+    </p>
+    <p>The <i>provider-name</i> search bar uses a name meant to capture the parent companies (holding company name). However, in some instances, that name may not be familiar to end users. If you are unable to find the name of an ISP, please go to the <a href="https://opendata.fcc.gov/Wireline/Fixed-Broadband-Deployment-Provider-Name-Lookup/etum-4rg3" target="_blank">Fixed Broadband Deployment: Provider Name Lookup</a> to search among the different names submitted by the providers. The first column (Holding Company Final) includes the name you will search for on this site; the other columns contain other names associated with that first column that may be more familiar.</p>
+  </section>
+  <hr>
+  <section>
+    <h2>Map controls</h2>
+    <table class="table-mapControls table table-condensed table-bordered">
+      <thead>
+        <tr>
+          <th>Icon</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="icon icon-cog"></span></td>
+          <td>The "Select Broadband" menu allows you to change the technologies and downstream and upstream speeds displayed in this map.</td>
+        </tr>
+        <tr>
+          <td>
+            <span class="mapboxgl-ctrl-icon mapboxgl-ctrl-zoom-in"></span>
+            <span class="mapboxgl-ctrl-icon mapboxgl-ctrl-zoom-out"></span>
+          </td>
+          <td>Zoom in and out on the map.</td>
+        </tr>
+        <tr>
+          <td><span class="mapboxgl-ctrl-icon mapboxgl-ctrl-compass"><span class="mapboxgl-ctrl-compass-arrow"></span></span>
+          </td>
+          <td>Resets the map to put north at the top of the map if you've rotated it.</td>
+        </tr>
+        <tr>
+          <td><span class="icon icon-globe"></span></td>
+          <td>Reset to the default map view.</td>
+        </tr>
+        <tr>
+          <td><span class="icon icon-layers"></span></td>
+          <td>Select the map base layer.</td>
+        </tr>
+        <tr>
+          <td><span class="icon icon-link"></span></td>
+          <td>To save or share the current map view and Provider table click on the "Link to this page" button, then click the Copy to Clipboard button.</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+  <hr>
+  <section>
+    <h2>Data sources</h2>
+    <p>For more information about data sources, visit the
+      <router-link to="/about" @click.native="closeModal">About</router-link> page</p>
+  </section>
   <div slot="footer">
     <!-- <button class="btn btn-default" type="button" @click="closeModal">Close</button> -->
     <button class="btn btn-default pull-right" type="button" @click="closeModal">Close</button>

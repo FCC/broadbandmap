@@ -9,14 +9,15 @@
       <a id="main-content" class="sr-only"></a>
       <section>
         <h2>Fixed Broadband Deployment</h2>
-        <p>This website provides a visualization of the fixed-broadband deployment data collected on FCC Form 477. Facilities-based providers of broadband service report Form 477 data in June and December each year. For more information about Form 477, to download the data, or to see reports generated from the dataset, please refer to the links at right.</p>
-
+        <p>This application provides a visualization of the residential fixed broadband deployment data collected on FCC Form 477. Facilities-based providers of broadband service report Form 477 data in June and December each year. For more information about Form 477, to download the data, or to see reports generated from the dataset, please refer to the links at right.</p>
         <p>Providers report fixed-broadband deployment data at the census block level. Form 477 data are reported using 2010 Census blocks. Providers may not offer service to every home in every block in which they report service. The calculations used to create the graphs treat every location as having service, and may therefore over-estimate broadband coverage, particularly in areas with large census blocks.</p>
+        <p>The Form 477 data collection relies on 2010 Census blocks as a standard for data collection. Thus all broadband data displayed on this map use 2010 geometries (2010 block, tract and county definitions). Similarly, the definitions of urban and tribal areas rely on the 2010 Census definitions. Search geometries on the Area Summary and Area Comparison pages (state, county, CBSA, census place, Congressional District and tribal areas) are based on updated definitions (see
+          <router-link to="/data-download">Data Download</router-link> page for more information).</p>
       </section>
       <hr>
       <section>
         <h2>Block-level estimates for housing units, population and households</h2>
-        <p>The U.S. Census Bureau publishes block-level figures for housing units, population and households only with data from the decennial census. Rather than rely on data from 2010, this site instead relies on block-level estimates that account for increases or decreases in population over time; and the construction of new homes. See <a href="https://www.fcc.gov/reports-research/data/staff-block-estimates">Staff Block Estimates</a> for more information.</p>
+        <p>The U.S. Census Bureau publishes block-level figures for housing units, population and households only with data from the decennial census. Rather than rely on data from 2010, this site instead relies on block-level estimates that account for increases or decreases in population over time; and the construction of new homes. See <a href="https://www.fcc.gov/reports-research/data/staff-block-estimates" target="_blank">Staff Block Estimates</a> for more information.</p>
         <p>The methodology used to create those block-level estimates is likely to over-state the number of blocks in which people reside (rather than under-state). As such these estimates may under-estimate population-weighted figures for broadband coverage.</p>
       </section>
       <hr>
@@ -25,10 +26,27 @@
         <p>This website allows you to explore various facets of fixed-broadband deployment.</p>
         <p>The site allows users to choose a from a list of technologies (ADSL, cable modem, FTTP, fixed wireless, satellite and other), and a list of broadband speeds (at least 200 kbps, at least 10 Mbps downstream / 1 Mbps upstream, at least 25/3, at least 100/10 or at least 250/25) in creating the maps and graphs on each page.</p>
         <ul>
-          <li>To see the providers that report service at a given location, go to the  <router-link to="/location-summary">Location Summary</router-link> page and enter and address or click on a location.</li>
-          <li>To see a map of broadband and get summary data about a particular area, go to the <router-link to="/area-summary">Area Summary</router-link> page, choose the type of area, and use the search bar.</li>
-          <li>To learn more about the technologies and speeds reported by each provider, or to compare providers' footprints, go to the <router-link to="/provider-detail">Provider Detail</router-link> page and search for up to three providers at a time.</li>
-          <li>To get information about different areas, and compare to other areas, go to the <router-link to="/area-comparison">Area Comparison</router-link> page.</li>
+          <li>To see the providers that report service at a given location, go to the
+            <router-link to="/location-summary">Location Summary</router-link> page and enter and address or click on a location.</li>
+          <li>To see a map of broadband and get summary data about a particular area, go to the
+            <router-link to="/area-summary">Area Summary</router-link> page, choose the type of area, and use the search bar.</li>
+          <li>To learn more about the technologies and speeds reported by each provider, or to compare providers' footprints, go to the
+            <router-link to="/provider-detail">Provider Detail</router-link> page and search for up to three providers at a time.</li>
+          <li>To get information about different areas, and compare to other areas, go to the
+            <router-link to="/area-comparison">Area Comparison</router-link> page.</li>
+        </ul>
+        <p>For more information about the Form 477 data collection or the data, please refer to the <b>Related Links</b> sidebar.</p>
+      </section>
+      <hr>
+      <section>
+        <h2>License and Attribution</h2>
+        <p>Data and content created by government employees within the scope of their employment are not subject to domestic copyright protection under 17 U.S.C. § 105. Broadband data from FCC Form 477, and data from the U.S. Census Bureau, therefore, are offered free and without restriction. See, e.g., <a href="https://www.usa.gov/government-works" target="_blank">U.S. Government Works</a>.
+        </p>
+        <p>While not required, when using content, data, documentation, code and related materials from fcc.gov or broadbandmap.fcc.gov in your own work, we ask that proper credit be given. Examples include:</p>
+        <ul>
+          <li>Source data: FCC Form 477</li>
+          <li>Map layer based on FCC Form 477</li>
+          <li>Code data based on broadbandmap.fcc.gov</li>
         </ul>
       </section>
       <hr>
@@ -45,6 +63,8 @@
           <li><a href="https://github.com/FCC/broadbandmap">Repository</a></li>
         </ul>
       </section>
+      <hr>
+      
     </div>
     <div class="col-sm-4">
       <div class="panel-sidebar panel panel-default">
@@ -68,6 +88,13 @@
             <li><a href="https://www.fcc.gov/voice-telephone-services-report">Voice Telephone Services (VTS) report</a></li>
             <li><a href="https://www.fcc.gov/reports-research/reports/mobile-wireless-competition-reports/mobile-wireless-competition-report-20th">Mobile competition report (20th)</a></li>
             <li><a href="#">BPR/Section 706 report [**Link to be updated**]</a></li>
+          </ul>
+          <p><b>Mobile-Broadband Maps</b></p>
+          <ul class="list-unstyled">
+            <li><a href="https://www.fcc.gov/maps/nationwide-mobile-wireless-coverage-ye-2016/">Mobile Coverage</a></li>
+            <li><a href="https://www.fcc.gov/maps/nationwide-lte-coverage-ye-2016/">LTE Coverage</a></li>
+            <li><a href="https://www.fcc.gov/maps/3gorbetter-number-providers-ye-2016/">3G number of providers</a></li>
+            <li><a href="https://www.fcc.gov/maps/lte-coverage-number-providers-ye-2016/">LTE number of providers</a></li>
           </ul>
         </div>
       </div>

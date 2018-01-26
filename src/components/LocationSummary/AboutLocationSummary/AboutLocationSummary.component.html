@@ -1,23 +1,66 @@
 <modal v-model="showModal" title="About Location Summary" @hide="" ref="modal">
   <section>
     <h2>About the map</h2>
-    <p>This map displays data showing the number of providers reporting fixed-broadband service around the country. As you zoom in, you will see more granular broadband data. When zoomed out, the map displays the population-weighted average number of broadband providers (at the county or census tract) level; at higher zoom levels (as you zoom in closer), the map displays the number of providers in each census block.</p>
-    <p>You can chose the technologies, and downstream and upstream speeds, displayed in this map in the "Select Broadband" menu, accessible when you click on the gear icon [picture of gear icon]. By default, the map shows all technologies and broadband at a speed of at least 25 Mbps downstream / 3 Mbps upstream.</p>
-    <p>Census blocks without any land do not appear on the map, though providers do sometimes report service in such areas. In addition, census blocks and tracts without any population are shown as [**TBD**].</p>
-    <p>[**add text about there possibly being fewer providers than listed on the table**]</p>
+    <p>This map displays data showing the number of providers reporting residential fixed broadband service around the country. As you zoom in, you will see more granular broadband data. When zoomed out, the map displays the population-weighted average number of broadband providers (at the county or census tract) level; at higher zoom levels (as you zoom in closer), the map displays the number of providers in each census block.</p>
+    <p>You can chose the technologies, and downstream and upstream speeds, displayed in this map when you click on the gear icon [picture of gear icon]. By default, the map shows all technologies and broadband at a speed of at least 25 Mbps downstream / 3 Mbps upstream.</p>
+    <p>Census blocks without any land do not appear on the map, though providers do sometimes report service in such areas. In addition, census blocks and tracts without any population are shown as [TBD].</p>
+    <p>Since the map color is determined by the combination of technology and speed, while the table lists all provider reporting service in each block, the map may display a lower count of providers than the number of providers listed in the table.</p>
   </section>
   <hr>
   <section>
     <h2>About the table</h2>
-    <p>The table provides a list of all providers reporting fixed broadband service regardless of the selected technology or speed for the location chosen. Broadband providers may not offer service to every home in a census block. If you do not see data in the table, click on the map to select a location; or enter an address, or latitude and longitude, in the search bar at the top of the map.</p>
+    <p>The table provides a list of all providers reporting residential fixed broadband service regardless of the selected technology or speed for the location chosen. Broadband providers may not offer service to every home in a census block. If you do not see data in the table, click on the map to select a location; or enter an address, or latitude and longitude, in the search bar at the top of the map.
+    </p>
+    <p>Providers may appear in the table more than once if they report using different technologies to offer service; for example, a provider may report using different versions of cable (DOCSIS) or ADSL service at different speeds. Such a provider is only counted once in the map.</p>
   </section>
   <hr>
   <section>
     <h2>Map controls</h2>
-    <p>By clicking on the gear icon <button class="btn btn-default btn-lg" type="button"><span class="icon icon-cog"></span></button>, you can update the map. The "Select Broadband" menu allows you to change the speed and technologies displayed on the map.</p>
-    <p>[**include description of map tilt and compass here; and copy to other map pages**]</p>
-    <p>For more information about data sources, visit the <router-link to="/about" @click.native="closeModal">About</router-link> page</p>
-  </section>  
+    <table class="table-mapControls table table-condensed table-bordered">
+      <thead>
+        <tr>
+          <th>Icon</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="icon icon-cog"></span></td>
+          <td>The "Select Broadband" menu allows you to change the technologies and downstream and upstream speeds displayed in this map.</td>
+        </tr>
+        <tr>
+          <td>
+            <span class="mapboxgl-ctrl-icon mapboxgl-ctrl-zoom-in"></span>
+            <span class="mapboxgl-ctrl-icon mapboxgl-ctrl-zoom-out"></span>
+          </td>
+          <td>Zoom in and out on the map.</td>
+        </tr>
+        <tr>
+          <td><span class="mapboxgl-ctrl-icon mapboxgl-ctrl-compass"><span class="mapboxgl-ctrl-compass-arrow"></span></span>
+          </td>
+          <td>Resets the map to put north at the top of the map if you've rotated it.</td>
+        </tr>
+        <tr>
+          <td><span class="icon icon-globe"></span></td>
+          <td>Reset to the default map view.</td>
+        </tr>
+        <tr>
+          <td><span class="icon icon-layers"></span></td>
+          <td>Select the map base layer.</td>
+        </tr>
+        <tr>
+          <td><span class="icon icon-link"></span></td>
+          <td>To save or share the current map view and Provider table click on the "Link to this page" button, then click the Copy to Clipboard button.</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+  <hr>
+  <section>
+    <h2>Data sources</h2>
+    <p>For more information about data sources, visit the
+      <router-link to="/about" @click.native="closeModal">About</router-link> page</p>
+  </section>
   <div slot="footer">
     <!-- <button class="btn btn-default" type="button" @click="closeModal">Close</button> -->
     <button class="btn btn-default pull-right" type="button" @click="closeModal">Close</button>

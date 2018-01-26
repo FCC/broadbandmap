@@ -22,7 +22,7 @@
   margin-bottom: 0;
   width: 100%;
   .map-provider & {
-    height: 370px;
+    height: 75vh;
   }
 }
 
@@ -166,16 +166,12 @@
 /*  Map Sidebar */
 
 .map-sidebar {
-  height: 77vh;
   box-shadow: none;
   padding-left: 15px;
   position: relative;
   right: 0;
   transition-duration: .16s;
-  z-index: 2;
-  @media(min-width: 992px) {
-    box-shadow: -2px -1px 4px rgba(0, 0, 0, 0.2);
-  }
+  z-index: 2;  
 
   .btn-toggle {
     border: none;
@@ -197,6 +193,11 @@
 
   &.hide-pane {
     @media(min-width: 992px) {
+      position: absolute;
+      right: -41.6vw;
+
+    }
+    @media(min-width: 1200px) {
       position: absolute;
       right: -33.2vw;
     }

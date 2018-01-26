@@ -166,10 +166,9 @@ export default {
     this.justMounted = true
 
     EventHub.$on('updateTableSettings', (selectedTech, selectedSpeed) => this.updateTechSpeed(selectedTech, selectedSpeed))
-    EventHub.$on('removeTableData', (propertyID, removeAll) => this.removeData())
+    EventHub.$on('removeTableData', (propertyID, removeAll) => this.removeData(propertyID, removeAll))
 
     if (this.$route.query.selectedTech === undefined) {
-      console.log('line 175 ')
       this.updateUrlParams()
     }
 
@@ -274,8 +273,15 @@ export default {
         this.speed = '0.2/0.2'
       }
     },
-    removeData () {
+    removeData (propertyID, removeAll) {
       this.rows = []
+
+      if (removeAll) {
+        this.selectedTech = ''
+        this.selectedSpeed = ''
+        this.updateTechSpeed(this.selectedTech, this.selectedSpeed)
+        this.updateUrlParams()
+      }
     },
     setSocrata () {
       if (process.env.SOCRATA_ENV === 'DEV') {
@@ -476,7 +482,7 @@ export default {
         routeQP[prop] = routeQ[prop]
       })
 
-      if (this.selectedTech) {
+      if (this.selectedTech !== undefined) {
         routeQP.selectedTech = this.selectedTech
         routeQP.selectedSpeed = this.selectedSpeed
       }

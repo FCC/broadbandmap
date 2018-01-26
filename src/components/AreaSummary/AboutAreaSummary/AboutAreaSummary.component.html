@@ -1,5 +1,65 @@
 <modal v-model="showModal" title="About Area Summary" @hide="" ref="modal">
-  About Area Summary
+  <section>
+    <h2>About the map</h2>
+    <p>This map displays data showing the number of providers reporting residential fixed broadband service around the country. As you zoom in, you will see more granular broadband data. When zoomed out, the map displays the population-weighted average number of broadband providers (at the county or census tract) level; at higher zoom levels, the map displays the number of providers in each census block.</p>
+    <p>You can chose the technologies, and downstream and upstream speeds, displayed in this map when you click on the gear icon [picture of gear icon]. By default, the map shows all technologies and broadband at a speed of at least 25 Mbps downstream / 3 Mbps upstream.</p>
+    <p>You can search for States, Counties, Congressional Districts, Census Places (cities and towns), Federally-recognized Tribal Areas and Core-Based Statistical Areas (CBSA), which include Metropolitan and Statistical Areas (MSAs) and Micropolitan Statistical Areas.</p>
+    <p>Census blocks without any land do not appear on the map, though providers do sometimes report service in such areas. In addition, census blocks and tracts without any population are shown as [TBD].</p>
+  </section>
+  <hr>
+  <section>
+    <h2>About the graphs</h2>
+    <p>There are three graphs that provide summary data for the area selected. The first shows the fraction of the population that has access to different numbers of residential broadband providers (the vertical axis) depending on the broadband speed (the horizontal axis) for the technologies selected to be displayed on the map (see <b>Map controls</b> below for more information). The second graph shows the relative size of urban and rural populations along the horizontal axis; and the same breakout of population by number of residential broadband providers for the technologies and speeds displayed on the map. The third graph shows the same breakout of population and number of residential broadband providers, comparing non-tribal and tribal blocks within the area selected.</p>
+    <p>Broadband providers report data at the census block level, and may not offer service to every home in every block in which they report service. The calculations used to create the graphs treat every location as having service, and may therefore over-estimate broadband coverage, particularly in areas with large census blocks.</p>
+  </section>
+  <hr>
+  <section>
+    <h2>Map controls</h2>
+    <table class="table-mapControls table table-condensed table-bordered">
+      <thead>
+        <tr>
+          <th>Icon</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="icon icon-cog"></span></td>
+          <td>The "Select Broadband" menu allows you to change the technologies and downstream and upstream speeds displayed in this map.</td>
+        </tr>
+        <tr>
+          <td>
+            <span class="mapboxgl-ctrl-icon mapboxgl-ctrl-zoom-in"></span>
+            <span class="mapboxgl-ctrl-icon mapboxgl-ctrl-zoom-out"></span>
+          </td>
+          <td>Zoom in and out on the map.</td>
+        </tr>
+        <tr>
+          <td><span class="mapboxgl-ctrl-icon mapboxgl-ctrl-compass"><span class="mapboxgl-ctrl-compass-arrow"></span></span>
+          </td>
+          <td>Resets the map to put north at the top of the map if you've rotated it.</td>
+        </tr>
+        <tr>
+          <td><span class="icon icon-globe"></span></td>
+          <td>Reset to the default map view.</td>
+        </tr>
+        <tr>
+          <td><span class="icon icon-layers"></span></td>
+          <td>Select the map base layer.</td>
+        </tr>
+        <tr>
+          <td><span class="icon icon-link"></span></td>
+          <td>To save or share the current map view and Provider table click on the "Link to this page" button, then click the Copy to Clipboard button.</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+  <hr>
+  <section>
+    <h2>Data sources</h2>
+    <p>For more information about data sources, visit the
+      <router-link to="/about" @click.native="closeModal">About</router-link> page</p>
+  </section>
   <div slot="footer">
     <!-- <button class="btn btn-default" type="button" @click="closeModal">Close</button> -->
     <button class="btn btn-default pull-right" type="button" @click="closeModal">Close</button>
