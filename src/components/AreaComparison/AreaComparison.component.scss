@@ -78,22 +78,33 @@
 
 
 
+
 /* Download and about links */
 
 .nav-utility {
   font-size: 20px;
-  margin: 0 0 10px;
+  margin: 7px 0 5px;
   text-align: right;
+
+  &.page {
+    margin-top: 35px;
+  }
 
   a {
     margin-left: 12px;
   }
-  
+
   .btn {
     font-size: 20px;
     padding: 0 12px 0 0;
   }
+
+  .icon-cloud-download {
+    position: relative;
+    top: 3px;
+  }
 }
+
 
 
 
@@ -104,6 +115,9 @@
   background-color: #f2f2f2;
   h3 {
     margin: 0 0 .625em;
+  }
+  h4 {
+    margin-bottom: 0;
   }
   dl {
     margin-bottom: 0;
@@ -123,6 +137,7 @@
 .table-results {
   margin: 0 15px;
 }
+
 
 
 
@@ -162,11 +177,7 @@
 
 
 
-/* Nav Utility */
 
-.nav-utility {
-  margin-top: 14px;
-}
 
 
 

@@ -5,7 +5,7 @@
         <h1>Compare Broadband Availability in Different Areas</h1>
       </div>
       <div class="col-sm-3">
-        <div class="nav-utility">
+        <div class="nav-utility page">
           <!-- <tooltip text="Download data" placement="top">
           <a href="#"><span class="icon icon-cloud-download"></span><span class="sr-only">Download Data</span></a>
         </tooltip> -->
@@ -100,7 +100,7 @@
               <div class="col-sm-6">
                 <div class="nav-utility">
                   <tooltip text="Download Excel file" placement="left">
-                    <a :href="csvUrl" download type="text/csv" @click="exportTable('.table-nw', 'Nationwide')"><span class="icon icon-file-excel-o"></span><span class="sr-only">Download Excel file</span></a>
+                    <a href="/area-comparison/#" download type="text/csv" @click.prevent="exportTable('.table-nw', 'Nationwide')"><span class="icon icon-file-excel-o"></span><span class="sr-only">Download Excel file</span></a>
                   </tooltip>
                   <tooltip text="Download API data" placement="left">
                     <a :href="nwDataDownload" target="_blank"><span class="icon icon-cloud-download"></span><span class="sr-only">Download Data</span></a>
@@ -120,7 +120,7 @@
               <div class="col-sm-6">
                 <div class="nav-utility">
                   <tooltip text="Download Excel file" placement="left">
-                    <a :href="csvUrl" download type="text/csv" @click="exportTable('.table-state', 'State')"><span class="icon icon-file-excel-o"></span><span class="sr-only">Download Excel file</span></a>
+                    <a href="/area-comparison/#" download type="text/csv" @click.prevent="exportTable('.table-state', 'State')"><span class="icon icon-file-excel-o"></span><span class="sr-only">Download Excel file</span></a>
                   </tooltip>
                   <tooltip text="Download API data" placement="left">
                     <a :href="stateDataDownload" target="_blank"><span class="icon icon-cloud-download"></span><span class="sr-only">Download Data</span></a>
@@ -140,7 +140,7 @@
               <div class="col-sm-6">
                 <div class="nav-utility">
                   <tooltip text="Download Excel file" placement="left">
-                    <a :href="csvUrl" download type="text/csv" @click="exportTable('.table-geog', searchGeogType)"><span class="icon icon-file-excel-o"></span><span class="sr-only">Download Excel file</span></a>
+                    <a href="/area-comparison/#" download type="text/csv" @click.prevent="exportTable('.table-geog', searchGeogType)"><span class="icon icon-file-excel-o"></span><span class="sr-only">Download Excel file</span></a>
                   </tooltip>
                   <tooltip text="Download API data" placement="left">
                     <a :href="geogTypeDownload" target="_blank"><span class="icon icon-cloud-download"></span><span class="sr-only">Download API data</span></a>
