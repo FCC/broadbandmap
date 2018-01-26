@@ -9,6 +9,7 @@
         :match-start="false"
         :force-select="false"
         :open-on-focus="true"
+        limit="20"
         >
         <!-- Override the input template -->
         <input id="addr" data-role="input" class="form-control input-lg" type="search" :placeholder="placeholderText" autocomplete="off" @keydown.prevent.enter="enterClicked" :readonly="typeaheadModel === 'Nationwide'">
