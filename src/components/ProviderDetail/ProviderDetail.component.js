@@ -53,8 +53,8 @@ export default {
       axios
       .get(socrataURL, {
         params: {
-          $select: 'holdingcompanyname,hoconum',
-          $group: 'holdingcompanyname,hoconum',
+          $select: 'hocofinal,hoconum',
+          $group: 'hocofinal,hoconum',
           $limit: 5000,
           $$app_token: appToken
         },
@@ -63,9 +63,10 @@ export default {
       .then(function (response) {
         self.hoconum2Name = {}
         self.name2Hoconum = {}
+
         for (let rdi in response.data) {
-          self.hoconum2Name[response.data[rdi].hoconum] = response.data[rdi].holdingcompanyname
-          self.name2Hoconum[response.data[rdi].holdingcompanyname] = response.data[rdi].hoconum
+          self.hoconum2Name[response.data[rdi].hoconum] = response.data[rdi].hocofinal
+          self.name2Hoconum[response.data[rdi].hocofinal] = response.data[rdi].hoconum
         }
         self.loadParamsFromUrl()
       })
@@ -116,9 +117,8 @@ export default {
       // Create list of provider Names
       this.providerNames = []
       for (let pbi in providerBox) {
-        // console.log('box content : ', providerBox[pbi])
-        if (providerBox[pbi].typeaheadModel.holdingcompanyname) {
-          this.providerNames.push(providerBox[pbi].typeaheadModel.holdingcompanyname)
+        if (providerBox[pbi].typeaheadModel.hocofinal) {
+          this.providerNames.push(providerBox[pbi].typeaheadModel.hocofinal)
         } else {
           this.validationError = 'Invalid provider name(s)'
           return
@@ -243,7 +243,7 @@ export default {
         let providerBox = self.$refs.providerBox
         // Populate list of provider Names
         for (let pbi in providerBox) {
-          providerBox[pbi].typeaheadModel = {'holdingcompanyname': self.providerNames[pbi]}
+          providerBox[pbi].typeaheadModel = {'hocofinal': self.providerNames[pbi]}
         }
       })
       .catch(function (error) {
