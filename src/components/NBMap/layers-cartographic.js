@@ -6,27 +6,27 @@ export const LayersCartographic = [
     id: 'county',
     source: {
       type: 'vector',
-      url: 'mapbox://fcc.v1_county'
+      url: 'mapbox://fcc.v1_county_carto'
     },
     type: 'line',
-    'source-layer': 'county_2016geojson',
+    'source-layer': 'county_carto_2016',
     layout: {
       visibility: 'visible'
     },
     paint: {
       'line-color': '#74994e'
     },
-    maxzoom: 10,
+    maxzoom: 9,
     minzoom: 6
   },
   {
     id: 'county-highlighted',
     source: {
       type: 'vector',
-      url: 'mapbox://fcc.v1_county'
+      url: 'mapbox://fcc.v1_county_carto'
     },
     type: 'line',
-    'source-layer': 'county_2016geojson',
+    'source-layer': 'county_carto_2016',
     layout: {
       visibility: 'visible'
     },

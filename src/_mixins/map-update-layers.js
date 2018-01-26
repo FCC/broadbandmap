@@ -164,9 +164,6 @@ export const updateMapLayers = {
     },
     openMapSettings () {
       EventHub.$emit('openMapSettings')
-    },
-    toggleLegendTitle (zoomLevel) {
-      this.togLegendTitle = zoomLevel <= 10
     }
   }
 }

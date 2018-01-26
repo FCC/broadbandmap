@@ -184,7 +184,7 @@ export default {
         this.fetchLookupTable('county')
       } else if (this.searchType === 'Provider') {
         this.asyncKey = ''
-        this.itemKey = 'holdingcompanyname'
+        this.itemKey = 'hocofinal'
         this.fetchLookupTable('provider')
       } else {
         console.log('DEBUG: No handler in Autocomplete for searchType= ', this.searchType)
@@ -203,9 +203,9 @@ export default {
         socrataURL = process.env.SOCRATA_PROD_FULL
         appToken = process.env.SOCRATA_PROD_APP_TOKEN
         axiosParams = {
-          $select: 'holdingcompanyname',
+          $select: 'hocofinal',
           $where: 'consumer=1',
-          $group: 'holdingcompanyname',
+          $group: 'hocofinal',
           $limit: 5000,
           $$app_token: appToken
         }

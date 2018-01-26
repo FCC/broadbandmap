@@ -1,6 +1,15 @@
 .chart-slide {
    margin: 0 auto;
    padding: 0 5% 0 7%;
+   p {
+   	margin-bottom: 5px;
+   }
+   span {
+   	font-size: 12px;
+   	+ span {
+   		margin-left: 15px;
+   	}
+   }
  }
 
  .carousel-inner {

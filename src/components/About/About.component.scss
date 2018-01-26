@@ -43,3 +43,13 @@
     margin-top: 15px;
   }
 }
+
+.table-mapEmbed {
+  th:first-child {
+    white-space: nowrap;
+    width: 250px;
+  }
+  td:last-child {
+    word-break: break-word;
+  }
+}

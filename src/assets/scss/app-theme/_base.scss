@@ -1,52 +1,88 @@
 /* Container */
+
 .container-fluid,
 .container {
-    transition: width 0.5s
+  transition: width 0.5s
 }
 
 .outer-container {
-    position: relative;
-    overflow: hidden;
-    width: 100%;
+  position: relative;
+  overflow: hidden;
+  width: 100%;
 }
 
 .inner-container {
-    position: relative;
-    width: 100%;
+  position: relative;
+  width: 100%;
 }
 
+
 /* Base element Styles */
+
 main,
 header .container-fluid {
-    width: 100%;
+  width: 100%;
 }
 
 main {
-    border-bottom: 1px solid #f2f2f2;
-    position: relative;
+  border-bottom: 1px solid #f2f2f2;
+  position: relative;
 }
+
+
 
 a {
-    &:focus {
-        outline: thin dotted;
+  &:focus {
+    outline: thin dotted;
+  }
+  &[href]:after {
+    @media print {
+      content: none !important;
     }
-    &[href]:after {
-        @media print {
-            content: none !important;
-        }
-    }
+  }
 }
 
+
 /* Helpers */
+
 .text-overflow {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .sr-only.focusable:focus {
-    position: static !important;
-    clip: auto;
-    overflow: visible;
-    height: auto;
+  position: static !important;
+  clip: auto;
+  overflow: visible;
+  height: auto;
+}
+
+
+/* Footnotes */
+
+[aria-describedby="footnote-label"] {
+  counter-increment: footnotes;
+  text-decoration: none;
+  color: inherit;
+  cursor: default;
+  outline: none;
+  &:hover {
+    color: #1d2b3e;
+  }
+}
+
+[aria-describedby="footnote-label"]::after {
+  content: '[' counter(footnotes) ']';
+  vertical-align: super;
+  font-size: 1em;
+  margin-left: 2px;
+  color: blue;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+[aria-describedby="footnote-label"]:focus::after {
+  outline: thin dotted;
+  outline-offset: 2px;
 }

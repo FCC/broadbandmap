@@ -7,13 +7,12 @@
     </div>
   </div>
   <div class="row">
-    <nb-map class="col-xs-12 col-sm-12 col-md-7 col-lg-8" mapType="location" searchType="location" searchDefault="Address" @map-init="mapInit" @map-click="getLatLon" @map-zoomend="toggleLegendTitle" @map-viewNationwide="viewNationwide"></nb-map>
+    <nb-map class="col-xs-12 col-sm-12 col-md-7 col-lg-8" mapType="location" searchType="location" searchDefault="Address" @map-init="mapInit" @map-click="getLatLon" @map-zoomend="mapZoomEnd" @map-viewNationwide="viewNationwide" @map-dragend="mapDragEnd"></nb-map>
     <nb-map-sidebar class="map-sidebar col-xs-12 col-sm-12 col-md-5 col-lg-4">
       <h2 class="sub-title" slot="sidebar-title"><b>All Providers Reporting Service</b></h2>
       <p v-if="censusBlock != ''" slot="sidebar-description">Census block ID: {{ censusBlock }}</p>
       <div class="map-legend" slot="map-legend">
-        <h5 v-if="!togLegendTitle"><b>Number of Broadband Providers</b></h5>
-        <h5 v-if="togLegendTitle"><b>Population-Weighted Average Number of Providers</b></h5>
+        <h5><b>Number of Fixed Residential Broadband Providers</b></h5>
         <div class="legend-gradient"></div>
         <div class="legend-keys">
           <ul>

@@ -64,6 +64,7 @@ export default {
     EventHub.$on('removeLayers', (propertyID, removeAll) => this.removeLayers(propertyID, removeAll))
   },
   destroyed () {
+    EventHub.$off('updateAddrSearch')
     EventHub.$off('updateMapSettings')
     EventHub.$off('removeLayers')
   },
@@ -117,12 +118,18 @@ export default {
         this.updateTechSpeed(this.$route.query.selectedTech, this.$route.query.selectedSpeed)
       }
     },
-    updateURLParams () {
+    updateURLParams (event) {
       let routeQueryParams = {}
 
       // Get existing route query parameters
       let routeQuery = this.$route.query
 
+      // Remove place_name param when map clicked
+      if (event !== undefined) {
+        if (event.hasOwnProperty('type') && event.type === 'click') {
+          delete routeQuery.place_name
+        }
+      }
       // Get map zoom level
       // let zoomLevel = this.Map.getZoom()
 
@@ -163,7 +170,13 @@ export default {
       // Get FIPS
       this.getFIPS(this.lat, this.lon)
 
-      this.updateURLParams()
+      // Remove vlat, vlon param when map clicked
+      if (this.$route.query.vlat) {
+        delete this.$route.query.vlat
+        delete this.$route.query.vlon
+      }
+
+      this.updateURLParams(event)
     },
     getFIPS (lat, lon) { // Call block API and expect FIPS and bounding box in response
       const blockAPI = process.env.BLOCK_API
@@ -221,6 +234,13 @@ export default {
       // Highlight the selected block
       this.Map.setFilter('block-highlighted', ['==', 'block_fips', fipsCode])
       this.Map.setFilter('xlarge-blocks-highlighted', ['==', 'geoid10', fipsCode])
+
+      // Center map based on view lat, lon
+      if (this.isValidLatLon(this.$route.query.vlat, this.$route.query.vlon)) {
+        this.Map.jumpTo({
+          center: [this.$route.query.vlon, this.$route.query.vlat]
+        })
+      }
     },
     fetchProviderData (response) {
       let fipsCode = response.data.Block.FIPS
@@ -286,7 +306,7 @@ export default {
 
       this.clearProviderTable()
 
-      this.$router.push({
+      this.$router.replace({
         name: 'LocationSummary',
         query: {
           selectedTech: routeQuery.selectedTech,
@@ -296,6 +316,30 @@ export default {
 
       // Hide alert message for no providers
       this.noProviders = false
+    },
+    mapDragEnd (event) { // When map drag event ends, update URL with vlat, vlon
+      let mapCenter = this.Map.getCenter()
+
+      let routeQueryParams = {}
+
+      // Get existing route query parameters
+      let routeQuery = this.$route.query
+
+      // Add routeQuery properties to routeQueryParams
+      Object.keys(routeQuery).map(property => {
+        routeQueryParams[property] = routeQuery[property]
+      })
+
+      routeQueryParams.vlat = mapCenter.lat.toString()
+      routeQueryParams.vlon = mapCenter.lng.toString()
+
+      // Only update URL fragment when block lat, lon exist
+      if (routeQuery.lat && routeQuery.lon) {
+        this.$router.replace({
+          name: 'LocationSummary',
+          query: routeQueryParams
+        })
+      }
     }
   },
   watch: {

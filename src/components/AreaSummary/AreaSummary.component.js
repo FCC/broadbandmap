@@ -9,15 +9,20 @@ import StackedBarChart from './StackedBarChart'
 import EventHub from '../../_mixins/EventHub.js'
 import { urlValidation } from '../../_mixins/urlValidation.js'
 import { updateMapLayers } from '../../_mixins/map-update-layers.js'
+import { utility } from '../../_mixins/utilities.js'
 
 export default {
   name: 'AreaSummary',
   components: { Carousel, Slide, Spinner, nbMap, nbMapSidebar, StackedBarChart },
   props: [],
-  mixins: [urlValidation, updateMapLayers],
+  mixins: [urlValidation, updateMapLayers, utility],
   data () {
     return {
       socrataData: [],
+      urbanTotal: 0,
+      ruralTotal: 0,
+      nonTribalTotal: 0,
+      TribalTotal: 0,
       showCharts: false,
       settlementType: 'Settlement Type',
       popChartData: {
@@ -354,7 +359,30 @@ export default {
         for (let i = 0; i < 4; i++) {
           chartData.datasets[i].data[li] = (100.0 * chartData.datasets[i].data[li] / (1.0 * labelTotalPop)).toFixed(2)
         }
+
+        // Display Urban, Rural totals in chart slide
+        if (label_field === 'urban_rural') {
+          if (label === 'U') {
+            this.urbanTotal = this.formatNumberCommas(labelTotalPop)
+          }
+
+          if (label === 'R') {
+            this.ruralTotal = this.formatNumberCommas(labelTotalPop)
+          }
+        }
+
+        // Display Non-tribal, Tribal totals in chart slide
+        if (label_field === 'tribal_non') {
+          if (label === 'N') {
+            this.nonTribalTotal = this.formatNumberCommas(labelTotalPop)
+          }
+
+          if (label === 'T') {
+            this.tribalTotal = this.formatNumberCommas(labelTotalPop)
+          }
+        }
       }
+
       return chartData
     },
     calculatepopChartData () {

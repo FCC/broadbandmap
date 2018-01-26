@@ -36,16 +36,16 @@ const router = new Router({
       meta: { title: 'Area Summary' }
     },
     {
-      path: '/provider-detail',
-      name: 'ProviderDetail',
-      component: ProviderDetail,
-      meta: { title: 'Provider Detail' }
-    },
-    {
       path: '/area-comparison',
       name: 'AreaComparison',
       component: AreaComparison,
       meta: { title: 'Area Comparison' }
+    },
+    {
+      path: '/provider-detail',
+      name: 'ProviderDetail',
+      component: ProviderDetail,
+      meta: { title: 'Provider Detail' }
     },
     {
       path: '/data-download',
@@ -74,6 +74,13 @@ const router = new Router({
     // Make the page scroll to top when route changes
     if (to.name !== from.name) {
       return { x: 0, y: 0 }
+    }
+
+    // Handle anchor links
+    if (to.hash) {
+      return {
+        selector: to.hash
+      }
     }
   }
 })
