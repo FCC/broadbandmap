@@ -1,7 +1,12 @@
 @import "../../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/_type.scss";
 
 
+
 /* FCC Styles */
+
+body {
+  line-height: 1.6em
+}
 
 a {
   color: #2c75d6;
@@ -39,12 +44,12 @@ h1.emphasis {
   }
 }
 
-h2, .beta {
-    line-height: 1.1428571429;
-    font-weight: 300;
-    color: #1d2b3e;
-    font-size: 2em;
-    // margin: 0 0 15px 0;
+h2,
+.beta {
+  line-height: 1.1428571429;
+  font-weight: 300;
+  color: #1d2b3e;
+  font-size: 2em; // margin: 0 0 15px 0;
 }
 
 h2.subheader {
@@ -87,7 +92,8 @@ legend.h3 {
   font-weight: 300;
 }
 
-h4, .h4 {
+h4,
+.h4 {
   font-size: 1.0625em;
   font-weight: 700;
   margin: 1.15em 0;
@@ -98,9 +104,6 @@ h4, .h4 {
   font-weight: normal;
 }
 
-p {
-  line-height: 1.6em
-}
 
 /* App Theme */
 

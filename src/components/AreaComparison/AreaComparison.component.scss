@@ -7,21 +7,36 @@
     content: " ";
     display: table;
   }
-  p {
-    margin-bottom: 5px;
-  }
-  .btns {
-    float: none;
-    margin-top: 0px;
-    margin-left: 1px;
-    @media(min-width: 992px) {
-      float: left;
-      margin-top: 27px;
-    }
-  }
+
   @media(min-width: 992px) {
     padding-bottom: 10px;
   }
+
+  label {
+    font-weight: normal;
+  }
+
+  .search-state {
+    margin-bottom: 0;
+  }
+}
+
+.form-group {
+  margin-right: 10px;
+  vertical-align: bottom;
+  p {
+    margin-bottom: 5px;
+  }
+}
+
+.btn-primary {
+  margin: -1px 20px 0 0;
+}
+
+.dropdown .btn {
+  font-size: 18px;
+  height: 46px;
+  margin-right: -1px;
 }
 
 .techSettings {
@@ -40,43 +55,9 @@
   }
 }
 
-.input-geography,
-.input-state {
-  float: none;
-  margin: 0 15px 15px 0;
-  width: 100%;
-  @media(min-width: 992px) {
-    float: left;
-  }
+.alert-error {
+  margin-top: 0;
 }
-
-.input-geography {
-  @media(min-width: 220px) {
-    max-width: 135px;
-  }
-}
-
-.input-state {
-  @media(min-width: 480px) {
-    width: 300px;
-  }
-}
-
-.input-group-lg {}
-
-.btn-primary {
-  margin-right: 15px;
-}
-
-.dropdown .btn {
-  // border: none;
-  font-size: 18px;
-  height: 46px;
-  margin-right: -1px;
-}
-
-
-
 
 
 /* Download and about links */
@@ -104,9 +85,6 @@
     top: 3px;
   }
 }
-
-
-
 
 
 /* Search results table */
@@ -137,8 +115,6 @@
 .table-results {
   margin: 0 15px;
 }
-
-
 
 
 
@@ -173,12 +149,6 @@
     border: none !important;
   }
 }
-
-
-
-
-
-
 
 
 /* Spinner */
