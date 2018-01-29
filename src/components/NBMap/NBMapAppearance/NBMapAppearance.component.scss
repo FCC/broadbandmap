@@ -1,0 +1,37 @@
+h3 {
+  margin: 0 0 .6em;
+}
+
+legend {
+  font-size: 14px;
+  font-weight: 700;
+  margin-bottom: 0;
+  border-bottom: none;
+}
+
+.row.settings {
+  .col-sm-6 {
+    float: left;
+    width: 50%;
+  }
+}
+
+label {
+	display: block;
+}
+
+.slider {
+  display: inline-block;
+  margin-right: 15px;
+  vertical-align: middle;
+  width: 200px;
+}
+
+.slider-output {
+  display: inline-block;
+  vertical-align: middle;
+  width: 105px;
+  input {
+  	text-align: right;
+  }
+}
