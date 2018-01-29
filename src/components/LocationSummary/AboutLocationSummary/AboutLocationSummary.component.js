@@ -7,9 +7,9 @@ export default {
   mixins: [],
   props: [],
   mounted () {
-    EventHub.$on('openAboutLocSummary', function () {
+    EventHub.$on('openAboutLocSummary', () => {
       this.showModal = true
-    }.bind(this))
+    })
   },
   destroyed () {
     EventHub.$off('openAboutLocSummary')

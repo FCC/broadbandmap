@@ -17,7 +17,8 @@ export const updateMapLayers = {
       selectedSpeed: '',
       technologies: technologies,
       tech: '',
-      speed: ''
+      speed: '',
+      mapOpacity: 1
     }
   },
   methods: {
@@ -66,7 +67,8 @@ export const updateMapLayers = {
             ],
             'default': '#ffffcc'
           },
-          'fill-outline-color': 'hsl(0, 1%, 46%)'
+          'fill-outline-color': 'hsl(0, 1%, 46%)',
+          'fill-opacity': vm.mapOpacity
         },
         'source-layer': ''
       }
@@ -80,6 +82,8 @@ export const updateMapLayers = {
 
       // Add layer to map
       vm.Map.addLayer(lyrStyle, layer.beforeLayer)
+
+      vm.updateOpacity(vm.mapOpacity * 100)
     },
     removeLayers (propertyID, removeAll) { // e.g. acfosw_25_3
       const vm = this
@@ -164,6 +168,19 @@ export const updateMapLayers = {
     },
     openMapSettings () {
       EventHub.$emit('openMapSettings')
+    },
+    updateOpacity (opacity) { // Update map layer opacity
+      this.mapOpacity = opacity / 100
+
+      // Loop through each map layer and adjust fill-opacity
+      for (var key in layersTechSpeed) {
+        let layer = layersTechSpeed[key]
+        let layerExists = this.Map.getLayer(layer.id)
+
+        if (layerExists) {
+          this.Map.setPaintProperty(layer.id, 'fill-opacity', this.mapOpacity)
+        }
+      }
     }
   }
 }

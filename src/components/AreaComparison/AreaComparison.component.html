@@ -20,44 +20,36 @@
     </div>
     <div class="row">
       <div class="col-sm-12">
-        <form class="search-geography">
-          <div class="alert alert-warning" role="alert" v-if="validationError">
+        <form class="search-geography form-inline">
+          <div class="alert alert-error" role="alert" v-if="validationError">
             <p>{{ validationError }}</p>
           </div>
           <div class="row">
             <div class="col-sm-12">
-              <div class="input-state">
-                <p><a href="#" @click.prevent="searchArea('Nationwide')">Search Nationwide</a> or <a href="#" @click.prevent="searchArea('state'); toggleSearchType('County')">enter a state</a></p>
-                <div class="input-group-lg">
-                  <Autocomplete class="search-state" ref="autocomplete" searchType="State" originPage="AreaComparison" placeholderText="Enter state" v-model="selectedState"></Autocomplete>
-                </div>
+              <div class="form-group">
+                <label for="addr"><a href="#" @click.prevent="searchArea('Nationwide')">Search Nationwide</a> or <a href="#" @click.prevent="searchArea('state'); toggleSearchType('County')">enter a state</a></label>
+                <Autocomplete class="search-state" ref="autocomplete" searchType="State" originPage="AreaComparison" placeholderText="Enter state" v-model="selectedState"></Autocomplete>
               </div>
-              <div class="input-geography">
+              <div class="form-group">
                 <p>Select area</p>
-                <div class="input-group input-group-lg">
-                  <div class="input-group-btn">
-                    <dropdown :disabled="refreshingDropdown">
-                      <button data-role="trigger" aria-expanded="false" class="btn btn-default dropdown-toggle" type="button">
-                        <span id="btn-label">{{ searchLabel }}</span> <span class="caret"></span>
-                      </button>
-                      <template slot="dropdown" @click="toggleSearchType">
-                        <li v-for="(value, key) in searchOptsList">
-                          <a href="#" @click.self.prevent="toggleSearchType(key)">{{ key }}</a>
-                        </li>
-                      </template>
-                    </dropdown>
-                  </div>
-                </div>
-              </div>
-              <div class="btns">
-                <button class="btn btn-lg btn-primary" type="button" @click.prevent="compareAreas">Compare</button>
-                <tooltip text="Table settings" trigger="hover" placement="right">
-                  <button class="btn-settings btn btn-default btn-lg" data-role="trigger" type="button" @click.prevent="openTableSettings">
-                    <span class="icon icon-cog"></span>
-                    <span class="sr-only">settings</span>
+                <dropdown :disabled="refreshingDropdown">
+                  <button data-role="trigger" aria-expanded="false" class="btn btn-default dropdown-toggle" type="button">
+                    <span id="btn-label">{{ searchLabel }}</span> <span class="caret"></span>
                   </button>
-                </tooltip>
+                  <template slot="dropdown" @click="toggleSearchType">
+                    <li v-for="(value, key) in searchOptsList">
+                      <a href="#" @click.self.prevent="toggleSearchType(key)">{{ key }}</a>
+                    </li>
+                  </template>
+                </dropdown>
               </div>
+              <button class="btn btn-lg btn-primary" type="button" @click.prevent="compareAreas">Compare</button>
+              <tooltip text="Table settings" trigger="hover" placement="right">
+                <button class="btn-settings btn btn-default btn-lg" data-role="trigger" type="button" @click.prevent="openTableSettings">
+                  <span class="icon icon-cog"></span>
+                  <span class="sr-only">settings</span>
+                </button>
+              </tooltip>              
             </div>
           </div>
         </form>

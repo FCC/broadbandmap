@@ -1,0 +1,82 @@
+/**
+ * Cross browser "<input type="range" />" reset
+ * Source: https://css-tricks.com/styling-cross-browser-compatible-range-inputs-css/
+ */
+input[type="range"] {
+  -webkit-appearance: none; /* Hides the slider so that custom slider can be made */
+  width: 100%; /* Specific width is required for Firefox. */
+  &::-webkit-slider-thumb {
+    -webkit-appearance: none;
+  }
+
+  &:focus {
+    outline: none; /* Removes the blue border. */
+  }
+
+  &::-ms-track {
+    width: 100%;
+    cursor: pointer;
+    background: transparent; /* Hides the slider so custom styles can be added */
+    border-color: transparent;
+    color: transparent;
+  }
+}
+
+
+/**
+ * You can't comma-separate the browser specific selectors, therefore we use a mixin.
+ */
+@mixin getTrackStyles($browser) {
+  &::#{$browser} {
+    height: .25rem;
+    margin: .875rem 0; // (2rem - .25rem) / 2
+    background: #ddd;
+    border: none;
+  }
+}
+
+@mixin getThumbStyles($browser) {
+  &::#{$browser} {
+    height: 1rem;
+    width: 1rem;
+    border: .25rem solid #ddd;
+    border-radius: 50%;
+    background: #fff;
+    
+    cursor: pointer;
+    
+    transition: all .3s;
+    @content;
+  }
+  
+  &:focus::#{$browser} {    
+    background: rgb(33, 150, 243);
+    
+    /** Workaround for semi transparent border. */
+    border-width: 0;
+    box-shadow: 0px 0px 0px .5rem rgba(33, 150, 243, .5);
+  }
+}
+
+input[type="range"] {
+  
+    @include getTrackStyles('-webkit-slider-runnable-track');
+    @include getTrackStyles('-moz-range-track');   
+  
+  @include getTrackStyles('-ms-track');
+
+  @include getThumbStyles('-webkit-slider-thumb') {
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+  
+  @include getThumbStyles('-moz-range-thumb') {
+    box-sizing: border-box;
+  }
+  
+  @include getThumbStyles('-ms-thumb') {
+    box-sizing: border-box;
+    transform: translateY(calc(.5rem - 50%));
+  }
+}

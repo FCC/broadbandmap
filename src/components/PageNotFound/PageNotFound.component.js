@@ -1,18 +1,8 @@
 export default {
   name: 'PageNotFound',
-  props: [],
-  mounted () {
-
-  },
-  data () {
-    return {
-
-    }
-  },
-  methods: {
-
-  },
   computed: {
-
+    requestPage () {
+      return this.$router.history.current.redirectedFrom.split('?')[0]
+    }
   }
 }

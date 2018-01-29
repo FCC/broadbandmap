@@ -28,31 +28,32 @@
         <div></div>
       </div>
       <div class="map-settings input-group-btn">
-        <tooltip text="Settings" trigger="hover" placement="bottom">
+        <tooltip text="Select Broadband" trigger="hover" placement="bottom">
           <button class="btn-settings btn btn-default btn-lg" type="button" @click.prevent="openMapSettings">
-            <span class="icon icon-cog" data-toggle="tooltip" data-placement="top" title="Map Settings"></span>
-            <span class="sr-only">Settings</span>              
+            <span class="icon icon-cog" data-toggle="tooltip" data-placement="top" title="Select Broadband"></span>
+            <span class="sr-only">Select Broadband</span>              
           </button>
         </tooltip>
+        <tooltip text="Map Appearance" trigger="hover" placement="bottom">
+            <button class="btn-settings btn btn-default btn-lg dropdown-toggle" data-role="trigger" @click.prevent="openMapAppearance" aria-haspopup="true" aria-expanded="false" type="button">
+              <span class="icon icon-sliders" data-toggle="tooltip" data-placement="top" title="Map Appearance"></span>
+              <span class="sr-only">Map Appearance</span>              
+            </button>
+          </tooltip>
         <!-- <dropdown :menu-right="true">
-          <tooltip text="Map settings" trigger="hover" placement="left">
+          <tooltip text="Map Appearance" trigger="hover" placement="right">
             <button class="btn-settings btn btn-default btn-lg dropdown-toggle" data-role="trigger" aria-haspopup="true" aria-expanded="false" type="button">
-              <span class="icon icon-cog" data-toggle="tooltip" data-placement="top" title="Map Settings"></span>
-              <span class="sr-only">Map settings</span>
+              <span class="icon icon-sliders" data-toggle="tooltip" data-placement="top" title="Map Appearance"></span>
+              <span class="sr-only">Map Appearance</span>
               <span class="caret"></span>
             </button>
           </tooltip>
           <template slot="dropdown">
             <li><a href="#" @click.prevent="openMapSettings">Select Broadband</a></li>
-            <li><a href="#">Appearance</a></li>
+            <li><a href="#" @click.prevent="openMapAppearance">Appearance</a></li>
             <li><a href="#">Controls</a></li>
           </template>
-        </dropdown> -->
-        <tooltip text="About this map" trigger="hover" placement="bottom">
-          <button class="btn btn-default btn-lg" type="button" @click.prevent="openAboutModal">
-            <span class="icon icon-info-circle"></span>
-          </button>
-        </tooltip>
+        </dropdown> -->        
       </div>
     </div>
   </div>
