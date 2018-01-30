@@ -183,8 +183,8 @@ export default {
           let lyrProvOther = Object.assign({}, layerStyle, layerProvOther)
 
           // Add layer to map
-          map.addLayer(lyrProvOther, 'block')
-          map.addLayer(lyrLargeProv, 'block')
+          map.addLayer(lyrProvOther, 'county')
+          map.addLayer(lyrLargeProv, 'county')
         })
       })
     },

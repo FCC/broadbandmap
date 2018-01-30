@@ -74,7 +74,6 @@ export default {
         attributionControl: false,
         center: [-94.96, 38.82],
         container: 'map-container',
-        logoPosition: 'bottom-left',
         maxZoom: 22,
         minZoom: 0,
         pitchWithRotate: false,
@@ -87,6 +86,11 @@ export default {
 
       // Add Controls to map
       this.addControls(map)
+
+      map.on('load', () => {
+        // Fix Mapbox wordmark display
+        document.querySelector('.mapboxgl-ctrl-bottom-left').firstChild.setAttribute('style', 'display: block')
+      })
 
       map.on('style.load', () => {
         // Reload the cartographic layers after base layer style change
