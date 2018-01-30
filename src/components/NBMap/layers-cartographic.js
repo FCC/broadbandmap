@@ -9,7 +9,7 @@ export const LayersCartographic = [
       url: 'mapbox://fcc.v1_county_carto'
     },
     type: 'line',
-    'source-layer': 'county_carto_2016',
+    'source-layer': 'county_carto_2016geojson',
     layout: {
       visibility: 'visible'
     },
@@ -26,7 +26,7 @@ export const LayersCartographic = [
       url: 'mapbox://fcc.v1_county_carto'
     },
     type: 'line',
-    'source-layer': 'county_carto_2016',
+    'source-layer': 'county_carto_2016geojson',
     layout: {
       visibility: 'visible'
     },
@@ -34,7 +34,7 @@ export const LayersCartographic = [
       'line-color': '#dd1ee4',
       'line-width': 4
     },
-    'filter': ['in', 'geoid', '']
+    'filter': ['in', 'GEOID', '']
   },
   {
     id: 'state',
@@ -67,6 +67,6 @@ export const LayersCartographic = [
       'line-color': '#dd1ee4',
       'line-width': 4
     },
-    'filter': ['in', 'geoid', '']
+    'filter': ['in', 'GEOID', '']
   }
 ]

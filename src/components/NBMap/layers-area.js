@@ -4,7 +4,6 @@ import { LayersCartographic } from './layers-cartographic.js'
 
 export const LayersArea = [
   ...LayersCartographic,
-
   {
     id: 'place-highlighted',
     source: {
@@ -20,9 +19,8 @@ export const LayersArea = [
       'line-color': '#dd1ee4',
       'line-width': 4
     },
-    'filter': ['in', 'geoid', '']
+    'filter': ['in', 'GEOID', '']
   },
-
   {
     id: 'cd-highlighted',
     source: {
@@ -38,9 +36,8 @@ export const LayersArea = [
       'line-color': '#dd1ee4',
       'line-width': 4
     },
-    'filter': ['in', 'geoid', '']
+    'filter': ['in', 'GEOID', '']
   },
-
   {
     id: 'tribal-highlighted',
     source: {
@@ -55,8 +52,7 @@ export const LayersArea = [
     paint: {
       'line-color': '#dd1ee4',
       'line-width': 4
-    },
-    'filter': ['in', 'geoid', '']
+    }
   },
   {
     id: 'cbsa-highlighted',
@@ -73,6 +69,6 @@ export const LayersArea = [
       'line-color': '#dd1ee4',
       'line-width': 4
     },
-    'filter': ['in', 'geoid', '']
+    'filter': ['in', 'GEOID', '']
   }
 ]
