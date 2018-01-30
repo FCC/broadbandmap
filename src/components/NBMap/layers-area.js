@@ -52,7 +52,8 @@ export const LayersArea = [
     paint: {
       'line-color': '#dd1ee4',
       'line-width': 4
-    }
+    },
+    'filter': ['in', 'GEOID', '']
   },
   {
     id: 'cbsa-highlighted',
