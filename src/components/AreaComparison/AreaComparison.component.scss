@@ -19,13 +19,13 @@
   .search-state {
     margin-bottom: 0;
   }
-}
 
-.form-group {
-  margin-right: 10px;
-  vertical-align: bottom;
-  p {
-    margin-bottom: 5px;
+  .form-group {
+    margin-right: 10px;
+    vertical-align: bottom;
+    p {
+      margin-bottom: 5px;
+    }
   }
 }
 
@@ -60,6 +60,7 @@
 }
 
 
+
 /* Download and about links */
 
 .nav-utility {
@@ -85,6 +86,7 @@
     top: 3px;
   }
 }
+
 
 
 /* Search results table */
@@ -115,6 +117,7 @@
 .table-results {
   margin: 0 15px;
 }
+
 
 
 
@@ -149,6 +152,7 @@
     border: none !important;
   }
 }
+
 
 
 /* Spinner */

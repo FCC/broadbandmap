@@ -1,5 +1,5 @@
 h3 {
-  margin: 0 0 .6em;
+  margin: 0 0 0.6em;
 }
 
 legend {
@@ -20,6 +20,8 @@ label {
   display: block;
 }
 
+/* Slider for map opacity */
+
 .slider {
   display: inline-block;
   margin-right: 15px;
@@ -35,6 +37,33 @@ label {
     text-align: right;
   }
 }
+
+/* vue-color map highlight color picker */
+.btn-selColor {
+  height: 20px;
+  width: 75px;
+}
+
+.vc-sketch {
+  width: 220px;
+}
+
+.vc-color {
+  background-color: #fff;
+  box-shadow: 0 0 2px rgba(0, 0, 0, 0.3), 0 4px 8px rgba(0, 0, 0, 0.3);
+  left: 14%;
+  position: absolute;
+  top: 25px;
+  z-index: 2;
+  .vc-chrome {
+    box-shadow: none;
+  }
+  .btn-xs {
+    text-align: center;
+  }
+}
+
+/* Map theme color picker */
 
 .color-scheme {
   margin: 0;
@@ -53,9 +82,10 @@ label {
     width: 18px;
     display: block;
   }
-  &:hover, &:focus {
+  &:hover,
+  &:focus {
     .color-ramp-link {
-      display: block
+      display: block;
     }
   }
 }
@@ -64,7 +94,7 @@ label {
   display: none;
   position: absolute;
   background: rgba(0, 0, 0, 0.5);
-  color: #FFF;
+  color: #fff;
   width: 126px;
   text-transform: uppercase;
   font-size: 8px;
@@ -76,7 +106,7 @@ label {
   border-radius: 4px;
 }
 
-.color-ramp-link+.color-ramp-item1 {
+.color-ramp-link + .color-ramp-item1 {
   border-radius: 4px 0 0 4px;
 }
 
