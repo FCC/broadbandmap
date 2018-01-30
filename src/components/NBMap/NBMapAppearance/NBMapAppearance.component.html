@@ -1,4 +1,4 @@
-<modal v-model="showModal" title="Map Appearance" @hide="" ref="modal">
+<modal v-model="showModal" title="Map Appearance" @hide="hidePicker()" ref="modal">
   <form>
     <div class="row">
       <div class="col-sm-12">
@@ -8,24 +8,37 @@
         </div>
         <div class="slider-output">
           <div class="input-group">
-            <input id="transparency" class="form-control" type="number" name="transparency" min="0" max="100" v-model="opacity" size="3" @change="updateOpacity(opacity)" @keyup="updateOpacity(opacity)">
+            <input id="transparency" class="form-control" type="number" name="transparency" min="0" max="100" v-model="opacity" size="3" @change="updateOpacity(opacity)" @input="updateOpacity(opacity)">
             <span class="input-group-addon">%</span>
           </div>
         </div>
       </div>
     </div>
-     <div class="row">
+    <hr>
+    <div class="row">
       <div class="col-sm-12">
-        <h4>Set color scheme:</h4>
+        <h3 class="h4">Set map highlight color:</h3>
+        <button class="btn-selColor btn btn-default" type="button" @click.prevent.stop="showPicker()" :style="'background-color:' + hlColors.hex"><span class="sr-only">Select color</span></button>
+        <button class="btn btn-default btn-xs" @click.prevent="updateHighlight(true)">Use Default</button>
+        <div id="colorPicker" class="vc-color" v-bind:class="{hide: !displayPicker}">
+          <color-picker v-model="hlColors" @input="updateHighlight()" />
+        </div>
+        <br>
+      </div>
+    </div>
+    <hr>
+    <div class="row">
+      <div class="col-sm-12">
+        <h3 class="h4">Set color scheme:</h3>
         <ul class="color-scheme">
           <li class="color-ramp color-ramp-1">
             <button class="color-ramp-link">Selected</button>
             <span class="color-ramp-item1"></span>
             <span class="color-ramp-item2"></span>
             <span class="color-ramp-item3"></span>
-            <span class="color-ramp-item4"></span>            
+            <span class="color-ramp-item4"></span>
             <span class="color-ramp-item5"></span>
-            <span class="color-ramp-item6"></span>            
+            <span class="color-ramp-item6"></span>
             <span class="color-ramp-item7"></span>
           </li>
           <li class="color-ramp color-ramp-2">
@@ -33,9 +46,9 @@
             <span class="color-ramp-item1"></span>
             <span class="color-ramp-item2"></span>
             <span class="color-ramp-item3"></span>
-            <span class="color-ramp-item4"></span>            
+            <span class="color-ramp-item4"></span>
             <span class="color-ramp-item5"></span>
-            <span class="color-ramp-item6"></span>            
+            <span class="color-ramp-item6"></span>
             <span class="color-ramp-item7"></span>
           </li>
           <li class="color-ramp color-ramp-3">
@@ -43,9 +56,9 @@
             <span class="color-ramp-item1"></span>
             <span class="color-ramp-item2"></span>
             <span class="color-ramp-item3"></span>
-            <span class="color-ramp-item4"></span>            
+            <span class="color-ramp-item4"></span>
             <span class="color-ramp-item5"></span>
-            <span class="color-ramp-item6"></span>            
+            <span class="color-ramp-item6"></span>
             <span class="color-ramp-item7"></span>
           </li>
           <li class="color-ramp color-ramp-4">
@@ -53,13 +66,12 @@
             <span class="color-ramp-item1"></span>
             <span class="color-ramp-item2"></span>
             <span class="color-ramp-item3"></span>
-            <span class="color-ramp-item4"></span>            
+            <span class="color-ramp-item4"></span>
             <span class="color-ramp-item5"></span>
-            <span class="color-ramp-item6"></span>            
+            <span class="color-ramp-item6"></span>
             <span class="color-ramp-item7"></span>
-          </li>                              
+          </li>
         </ul>
-
       </div>
     </div>
   </form>

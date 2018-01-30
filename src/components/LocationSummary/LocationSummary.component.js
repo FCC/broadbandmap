@@ -64,12 +64,14 @@ export default {
     EventHub.$on('updateMapSettings', (selectedTech, selectedSpeed) => this.updateTechSpeed(selectedTech, selectedSpeed))
     EventHub.$on('removeLayers', (propertyID, removeAll) => this.removeLayers(propertyID, removeAll))
     EventHub.$on('updateOpacity', (opacity) => this.updateOpacity(opacity))
+    EventHub.$on('updateHighlight', (highlight) => this.updateHighlight(highlight))
   },
   destroyed () {
     EventHub.$off('updateAddrSearch')
     EventHub.$off('updateMapSettings')
     EventHub.$off('removeLayers')
     EventHub.$off('updateOpacity')
+    EventHub.$off('updateHighlight')
   },
   methods: {
     mapInit (map, mapOptions) {

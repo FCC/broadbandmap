@@ -1,42 +1,27 @@
 import { Modal } from 'uiv'
+import { Chrome } from 'vue-color'
+
 import EventHub from '../../../_mixins/EventHub.js'
 import { urlValidation } from '../../../_mixins/urlValidation.js'
-import { technologies, speeds } from '../../../_mixins/tech-speeds.js'
+import { mapSettings } from '../../../_mixins/map-settings.js'
 
 export default {
   name: 'MapAppearance',
-  components: { Modal },
+  components: { Modal, 'color-picker': Chrome },
   mixins: [urlValidation],
   props: [],
   data () {
     return {
       showModal: false,
-      technologies: technologies,
-      selectedTechCategories: ['a', 'c', 'f', 'w', 's', 'o'],
-      speeds: speeds,
-      selectedSpeed: '25_3',
-      selectedPropertyID: '',
-      opacity: 100
+      opacity: mapSettings.opacity,
+      hlColors: mapSettings.highlightColor,
+      displayPicker: false
     }
   },
   mounted () {
     EventHub.$on('openMapAppearance', () => {
       this.showModal = true
     })
-
-    // Get selectedTech and selectedSpeed values from URL query params
-    let tech = this.$route.query.selectedTech
-    let speed = this.$route.query.selectedSpeed
-
-    // If selectedTech is available in URL, use that value
-    if (this.isValidTech(tech)) {
-      this.selectedTechCategories = tech.toLowerCase().split('')
-    }
-
-    // If selectedSpeed is available in URL, use that value
-    if (this.isValidSpeed(speed)) {
-      this.selectedSpeed = speed
-    }
   },
   destroyed () {
     EventHub.$off('openMapAppearance', () => {
@@ -46,6 +31,29 @@ export default {
   methods: {
     updateOpacity (opacity) {
       EventHub.$emit('updateOpacity', opacity)
+    },
+    updateHighlight (useDefault) {
+      if (useDefault) {
+        this.hlColors = mapSettings.highlightColor
+      }
+
+      EventHub.$emit('updateHighlight', this.hlColors.hex)
+    },
+    showPicker () {
+      this.displayPicker = true
+      document.addEventListener('click', this.documentClick)
+    },
+    hidePicker () {
+      this.displayPicker = false
+      document.removeEventListener('click', this.documentClick)
+    },
+    documentClick (e) { // Hide color picker when clicking outside the color picker DIV
+      let el = document.getElementById('colorPicker')
+      let target = e.target
+
+      if (el !== target && !el.contains(target)) {
+        this.hidePicker()
+      }
     },
     saveSettings () {
       console.log('saveSettings')
