@@ -49,6 +49,7 @@ export default {
     EventHub.$on('removeLayers', (propertyID, removeAll) => this.removeLayers(propertyID, removeAll))
     EventHub.$on('updateOpacity', (opacity) => this.updateOpacity(opacity))
     EventHub.$on('updateHighlight', (highlight) => this.updateHighlight(highlight))
+    EventHub.$on('setWaterBlocks', (showWaterBlocks) => this.setWaterBlocks(showWaterBlocks))
 
     // Options for spinner graphic
     this.spinnerOpts = {
@@ -81,6 +82,7 @@ export default {
     EventHub.$off('removeLayers')
     EventHub.$off('updateOpacity')
     EventHub.$off('updateHighlight')
+    EventHub.$off('setWaterBlocks')
   },
   methods: {
     mapInit (map, mapOptions) {
@@ -286,6 +288,13 @@ export default {
             padding: 100
           })
 
+          // Center map based on view lat, lon
+          if (this.isValidLatLon(this.$route.query.vlat, this.$route.query.vlon)) {
+            this.Map.jumpTo({
+              center: [this.$route.query.vlon, this.$route.query.vlat]
+            })
+          }
+
           // Clear existing geography highlight
           if (this.prevGeogType !== undefined) {
             this.Map.setFilter(this.prevGeogType + '-highlighted', ['==', 'GEOID', ''])
@@ -429,11 +438,40 @@ export default {
           selectedSpeed: routeQuery.selectedSpeed
         }
       })
+    },
+    mapDragEnd (event) { // When map drag event ends, update URL with vlat, vlon
+      let mapCenter = this.Map.getCenter()
+
+      let routeQueryParams = {}
+
+      // Get existing route query parameters
+      let routeQuery = this.$route.query
+
+      // Add routeQuery properties to routeQueryParams
+      Object.keys(routeQuery).map(property => {
+        routeQueryParams[property] = routeQuery[property]
+      })
+
+      routeQueryParams.vlat = mapCenter.lat.toString()
+      routeQueryParams.vlon = mapCenter.lng.toString()
+
+      // Only update URL fragment when block lat, lon exist
+      if (routeQuery.bbox) {
+        this.$router.replace({
+          name: 'AreaSummary',
+          query: routeQueryParams
+        })
+      }
     }
   },
   watch: {
     // When query params change for the same route (URL slug)
     '$route' (to, from) {
+      // Prevent data reload if geoid hasn't changed
+      if (to.query.geoid === from.query.geoid) {
+        return
+      }
+
       // Dirty fix to prevent data not loading to diagrams on "clean" URL
       if (from.fullPath !== from.path) this.validateURL()
     }
