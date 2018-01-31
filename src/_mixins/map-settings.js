@@ -12,5 +12,6 @@ export const mapSettings = {
       a: 1
     },
     a: 1
-  }
+  },
+  showWaterBlocks: false
 }

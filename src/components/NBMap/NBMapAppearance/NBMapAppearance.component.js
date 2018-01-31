@@ -15,6 +15,7 @@ export default {
       showModal: false,
       opacity: mapSettings.opacity,
       hlColors: mapSettings.highlightColor,
+      showWaterBlocks: mapSettings.showWaterBlocks,
       displayPicker: false
     }
   },
@@ -39,11 +40,11 @@ export default {
 
       EventHub.$emit('updateHighlight', this.hlColors.hex)
     },
-    showPicker () {
+    showPicker () { // Show color picker
       this.displayPicker = true
       document.addEventListener('click', this.documentClick)
     },
-    hidePicker () {
+    hidePicker () { // Hide color picker
       this.displayPicker = false
       document.removeEventListener('click', this.documentClick)
     },
@@ -54,6 +55,9 @@ export default {
       if (el !== target && !el.contains(target)) {
         this.hidePicker()
       }
+    },
+    setWaterBlocks (e) {
+      EventHub.$emit('setWaterBlocks', !this.showWaterBlocks)
     },
     saveSettings () {
       console.log('saveSettings')

@@ -8,7 +8,7 @@
       </div>
     </div>
     <div class="row">
-      <nb-map class="col-xs-12 col-sm-12 col-md-7 col-lg-8" mapType="area" searchType="comparison" searchDefault="County" @map-init="mapInit" @map-zoomend="mapZoomEnd" @map-viewNationwide="viewNW"></nb-map>
+      <nb-map class="col-xs-12 col-sm-12 col-md-7 col-lg-8" mapType="area" searchType="comparison" searchDefault="County" @map-init="mapInit" @map-zoomend="mapZoomEnd" @map-viewNationwide="viewNW" @map-dragend="mapDragEnd"></nb-map>
       <nb-map-sidebar class="map-sidebar col-xs-12 col-sm-12 col-md-5 col-lg-4">
         <h2 class="sub-title" slot="sidebar-title"><b>{{ sidebarTitle }}</b></h2>
         <div id="spinner" slot="spinner"></div>

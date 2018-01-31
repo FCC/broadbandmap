@@ -20,7 +20,8 @@ export const updateMapLayers = {
       tech: '',
       speed: '',
       mapOpacity: 1,
-      mapHighlight: mapSettings.highlightColor.hex
+      mapHighlight: mapSettings.highlightColor.hex,
+      showWaterBlocks: mapSettings.showWaterBlocks
     }
   },
   methods: {
@@ -87,6 +88,7 @@ export const updateMapLayers = {
 
       vm.updateOpacity(vm.mapOpacity * 100)
       vm.updateHighlight(this.mapHighlight)
+      vm.setWaterBlocks(this.showWaterBlocks)
     },
     removeLayers (propertyID, removeAll) { // e.g. acfosw_25_3
       const vm = this
@@ -205,6 +207,19 @@ export const updateMapLayers = {
         layersHL.forEach(layer => {
           this.Map.setPaintProperty(layer.id, 'line-color', highlight)
         })
+      }
+    },
+    setWaterBlocks (showWaterBlocks) {
+      this.showWaterBlocks = showWaterBlocks
+
+      // Adjust fill-opacity for each tech/speed layer
+      for (var key in layersTechSpeed) {
+        let layer = layersTechSpeed[key]
+        let layerExists = this.Map.getLayer(layer.id)
+
+        if (layerExists) {
+          this.Map.setFilter(layer.id, ['!=', 'h2only_undev', this.showWaterBlocks ? 2 : 1])
+        }
       }
     }
   }
