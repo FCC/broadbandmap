@@ -218,7 +218,7 @@ export const updateMapLayers = {
         let layerExists = this.Map.getLayer(layer.id)
 
         if (layerExists) {
-          this.Map.setFilter(layer.id, ['!=', 'h2only_undev', this.showWaterBlocks ? 2 : 1])
+          this.Map.setFilter(layer.id, ['!=', 'h2only_undev', this.showWaterBlocks ? '' : 1])
         }
       }
     }
