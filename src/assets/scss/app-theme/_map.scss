@@ -26,9 +26,6 @@
   }
 }
 
-
-
-
 /* Search bar */
 
 .search-wrapper {
@@ -116,11 +113,6 @@
   }
 }
 
-
-
-
-
-
 /* Map Controls */
 
 .mapboxgl-ctrl-group {
@@ -158,10 +150,6 @@
     margin: 0;
   }
 }
-
-
-
-
 
 /*  Map Sidebar */
 
@@ -222,7 +210,9 @@
 
 .nav-links {
   .btn-link {
+    font-size: 20px;
     margin-left: 10px;
+    padding: 0;
     vertical-align: text-bottom;
   }
   .icon {
@@ -234,11 +224,6 @@
   border-top: 1px solid #ccc; // margin: 20px 0;
   padding: 20px 0;
 }
-
-
-
-
-
 
 /* Map Legend */
 
@@ -275,6 +260,67 @@ div.legend-gradient {
   width: 65%;
   height: 20px;
 }
+
+div.legend-gradient-a {
+  background: #ffffcc;
+  /* Old browsers */
+  background: -moz-linear-gradient(left, #ffffcc 0%, #a1dab4 12%, #41b6c4 24%, #225ea8 36%, #253494 48%, #081d58 70%, #000000 100%);
+  /* FF3.6-15 */
+  background: -webkit-linear-gradient(left, #ffffcc 0%, #a1dab4 12%, #41b6c4 24%, #225ea8 36%, #253494 48%, #081d58 70%, #000000 100%);
+  /* Chrome10-25,Safari5.1-6 */
+  background: linear-gradient(to right, #ffffcc 0%, #a1dab4 12%, #41b6c4 24%, #225ea8 36%, #253494 48%, #081d58 70%, #000000 100%);
+  /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffcc', endColorstr='#000000', GradientType=1);
+  /* IE6-9 */
+  width: 65%;
+  height: 20px;
+}
+
+div.legend-gradient-b {
+  background: #fbe6c5; 
+  /* Old browsers */
+  background: -moz-linear-gradient(left, #fbe6c5 0%, #f5ba98 12%, #dc7176 24%, #9c3f5d 36%, #70284a 48%, #4c1b2a 70%, #160107 100%); 
+  /* FF3.6-15 */
+  background: -webkit-linear-gradient(left, #fbe6c5 0%,#f5ba98 12%,#dc7176 24%,#9c3f5d 36%,#70284a 48%,#4c1b2a 70%,#160107 100%); 
+  /* Chrome10-25,Safari5.1-6 */
+  background: linear-gradient(to right, #fbe6c5 0%,#f5ba98 12%,#dc7176 24%,#9c3f5d 36%,#70284a 48%,#4c1b2a 70%,#160107 100%); 
+  /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#fbe6c5', endColorstr='#160107',GradientType=1 ); 
+  /* IE6-9 */
+  width: 65%;
+  height: 20px;
+}
+
+div.legend-gradient-c {
+  background: #ffd3df; 
+  /* Old browsers */
+  background: -moz-linear-gradient(left, #ffd3df 0%, #e597b9 12%, #ce78b3 24%, #ad5fad 36%, #834ba0 48%, #513487 70%, #0d0123 100%); 
+  /* FF3.6-15 */
+  background: -webkit-linear-gradient(left, #ffd3df 0%,#e597b9 12%,#ce78b3 24%,#ad5fad 36%,#834ba0 48%,#513487 70%,#0d0123 100%); 
+  /* Chrome10-25,Safari5.1-6 */
+  background: linear-gradient(to right, #ffd3df 0%,#e597b9 12%,#ce78b3 24%,#ad5fad 36%,#834ba0 48%,#513487 70%,#0d0123 100%); 
+  /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffd3df', endColorstr='#0d0123',GradientType=1 ); 
+  /* IE6-9 */
+  width: 65%;
+  height: 20px;
+}
+
+div.legend-gradient-d {
+  background: #fedfa1; 
+  /* Old browsers */
+  background: -moz-linear-gradient(left, #fedfa1 0%, #ceaf4d 12%, #aa9a2f 24%, #808716 36%, #507604 48%, #005900 70%, #001b00 100%); 
+  /* FF3.6-15 */
+  background: -webkit-linear-gradient(left, #fedfa1 0%,#ceaf4d 12%,#aa9a2f 24%,#808716 36%,#507604 48%,#005900 70%,#001b00 100%); 
+  /* Chrome10-25,Safari5.1-6 */
+  background: linear-gradient(to right, #fedfa1 0%,#ceaf4d 12%,#aa9a2f 24%,#808716 36%,#507604 48%,#005900 70%,#001b00 100%); 
+  /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#fedfa1', endColorstr='#001b00',GradientType=1 ); 
+  /* IE6-9 */
+  width: 65%;
+  height: 20px;
+}
+
 
 div.legend-keys {
   width: 65%;

@@ -5,6 +5,7 @@ import axios from 'axios'
 import nbMap from '../NBMap/'
 import nbMapSidebar from '../NBMap/NBMapSidebar/'
 import StackedBarChart from './StackedBarChart'
+import MapAppearance from '@/components/NBMap/NBMapAppearance/'
 
 import EventHub from '../../_mixins/EventHub.js'
 import { urlValidation } from '../../_mixins/urlValidation.js'
@@ -13,7 +14,7 @@ import { utility } from '../../_mixins/utilities.js'
 
 export default {
   name: 'AreaSummary',
-  components: { Carousel, Slide, Spinner, nbMap, nbMapSidebar, StackedBarChart },
+  components: { Carousel, Slide, Spinner, nbMap, nbMapSidebar, MapAppearance, StackedBarChart },
   props: [],
   mixins: [urlValidation, updateMapLayers, utility],
   data () {
@@ -46,6 +47,8 @@ export default {
     EventHub.$on('updateGeogSearch', this.updateURLParams)
     EventHub.$on('updateMapSettings', (selectedTech, selectedSpeed) => this.updateTechSpeed(selectedTech, selectedSpeed))
     EventHub.$on('removeLayers', (propertyID, removeAll) => this.removeLayers(propertyID, removeAll))
+    EventHub.$on('updateOpacity', (opacity) => this.updateOpacity(opacity))
+    EventHub.$on('updateHighlight', (highlight) => this.updateHighlight(highlight))
 
     // Options for spinner graphic
     this.spinnerOpts = {
@@ -76,6 +79,8 @@ export default {
   destroyed () {
     EventHub.$off('updateMapSettings')
     EventHub.$off('removeLayers')
+    EventHub.$off('updateOpacity')
+    EventHub.$off('updateHighlight')
   },
   methods: {
     mapInit (map, mapOptions) {
@@ -283,11 +288,12 @@ export default {
 
           // Clear existing geography highlight
           if (this.prevGeogType !== undefined) {
-            this.Map.setFilter(this.prevGeogType + '-highlighted', ['==', 'geoid', ''])
+            this.Map.setFilter(this.prevGeogType + '-highlighted', ['==', 'GEOID', ''])
           }
 
           // Highlight the selected geography type based on geoid
-          this.Map.setFilter(geogType + '-highlighted', ['==', 'geoid', geoid])
+          this.geogHighlight = geogType + '-highlighted'
+          this.Map.setFilter(this.geogHighlight, ['==', 'GEOID', geoid])
           this.prevGeogType = geogType
         }
         .bind(this))

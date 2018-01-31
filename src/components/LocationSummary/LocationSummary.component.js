@@ -2,6 +2,7 @@ import axios from 'axios'
 
 import nbMap from '../NBMap/'
 import nbMapSidebar from '../NBMap/NBMapSidebar/'
+import MapAppearance from '@/components/NBMap/NBMapAppearance/'
 
 import EventHub from '../../_mixins/EventHub.js'
 import { urlValidation } from '../../_mixins/urlValidation.js'
@@ -9,7 +10,7 @@ import { updateMapLayers } from '../../_mixins/map-update-layers.js'
 
 export default {
   name: 'LocationSummary',
-  components: { axios, nbMap, nbMapSidebar },
+  components: { axios, nbMap, nbMapSidebar, MapAppearance },
   mixins: [urlValidation, updateMapLayers],
   data () {
     return {
@@ -62,11 +63,15 @@ export default {
     EventHub.$on('updateAddrSearch', this.updateURLParams)
     EventHub.$on('updateMapSettings', (selectedTech, selectedSpeed) => this.updateTechSpeed(selectedTech, selectedSpeed))
     EventHub.$on('removeLayers', (propertyID, removeAll) => this.removeLayers(propertyID, removeAll))
+    EventHub.$on('updateOpacity', (opacity) => this.updateOpacity(opacity))
+    EventHub.$on('updateHighlight', (highlight) => this.updateHighlight(highlight))
   },
   destroyed () {
     EventHub.$off('updateAddrSearch')
     EventHub.$off('updateMapSettings')
     EventHub.$off('removeLayers')
+    EventHub.$off('updateOpacity')
+    EventHub.$off('updateHighlight')
   },
   methods: {
     mapInit (map, mapOptions) {

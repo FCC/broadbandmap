@@ -1,0 +1,211 @@
+h3 {
+  margin: 0 0 0.6em;
+}
+
+legend {
+  font-size: 14px;
+  font-weight: 700;
+  margin-bottom: 0;
+  border-bottom: none;
+}
+
+.row.settings {
+  .col-sm-6 {
+    float: left;
+    width: 50%;
+  }
+}
+
+label {
+  display: block;
+}
+
+/* Slider for map opacity */
+
+.slider {
+  display: inline-block;
+  margin-right: 15px;
+  vertical-align: middle;
+  width: 200px;
+}
+
+.slider-output {
+  display: inline-block;
+  vertical-align: middle;
+  width: 105px;
+  input {
+    text-align: right;
+  }
+}
+
+/* vue-color map highlight color picker */
+.btn-selColor {
+  height: 20px;
+  width: 75px;
+}
+
+.vc-sketch {
+  width: 220px;
+}
+
+.vc-color {
+  background-color: #fff;
+  box-shadow: 0 0 2px rgba(0, 0, 0, 0.3), 0 4px 8px rgba(0, 0, 0, 0.3);
+  left: 14%;
+  position: absolute;
+  top: 25px;
+  z-index: 2;
+  .vc-chrome {
+    box-shadow: none;
+  }
+  .btn-xs {
+    text-align: center;
+  }
+}
+
+/* Map theme color picker */
+
+.color-scheme {
+  margin: 0;
+  padding: 0;
+  li {
+    float: left;
+    list-style-type: none;
+    margin: 0 15px 0 0;
+  }
+}
+
+.color-ramp {
+  span {
+    float: left;
+    height: 24px;
+    width: 18px;
+    display: block;
+  }
+  &:hover,
+  &:focus {
+    .color-ramp-link {
+      display: block;
+    }
+  }
+}
+
+.color-ramp-link {
+  display: none;
+  position: absolute;
+  background: rgba(0, 0, 0, 0.5);
+  color: #fff;
+  width: 126px;
+  text-transform: uppercase;
+  font-size: 8px;
+  transition: all 0.1s ease;
+  border: 0;
+  margin: 0;
+  letter-spacing: 1px;
+  height: 24px;
+  border-radius: 4px;
+}
+
+.color-ramp-link + .color-ramp-item1 {
+  border-radius: 4px 0 0 4px;
+}
+
+.color-ramp span:last-child {
+  border-radius: 0 4px 4px 0;
+}
+
+.color-ramp-1 {
+  .color-ramp-item1 {
+    background-color: #ffffcc;
+  }
+  .color-ramp-item2 {
+    background-color: #a1dab4;
+  }
+  .color-ramp-item3 {
+    background-color: #41b6c4;
+  }
+  .color-ramp-item4 {
+    background-color: #225ea8;
+  }
+  .color-ramp-item5 {
+    background-color: #253494;
+  }
+  .color-ramp-item6 {
+    background-color: #081d58;
+  }
+  .color-ramp-item7 {
+    background-color: #000000;
+  }
+}
+
+.color-ramp-2 {
+  .color-ramp-item1 {
+    background-color: #fbe6c5;
+  }
+  .color-ramp-item2 {
+    background-color: #f5ba98;
+  }
+  .color-ramp-item3 {
+    background-color: #dc7176;
+  }
+  .color-ramp-item4 {
+    background-color: #9c3f5d;
+  }
+  .color-ramp-item5 {
+    background-color: #70284a;
+  }
+  .color-ramp-item6 {
+    background-color: #4c1b2a;
+  }
+  .color-ramp-item7 {
+    background-color: #160107;
+  }
+}
+
+.color-ramp-3 {
+  .color-ramp-item1 {
+    background-color: #ffd3df;
+  }
+  .color-ramp-item2 {
+    background-color: #e597b9;
+  }
+  .color-ramp-item3 {
+    background-color: #ce78b3;
+  }
+  .color-ramp-item4 {
+    background-color: #ad5fad;
+  }
+  .color-ramp-item5 {
+    background-color: #834ba0;
+  }
+  .color-ramp-item6 {
+    background-color: #513487;
+  }
+  .color-ramp-item7 {
+    background-color: #0d0123;
+  }
+}
+
+.color-ramp-4 {
+  .color-ramp-item1 {
+    background-color: #fedfa1;
+  }
+  .color-ramp-item2 {
+    background-color: #ceaf4d;
+  }
+  .color-ramp-item3 {
+    background-color: #aa9a2f;
+  }
+  .color-ramp-item4 {
+    background-color: #808716;
+  }
+  .color-ramp-item5 {
+    background-color: #507604;
+  }
+  .color-ramp-item6 {
+    background-color: #005900;
+  }
+  .color-ramp-item7 {
+    background-color: #001b00;
+  }
+}

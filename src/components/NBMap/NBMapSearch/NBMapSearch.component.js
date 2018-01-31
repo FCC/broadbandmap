@@ -85,6 +85,9 @@ export default {
       } else {
         EventHub.$emit('openAboutAreaSummary')
       }
+    },
+    openMapAppearance () {
+      EventHub.$emit('openMapAppearance')
     }
   },
   computed: {

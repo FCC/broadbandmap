@@ -18,6 +18,11 @@
                 <a href="#"><span class="icon icon-cloud-download"></span><span class="sr-only">Download Data</span></a>
               </tooltip> -->
               <bookmark-link></bookmark-link>
+              <tooltip text="About this map" trigger="hover" placement="left">
+                <button class="btn btn-link" type="button" @click.prevent="openAboutModal">
+                  <span class="icon icon-info-circle"></span>
+                </button>
+              </tooltip>
             </div>
           </div>
         </div>
@@ -27,6 +32,5 @@
       <slot name="spinner"></slot>
       <slot name="charts"></slot>
     </section>
-    
   </aside>
 </div>

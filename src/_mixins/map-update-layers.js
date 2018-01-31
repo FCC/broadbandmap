@@ -4,6 +4,7 @@ import { Tooltip } from 'uiv'
 import EventHub from './EventHub.js'
 import { sourcesTechSpeed, layersTechSpeed } from '@/components/NBMap/layers-techSpeed.js'
 import { technologies } from './tech-speeds.js'
+import { mapSettings } from './map-settings.js'
 
 export const updateMapLayers = {
   components: { Tooltip },
@@ -17,7 +18,9 @@ export const updateMapLayers = {
       selectedSpeed: '',
       technologies: technologies,
       tech: '',
-      speed: ''
+      speed: '',
+      mapOpacity: 1,
+      mapHighlight: mapSettings.highlightColor.hex
     }
   },
   methods: {
@@ -66,7 +69,8 @@ export const updateMapLayers = {
             ],
             'default': '#ffffcc'
           },
-          'fill-outline-color': 'hsl(0, 1%, 46%)'
+          'fill-outline-color': 'hsl(0, 1%, 46%)',
+          'fill-opacity': vm.mapOpacity
         },
         'source-layer': ''
       }
@@ -80,6 +84,9 @@ export const updateMapLayers = {
 
       // Add layer to map
       vm.Map.addLayer(lyrStyle, layer.beforeLayer)
+
+      vm.updateOpacity(vm.mapOpacity * 100)
+      vm.updateHighlight(this.mapHighlight)
     },
     removeLayers (propertyID, removeAll) { // e.g. acfosw_25_3
       const vm = this
@@ -164,6 +171,41 @@ export const updateMapLayers = {
     },
     openMapSettings () {
       EventHub.$emit('openMapSettings')
+    },
+    updateOpacity (opacity) { // Update map layer opacity
+      this.mapOpacity = opacity / 100
+
+      // Adjust fill-opacity for each tech/speed layer
+      for (var key in layersTechSpeed) {
+        let layer = layersTechSpeed[key]
+        let layerExists = this.Map.getLayer(layer.id)
+
+        if (layerExists) {
+          this.Map.setPaintProperty(layer.id, 'fill-opacity', this.mapOpacity)
+        }
+      }
+    },
+    updateHighlight (highlight) { // Update map layer highlight color
+      this.mapHighlight = highlight
+
+      if (this.$route.name === 'LocationSummary') {
+        this.Map.setPaintProperty('block-highlighted', 'line-color', highlight)
+        this.Map.setPaintProperty('xlarge-blocks-highlighted', 'line-color', highlight)
+      }
+
+      if (this.$route.name === 'AreaSummary') {
+        // Filter map layers where layer id contains 'highlighted'
+        let layersHL = this.Map.getStyle().layers.filter(layer => {
+          if (layer.id.split('-')[1] === 'highlighted') {
+            return layer
+          }
+        })
+
+        // Set line-color of layers
+        layersHL.forEach(layer => {
+          this.Map.setPaintProperty(layer.id, 'line-color', highlight)
+        })
+      }
     }
   }
 }

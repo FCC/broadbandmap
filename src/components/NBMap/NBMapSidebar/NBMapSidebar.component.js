@@ -29,6 +29,13 @@ export default {
       this.toggleText = this.hidePane ? 'Expand sidebar' : 'Collapse sidebar'
 
       EventHub.$emit('toggleSidebar', this.hidePane)
+    },
+    openAboutModal () {
+      if (this.$route.name === 'LocationSummary') {
+        EventHub.$emit('openAboutLocSummary')
+      } else {
+        EventHub.$emit('openAboutAreaSummary')
+      }
     }
   },
   computed: {

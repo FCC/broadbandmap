@@ -1,5 +1,11 @@
 .map-search {
-	&.row {
-		margin-top: -2px;
-	}
+  &.row {
+    margin-top: -2px;
+  }
+}
+
+.btn-lg {
+  .caret {
+    margin-left: 5px;
+  }
 }
