@@ -41,44 +41,37 @@ export const layersTechSpeed = {
   '200': {
     id: 'dec2016_7nov17_200',
     source: '200',
-    beforeLayer: 'county',
-    'filter': ['!=', 'h2only_undev', 1]
+    beforeLayer: 'county'
   },
   '4': {
     id: 'dec2016_7nov17_4',
     source: '4_1',
-    beforeLayer: 'county',
-    'filter': ['!=', 'h2only_undev', 1]
+    beforeLayer: 'county'
   },
   '10': {
     id: 'dec2016_7nov17_10',
     source: '10_1',
-    beforeLayer: 'county',
-    'filter': ['!=', 'h2only_undev', 1]
+    beforeLayer: 'county'
   },
   '25': {
     id: 'dec2016_7nov17_25',
     source: '25_3',
-    beforeLayer: 'county',
-    'filter': ['!=', 'h2only_undev', 1]
+    beforeLayer: 'county'
   },
 
   '100': {
     id: 'dec2016_7nov17_100',
     source: '100_10',
-    beforeLayer: 'county',
-    'filter': ['!=', 'h2only_undev', 1]
+    beforeLayer: 'county'
   },
   '250': {
     id: 'dec2016_7nov17_250',
     source: '250_25',
-    beforeLayer: 'county',
-    'filter': ['!=', 'h2only_undev', 1]
+    beforeLayer: 'county'
   },
   '1000': {
     id: 'dec2016_7nov17_1000',
     source: '1000_100',
-    beforeLayer: 'county',
-    'filter': ['!=', 'h2only_undev', 1]
+    beforeLayer: 'county'
   }
 }

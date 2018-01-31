@@ -2,7 +2,21 @@
   <form>
     <div class="row">
       <div class="col-sm-12">
-        <label for="transparency">Set data layer transparency:</label>
+        <p><b>Layer options</b></p>
+        <div class="checkbox">
+          <input type="checkbox" name="waterBlocks" id="waterBlocks" value="option1" v-model="showWaterBlocks" @click="setWaterBlocks">
+          <label for="waterBlocks">Display water blocks <span class="icon icon-info-circle"></span></label>
+        </div>
+        <!-- <div class="checkbox">
+          <input type="checkbox" name="popBlocks" id="popBlocks" value="option1">
+          <label for="popBlocks">Display un-populated blocks/tracts <span class="icon icon-info-circle"></span></label>
+        </div> -->
+      </div>
+    </div>
+    <hr>
+    <div class="row">
+      <div class="col-sm-12">
+        <label for="transparency">Data layer transparency</label>
         <div class="slider">
           <input id="slider" name="slider" type="range" min="0" max="100" value="100" v-model="opacity" @change="updateOpacity(opacity)">
         </div>
@@ -17,7 +31,7 @@
     <hr>
     <div class="row">
       <div class="col-sm-12">
-        <h3 class="h4">Set map highlight color:</h3>
+        <h3 class="h4">Layer highlight color</h3>
         <button class="btn-selColor btn btn-default" type="button" @click.prevent.stop="showPicker()" :style="'background-color:' + hlColors.hex"><span class="sr-only">Select color</span></button>
         <button class="btn btn-default btn-xs" @click.prevent="updateHighlight(true)">Use Default</button>
         <div id="colorPicker" class="vc-color" v-bind:class="{hide: !displayPicker}">
@@ -29,7 +43,7 @@
     <hr>
     <div class="row">
       <div class="col-sm-12">
-        <h3 class="h4">Set color scheme:</h3>
+        <h3 class="h4">Color scheme</h3>
         <ul class="color-scheme">
           <li class="color-ramp color-ramp-1">
             <button class="color-ramp-link">Selected</button>
