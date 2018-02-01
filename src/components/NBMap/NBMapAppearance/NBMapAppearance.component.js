@@ -16,6 +16,7 @@ export default {
       opacity: mapSettings.opacity,
       hlColors: mapSettings.highlightColor,
       showWaterBlocks: mapSettings.showWaterBlocks,
+      showUnPopBlocks: mapSettings.showUnPopBlocks,
       displayPicker: false
     }
   },
@@ -30,8 +31,13 @@ export default {
     })
   },
   methods: {
-    updateOpacity (opacity) {
-      EventHub.$emit('updateOpacity', opacity)
+    setOpacity (opacity) {
+      if (opacity > 100 || opacity < 0 || opacity === '') {
+        opacity = 100
+        this.opacity = 100
+      }
+
+      EventHub.$emit('setOpacity', opacity)
     },
     updateHighlight (useDefault) {
       if (useDefault) {
