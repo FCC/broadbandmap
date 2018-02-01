@@ -47,7 +47,7 @@ export default {
     EventHub.$on('updateGeogSearch', this.updateURLParams)
     EventHub.$on('updateMapSettings', (selectedTech, selectedSpeed) => this.updateTechSpeed(selectedTech, selectedSpeed))
     EventHub.$on('removeLayers', (propertyID, removeAll) => this.removeLayers(propertyID, removeAll))
-    EventHub.$on('updateOpacity', (opacity) => this.updateOpacity(opacity))
+    EventHub.$on('setOpacity', (opacity) => this.setOpacity(opacity))
     EventHub.$on('updateHighlight', (highlight) => this.updateHighlight(highlight))
     EventHub.$on('setWaterBlocks', (showWaterBlocks) => this.setWaterBlocks(showWaterBlocks))
     EventHub.$on('setUnPopBlocks', (showUnPopBlocks) => this.setUnPopBlocks(showUnPopBlocks))
@@ -81,7 +81,7 @@ export default {
   destroyed () {
     EventHub.$off('updateMapSettings')
     EventHub.$off('removeLayers')
-    EventHub.$off('updateOpacity')
+    EventHub.$off('setOpacity')
     EventHub.$off('updateHighlight')
     EventHub.$off('setWaterBlocks')
     EventHub.$off('setUnPopBlocks')

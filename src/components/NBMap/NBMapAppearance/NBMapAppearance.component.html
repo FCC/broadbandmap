@@ -18,11 +18,11 @@
       <div class="col-sm-12">
         <label for="transparency">Data layer transparency</label>
         <div class="slider">
-          <input id="slider" name="slider" type="range" min="0" max="100" value="100" v-model="opacity" @change="updateOpacity(opacity)">
+          <input id="slider" name="slider" type="range" min="0" max="100" value="100" v-model="opacity" @change="setOpacity(opacity)">
         </div>
         <div class="slider-output">
           <div class="input-group">
-            <input id="transparency" class="form-control" type="number" name="transparency" min="0" max="100" v-model="opacity" size="3" @change="updateOpacity(opacity)" @input="updateOpacity(opacity)">
+            <input id="transparency" class="form-control" type="number" name="transparency" min="0" max="100" v-model="opacity" size="3" @input="setOpacity(opacity)">
             <span class="input-group-addon">%</span>
           </div>
         </div>
