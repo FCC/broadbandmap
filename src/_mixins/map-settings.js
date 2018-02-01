@@ -13,5 +13,6 @@ export const mapSettings = {
     },
     a: 1
   },
-  showWaterBlocks: false
+  showWaterBlocks: false,
+  showUnPopBlocks: false
 }

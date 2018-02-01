@@ -21,7 +21,8 @@ export const updateMapLayers = {
       speed: '',
       mapOpacity: 1,
       mapHighlight: mapSettings.highlightColor.hex,
-      showWaterBlocks: mapSettings.showWaterBlocks
+      showWaterBlocks: mapSettings.showWaterBlocks,
+      showUnPopBlocks: mapSettings.showUnPopBlocks
     }
   },
   methods: {
@@ -87,8 +88,9 @@ export const updateMapLayers = {
       vm.Map.addLayer(lyrStyle, layer.beforeLayer)
 
       vm.updateOpacity(vm.mapOpacity * 100)
-      vm.updateHighlight(this.mapHighlight)
-      vm.setWaterBlocks(this.showWaterBlocks)
+      vm.updateHighlight(vm.mapHighlight)
+      vm.setWaterBlocks(vm.showWaterBlocks)
+      vm.setUnPopBlocks(vm.showUnPopBlocks)
     },
     removeLayers (propertyID, removeAll) { // e.g. acfosw_25_3
       const vm = this
@@ -97,14 +99,10 @@ export const updateMapLayers = {
       this.removeAllLayers = removeAll
 
       // Loop through each layer and remove from map
-      for (var key in layersTechSpeed) {
-        let layer = layersTechSpeed[key]
-        let layerExists = vm.Map.getLayer(layer.id)
-
-        if (layerExists) {
-          vm.Map.removeLayer(layer.id)
-        }
-      }
+      let existLayers = this.layerExists()
+      existLayers.forEach(layer => {
+        vm.Map.removeLayer(layer.id)
+      })
 
       // Set selected Tech and Speed to empty when all layers are removed
       if (removeAll) {
@@ -178,14 +176,10 @@ export const updateMapLayers = {
       this.mapOpacity = opacity / 100
 
       // Adjust fill-opacity for each tech/speed layer
-      for (var key in layersTechSpeed) {
-        let layer = layersTechSpeed[key]
-        let layerExists = this.Map.getLayer(layer.id)
-
-        if (layerExists) {
-          this.Map.setPaintProperty(layer.id, 'fill-opacity', this.mapOpacity)
-        }
-      }
+      let existLayers = this.layerExists()
+      existLayers.forEach(layer => {
+        this.Map.setPaintProperty(layer.id, 'fill-opacity', this.mapOpacity)
+      })
     },
     updateHighlight (highlight) { // Update map layer highlight color
       this.mapHighlight = highlight
@@ -211,16 +205,56 @@ export const updateMapLayers = {
     },
     setWaterBlocks (showWaterBlocks) {
       this.showWaterBlocks = showWaterBlocks
+      this.setLayerOpts()
+    },
+    setUnPopBlocks (showUnPopBlocks) {
+      this.showUnPopBlocks = showUnPopBlocks
+      this.setLayerOpts()
+    },
+    setLayerOpts (showWaterBlocks, showUnPopBlocks) {
+      // Filter tech/speed layers by water or unpopulated block
+      let existLayers = this.layerExists()
+      existLayers.forEach(layer => {
+        let filterArr1 = []
+        let filterArr2 = []
 
-      // Adjust fill-opacity for each tech/speed layer
+        if (!this.showUnPopBlocks && !this.showWaterBlocks) {
+          filterArr1 = ['!=', 'h2only_undev', 1]
+          filterArr2 = ['!=', 'h2only_undev', 2]
+        }
+
+        if (this.showUnPopBlocks && !this.showWaterBlocks) {
+          filterArr1 = ['!=', 'h2only_undev', '']
+          filterArr2 = ['!=', 'h2only_undev', 1]
+        }
+
+        if (!this.showUnPopBlocks && this.showWaterBlocks) {
+          filterArr1 = ['!=', 'h2only_undev', '']
+          filterArr2 = ['!=', 'h2only_undev', 2]
+        }
+
+        if (this.showUnPopBlocks && this.showWaterBlocks) {
+          filterArr1 = ['!=', 'h2only_undev', '']
+          filterArr2 = ['!=', 'h2only_undev', '']
+        }
+
+        this.Map.setFilter(layer.id, ['all', filterArr1, filterArr2])
+      })
+    },
+    layerExists () {
+      let layers = []
+
+      // Get the layers that are loaded in the map
       for (var key in layersTechSpeed) {
         let layer = layersTechSpeed[key]
         let layerExists = this.Map.getLayer(layer.id)
 
         if (layerExists) {
-          this.Map.setFilter(layer.id, ['!=', 'h2only_undev', this.showWaterBlocks ? 2 : 1])
+          layers.push(layer)
         }
       }
+
+      return layers
     }
   }
 }
