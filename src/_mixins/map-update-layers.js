@@ -87,7 +87,7 @@ export const updateMapLayers = {
       // Add layer to map
       vm.Map.addLayer(lyrStyle, layer.beforeLayer)
 
-      vm.updateOpacity(vm.mapOpacity * 100)
+      vm.setOpacity(vm.mapOpacity * 100)
       vm.updateHighlight(vm.mapHighlight)
       vm.setWaterBlocks(vm.showWaterBlocks)
       vm.setUnPopBlocks(vm.showUnPopBlocks)
@@ -172,7 +172,7 @@ export const updateMapLayers = {
     openMapSettings () {
       EventHub.$emit('openMapSettings')
     },
-    updateOpacity (opacity) { // Update map layer opacity
+    setOpacity (opacity) { // Update map layer opacity
       this.mapOpacity = opacity / 100
 
       // Adjust fill-opacity for each tech/speed layer
@@ -217,28 +217,34 @@ export const updateMapLayers = {
       existLayers.forEach(layer => {
         let filterArr1 = []
         let filterArr2 = []
+        let filterArr3 = []
 
-        if (!this.showUnPopBlocks && !this.showWaterBlocks) {
+        if (!this.showWaterBlocks && !this.showUnPopBlocks) {
           filterArr1 = ['!=', 'h2only_undev', 1]
           filterArr2 = ['!=', 'h2only_undev', 2]
+          filterArr3 = ['!=', 'is_populated', 'False']
         }
 
-        if (this.showUnPopBlocks && !this.showWaterBlocks) {
+        if (!this.showWaterBlocks && this.showUnPopBlocks) {
           filterArr1 = ['!=', 'h2only_undev', '']
           filterArr2 = ['!=', 'h2only_undev', 1]
+          // filterArr3 = ['!=', 'is_populated', 'False']
+          filterArr3 = ['!=', 'is_populated', '']
         }
 
-        if (!this.showUnPopBlocks && this.showWaterBlocks) {
+        if (this.showWaterBlocks && !this.showUnPopBlocks) {
           filterArr1 = ['!=', 'h2only_undev', '']
           filterArr2 = ['!=', 'h2only_undev', 2]
+          filterArr3 = ['!=', 'is_populated', 'False']
         }
 
-        if (this.showUnPopBlocks && this.showWaterBlocks) {
+        if (this.showWaterBlocks && this.showUnPopBlocks) {
           filterArr1 = ['!=', 'h2only_undev', '']
           filterArr2 = ['!=', 'h2only_undev', '']
+          filterArr3 = ['!=', 'is_populated', '']
         }
 
-        this.Map.setFilter(layer.id, ['all', filterArr1, filterArr2])
+        this.Map.setFilter(layer.id, ['all', filterArr1, filterArr2, filterArr3])
       })
     },
     layerExists () {
