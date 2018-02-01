@@ -4,13 +4,13 @@
       <div class="col-sm-12">
         <p><b>Layer options</b></p>
         <div class="checkbox">
-          <input type="checkbox" name="waterBlocks" id="waterBlocks" value="option1" v-model="showWaterBlocks" @click="setWaterBlocks">
-          <label for="waterBlocks">Display water blocks <span class="icon icon-info-circle"></span></label>
+          <input type="checkbox" name="waterBlocks" id="waterBlocks" v-model="showWaterBlocks" @click="setWaterBlocks(showWaterBlocks)">
+          <label for="waterBlocks">Display water only blocks</label>
         </div>
-        <!-- <div class="checkbox">
-          <input type="checkbox" name="popBlocks" id="popBlocks" value="option1">
-          <label for="popBlocks">Display un-populated blocks/tracts <span class="icon icon-info-circle"></span></label>
-        </div> -->
+        <div class="checkbox">
+          <input type="checkbox" name="unPopBlocks" id="unPopBlocks" v-model="showUnPopBlocks" @click="setUnPopBlocks(showUnPopBlocks)">
+          <label for="unPopBlocks">Display un-populated blocks/tracts</label>
+        </div>
       </div>
     </div>
     <hr>

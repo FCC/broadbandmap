@@ -56,8 +56,11 @@ export default {
         this.hidePicker()
       }
     },
-    setWaterBlocks (e) {
+    setWaterBlocks () {
       EventHub.$emit('setWaterBlocks', !this.showWaterBlocks)
+    },
+    setUnPopBlocks () {
+      EventHub.$emit('setUnPopBlocks', !this.showUnPopBlocks)
     },
     saveSettings () {
       console.log('saveSettings')

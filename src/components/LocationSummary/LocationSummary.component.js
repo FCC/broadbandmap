@@ -66,6 +66,7 @@ export default {
     EventHub.$on('updateOpacity', (opacity) => this.updateOpacity(opacity))
     EventHub.$on('updateHighlight', (highlight) => this.updateHighlight(highlight))
     EventHub.$on('setWaterBlocks', (showWaterBlocks) => this.setWaterBlocks(showWaterBlocks))
+    EventHub.$on('setUnPopBlocks', (showUnPopBlocks) => this.setUnPopBlocks(showUnPopBlocks))
   },
   destroyed () {
     EventHub.$off('updateAddrSearch')
@@ -74,6 +75,7 @@ export default {
     EventHub.$off('updateOpacity')
     EventHub.$off('updateHighlight')
     EventHub.$off('setWaterBlocks')
+    EventHub.$off('setUnPopBlocks')
   },
   methods: {
     mapInit (map, mapOptions) {
