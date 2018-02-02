@@ -71,7 +71,7 @@ export default {
 
       // Define default map options
       this.mapOptions = {
-        attributionControl: false,
+        attributionControl: true,
         center: [-94.96, 38.82],
         container: 'map-container',
         maxZoom: 22,
@@ -86,11 +86,6 @@ export default {
 
       // Add Controls to map
       this.addControls(map)
-
-      map.on('load', () => {
-        // Fix Mapbox wordmark display
-        document.querySelector('.mapboxgl-ctrl-bottom-left').firstChild.setAttribute('style', 'display: block')
-      })
 
       map.on('style.load', () => {
         // Reload the cartographic layers after base layer style change
@@ -113,11 +108,6 @@ export default {
           enableHighAccuracy: true
         },
         trackUserLocation: true
-      })
-
-      // Define Attribution Control
-      const attrControl = new mapboxgl.AttributionControl({
-        compact: true
       })
 
       // Define custom Nationwide control
@@ -151,7 +141,6 @@ export default {
       const layerSwitchControl = new LayerSwitchControl()
 
       // Add controls to map
-      map.addControl(attrControl, 'bottom-right')
       map.addControl(navControl, 'top-left')
       map.addControl(geoLocControl, 'top-left')
       map.addControl(nationwideBtnControl, 'top-left')
