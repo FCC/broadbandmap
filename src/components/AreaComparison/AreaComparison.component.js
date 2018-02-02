@@ -48,7 +48,7 @@ export default {
       rows: [],
       nwData: [],
       stateData: [],
-      searchType: 'County',
+      searchType: '', // Set to 'County' to show county table on page load
       refreshingDropdown: false,
       selectedTech: 'acfosw',
       selectedSpeed: '25_3',
@@ -437,6 +437,10 @@ export default {
 
           this.nwData = []
           this.nwData.push(rowData)
+
+          // Prevent other tables from displaying data on initial page load
+          this.rows = []
+          break
         } else if (lookupData === 'state') {
           // Populate State results table data
           let rowData = this.joinRows('state', this.$refs.autocomplete.typeaheadModel.name, rawData[rdi], totalPop)
