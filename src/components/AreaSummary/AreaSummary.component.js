@@ -469,11 +469,6 @@ export default {
   watch: {
     // When query params change for the same route (URL slug)
     '$route' (to, from) {
-      // Prevent data reload if geoid hasn't changed
-      if (to.query.geoid === from.query.geoid) {
-        return
-      }
-
       // Dirty fix to prevent data not loading to diagrams on "clean" URL
       if (from.fullPath !== from.path) this.validateURL()
     }
