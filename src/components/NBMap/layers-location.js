@@ -26,10 +26,10 @@ export const LayersLocation = [
     id: 'block-highlighted',
     source: {
       type: 'vector',
-      url: 'mapbox://fcc.9tcqhtt6'
+      url: 'mapbox://fcc.v1_block'
     },
     type: 'line',
-    'source-layer': 'nbm2_block2010geojson',
+    'source-layer': 'block2010geojson',
     layout: {
       visibility: 'visible'
     },
