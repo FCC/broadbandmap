@@ -29,7 +29,7 @@ export const LayersLocation = [
       url: 'mapbox://fcc.v1_block'
     },
     type: 'line',
-    'source-layer': 'block2010geojson',
+    'source-layer': 'block_2010geojson',
     layout: {
       visibility: 'visible'
     },
