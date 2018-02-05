@@ -75,21 +75,17 @@ export default {
       switch (this.searchType) {
         case 'Address':
           if (typeof this.typeaheadModel === 'object' && typeof this.typeaheadModel.id === 'string') {
-            // Create the URL
-            newURL = 'location-summary?lat=' + this.typeaheadModel.center[1].toFixed(6) + '&lon=' + this.typeaheadModel.center[0].toFixed(6) + '&place_name=' + encodeURIComponent(this.typeaheadModel.place_name)
-            this.$router.push(newURL)
-            EventHub.$emit('updateAddrSearch')
+            EventHub.$emit('searchByAddr', this.typeaheadModel)
           } else {
             // Call Modal component in app footer
             EventHub.$emit('openModal', 'No results found', 'Please enter and then select a valid U.S. address.')
           }
           break
         case 'Coordinates':
-          let coordinatesArray = this.typeaheadModel.split(',')
-          if (coordinatesArray.length === 2 && this.isValidLatLon(coordinatesArray[0], coordinatesArray[1])) {
-            newURL = 'location-summary?lat=' + coordinatesArray[0].trim() + '&lon=' + coordinatesArray[1].trim()
-            this.$router.push(newURL)
-            EventHub.$emit('updateAddrSearch')
+          // let coordinatesArray = this.typeaheadModel.split(',')
+          let coordinates = this.typeaheadModel.split(',')
+          if (coordinates.length === 2 && this.isValidLatLon(coordinates[0], coordinates[1])) {
+            EventHub.$emit('searchByCoords', coordinates)
           } else {
             // Call Modal component in app footer
             EventHub.$emit('openModal', 'No results found', 'Please enter valid coordinates in "latitude, longitude" format.')
