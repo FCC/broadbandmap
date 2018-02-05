@@ -1,3 +1,4 @@
+import { mapGetters, mapMutations } from 'vuex'
 import axios from 'axios'
 
 import nbMap from '../NBMap/'
@@ -14,6 +15,8 @@ export default {
   mixins: [urlValidation, updateMapLayers],
   data () {
     return {
+      mapView: {},
+      setMapPosition: false,
       censusBlock: '',
       providerColumns: [
         {
@@ -60,7 +63,13 @@ export default {
     }
   },
   mounted () {
-    EventHub.$on('updateAddrSearch', this.updateURLParams)
+    // Set block coords and map view to default
+    this.setBlock({})
+    this.setMapView({})
+
+    // EventHub.$on('searchByAddr', this.updateURLParams)
+    EventHub.$on('searchByAddr', (typeaheadModel) => this.searchByAddr(typeaheadModel))
+    EventHub.$on('searchByCoords', (coordinates) => this.searchByCoords(coordinates))
     EventHub.$on('updateMapSettings', (selectedTech, selectedSpeed) => this.updateTechSpeed(selectedTech, selectedSpeed))
     EventHub.$on('removeLayers', (propertyID, removeAll) => this.removeLayers(propertyID, removeAll))
     EventHub.$on('setOpacity', (opacity) => this.setOpacity(opacity))
@@ -69,7 +78,8 @@ export default {
     EventHub.$on('setUnPopBlocks', (showUnPopBlocks) => this.setUnPopBlocks(showUnPopBlocks))
   },
   destroyed () {
-    EventHub.$off('updateAddrSearch')
+    EventHub.$off('searchByAddr')
+    EventHub.$off('searchByCoords')
     EventHub.$off('updateMapSettings')
     EventHub.$off('removeLayers')
     EventHub.$off('setOpacity')
@@ -78,6 +88,20 @@ export default {
     EventHub.$off('setUnPopBlocks')
   },
   methods: {
+    ...mapGetters([
+      // Mount store getters to component scope
+      'getBroadband',
+      'getBlock',
+      'getMapView',
+      'getAddrSearch'
+    ]),
+    ...mapMutations([
+      // Mount store mutation functions
+      'setBroadband',
+      'setBlock',
+      'setMapView',
+      'setAddrSearch'
+    ]),
     mapInit (map, mapOptions) {
       this.Map = map
       this.mapOptions = mapOptions
@@ -86,8 +110,8 @@ export default {
         // If one or more technologies is selected, then reload the tech/speed layers when the base layer style is changed
         // Need to reload tech/speed layers so the labels will appear on top
         if (!this.removeAllLayers) {
-          let tech = this.$route.query.selectedTech
-          let speed = this.$route.query.selectedSpeed
+          let tech = this.$route.query.tech
+          let speed = this.$route.query.speed
 
           // If tech/speed query params are invalid, use default tech and speed
           if (!this.isValidTech(tech) || !this.isValidSpeed(speed)) {
@@ -96,96 +120,83 @@ export default {
             this.updateTechSpeed(tech.toLowerCase(), speed)
           }
         }
-        // Trigger reload of highlighted block when base layer style is changed
-        this.validateURL()
+
+        // Get the URL query params and update the map view
+        this.loadParamsFromUrl()
+        this.positionMapView()
       })
     },
-    validateURL () {
-      // If valid latitude and longitude, get the FIPS and highlight the census block
-      if (this.isValidLatLon(this.$route.query.lat, this.$route.query.lon)) {
-        this.getFIPS(this.$route.query.lat.trim(), this.$route.query.lon.trim())
+    searchByAddr (typeaheadModel) {
+      let lat = typeaheadModel.center[1].toFixed(6)
+      let lon = typeaheadModel.center[0].toFixed(6)
 
-      // If invalid lat or lon are passed in, remove from the query string
-      } else if (this.$route.query.lat !== undefined || this.$route.query.lon !== undefined) {
-        this.updateURLParams()
-      } else {
-        this.clearProviderTable()
+       // Reset the map view
+      this.setMapView({})
 
-        this.Map.easeTo({
-          center: this.mapOptions.center,
-          zoom: this.mapOptions.zoom
-        })
+      // Store the search query (place_name)
+      this.setAddrSearch({
+        place_name: typeaheadModel.place_name
+      })
 
-        this.updateURLParams()
+      // Store the location coords
+      this.setBlock({
+        lat: lat,
+        lon: lon
+      })
 
-        // Hide alert message for no providers
-        this.noProviders = false
-      }
+      // Update the URL with store params
+      this.updateURL()
 
-      // If all layers are removed, update tech/speed layers based on URL history
-      if (!this.removeAllLayers) {
-        this.updateTechSpeed(this.$route.query.selectedTech, this.$route.query.selectedSpeed)
-      }
+      // Get the block FIPS
+      this.getFIPS(lat, lon)
     },
-    updateURLParams (event) {
-      let routeQueryParams = {}
+    searchByCoords (coords) {
+      let lat = coords[0]
+      let lon = coords[1]
 
-      // Get existing route query parameters
-      let routeQuery = this.$route.query
+      // Reset address search
+      this.setAddrSearch({})
 
-      // Remove place_name param when map clicked
-      if (event !== undefined) {
-        if (event.hasOwnProperty('type') && event.type === 'click') {
-          delete routeQuery.place_name
-        }
-      }
-      // Get map zoom level
-      // let zoomLevel = this.Map.getZoom()
+      // Reset the map view
+      this.setMapView({})
 
-      // If lat is undefined get the value from URL param
-      if (this.lat === undefined || this.lon === undefined) {
-        if (this.isValidLatLon(this.$route.query.lat, this.$route.query.lon)) {
-          this.lat = this.$route.query.lat
-          this.lon = this.$route.query.lon
-        }
-      }
-
-      // Add routeQuery properties to routeQueryParams
-      Object.keys(routeQuery).map(property => {
-        routeQueryParams[property] = routeQuery[property]
+      // Store the block coords
+      this.setBlock({
+        lat: lat,
+        lon: lon
       })
 
-      // Add select tech, selected speed, and zoom to routeQueryParams
-      routeQueryParams.selectedTech = this.selectedTech
-      routeQueryParams.selectedSpeed = this.selectedSpeed
-      routeQueryParams.lat = this.lat
-      routeQueryParams.lon = this.lon
-      // routeQueryParams.zoom = zoomLevel
+      // Update the URL with store params
+      this.updateURL()
 
-      // Update URL fragment
-      this.$router.push({
-        name: 'LocationSummary',
-        query: routeQueryParams
-      })
-
-      // Reset lat, lon
-      this.lat = (function () { })()
-      this.lon = (function () { })()
+       // Get the block FIPS
+      this.getFIPS(lat, lon)
     },
     getLatLon (event) {  // Called when map is clicked ('map-click' event emitted by NBMap component)
       this.lat = event.lngLat.lat.toFixed(6)
       this.lon = event.lngLat.lng.toFixed(6)
 
-      // Get FIPS
+      // Get block FIPS
       this.getFIPS(this.lat, this.lon)
 
       // Remove vlat, vlon param when map clicked
-      if (this.$route.query.vlat) {
-        delete this.$route.query.vlat
-        delete this.$route.query.vlon
+      if (this.$route.query.vlat && this.$route.query.vlon) {
+        this.setMapView({})
       }
 
-      this.updateURLParams(event)
+      // Reset the address query
+      this.setAddrSearch({
+        place_name: undefined
+      })
+
+      // Store the block coords
+      this.setBlock({
+        lat: this.lat,
+        lon: this.lon
+      })
+
+     // Update the URL with store params
+      this.updateURL()
     },
     getFIPS (lat, lon) { // Call block API and expect FIPS and bounding box in response
       const blockAPI = process.env.BLOCK_API
@@ -244,11 +255,19 @@ export default {
       this.Map.setFilter('block-highlighted', ['==', 'block_fips', fipsCode])
       this.Map.setFilter('xlarge-blocks-highlighted', ['==', 'geoid10', fipsCode])
 
-      // Center map based on view lat, lon
-      if (this.isValidLatLon(this.$route.query.vlat, this.$route.query.vlon)) {
+      this.positionMapView()
+    },
+    positionMapView () {
+      // Position map based on view params (vlat, vlon, vzoom)
+      if (this.getMapView().vlat !== undefined && this.getMapView().vlon !== undefined) {
+        console.log('map jumpTo')
+
         this.Map.jumpTo({
-          center: [this.$route.query.vlon, this.$route.query.vlat]
+          center: [this.getMapView().vlon, this.getMapView().vlat],
+          zoom: this.getMapView().vzoom
         })
+
+        this.setMapPosition = true
       }
     },
     fetchProviderData (response) {
@@ -311,50 +330,108 @@ export default {
       this.providerRows = []
     },
     viewNationwide () {
-      let routeQuery = this.$route.query
-
       this.clearProviderTable()
-
-      this.$router.replace({
-        name: 'LocationSummary',
-        query: {
-          selectedTech: routeQuery.selectedTech,
-          selectedSpeed: routeQuery.selectedSpeed
-        }
-      })
 
       // Hide alert message for no providers
       this.noProviders = false
+
+      // Reset store params
+      this.setBlock({})
+      this.setAddrSearch({})
+      this.setMapView({})
+
+      this.updateURL()
     },
-    mapDragEnd (event) { // When map drag event ends, update URL with vlat, vlon
+    mapZoomEnd (event) {
       let mapCenter = this.Map.getCenter()
 
-      let routeQueryParams = {}
+      // If map already positioned, don't update it again
+      if (this.setMapPosition) {
+        this.setMapPosition = false
 
-      // Get existing route query parameters
-      let routeQuery = this.$route.query
+        return
+      }
 
-      // Add routeQuery properties to routeQueryParams
-      Object.keys(routeQuery).map(property => {
-        routeQueryParams[property] = routeQuery[property]
+      this.setMapView({
+        vlat: mapCenter.lat.toString(),
+        vlon: mapCenter.lng.toString(),
+        vzoom: this.Map.getZoom()
       })
 
-      routeQueryParams.vlat = mapCenter.lat.toString()
-      routeQueryParams.vlon = mapCenter.lng.toString()
+      this.updateURL()
+    },
+    mapDragEnd () { // When map drag event ends, update URL with vlat, vlon, vzoom
+      let mapCenter = this.Map.getCenter()
 
-      // Only update URL fragment when block lat, lon exist
-      if (routeQuery.lat && routeQuery.lon) {
-        this.$router.replace({
-          name: 'LocationSummary',
-          query: routeQueryParams
+      this.setMapView({
+        vlat: mapCenter.lat.toString(),
+        vlon: mapCenter.lng.toString(),
+        vzoom: this.Map.getZoom()
+      })
+
+      this.updateURL()
+    },
+    loadParamsFromUrl () {
+      // Validate address
+      if (this.isValidAddress(this.$route.query.place_name)) {
+        this.setAddrSearch({
+          place_name: this.$route.query.place_name
         })
       }
+
+      // Validate tech and speed
+      if (this.isValidTech(this.$route.query.tech) && this.isValidSpeed(this.$route.query.speed)) {
+        this.setBroadband({
+          tech: this.$route.query.tech,
+          speed: this.$route.query.speed
+        })
+      }
+
+      // Validate block lat and lon
+      if (this.isValidLatLon(this.$route.query.lat, this.$route.query.lon)) {
+        let lat = this.$route.query.lat.trim()
+        let lon = this.$route.query.lon.trim()
+
+        this.setBlock({
+          lat: lat,
+          lon: lon
+        })
+
+        this.getFIPS(lat, lon)
+      }
+
+      // Validate view lat and lon
+      if (this.isValidLatLon(this.$route.query.vlat, this.$route.query.vlon)) {
+        this.setMapView({
+          vlat: this.$route.query.vlat.trim(),
+          vlon: this.$route.query.vlon.trim(),
+          vzoom: this.$route.query.vzoom
+        })
+      }
+
+      this.updateURL()
+    },
+    updateURL () {
+      let routeQueryParams = Object.assign({}, this.getAddrSearch(), this.getBlock(), this.getBroadband(), this.getMapView())
+
+      this.$router.replace({
+        name: 'LocationSummary',
+        query: routeQueryParams
+      })
     }
   },
   watch: {
     // When query params change for the same route (URL slug)
     '$route' (to, from) {
-      this.validateURL()
+      // If no query params, reset map to default center and zoom
+      if (Object.keys(to.query).length === 0 && to.query.constructor === Object) {
+        this.viewNationwide()
+
+        this.Map.easeTo({
+          center: this.mapOptions.center,
+          zoom: this.mapOptions.zoom
+        })
+      }
     }
   }
 }
