@@ -62,6 +62,8 @@ export default {
           this.searchType = 'Tribal Area'
         } else if (this.$route.query.type === 'place') {
           this.searchType = 'Census Place'
+        } else if (this.$route.query.type === 'nation') {
+          this.searchType = this.defaultSearch
         }
       } else if (this.isValidLatLon(this.$route.query.lat, this.$route.query.lon)) {
         // If valid lat, lon and address
