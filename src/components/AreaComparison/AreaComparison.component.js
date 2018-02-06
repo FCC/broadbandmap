@@ -635,6 +635,10 @@ export default {
         routeQP[prop] = routeQ[prop]
       })
 
+      if (routeQ.selectedTech && routeQ.selectedSpeed) {
+        this.updateTechSpeed(routeQ.selectedTech, routeQ.selectedSpeed)
+      }
+
       if (routeQP.searchtype) {
         if (routeQP.searchtype in this.typeReverseDictionary) {
           this.toggleSearchType(this.typeReverseDictionary[routeQP.searchtype])
@@ -660,10 +664,6 @@ export default {
       }
 
       if (routeQP.searchtype || routeQP.geoid) this.compareAreas()
-
-      if (routeQ.selectedTech && routeQ.selectedSpeed) {
-        this.updateTechSpeed(routeQ.selectedTech, routeQ.selectedSpeed)
-      }
     },
     openAboutAreaCompare () {
       EventHub.$emit('openAboutAreaCompare')
