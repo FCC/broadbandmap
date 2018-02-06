@@ -73,7 +73,6 @@ export default {
       speed: this.defaultSpeed
     })
 
-    // EventHub.$on('searchByAddr', this.updateURLParams)
     EventHub.$on('searchByAddr', (typeaheadModel) => this.searchByAddr(typeaheadModel))
     EventHub.$on('searchByCoords', (coordinates) => this.searchByCoords(coordinates))
     EventHub.$on('updateMapSettings', (selectedTech, selectedSpeed) => this.updateTechSpeed(selectedTech, selectedSpeed))
