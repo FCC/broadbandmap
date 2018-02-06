@@ -64,8 +64,14 @@ export default {
   },
   mounted () {
     // Set block coords and map view to default
+    this.setAddrSearch({})
     this.setBlock({})
     this.setMapView({})
+
+    this.setBroadband({
+      tech: this.defaultTech,
+      speed: this.defaultSpeed
+    })
 
     // EventHub.$on('searchByAddr', this.updateURLParams)
     EventHub.$on('searchByAddr', (typeaheadModel) => this.searchByAddr(typeaheadModel))
@@ -107,23 +113,15 @@ export default {
       this.mapOptions = mapOptions
 
       this.Map.on('style.load', () => {
-        // If one or more technologies is selected, then reload the tech/speed layers when the base layer style is changed
-        // Need to reload tech/speed layers so the labels will appear on top
-        if (!this.removeAllLayers) {
-          let tech = this.$route.query.tech
-          let speed = this.$route.query.speed
-
-          // If tech/speed query params are invalid, use default tech and speed
-          if (!this.isValidTech(tech) || !this.isValidSpeed(speed)) {
-            this.updateTechSpeed(this.defaultTech, this.defaultSpeed)
-          } else {
-            this.updateTechSpeed(tech.toLowerCase(), speed)
-          }
-        }
-
         // Get the URL query params and update the map view
         this.loadParamsFromUrl()
         this.positionMapView()
+
+        // If one or more technologies is selected, then reload the tech/speed layers when the base layer style is changed
+        // Need to reload tech/speed layers so the labels will appear on top
+        if (!this.removeAllLayers) {
+          this.updateTechSpeed(this.getBroadband().tech, this.getBroadband().speed)
+        }
       })
     },
     searchByAddr (typeaheadModel) {
@@ -260,8 +258,6 @@ export default {
     positionMapView () {
       // Position map based on view params (vlat, vlon, vzoom)
       if (this.getMapView().vlat !== undefined && this.getMapView().vlon !== undefined) {
-        console.log('map jumpTo')
-
         this.Map.jumpTo({
           center: [this.getMapView().vlon, this.getMapView().vlat],
           zoom: this.getMapView().vzoom
@@ -380,11 +376,16 @@ export default {
       }
 
       // Validate tech and speed
-      if (this.isValidTech(this.$route.query.tech) && this.isValidSpeed(this.$route.query.speed)) {
+      let tech = this.$route.query.tech
+      let speed = this.$route.query.speed
+
+      if (this.isValidTech(tech) && this.isValidSpeed(speed)) {
         this.setBroadband({
-          tech: this.$route.query.tech,
-          speed: this.$route.query.speed
+          tech: tech,
+          speed: speed
         })
+
+        EventHub.$emit('loadBroadband', tech, speed)
       }
 
       // Validate block lat and lon
@@ -411,7 +412,7 @@ export default {
 
       this.updateURL()
     },
-    updateURL () {
+    updateURL () { // Update URL with values from store
       let routeQueryParams = Object.assign({}, this.getAddrSearch(), this.getBlock(), this.getBroadband(), this.getMapView())
 
       this.$router.replace({
