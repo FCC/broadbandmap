@@ -92,42 +92,24 @@ export default {
           }
           break
         case 'State':
-          // console.log('gotoGeography(), searchType= ' + this.searchType + ', typeaheadModel= ', this.typeaheadModel)
           if (this.originPage !== 'AreaComparison') {
-            newURL = 'area-summary?type=state&geoid=' + this.typeaheadModel.geoid + '&bbox=' + this.typeaheadModel.bbox_arr
-            this.$router.push(newURL)
-            EventHub.$emit('updateGeogSearch')
+            EventHub.$emit('searchByGeog', 'state', this.typeaheadModel)
           }
           break
         case 'CBSA (MSA)':
-          // console.log('gotoGeography(), searchType= ' + this.searchType + ', typeaheadModel= ', this.typeaheadModel)
-          newURL = 'area-summary?type=cbsa&geoid=' + this.typeaheadModel.geoid + '&bbox=' + this.typeaheadModel.bbox_arr
-          this.$router.push(newURL)
-          EventHub.$emit('updateGeogSearch')
+          EventHub.$emit('searchByGeog', 'cbsa', this.typeaheadModel)
           break
         case 'County':
-          // console.log('gotoGeography(), searchType= ' + this.searchType + ', typeaheadModel= ', this.typeaheadModel)
-          newURL = 'area-summary?type=county&geoid=' + this.typeaheadModel.geoid + '&bbox=' + this.typeaheadModel.bbox_arr
-          this.$router.push(newURL)
-          EventHub.$emit('updateGeogSearch')
+          EventHub.$emit('searchByGeog', 'county', this.typeaheadModel)
           break
         case 'Congressional District':
-          // console.log('gotoGeography(), searchType= ' + this.searchType + ', typeaheadModel= ', this.typeaheadModel)
-          newURL = 'area-summary?type=cd&geoid=' + this.typeaheadModel.geoid + '&bbox=' + this.typeaheadModel.bbox_arr
-          this.$router.push(newURL)
-          EventHub.$emit('updateGeogSearch')
+          EventHub.$emit('searchByGeog', 'cd', this.typeaheadModel)
           break
         case 'Tribal Area':
-          // console.log('gotoGeography(), searchType= ' + this.searchType + ', typeaheadModel= ', this.typeaheadModel)
-          newURL = 'area-summary?type=tribal&geoid=' + this.typeaheadModel.geoid + '&bbox=' + this.typeaheadModel.bbox_arr
-          this.$router.push(newURL)
-          EventHub.$emit('updateGeogSearch')
+          EventHub.$emit('searchByGeog', 'tribal', this.typeaheadModel)
           break
         case 'Census Place':
-          // console.log('gotoGeography(), searchType= ' + this.searchType + ', typeaheadModel= ', this.typeaheadModel)
-          newURL = 'area-summary?type=place&geoid=' + this.typeaheadModel.geoid + '&bbox=' + this.typeaheadModel.bbox_arr
-          this.$router.push(newURL)
-          EventHub.$emit('updateGeogSearch')
+          EventHub.$emit('searchByGeog', 'place', this.typeaheadModel)
           break
         default:
           // console.log('DEBUG: No handler in gotoGeography() for searchType = ' + this.searchType)
