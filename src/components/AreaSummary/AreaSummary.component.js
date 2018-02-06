@@ -1,3 +1,4 @@
+import { mapGetters, mapMutations } from 'vuex'
 import { Carousel, Slide } from 'uiv'
 import { Spinner } from 'spin.js'
 import axios from 'axios'
@@ -19,6 +20,7 @@ export default {
   mixins: [urlValidation, updateMapLayers, utility],
   data () {
     return {
+      mapPositioned: false,
       socrataData: [],
       urbanTotal: 0,
       ruralTotal: 0,
@@ -44,8 +46,28 @@ export default {
     }
   },
   mounted () {
-    EventHub.$on('updateGeogSearch', this.updateURLParams)
-    EventHub.$on('updateMapSettings', (selectedTech, selectedSpeed) => this.updateTechSpeed(selectedTech, selectedSpeed))
+    const self = this
+
+    this.setMapView({})
+
+    this.setGeogSearch({
+      type: 'nation',
+      geoid: 0,
+      bbox_arr: undefined
+    })
+
+    this.setBroadband({
+      tech: this.defaultTech,
+      speed: this.defaultSpeed
+    })
+
+    EventHub.$on('searchByGeog', (searchType, typeaheadModel) => this.searchByGeog(searchType, typeaheadModel))
+
+    EventHub.$on('updateMapSettings', function (selectedTech, selectedSpeed) {
+      self.updateTechSpeed(selectedTech, selectedSpeed)
+      self.fetchAreaData()
+    })
+
     EventHub.$on('removeLayers', (propertyID, removeAll) => this.removeLayers(propertyID, removeAll))
     EventHub.$on('setOpacity', (opacity) => this.setOpacity(opacity))
     EventHub.$on('updateHighlight', (highlight) => this.updateHighlight(highlight))
@@ -79,6 +101,7 @@ export default {
     this.spinnerTarget = document.getElementById('spinner')
   },
   destroyed () {
+    EventHub.$off('searchByGeog')
     EventHub.$off('updateMapSettings')
     EventHub.$off('removeLayers')
     EventHub.$off('setOpacity')
@@ -87,60 +110,55 @@ export default {
     EventHub.$off('setUnPopBlocks')
   },
   methods: {
+    ...mapGetters([
+      // Mount store getters to component scope
+      'getBroadband',
+      'getMapView',
+      'getGeogSearch'
+    ]),
+    ...mapMutations([
+      // Mount store mutation functions
+      'setBroadband',
+      'setMapView',
+      'setGeogSearch'
+    ]),
     mapInit (map, mapOptions) {
       this.Map = map
       this.mapOptions = mapOptions
 
       this.Map.on('style.load', () => {
+        // Get the URL query params and update the map view
+        this.loadParamsFromUrl()
+        this.positionMapView()
+        this.fetchAreaData()
+
         // If one or more technologies is selected, then reload the tech/speed layers when the base layer style is changed
         // Need to reload tech/speed layers so the labels will appear on top
         if (!this.removeAllLayers) {
-          let tech = this.$route.query.selectedTech
-          let speed = this.$route.query.selectedSpeed
-
-          // If tech/speed query params are invalid, use default tech and speed
-          if (!this.isValidTech(tech) || !this.isValidSpeed(speed)) {
-            this.updateTechSpeed(this.defaultTech, this.defaultSpeed)
-          } else {
-            this.updateTechSpeed(tech.toLowerCase(), speed)
-          }
+          this.updateTechSpeed(this.getBroadband().tech, this.getBroadband().speed)
         }
-
-        this.validateURL()
       })
     },
-    validateURL () {
-      // If at least one query param was passed in, but "selectedTech" and "selectedSpeed" are not valid
-      if (Object.keys(this.$route.query).length && (!this.isValidQueryParam('selectedTech') || !this.isValidQueryParam('selectedSpeed'))) {
-        this.updateURLParams()
-      }
-      // Update charts, map, and sidebar title
+    searchByGeog (searchType, typeaheadModel) {
+      let geoid = typeaheadModel.geoid
+      let bbox_arr = typeaheadModel.bbox_arr
+
+       // Reset the map view
+      this.setMapView({})
+
+      // Store the geog search geoid and bbox_arr
+      this.setGeogSearch({
+        type: searchType,
+        geoid: geoid,
+        bbox_arr: bbox_arr
+      })
+
+      // Update the URL with store params
+      this.updateURL()
+
+      // Get the block FIPS
+      // this.getFIPS(lat, lon)
       this.fetchAreaData()
-    },
-    updateURLParams () {
-      let routeQueryParams = {}
-
-      // Get existing route query parameters
-      let routeQuery = this.$route.query
-
-      // Get map zoom level
-      // let zoomLevel = this.Map.getZoom()
-
-      // Add routeQuery properties to routeQueryParams
-      Object.keys(routeQuery).map(property => {
-        routeQueryParams[property] = routeQuery[property]
-      })
-
-      // Add select tech, selected speed, and zoom to routeQueryParams
-      routeQueryParams.selectedTech = this.selectedTech
-      routeQueryParams.selectedSpeed = this.selectedSpeed
-      // routeQueryParams.zoom = zoomLevel
-
-      // Update URL fragment with routeQueryParams
-      this.$router.replace({
-        name: 'AreaSummary',
-        query: routeQueryParams
-      })
     },
     fetchAreaData () {
       const self = this
@@ -158,12 +176,10 @@ export default {
       // Set defaults
       let geogType = 'nation'
       let geoid = 0
-      let isValidType = ['state', 'county', 'place', 'cbsa', 'cd', 'tribal'].indexOf(this.$route.query.type) !== -1
 
-      // If the geoid and geography type are in the query string, use those
-      if (typeof this.$route.query.type !== 'undefined' && isValidType && typeof this.$route.query.geoid !== 'undefined') {
-        geogType = this.$route.query.type
-        geoid = this.$route.query.geoid
+      if (this.getGeogSearch().geoid !== 0) {
+        geogType = this.getGeogSearch().type
+        geoid = this.getGeogSearch().geoid
       }
 
       // Call Socrata API - Area table for charts
@@ -209,7 +225,7 @@ export default {
         params: {
           id: geoid,
           type: geogType,
-          tech: this.selectedTech,
+          tech: this.getBroadband().tech,
           // speed: speedNumeric,
           $order: 'speed',
           $$app_token: appToken
@@ -255,7 +271,7 @@ export default {
       // If this is the nationwide view
       if (geoid === 0) {
         this.sidebarTitle = 'Nationwide'
-        // console.log('TODO: Revert the map back to the national view')
+
       // Otherwise this is a specific geography the user searched for
       } else {
         // Query lookup table for this specific geography
@@ -275,8 +291,7 @@ export default {
           headers: httpHeaders
         })
         .then(function (response) {
-          // console.log('Socrata GEOGRAPHY DETAILS query response= ', response)
-          // Display name of searched geography
+          // Display name of searched geography in sidebar
           this.sidebarTitle = response.data[0].name
 
           // Get lat/lon pair
@@ -290,12 +305,8 @@ export default {
             padding: 100
           })
 
-          // Center map based on view lat, lon
-          if (this.isValidLatLon(this.$route.query.vlat, this.$route.query.vlon)) {
-            this.Map.jumpTo({
-              center: [this.$route.query.vlon, this.$route.query.vlat]
-            })
-          }
+          // Position map based on map view (vlat, vlon, vzoom)
+          this.positionMapView()
 
           // Clear existing geography highlight
           if (this.prevGeogType !== undefined) {
@@ -430,47 +441,120 @@ export default {
       ]
       this.tribalChartData = this.aggregate(this.tribalChartData, 'tribal_non', {'Tribal': 'T', 'Non-tribal': 'N'})
     },
-    viewNW () {
-      let routeQuery = this.$route.query
-
-      this.$router.push({
-        name: 'AreaSummary',
-        query: {
-          selectedTech: routeQuery.selectedTech,
-          selectedSpeed: routeQuery.selectedSpeed
-        }
+    viewNationwide () {
+      this.setGeogSearch({
+        type: 'nation',
+        geoid: 0,
+        bbox_arr: undefined
       })
+
+      this.setMapView({})
+
+      this.updateURL()
+      this.fetchAreaData()
     },
-    mapDragEnd (event) { // When map drag event ends, update URL with vlat, vlon
+    positionMapView () {
+      // Position map based on view params (vlat, vlon, vzoom)
+      if (this.getMapView().vlat !== undefined && this.getMapView().vlon !== undefined) {
+        this.Map.jumpTo({
+          center: [this.getMapView().vlon, this.getMapView().vlat],
+          zoom: this.getMapView().vzoom
+        })
+
+        this.mapPositioned = true
+      }
+    },
+    mapZoomEnd (event) {
       let mapCenter = this.Map.getCenter()
 
-      let routeQueryParams = {}
+      // If map already positioned, don't update it again
+      if (this.mapPositioned) {
+        this.mapPositioned = false
 
-      // Get existing route query parameters
-      let routeQuery = this.$route.query
+        return
+      }
 
-      // Add routeQuery properties to routeQueryParams
-      Object.keys(routeQuery).map(property => {
-        routeQueryParams[property] = routeQuery[property]
+      this.setMapView({
+        vlat: mapCenter.lat.toString(),
+        vlon: mapCenter.lng.toString(),
+        vzoom: this.Map.getZoom()
       })
 
-      routeQueryParams.vlat = mapCenter.lat.toString()
-      routeQueryParams.vlon = mapCenter.lng.toString()
+      this.updateURL()
+    },
+    mapDragEnd () { // When map drag event ends, update URL with vlat, vlon, vzoom
+      let mapCenter = this.Map.getCenter()
 
-      // Only update URL fragment when block lat, lon exist
-      if (routeQuery.bbox) {
-        this.$router.replace({
-          name: 'AreaSummary',
-          query: routeQueryParams
+      this.setMapView({
+        vlat: mapCenter.lat.toString(),
+        vlon: mapCenter.lng.toString(),
+        vzoom: this.Map.getZoom()
+      })
+
+      this.updateURL()
+    },
+    loadParamsFromUrl () { // Use URL params if valid, otherwise use default values from store
+      // Validate geography search
+      let isValidType = ['state', 'county', 'place', 'cbsa', 'cd', 'tribal'].indexOf(this.$route.query.type) !== -1
+
+      if (this.$route.query.type !== 'undefined' && isValidType && typeof this.$route.query.geoid !== 'undefined') {
+        this.setGeogSearch({
+          type: this.$route.query.type,
+          geoid: this.$route.query.geoid,
+          bbox_arr: this.$route.query.bbox_arr
         })
       }
+
+      // Validate tech and speed
+      let tech = this.$route.query.tech
+      let speed = this.$route.query.speed
+
+      if (this.isValidTech(tech) && this.isValidSpeed(speed)) {
+        this.setBroadband({
+          tech: tech,
+          speed: speed
+        })
+
+        EventHub.$emit('loadBroadband', tech, speed)
+      }
+
+      // Validate view lat and lon
+      if (this.isValidLatLon(this.$route.query.vlat, this.$route.query.vlon)) {
+        this.setMapView({
+          vlat: this.$route.query.vlat.trim(),
+          vlon: this.$route.query.vlon.trim(),
+          vzoom: this.$route.query.vzoom
+        })
+      }
+
+      this.updateURL()
+    },
+    updateURL () { // Update URL with values from store
+      let routeQueryParams = Object.assign({}, this.getGeogSearch(), this.getBroadband(), this.getMapView())
+
+      this.$router.replace({
+        name: 'AreaSummary',
+        query: routeQueryParams
+      })
     }
   },
   watch: {
     // When query params change for the same route (URL slug)
     '$route' (to, from) {
-      // Dirty fix to prevent data not loading to diagrams on "clean" URL
-      if (from.fullPath !== from.path) this.validateURL()
+      // Hide charts when all tech/speed layers removed
+      if (this.removeAllLayers) {
+        this.showCharts = false
+      }
+
+      // If no query params, reset map to default center and zoom
+      if (Object.keys(to.query).length === 0 && to.query.constructor === Object) {
+        this.viewNationwide()
+
+        this.Map.easeTo({
+          center: this.mapOptions.center,
+          zoom: this.mapOptions.zoom
+        })
+      }
     }
   }
 }
