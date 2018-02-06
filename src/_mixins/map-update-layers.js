@@ -112,7 +112,11 @@ export const updateMapLayers = {
         this.tech = ''
         this.speed = ''
 
-        this.updateURLParams()
+        // Reset stored tech/speed values
+        this.setBroadband({})
+
+        // Update URL with values from store
+        this.updateURL()
       }
     },
     updateTechSpeed (selectedTech, selectedSpeed) { // e.g. acfosw, 25_3
@@ -124,8 +128,13 @@ export const updateMapLayers = {
       this.selectedTech = selectedTech
       this.selectedSpeed = selectedSpeed
 
-      // Update URL params when selected Tech and Speed change
-      this.updateURLParams()
+      // Store selected tech and speed values
+      this.setBroadband({
+        tech: this.selectedTech,
+        speed: this.selectedSpeed
+      })
+
+      this.updateURL()
 
       // Add layer sources if they don't exist already
       if (this.Map.getSource('25_3') === undefined) {
@@ -228,7 +237,6 @@ export const updateMapLayers = {
         if (!this.showWaterBlocks && this.showUnPopBlocks) {
           filterArr1 = ['!=', 'h2only_undev', '']
           filterArr2 = ['!=', 'h2only_undev', 1]
-          // filterArr3 = ['!=', 'is_populated', 'False']
           filterArr3 = ['!=', 'is_populated', '']
         }
 
