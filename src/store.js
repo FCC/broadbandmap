@@ -1,5 +1,21 @@
+// Map configuration and search settings
 export const appStore = {
   state: {
+    mapSettings: {
+      opacity: 0,
+      highlightColor: {
+        hex: '#dd1ee4',
+        rgba: {
+          r: 221,
+          g: 30,
+          b: 228,
+          a: 1
+        },
+        a: 1
+      },
+      showWaterBlocks: false,
+      showUnPopBlocks: true
+    },
     mapOptions: {
       center: [-94.96, 38.82],
       maxZoom: 22,
@@ -30,6 +46,7 @@ export const appStore = {
     }
   },
   getters: {
+    getMapSettings: state => state.mapSettings,
     getMapOptions: state => state.mapOptions,
     getMapView: state => state.view,
     getBroadband: state => state.broadband,
@@ -38,6 +55,9 @@ export const appStore = {
     getGeogSearch: state => state.geogSearch
   },
   mutations: {
+    setMapSettings (state, mapSettings) {
+      state.mapSettings = mapSettings
+    },
     setMapView (state, view) {
       state.view = view
     },
