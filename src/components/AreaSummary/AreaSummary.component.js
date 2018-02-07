@@ -298,15 +298,14 @@ export default {
           let bbox = response.data[0].bbox_arr.replace(/{/g, '').replace(/}/g, '')
           let envArray = bbox.split(',')
 
-          // Zoom and center map to envelope
-          this.Map.fitBounds(envArray, {
-            animate: false,
-            easeTo: true,
-            padding: 100
-          })
-
-          // Position map based on map view (vlat, vlon, vzoom)
-          this.positionMapView()
+          // Don't reposition map if current geoid is the same as previous search
+          if (this.getGeogSearch().geoid !== this.prevGeoID) {
+            this.Map.fitBounds(envArray, {
+              animate: false,
+              easeTo: true,
+              padding: 100
+            })
+          }
 
           // Clear existing geography highlight
           if (this.prevGeogType !== undefined) {
@@ -317,6 +316,10 @@ export default {
           this.geogHighlight = geogType + '-highlighted'
           this.Map.setFilter(this.geogHighlight, ['==', 'GEOID', geoid])
           this.prevGeogType = geogType
+          this.prevGeoID = geoid
+
+           // Position map based on view (vlat, vlon, vzoom)
+          this.positionMapView()
         }
         .bind(this))
         .catch(function (error) {
@@ -442,6 +445,15 @@ export default {
       this.tribalChartData = this.aggregate(this.tribalChartData, 'tribal_non', {'Tribal': 'T', 'Non-tribal': 'N'})
     },
     viewNationwide () {
+      // Clear search box
+      document.getElementById('addr').value = ''
+
+      // Remove map highlight
+      let layerExists = this.Map.getLayer(this.geogHighlight)
+      if (layerExists) {
+        this.Map.setFilter(this.geogHighlight, ['==', 'GEOID', ''])
+      }
+
       this.setGeogSearch({
         type: 'nation',
         geoid: 0,
