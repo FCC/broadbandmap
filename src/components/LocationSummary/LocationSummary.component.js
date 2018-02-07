@@ -16,7 +16,7 @@ export default {
   data () {
     return {
       mapView: {},
-      setMapPosition: false,
+      mapPositioned: false,
       censusBlock: '',
       providerColumns: [
         {
@@ -252,6 +252,7 @@ export default {
       this.Map.setFilter('block-highlighted', ['==', 'block_fips', fipsCode])
       this.Map.setFilter('xlarge-blocks-highlighted', ['==', 'geoid10', fipsCode])
 
+       // Position map based on view (vlat, vlon, vzoom)
       this.positionMapView()
     },
     positionMapView () {
@@ -262,7 +263,7 @@ export default {
           zoom: this.getMapView().vzoom
         })
 
-        this.setMapPosition = true
+        this.mapPositioned = true
       }
     },
     fetchProviderData (response) {
@@ -325,6 +326,14 @@ export default {
       this.providerRows = []
     },
     viewNationwide () {
+      // Remove map highlight
+      let layerExists = this.Map.getLayer('block-highlighted')
+      if (layerExists) {
+        this.Map.setFilter('block-highlighted', ['==', 'block_fips', ''])
+        this.Map.setFilter('xlarge-blocks-highlighted', ['==', 'geoid10', ''])
+      }
+
+      // Clear Provider table
       this.clearProviderTable()
 
       // Hide alert message for no providers
@@ -341,8 +350,8 @@ export default {
       let mapCenter = this.Map.getCenter()
 
       // If map already positioned, don't update it again
-      if (this.setMapPosition) {
-        this.setMapPosition = false
+      if (this.mapPositioned) {
+        this.mapPositioned = false
 
         return
       }
