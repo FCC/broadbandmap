@@ -208,11 +208,13 @@ export default {
             }
           })
           .then(response => {
-            if (response.data.Block.bbox.length !== 0) {
+            if (response.data.Block.bbox !== null) {
               this.highlightBlock(response, lat, lon)
               this.fetchProviderData(response)
             } else {
               this.clearProviderTable()
+
+              EventHub.$emit('openModal', 'No results found', 'Please select a valid location or enter coordinates in "latitude, longitude" format.')
             }
           })
           .catch(function (error) {
