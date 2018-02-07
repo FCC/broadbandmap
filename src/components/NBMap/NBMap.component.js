@@ -1,10 +1,11 @@
+import { mapGetters } from 'vuex'
 import mapboxgl from 'mapboxgl'
 import { Dropdown, Tooltip } from 'uiv'
+
 import nbMapSearch from './NBMapSearch/'
 import EventHub from '../../_mixins/EventHub.js'
 import { LayersLocation } from './layers-location.js'
 import { LayersArea } from './layers-area.js'
-
 import { urlValidation } from '../../_mixins/urlValidation.js'
 
 export default {
@@ -56,8 +57,13 @@ export default {
     this.Map.remove()
   },
   methods: {
+    ...mapGetters([
+      // Mount store getters to component scope
+      'getMapOptions'
+    ]),
     init: function () {
       let vm = this
+
       mapboxgl.accessToken = process.env.MAPBOX_ACCESS_TOKEN
 
       // Define map layers based on map type
@@ -70,16 +76,11 @@ export default {
       this.mapLayers = layerTypes[this.mapType]
 
       // Define default map options
-      this.mapOptions = {
-        attributionControl: true,
-        center: [-94.96, 38.82],
+      let mapOpts = this.getMapOptions()
+      this.mapOptions = Object.assign({}, mapOpts, {
         container: 'map-container',
-        maxZoom: 22,
-        minZoom: 0,
-        pitchWithRotate: false,
-        style: this.baseLayers[0].styleURL,
-        zoom: 3
-      }
+        style: this.baseLayers[0].styleURL
+      })
 
       // Create map
       let map = new mapboxgl.Map(this.mapOptions)
@@ -165,11 +166,7 @@ export default {
       })
 
       map.on('zoomend', function (event) {
-        console.log('zoom = ', map.getZoom())
-
-        let zoomLevel = map.getZoom()
-
-        vm.$emit('map-zoomend', zoomLevel)
+        vm.$emit('map-zoomend', event)
       })
 
       map.on('dragend', function (event) {
@@ -220,9 +217,6 @@ export default {
     }
   },
   computed: {
-
-  },
-  watch: {
 
   }
 }

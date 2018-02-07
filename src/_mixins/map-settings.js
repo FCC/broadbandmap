@@ -2,7 +2,7 @@
 // Used by NBMapAppearance
 
 export const mapSettings = {
-  opacity: 100,
+  opacity: 0,
   highlightColor: {
     hex: '#dd1ee4',
     rgba: {

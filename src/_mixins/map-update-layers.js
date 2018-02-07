@@ -19,7 +19,7 @@ export const updateMapLayers = {
       technologies: technologies,
       tech: '',
       speed: '',
-      mapOpacity: 1,
+      mapOpacity: this.$store.getters.getMapSettings.opacity,
       mapHighlight: mapSettings.highlightColor.hex,
       showWaterBlocks: mapSettings.showWaterBlocks,
       showUnPopBlocks: mapSettings.showUnPopBlocks
@@ -72,7 +72,7 @@ export const updateMapLayers = {
             'default': '#ffffcc'
           },
           'fill-outline-color': 'hsl(0, 1%, 46%)',
-          'fill-opacity': vm.mapOpacity
+          'fill-opacity': (100 - vm.mapOpacity) / 100
         },
         'source-layer': ''
       }
@@ -87,7 +87,7 @@ export const updateMapLayers = {
       // Add layer to map
       vm.Map.addLayer(lyrStyle, layer.beforeLayer)
 
-      vm.setOpacity(vm.mapOpacity * 100)
+      vm.setOpacity(vm.mapOpacity)
       vm.updateHighlight(vm.mapHighlight)
       vm.setWaterBlocks(vm.showWaterBlocks)
       vm.setUnPopBlocks(vm.showUnPopBlocks)
@@ -112,7 +112,11 @@ export const updateMapLayers = {
         this.tech = ''
         this.speed = ''
 
-        this.updateURLParams()
+        // Reset stored tech/speed values
+        this.setBroadband({})
+
+        // Update URL with values from store
+        this.updateURL()
       }
     },
     updateTechSpeed (selectedTech, selectedSpeed) { // e.g. acfosw, 25_3
@@ -124,8 +128,13 @@ export const updateMapLayers = {
       this.selectedTech = selectedTech
       this.selectedSpeed = selectedSpeed
 
-      // Update URL params when selected Tech and Speed change
-      this.updateURLParams()
+      // Store selected tech and speed values
+      this.setBroadband({
+        tech: this.selectedTech,
+        speed: this.selectedSpeed
+      })
+
+      this.updateURL()
 
       // Add layer sources if they don't exist already
       if (this.Map.getSource('25_3') === undefined) {
@@ -173,13 +182,16 @@ export const updateMapLayers = {
       EventHub.$emit('openMapSettings')
     },
     setOpacity (opacity) { // Update map layer opacity
-      this.mapOpacity = opacity / 100
+      // Convert from percentage to integer 0 to 1
+      this.mapOpacity = (100 - opacity) / 100
 
       // Adjust fill-opacity for each tech/speed layer
       let existLayers = this.layerExists()
       existLayers.forEach(layer => {
         this.Map.setPaintProperty(layer.id, 'fill-opacity', this.mapOpacity)
       })
+
+      this.mapOpacity = 100 * (1 - this.mapOpacity)
     },
     updateHighlight (highlight) { // Update map layer highlight color
       this.mapHighlight = highlight
@@ -228,7 +240,6 @@ export const updateMapLayers = {
         if (!this.showWaterBlocks && this.showUnPopBlocks) {
           filterArr1 = ['!=', 'h2only_undev', '']
           filterArr2 = ['!=', 'h2only_undev', 1]
-          // filterArr3 = ['!=', 'is_populated', 'False']
           filterArr3 = ['!=', 'is_populated', '']
         }
 
