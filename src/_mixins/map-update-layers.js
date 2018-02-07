@@ -19,7 +19,7 @@ export const updateMapLayers = {
       technologies: technologies,
       tech: '',
       speed: '',
-      mapOpacity: 1,
+      mapOpacity: this.$store.getters.getMapSettings.opacity,
       mapHighlight: mapSettings.highlightColor.hex,
       showWaterBlocks: mapSettings.showWaterBlocks,
       showUnPopBlocks: mapSettings.showUnPopBlocks
@@ -72,7 +72,7 @@ export const updateMapLayers = {
             'default': '#ffffcc'
           },
           'fill-outline-color': 'hsl(0, 1%, 46%)',
-          'fill-opacity': vm.mapOpacity
+          'fill-opacity': (100 - vm.mapOpacity) / 100
         },
         'source-layer': ''
       }
@@ -87,7 +87,7 @@ export const updateMapLayers = {
       // Add layer to map
       vm.Map.addLayer(lyrStyle, layer.beforeLayer)
 
-      vm.setOpacity(vm.mapOpacity * 100)
+      vm.setOpacity(vm.mapOpacity)
       vm.updateHighlight(vm.mapHighlight)
       vm.setWaterBlocks(vm.showWaterBlocks)
       vm.setUnPopBlocks(vm.showUnPopBlocks)
@@ -182,13 +182,16 @@ export const updateMapLayers = {
       EventHub.$emit('openMapSettings')
     },
     setOpacity (opacity) { // Update map layer opacity
-      this.mapOpacity = opacity / 100
+      // Convert from percentage to integer 0 to 1
+      this.mapOpacity = (100 - opacity) / 100
 
       // Adjust fill-opacity for each tech/speed layer
       let existLayers = this.layerExists()
       existLayers.forEach(layer => {
         this.Map.setPaintProperty(layer.id, 'fill-opacity', this.mapOpacity)
       })
+
+      this.mapOpacity = 100 * (1 - this.mapOpacity)
     },
     updateHighlight (highlight) { // Update map layer highlight color
       this.mapHighlight = highlight
