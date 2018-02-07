@@ -82,18 +82,6 @@ export default {
         style: this.baseLayers[0].styleURL
       })
 
-      // Define default map options
-      /* this.mapOptions = {
-        attributionControl: true,
-        center: [-94.96, 38.82],
-        container: 'map-container',
-        maxZoom: 22,
-        minZoom: 0,
-        pitchWithRotate: false,
-        style: this.baseLayers[0].styleURL,
-        zoom: 3
-      } */
-
       // Create map
       let map = new mapboxgl.Map(this.mapOptions)
 
