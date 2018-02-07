@@ -10,7 +10,7 @@
       </button>
     </div>
     <div id="btn-layerSwitch" class="mapboxgl-ctrl mapboxgl-ctrl-group">
-      <dropdown>
+      <dropdown v-model="showBaseLayerCtrl">
         <button class="mapboxgl-ctrl-icon dropdown-toggle" type="button" data-role="trigger" aria-haspopup="true" aria-expanded="false">
           <tooltip text="Switch base layer" placement="right" trigger="hover">
             <span class="icon icon-layers"></span>
@@ -20,7 +20,7 @@
         <template slot="dropdown">
           <li class="radio" v-for="baseLayer in baseLayers">            
             <div class="radio">
-              <input type="radio" name="layerOpts" :id="baseLayer.id" :value="baseLayer.id" v-model="defaultBaseLayer" @change="switchBaseLayer(baseLayer.id)">
+              <input type="radio" name="layerOpts" :id="baseLayer.id" :value="baseLayer.id" v-model="defaultBaseLayer" @click.stop="switchBaseLayer(baseLayer.id)">
               <label :for="baseLayer.id">
                 {{baseLayer.label}}                
               </label>

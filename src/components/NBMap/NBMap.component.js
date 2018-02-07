@@ -33,6 +33,7 @@ export default {
       mapLayers: {},
       baseLayerNames: [],
       defaultBaseLayer: 'dark',
+      showBaseLayerCtrl: false,
       showSearch: this.searchType === 'none',
       baseLayers: [{
         id: 'dark',
@@ -184,6 +185,9 @@ export default {
       })
 
       this.Map.setStyle(baseLayerURL)
+
+      // Hide the control dropdown
+      this.showBaseLayerCtrl = false
     },
     addCartographicLayers (mapLayers) {
       let layers = this.Map.getStyle().layers
