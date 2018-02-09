@@ -324,10 +324,10 @@ export default {
           if (outData[odi].hoconum === data[di].hoconum &&
               outData[odi].tech === this.getTechNameByCode(data[di].tech)) {
             for (let i = 1; i < 9; i++) {
-              outData[odi]['d_' + i.toString()] = (parseInt(outData[odi]['d_' + i.toString()]) + parseInt(data[di]['d_' + i.toString()])).toString()
+              outData[odi]['d_' + i.toString()] = (parseInt(data[di]['d_' + i.toString()])).toString()
             }
-            for (let i = 1; i < 11; i++) {
-              outData[odi]['u_' + i.toString()] = (parseInt(outData[odi]['u_' + i.toString()]) + parseInt(data[di]['u_' + i.toString()])).toString()
+            for (let i = 1; i < 10; i++) {
+              outData[odi]['u_' + i.toString()] = (parseInt(data[di]['u_' + i.toString()])).toString()
             }
             found = true
           }
@@ -335,10 +335,12 @@ export default {
 
         if (!found) {
           let od = Object.assign({}, data[di])
+
           od.tech = this.getTechNameByCode(od.tech)
           outData.push(od)
         }
       }
+
       return outData
     },
     setU () {
@@ -361,9 +363,8 @@ export default {
     },
     // Tech name by code
     getTechNameByCode (code) {
-      if (code === 'all') return code
-      if (parseInt(code) >= 10 && parseInt(code) <= 13) return 'adsl'
-      if (parseInt(code) >= 40 && parseInt(code) <= 43) return 'cable'
+      // if (code === 'all') return code
+      if (code === 'all' || code === 'adsl' || code === 'cable') return code
       if (code === '50') return 'fiber'
       if (code === '60') return 'satellite'
       if (code === '70') return 'fixedWireless'
