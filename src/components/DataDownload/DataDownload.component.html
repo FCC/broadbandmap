@@ -6,106 +6,150 @@
   </div>
   <div class="row">
     <div class="col-sm-8 col-fixed">
-      <table class="table table-striped">
-        <thead>
-          <tr class="tr-heading">
-            <th colspan="2"></th>
-            <th colspan="2">
-              Characteristics of Data Collected
-            </th>
-          </tr>
-          <tr>
-            <th>Data Type</th>
-            <th>What We Collect</th>
-            <th>Fixed Broadband</th>
-            <th>Mobile Broadband</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>Deployment data</td>
-            <td>Areas where providers can or do offer service</td>
-            <td>
-              <ul>
-                <li>Public</li>
-                <li>Census block</li>
-                <li>Consumer vs. business</li>
-                <li>Technology deployed</li>
-                <li>Max. advertised down/up</li>
-              </ul>
-            </td>
-            <td>
-              <ul>
-                <li>(Mostly) Public</li>
-                <li>Geospatial polygons (mapping data)</li>
-                <li>Technology deployed</li>
-                <li>Min. advertised down/up</li>
-                <li>Spectrum</li>
-              </ul>
-            </td>
-          </tr>
-          <tr>
-            <td>Subscription (connection) data</td>
-            <td>The number of connections</td>
-            <td>
-              <ul>
-                <li>(Mostly) confidential</li>
-                <li>Census tract</li>
-                <li>Consumer vs. business</li>
-                <li>Technology in use</li>
-                <li>Subs per advertised speed</li>
-              </ul>
-            </td>
-            <td>
-              <ul>
-                <li>(Mostly) Confidential</li>
-                <li>State</li>
-                <li>Subs per advertised speed</li>
-              </ul>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+      <section>
+        <h2>Data used for search and charts</h2>
+        <table class="table table-bordered table-striped">
+          <thead>
+            <tr>
+              <th>Page</th>
+              <th>Feature</th>
+              <th>Source</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th>Location Summary</th>
+              <td>Provider table</td>
+              <td><a href="https://opendata.fcc.gov/Wireline/Fixed-Broadband-Deployment-Data-December-2016-Stat/b5f4-szwq" target="_blank">Fixed Broadband Deployment Data: December, 2016 Status V1</a></td>
+            </tr>
+            <tr>
+              <th rowspan="2">Area Summary</th>
+              <td>Geography search</td>
+              <td><a href="https://opendata.fcc.gov/dataset/Geography-Lookup-2017/fh6b-eeeb" target="_blank">Geography Lookup 2017</a></td>
+            </tr>
+            <tr>
+              <td>Charts</td>
+              <td><a href="https://opendata.fcc.gov/dataset/Area-Table-Dec2016/xv2f-wqqz/" target="_blank">Area Table Dec2016</a></td>
+            </tr>
+            <tr>
+              <th rowspan="2">Area Comparison</th>
+              <td>Geography search</td>
+              <td><a href="https://opendata.fcc.gov/dataset/Geography-Lookup-2017/fh6b-eeeb" target="_blank">Geography Lookup 2017</a></td>
+            </tr>
+            <tr>
+              <td>Results tables</td>
+              <td><a href="https://opendata.fcc.gov/dataset/Area-Table-Dec2016/xv2f-wqqz/" target="_blank">Area Table Dec2016</a></td>
+            </tr>
+            <tr>
+              <th rowspan="2">Provider Detail</th>
+              <td>Search</td>
+              <td><a href="https://opendata.fcc.gov/Wireline/Fixed-Broadband-Deployment-Data-December-2016-Stat/b5f4-szwq" target="_blank">Fixed Broadband Deployment Data: December, 2016 Status V1</a></td>
+            </tr>
+            <tr>
+              <td>Charts</td>
+              <td><a href="https://opendata.fcc.gov/dataset/Provider-Table-Dec2016/s8yu-gdgv" target="_blank">Provider Table Dec2016</a></td>
+            </tr>
+          </tbody>
+        </table>        
+      </section>
+
+      <section>
+        <h2>Raw data</h2>
+        <table class="table table-bordered table-striped">
+          <thead>
+            <tr>
+              <th>Description</th>
+              <th>Source</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th>Fixed-broadband deployment data: FCC Form 477 as of December 2016 (v1)</th>
+              <td><a href="https://www.fcc.gov/general/broadband-deployment-data-fcc-form-477" target="_blank">FCC Wireline Competition</a></td>
+            </tr>
+            <tr class="indent-3">
+              <th colspan="2">Areas used to map fixed-broadband deployment data</th>              
+            </tr>
+            <tr>
+              <th class="indent">2010 Census blocks (and roll-ups to larger areas)</th>
+              <td>
+                <a href="https://www.census.gov/geo/maps-data/data/tiger-line.html" target="_blank">Census.gov</a>
+              </td>
+            </tr>
+            <tr>
+              <th class="indent">2010 Cartographic Census tracts (500 km)</th>
+              <td>
+                <a href="https://www.census.gov/geo/maps-data/data/cbf/cbf_counties.html" target="_blank">Census.gov</a>
+              </td>
+            </tr>
+            <tr>
+              <th class="indent">2010 Cartographic Census counties (500 km)</th>
+              <td>
+                <a href="https://www.census.gov/geo/maps-data/data/cbf/cbf_tracts.html" target="_blank">Census.gov</a>
+              </td>
+            </tr>
+            <tr class="indent-6">
+              <th colspan="2">Geographic-area definitions</th>              
+            </tr>
+            <tr>
+              <th class="indent">2016 Cartographic States</th>
+              <td>
+                [source to be added]
+              </td>
+            </tr>
+            <tr>
+              <th class="indent">2016 Cartographic Counties</th>
+              <td>
+                [source to be added]
+              </td>
+            </tr>
+            <tr>
+              <th class="indent">115th Congressional Districts</th>
+              <td>
+                [source to be added]
+              </td>
+            </tr>
+            <tr>
+              <th class="indent">2016 Cartographic Tribal areas (for Federally recognized tribal areas)</th>
+              <td>
+                [source to be added]
+              </td>
+            </tr>
+            <tr>
+              <th class="indent">2016 Core-Based Statistical Areas (CBSAs): roll-up of 2016 Cartographic Counties</th>
+              <td>
+                [source to be added]
+              </td>
+            </tr>
+            <tr>
+              <th class="indent">2016 Census Designated Places</th>
+              <td>
+                [source to be added]
+              </td>
+            </tr>
+            <tr>
+              <th>Urban/rural definition; Census 2010, Summary File 1</th>
+              <td>
+                <a href="https://www.census.gov/2010census/news/press-kits/summary-file-1.html" target="_blank">Census.gov</a>
+              </td>
+            </tr>
+            <tr>
+              <th>Tribal definition; Census 2010, Summary File 1</th>
+              <td>
+                <a href="https://www.census.gov/2010census/news/press-kits/summary-file-1.html" target="_blank">Census.gov</a>
+              </td>
+            </tr>
+            <tr>
+              <th>Block-level estimates for population, housing units and households</th>
+              <td>
+                <a href="https://www.fcc.gov/reports-research/data/staff-block-estimates" target="_blank">Census.gov</a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+      <br>
     </div>
-    <div class="col-sm-4">
-      <div class="panel-sidebar panel panel-default">
-        <div class="panel-heading">
-          <h3 class="panel-title">FCC Data</h3>
-        </div>
-        <div class="panel-body">
-          <section>
-            <p><b>Raw Data</b></p>
-            <ul class="list-unstyled">
-              <li><a href="#">Form 477</a></li>
-              <li><a href="#">Block-level estimates for HU, HH, POP</a></li>
-            </ul>
-            <hr>
-            <p><b>Processed Data</b></p>
-            <ul class="list-unstyled">
-              <li><a href="#">Mapping data</a></li>
-              <li><a href="#">Roll-ups to geography</a></li>
-              <li><a href="#">Provider Summary</a></li>
-            </ul>
-          </section>
-          <hr>
-          <h3 class="h4">Non-FCC Data</h3>
-          <section>
-            <ul class="list-unstyled">
-              <li><b>Geographic Data from Census</b>
-                <ul class="list-unstyled">
-                  <li><a href="#">2010 census blocks </a></li>
-                  <li><a href="#">20xx cartographic tracts and counties</a></li>
-                  <li><a href="#">Cartographic state</a></li>
-                  <li><a href="#">20xx Congressional Districts</a></li>
-                  <li><a href="#">20xx CDPs</a></li>
-                  <li><a href="#">20xx Tribal areas</a></li>
-                </ul>
-              </li>
-              <li><a href="#">CBSA definition </a></li>
-            </ul>
-          </section>
-        </div>
-      </div>
-    </div>
+    
   </div>
 </div>
