@@ -12,16 +12,18 @@
   border-top: 7px solid #ffcc44;
   margin-top: 40px;
   max-width: 100%;
-  @media(min-width: 768px) {
+  @media (min-width: 768px) {
     max-width: 300px;
     margin-top: 0;
   }
 }
 
-.panel-heading {
-  background-color: #fff;
-  border: none;
-  padding-bottom: 0;
+.panel-default {
+  > .panel-heading {
+    background-color: #fff;
+    border: none;
+    padding-bottom: 0;
+  }
 }
 
 .panel-title {
@@ -32,10 +34,10 @@
   ul {
     margin-bottom: 0;
   }
-  li+li {
+  li + li {
     margin-top: 10px;
   }
-  li>ul {
+  li > ul {
     margin: 5px 0 0;
     padding-left: 0;
   }
@@ -52,4 +54,38 @@
   td:last-child {
     word-break: break-word;
   }
+}
+
+/* Logos */
+.status {
+  margin-top: 27px;
+  text-align: right;
+  max-width: 300px;
+  > span {
+    // display: block;
+    font-size: 11px;
+    margin-bottom: 2px;
+  }
+  // ul {
+  //   display: inline;
+  // }
+  li {
+    padding-right: 0;
+    vertical-align: middle;
+  }
+}
+.logo-socrata {
+  background: url('../../assets/images/socrata-logo.png') 0 0 no-repeat transparent;
+  background-size: contain;
+  display: inline-block;
+  height: 24px;
+  width: 90px;
+}
+
+.logo-mapbox {
+  background: url('../../assets/images/mapbox-logo-color.png') 0 0 no-repeat transparent;
+  background-size: contain;
+  display: inline-block;
+  height: 23px;
+  width: 100px;
 }
