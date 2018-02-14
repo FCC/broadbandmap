@@ -59,7 +59,6 @@ const router = new Router({
       component: About,
       meta: { title: 'About' }
     },
-    /* Page Not Found handler */
     {
       path: '/PageNotFound',
       name: 'Page Not Found',
