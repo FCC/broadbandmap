@@ -156,8 +156,7 @@ export default {
       // Update the URL with store params
       this.updateURL()
 
-      // Get the block FIPS
-      // this.getFIPS(lat, lon)
+      // Get the chart data
       this.fetchAreaData()
     },
     fetchAreaData () {
