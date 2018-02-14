@@ -45,7 +45,7 @@ export default {
     },
     searchButtonClicked (event) {
       // Pass the event and geography type to the Autocomplete component
-      this.$refs.autocomplete2.searchButtonClicked(event, this.searchType)
+      this.$refs.autocomplete2.validateQuery(event, this.searchType)
     },
     // Check query string and override or use default search type
     receiveSearchType () {

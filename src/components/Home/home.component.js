@@ -26,7 +26,7 @@ export default {
     ]),
     searchButtonClicked (event) {
       // Pass the event and geography type to the Autocomplete component
-      this.$refs.autocomplete2.searchButtonClicked(event, 'Address')
+      this.$refs.autocomplete2.validateQuery()
     },
     searchByAddr (typeaheadModel) { // Send address search query to Location Summary page
       this.setAddrSearch({
