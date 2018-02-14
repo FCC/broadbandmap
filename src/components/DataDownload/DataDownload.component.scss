@@ -2,17 +2,24 @@
   max-width: 800px;
 }
 
-.indent-3 ~ tr:nth-of-type(-n+5) {
+tbody {
+  th {
+    font-weight: normal;
+  }
+}
+
+.indent-3 ~ tr:nth-of-type(-n + 5) {
   th {
     padding-left: 25px;
   }
 }
 
-.indent-6 ~ tr:nth-of-type(-n+12) {
+.indent-6 ~ tr:nth-of-type(-n + 12) {
   th {
     padding-left: 25px;
   }
 }
+
 section {
   + section {
     margin-top: 30px;
