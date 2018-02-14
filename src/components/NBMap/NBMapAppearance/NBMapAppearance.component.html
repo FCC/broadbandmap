@@ -2,13 +2,27 @@
   <form>
     <div class="row">
       <div class="col-sm-12">
-        <label for="transparency">Set data layer transparency:</label>
+        <p><b>Layer options</b></p>
+        <div class="checkbox">
+          <input type="checkbox" name="waterBlocks" id="waterBlocks" v-model="showWaterBlocks" @click="setWaterBlocks(showWaterBlocks)">
+          <label for="waterBlocks">Display water only blocks</label>
+        </div>
+        <div class="checkbox">
+          <input type="checkbox" name="unPopBlocks" id="unPopBlocks" v-model="showUnPopBlocks" @click="setUnPopBlocks(showUnPopBlocks)">
+          <label for="unPopBlocks">Display un-populated blocks/tracts</label>
+        </div>
+      </div>
+    </div>
+    <hr>
+    <div class="row">
+      <div class="col-sm-12">
+        <label for="transparency">Data layer transparency</label>
         <div class="slider">
-          <input id="slider" name="slider" type="range" min="0" max="100" value="100" v-model="opacity" @change="updateOpacity(opacity)">
+          <input id="slider" name="slider" type="range" min="0" max="100" value="0" v-model="opacity" @change="setOpacity(opacity)">
         </div>
         <div class="slider-output">
           <div class="input-group">
-            <input id="transparency" class="form-control" type="number" name="transparency" min="0" max="100" v-model="opacity" size="3" @change="updateOpacity(opacity)" @input="updateOpacity(opacity)">
+            <input id="transparency" class="form-control" type="number" name="transparency" min="0" max="100" v-model="opacity" size="3" @input="setOpacity(opacity)">
             <span class="input-group-addon">%</span>
           </div>
         </div>
@@ -17,7 +31,7 @@
     <hr>
     <div class="row">
       <div class="col-sm-12">
-        <h3 class="h4">Set map highlight color:</h3>
+        <h3 class="h4">Layer highlight color</h3>
         <button class="btn-selColor btn btn-default" type="button" @click.prevent.stop="showPicker()" :style="'background-color:' + hlColors.hex"><span class="sr-only">Select color</span></button>
         <button class="btn btn-default btn-xs" @click.prevent="updateHighlight(true)">Use Default</button>
         <div id="colorPicker" class="vc-color" v-bind:class="{hide: !displayPicker}">
@@ -26,10 +40,10 @@
         <br>
       </div>
     </div>
-    <hr>
+    <!-- <hr>
     <div class="row">
       <div class="col-sm-12">
-        <h3 class="h4">Set color scheme:</h3>
+        <h3 class="h4">Color scheme</h3>
         <ul class="color-scheme">
           <li class="color-ramp color-ramp-1">
             <button class="color-ramp-link">Selected</button>
@@ -73,7 +87,7 @@
           </li>
         </ul>
       </div>
-    </div>
+    </div> -->
   </form>
   <div slot="footer">
     <button class="btn btn-default pull-right" type="button" @click="closeModal">Close</button>

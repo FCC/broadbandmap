@@ -40,8 +40,11 @@ label {
 
 /* vue-color map highlight color picker */
 .btn-selColor {
-  height: 20px;
-  width: 75px;
+  border: 0 none;
+  border-radius: 4px;
+  height: 22px;
+  width: 126px;
+  margin-right: 10px;
 }
 
 .vc-sketch {
@@ -51,7 +54,7 @@ label {
 .vc-color {
   background-color: #fff;
   box-shadow: 0 0 2px rgba(0, 0, 0, 0.3), 0 4px 8px rgba(0, 0, 0, 0.3);
-  left: 14%;
+  left: 25%;
   position: absolute;
   top: 25px;
   z-index: 2;

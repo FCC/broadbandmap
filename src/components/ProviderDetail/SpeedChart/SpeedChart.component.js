@@ -25,7 +25,7 @@ export default {
     })
 
     let chartData = {
-      labels: ['any', '10', '25', '50', '100', '250', '500', '1000'],
+      labels: ['any', '4', '10', '25', '100', '250', '500', '1000'],
       datasets: []
     }
 

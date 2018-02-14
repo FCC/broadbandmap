@@ -1,10 +1,11 @@
+import { mapGetters } from 'vuex'
 import mapboxgl from 'mapboxgl'
 import { Dropdown, Tooltip } from 'uiv'
+
 import nbMapSearch from './NBMapSearch/'
 import EventHub from '../../_mixins/EventHub.js'
 import { LayersLocation } from './layers-location.js'
 import { LayersArea } from './layers-area.js'
-
 import { urlValidation } from '../../_mixins/urlValidation.js'
 
 export default {
@@ -32,6 +33,7 @@ export default {
       mapLayers: {},
       baseLayerNames: [],
       defaultBaseLayer: 'dark',
+      showBaseLayerCtrl: false,
       showSearch: this.searchType === 'none',
       baseLayers: [{
         id: 'dark',
@@ -56,8 +58,13 @@ export default {
     this.Map.remove()
   },
   methods: {
+    ...mapGetters([
+      // Mount store getters to component scope
+      'getMapOptions'
+    ]),
     init: function () {
       let vm = this
+
       mapboxgl.accessToken = process.env.MAPBOX_ACCESS_TOKEN
 
       // Define map layers based on map type
@@ -70,27 +77,17 @@ export default {
       this.mapLayers = layerTypes[this.mapType]
 
       // Define default map options
-      this.mapOptions = {
-        attributionControl: false,
-        center: [-94.96, 38.82],
+      let mapOpts = this.getMapOptions()
+      this.mapOptions = Object.assign({}, mapOpts, {
         container: 'map-container',
-        maxZoom: 22,
-        minZoom: 0,
-        pitchWithRotate: false,
-        style: this.baseLayers[0].styleURL,
-        zoom: 3
-      }
+        style: this.baseLayers[0].styleURL
+      })
 
       // Create map
       let map = new mapboxgl.Map(this.mapOptions)
 
       // Add Controls to map
       this.addControls(map)
-
-      map.on('load', () => {
-        // Fix Mapbox wordmark display
-        document.querySelector('.mapboxgl-ctrl-bottom-left').firstChild.setAttribute('style', 'display: block')
-      })
 
       map.on('style.load', () => {
         // Reload the cartographic layers after base layer style change
@@ -113,11 +110,6 @@ export default {
           enableHighAccuracy: true
         },
         trackUserLocation: true
-      })
-
-      // Define Attribution Control
-      const attrControl = new mapboxgl.AttributionControl({
-        compact: true
       })
 
       // Define custom Nationwide control
@@ -151,7 +143,6 @@ export default {
       const layerSwitchControl = new LayerSwitchControl()
 
       // Add controls to map
-      map.addControl(attrControl, 'bottom-right')
       map.addControl(navControl, 'top-left')
       map.addControl(geoLocControl, 'top-left')
       map.addControl(nationwideBtnControl, 'top-left')
@@ -176,11 +167,7 @@ export default {
       })
 
       map.on('zoomend', function (event) {
-        console.log('zoom = ', map.getZoom())
-
-        let zoomLevel = map.getZoom()
-
-        vm.$emit('map-zoomend', zoomLevel)
+        vm.$emit('map-zoomend', event)
       })
 
       map.on('dragend', function (event) {
@@ -198,6 +185,9 @@ export default {
       })
 
       this.Map.setStyle(baseLayerURL)
+
+      // Hide the control dropdown
+      this.showBaseLayerCtrl = false
     },
     addCartographicLayers (mapLayers) {
       let layers = this.Map.getStyle().layers
@@ -231,9 +221,6 @@ export default {
     }
   },
   computed: {
-
-  },
-  watch: {
 
   }
 }

@@ -1,8 +1,9 @@
-import axios from 'axios'
-// Include the needed "uiv" library components
 import { Typeahead } from 'uiv'
-import { urlValidation } from '../../_mixins/urlValidation.js'
+import axios from 'axios'
+
 import EventHub from '../../_mixins/EventHub.js'
+import { urlValidation } from '../../_mixins/urlValidation.js'
+
 export default {
   components: {
     Typeahead: Typeahead
@@ -10,7 +11,6 @@ export default {
   mixins: [urlValidation],
   // Bind vars passed in via the <Autocomplete> tag
   props: ['placeholderText', 'searchType', 'originPage'],
-  // Initialize vars
   data () {
     return {
       typeaheadModel: '',
@@ -26,117 +26,138 @@ export default {
     this.$nextTick(this.populateTypeahead)
   },
   methods: {
-    searchButtonClicked (event) {
-      if (this.searchType !== 'Provider') {
-        this.enterClicked(event)
+    validateQuery (event) {
+      const geogs = ['State', 'County', 'Congressional District', 'Census Place', 'Tribal Area', 'CBSA (MSA)']
+
+      if (this.searchType === 'Provider') {
+        return
       }
-    },
-    enterClicked (event) {
-      if (this.originPage !== 'AreaComparison' && this.originPage !== 'ProviderDetail') {
-        // Prevent duplicate search calls
-        if (this.selectedItem.hasOwnProperty('place_name') && this.selectedItem.place_name === this.typeaheadModel) {
-          return
-        }
 
-        // Prevent duplicate search calls
-        if (this.searchType === 'Address' && document.getElementById('addr').value === this.$route.query.place_name) {
-          return
-        }
+      // Validate address search
+      if (this.searchType === 'Address') {
+        setTimeout(() => {
+          this.geoCode()
+        }, 100)
 
-        // If search button is clicked if search query has not been geocoded
-        if (this.searchType === 'Address' && typeof this.typeaheadModel === 'string' && event.type === 'click') {
-          EventHub.$emit('openModal', 'No results found', 'Please enter and then select a valid U.S. address.')
-          return
-        }
+        // this.gotoGeography()
+      }
 
-        // If search query has been geocoded, gotoGeography
-        if (this.typeaheadModel.hasOwnProperty('id') || this.searchType !== 'Address') {
-          // bizarre timeout because of stupid logic
+      // Validate coordinates search
+      if (this.searchType === 'Coordinates') {
+        this.validateCoords()
+      }
+
+      // Validate geography (state, county, etc.) search
+      if (geogs.indexOf(this.searchType) > -1) {
+        if (event && event.keyCode === 13) {
+          // If enter key pressed, wait for typeahead to be updated before validating
           setTimeout(() => {
             this.selectedItem = this.typeaheadModel
-            this.gotoGeography(event)
+            this.validateGeog()
           }, 100)
-        }
-
-        // When enter key is pressed, gotoGeography
-        if (event && event.keyCode === 13 && this.searchType === 'Address') {
-          // bizarre timeout because of stupid logic
-          setTimeout(() => {
-            this.selectedItem = this.typeaheadModel
-            this.gotoGeography(event)
-          }, 100)
+        } else {
+          this.validateGeog()
         }
       }
     },
+    geoCode () {
+      let query = this.typeaheadModel.hasOwnProperty('place_name') ? this.typeaheadModel.place_name : this.typeaheadModel
+
+      let geoCodeURL = 'https://api.mapbox.com/geocoding/v5/mapbox.places/' + query + '.json?country=us&limit=10&access_token=' + process.env.MAPBOX_ACCESS_TOKEN + '&'
+
+      if (query === '') {
+        this.showError()
+      } else {
+        axios.get(geoCodeURL)
+          .then(response => {
+            let results = response.data.features
+
+            let foundResult = results.filter(result => {
+              return result.place_name === query
+            })
+
+            if (foundResult.length > 0) {
+              this.typeaheadModel = foundResult[0]
+
+              this.validateAddr()
+            } else {
+              this.showError()
+            }
+          })
+          .catch(error => {
+            this.showError()
+          })
+      }
+    },
+    validateAddr () {
+      if (typeof this.typeaheadModel === 'object' && typeof this.typeaheadModel.id === 'string') {
+        this.gotoGeography()
+        this.selectedItem = this.typeaheadModel
+      } else {
+        this.showError()
+      }
+    },
+    validateCoords () {
+      let coordinates = this.typeaheadModel.split(',')
+
+      if (coordinates.length === 2 && this.isValidLatLon(coordinates[0], coordinates[1])) {
+        this.coordinates = coordinates
+        this.gotoGeography()
+      } else {
+        this.showError()
+      }
+    },
+    validateGeog () {
+      if (this.typeaheadModel.hasOwnProperty('geoid') && this.typeaheadModel.geoid !== '') {
+        this.gotoGeography()
+      } else {
+        this.showError()
+      }
+    },
+
     // Called when user pressed enter or clicked search
     gotoGeography (event) {
-      let newURL = ''
-
       switch (this.searchType) {
         case 'Address':
-          if (typeof this.typeaheadModel === 'object' && typeof this.typeaheadModel.id === 'string') {
-            // Create the URL
-            newURL = 'location-summary?lat=' + this.typeaheadModel.center[1].toFixed(6) + '&lon=' + this.typeaheadModel.center[0].toFixed(6) + '&place_name=' + encodeURIComponent(this.typeaheadModel.place_name)
-            this.$router.push(newURL)
-            EventHub.$emit('updateAddrSearch')
-          } else {
-            // Call Modal component in app footer
-            EventHub.$emit('openModal', 'No results found', 'Please enter and then select a valid U.S. address.')
-          }
+          EventHub.$emit('searchByAddr', this.typeaheadModel)
           break
         case 'Coordinates':
-          let coordinatesArray = this.typeaheadModel.split(',')
-          if (coordinatesArray.length === 2 && this.isValidLatLon(coordinatesArray[0], coordinatesArray[1])) {
-            newURL = 'location-summary?lat=' + coordinatesArray[0].trim() + '&lon=' + coordinatesArray[1].trim()
-            this.$router.push(newURL)
-            EventHub.$emit('updateAddrSearch')
-          } else {
-            // Call Modal component in app footer
-            EventHub.$emit('openModal', 'No results found', 'Please enter valid coordinates in "latitude, longitude" format.')
-          }
+          EventHub.$emit('searchByCoords', this.coordinates)
           break
         case 'State':
-          // console.log('gotoGeography(), searchType= ' + this.searchType + ', typeaheadModel= ', this.typeaheadModel)
           if (this.originPage !== 'AreaComparison') {
-            newURL = 'area-summary?type=state&geoid=' + this.typeaheadModel.geoid + '&bbox=' + this.typeaheadModel.bbox_arr
-            this.$router.push(newURL)
-            EventHub.$emit('updateGeogSearch')
+            EventHub.$emit('searchByGeog', 'state', this.typeaheadModel)
           }
           break
         case 'CBSA (MSA)':
-          // console.log('gotoGeography(), searchType= ' + this.searchType + ', typeaheadModel= ', this.typeaheadModel)
-          newURL = 'area-summary?type=cbsa&geoid=' + this.typeaheadModel.geoid + '&bbox=' + this.typeaheadModel.bbox_arr
-          this.$router.push(newURL)
-          EventHub.$emit('updateGeogSearch')
+          EventHub.$emit('searchByGeog', 'cbsa', this.typeaheadModel)
           break
         case 'County':
-          // console.log('gotoGeography(), searchType= ' + this.searchType + ', typeaheadModel= ', this.typeaheadModel)
-          newURL = 'area-summary?type=county&geoid=' + this.typeaheadModel.geoid + '&bbox=' + this.typeaheadModel.bbox_arr
-          this.$router.push(newURL)
-          EventHub.$emit('updateGeogSearch')
+          EventHub.$emit('searchByGeog', 'county', this.typeaheadModel)
           break
         case 'Congressional District':
-          // console.log('gotoGeography(), searchType= ' + this.searchType + ', typeaheadModel= ', this.typeaheadModel)
-          newURL = 'area-summary?type=cd&geoid=' + this.typeaheadModel.geoid + '&bbox=' + this.typeaheadModel.bbox_arr
-          this.$router.push(newURL)
-          EventHub.$emit('updateGeogSearch')
+          EventHub.$emit('searchByGeog', 'cd', this.typeaheadModel)
           break
         case 'Tribal Area':
-          // console.log('gotoGeography(), searchType= ' + this.searchType + ', typeaheadModel= ', this.typeaheadModel)
-          newURL = 'area-summary?type=tribal&geoid=' + this.typeaheadModel.geoid + '&bbox=' + this.typeaheadModel.bbox_arr
-          this.$router.push(newURL)
-          EventHub.$emit('updateGeogSearch')
+          EventHub.$emit('searchByGeog', 'tribal', this.typeaheadModel)
           break
         case 'Census Place':
-          // console.log('gotoGeography(), searchType= ' + this.searchType + ', typeaheadModel= ', this.typeaheadModel)
-          newURL = 'area-summary?type=place&geoid=' + this.typeaheadModel.geoid + '&bbox=' + this.typeaheadModel.bbox_arr
-          this.$router.push(newURL)
-          EventHub.$emit('updateGeogSearch')
+          EventHub.$emit('searchByGeog', 'place', this.typeaheadModel)
           break
         default:
           // console.log('DEBUG: No handler in gotoGeography() for searchType = ' + this.searchType)
           break
       }
+    },
+    showError () {
+      let srchLabel = this.searchType === 'CBSA (MSA)' ? this.searchType : this.searchType.toLowerCase()
+      let errorMsg = 'Please type then select a valid ' + srchLabel + ' from the search suggestions.'
+
+      // Call Modal component in app footer
+      EventHub.$emit('openModal', this.searchType + ' not found', errorMsg)
+
+      // Clear search input
+      this.typeaheadModel = ''
     },
     // Called by data() on init, and when searchType changes
     populateTypeahead () {

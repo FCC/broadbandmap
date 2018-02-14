@@ -45,7 +45,7 @@ export default {
     },
     searchButtonClicked (event) {
       // Pass the event and geography type to the Autocomplete component
-      this.$refs.autocomplete2.searchButtonClicked(event, this.searchType)
+      this.$refs.autocomplete2.validateQuery(event, this.searchType)
     },
     // Check query string and override or use default search type
     receiveSearchType () {
@@ -62,6 +62,8 @@ export default {
           this.searchType = 'Tribal Area'
         } else if (this.$route.query.type === 'place') {
           this.searchType = 'Census Place'
+        } else if (this.$route.query.type === 'nation') {
+          this.searchType = this.defaultSearch
         }
       } else if (this.isValidLatLon(this.$route.query.lat, this.$route.query.lon)) {
         // If valid lat, lon and address

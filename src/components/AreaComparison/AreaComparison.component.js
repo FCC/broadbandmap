@@ -48,7 +48,7 @@ export default {
       rows: [],
       nwData: [],
       stateData: [],
-      searchType: 'County',
+      searchType: '', // Set to 'County' to show county table on page load
       refreshingDropdown: false,
       selectedTech: 'acfosw',
       selectedSpeed: '25_3',
@@ -437,6 +437,10 @@ export default {
 
           this.nwData = []
           this.nwData.push(rowData)
+
+          // Prevent other tables from displaying data on initial page load
+          this.rows = []
+          break
         } else if (lookupData === 'state') {
           // Populate State results table data
           let rowData = this.joinRows('state', this.$refs.autocomplete.typeaheadModel.name, rawData[rdi], totalPop)
@@ -631,6 +635,10 @@ export default {
         routeQP[prop] = routeQ[prop]
       })
 
+      if (routeQ.selectedTech && routeQ.selectedSpeed) {
+        this.updateTechSpeed(routeQ.selectedTech, routeQ.selectedSpeed)
+      }
+
       if (routeQP.searchtype) {
         if (routeQP.searchtype in this.typeReverseDictionary) {
           this.toggleSearchType(this.typeReverseDictionary[routeQP.searchtype])
@@ -656,10 +664,6 @@ export default {
       }
 
       if (routeQP.searchtype || routeQP.geoid) this.compareAreas()
-
-      if (routeQ.selectedTech && routeQ.selectedSpeed) {
-        this.updateTechSpeed(routeQ.selectedTech, routeQ.selectedSpeed)
-      }
     },
     openAboutAreaCompare () {
       EventHub.$emit('openAboutAreaCompare')
