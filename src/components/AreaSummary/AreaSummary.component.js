@@ -297,14 +297,11 @@ export default {
           let bbox = response.data[0].bbox_arr.replace(/{/g, '').replace(/}/g, '')
           let envArray = bbox.split(',')
 
-          // Don't reposition map if current geoid is the same as previous search
-          if (this.getGeogSearch().geoid !== this.prevGeoID) {
-            this.Map.fitBounds(envArray, {
-              animate: false,
-              easeTo: true,
-              padding: 100
-            })
-          }
+          this.Map.fitBounds(envArray, {
+            animate: false,
+            easeTo: true,
+            padding: 100
+          })
 
           // Clear existing geography highlight
           if (this.prevGeogType !== undefined) {
