@@ -31,6 +31,12 @@ export default {
       EventHub.$emit('toggleSidebar', this.hidePane)
     },
     openAboutModal () {
+      let thisTooltip = document.querySelectorAll('.tooltip')
+
+      for (let i = 0; i < thisTooltip.length; i++) {
+        thisTooltip[i].parentNode.removeChild(thisTooltip[i])
+      }
+
       if (this.$route.name === 'LocationSummary') {
         EventHub.$emit('openAboutLocSummary')
       } else {
