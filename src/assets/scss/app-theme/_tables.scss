@@ -12,3 +12,18 @@
     }
   }
 }
+
+.good-table {
+  thead {
+    th:last-child {
+      padding-right: 30px;
+    }
+  }
+  .table-footer,
+  .pagination-controls a {
+    font-size: 13px !important;
+  }
+  .responsive {
+    overflow-x: auto !important;
+  }
+}
