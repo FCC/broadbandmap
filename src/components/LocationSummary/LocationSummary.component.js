@@ -30,13 +30,13 @@ export default {
           width: '20px'
         },
         {
-          label: 'Down (Mbps)',
+          label: 'Down',
           field: 'down',
           type: 'number',
           width: '20px'
         },
         {
-          label: 'Up (Mbps)',
+          label: 'Up',
           field: 'up',
           type: 'number',
           width: '20px'
