@@ -15,9 +15,22 @@
 
 .good-table {
   thead {
-    th:last-child {
-      padding-right: 30px;
+    .sorting {
+      padding-right: 24px !important;
+      vertical-align: top !important;
+      > span:first-child {
+        display: inline-block;
+      }
     }
+    
+    .help-inline {
+      display: block;
+      font-size: 11px;
+      margin-bottom: 0;
+    }
+  }
+  td {
+    padding-right: 24px !important;
   }
   .table-footer,
   .pagination-controls a {
