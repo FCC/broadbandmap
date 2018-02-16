@@ -1,0 +1,6 @@
+<modal v-model="modalModel" :title="modalTitle" @show="init" @hide="close" auto-focus>
+  <p>{{ modalBody }}</p>
+  <div slot="footer">
+    <button class="btn btn-default pull-right" type="button" @click="modalModel=false">Close</button>
+  </div>
+</modal>

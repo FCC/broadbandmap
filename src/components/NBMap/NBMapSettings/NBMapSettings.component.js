@@ -2,17 +2,22 @@ import { Modal } from 'uiv'
 import EventHub from '../../../_mixins/EventHub.js'
 import { urlValidation } from '../../../_mixins/urlValidation.js'
 import { technologies, speeds } from '../../../_mixins/tech-speeds.js'
+import { modalAccessibility } from '../../../_mixins/modal-accessibility.js'
 
 export default {
   name: 'MapSettings',
   components: { Modal },
-  mixins: [urlValidation],
+  mixins: [urlValidation, modalAccessibility],
   props: [],
   mounted () {
     // Get tech and speed values from Store
     EventHub.$on('loadBroadband', (tech, speed) => {
       this.selectedTechCategories = tech.toLowerCase().split('')
       this.selectedSpeed = speed
+    })
+
+    EventHub.$on('openMapSettings', () => {
+      this.showModal = true
     })
   },
   data () {
@@ -24,11 +29,6 @@ export default {
       selectedSpeed: '25_3',
       selectedPropertyID: ''
     }
-  },
-  created () {
-    EventHub.$on('openMapSettings', function () {
-      this.showModal = true
-    }.bind(this))
   },
   methods: {
     saveSettings () {

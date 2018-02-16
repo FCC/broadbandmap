@@ -2,11 +2,12 @@ import { Modal } from 'uiv'
 
 import EventHub from '../../../_mixins/EventHub.js'
 import { urlValidation } from '../../../_mixins/urlValidation.js'
+import { modalAccessibility } from '../../../_mixins/modal-accessibility.js'
 
 export default {
   name: 'TableSettings',
   components: { Modal },
-  mixins: [urlValidation],
+  mixins: [urlValidation, modalAccessibility],
   props: [],
   mounted () {
     // Get selectedTech and selectedSpeed values from URL query params
