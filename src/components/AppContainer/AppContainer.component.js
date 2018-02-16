@@ -6,14 +6,14 @@ import AboutLocationSummary from '@/components/LocationSummary/AboutLocationSumm
 import AboutAreaSummary from '@/components/AreaSummary/AboutAreaSummary/'
 import AboutProviderDetail from '@/components/ProviderDetail/AboutProviderDetail/'
 import AboutAreaComparison from '@/components/AreaComparison/AboutAreaComparison/'
+import ModalDialog from '@/components/ModalDialog/'
 import AppFooter from '@/components/AppFooter/'
 
 export default {
   name: 'AppContainer',
-  components: { AppHeader, SystemAlert, MapSettings, TableSettings, AboutLocationSummary, AboutAreaSummary, AboutProviderDetail, AboutAreaComparison, AppFooter },
+  components: { AppHeader, SystemAlert, MapSettings, TableSettings, AboutLocationSummary, AboutAreaSummary, AboutProviderDetail, AboutAreaComparison, ModalDialog, AppFooter },
   props: [],
   mounted () {
-
   },
   data () {
     return {
