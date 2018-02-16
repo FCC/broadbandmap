@@ -5,11 +5,12 @@ import { Chrome } from 'vue-color'
 
 import EventHub from '../../../_mixins/EventHub.js'
 import { urlValidation } from '../../../_mixins/urlValidation.js'
+import { modalAccessibility } from '../../../_mixins/modal-accessibility.js'
 
 export default {
   name: 'MapAppearance',
   components: { Modal, 'color-picker': Chrome },
-  mixins: [urlValidation],
+  mixins: [urlValidation, modalAccessibility],
   props: [],
   data () {
     return {

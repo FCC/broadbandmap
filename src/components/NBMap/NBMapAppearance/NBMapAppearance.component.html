@@ -1,4 +1,4 @@
-<modal v-model="showModal" title="Map Appearance" @hide="hidePicker()" ref="modal">
+<modal v-model="showModal" title="Map Appearance" @show="init" @hide="hidePicker(); close()" ref="modal" auto-focus>
   <form>
     <div class="row">
       <div class="col-sm-12">
@@ -90,6 +90,6 @@
     </div> -->
   </form>
   <div slot="footer">
-    <button class="btn btn-default pull-right" type="button" @click="closeModal">Close</button>
+    <button class="btn btn-default pull-right" type="button" @click="closeModal" data-action="auto-focus">Close</button>
   </div>
 </modal>
