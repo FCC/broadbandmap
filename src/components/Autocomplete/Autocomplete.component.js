@@ -152,11 +152,16 @@ export default {
       }
     },
     showError () {
-      let srchLabel = this.searchType === 'CBSA (MSA)' ? this.searchType : this.searchType.toLowerCase()
-      let errorMsg = 'Please type then select a valid ' + srchLabel + ' from the search suggestions.'
+      let searchType = this.searchType
+      let srchLabel = searchType === 'CBSA (MSA)' ? searchType : searchType.toLowerCase()
+
+      let errorGeog = 'Please type then select a valid ' + srchLabel + ' from the search suggestions.'
+      let errorCoords = 'Please enter valid coordinates in latitude, longitude format.'
+
+      let errorMsg = searchType === 'Coordinates' ? errorCoords : errorGeog
 
       // Call Modal component in app footer
-      EventHub.$emit('openModal', this.searchType + ' not found', errorMsg)
+      EventHub.$emit('openModal', searchType + ' not found', errorMsg)
 
       // Clear search input
       this.typeaheadModel = ''
