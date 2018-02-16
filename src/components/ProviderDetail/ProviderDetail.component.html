@@ -80,16 +80,7 @@
                 <div class="col-sm-8">
                   <h4 class="h5">Percentage of the pop. covered by selected provider(s)</h4>
                 </div>
-                <div class="col-sm-4">
-                  <div class="nav-utility">
-                    <!-- <tooltip text="Download data" placement="top">
-                      <a href="#"><span class="icon icon-cloud-download"></span><span class="sr-only">Download Data</span></a>
-                    </tooltip> -->
-                    <tooltip text="About this map" placement="top">
-                      <a href="#"><span class="icon icon-info-circle" data-toggle="tooltip" data-placement="top" title="" data-original-title="About"></span><span class="sr-only">About this map</span></a>
-                    </tooltip>
-                  </div>
-                </div>
+                
               </div>
               <population-chart :width="392" :height="350" :data="popChartData.d" v-if="direction === 'd' && popChartData.d"></population-chart>
               <div class="alert alert-info" v-if="direction === 'd' && !popChartData.d">
@@ -126,17 +117,7 @@
               <div class="row">
                 <div class="col-sm-6">
                   <h4 class="h5">Any Technology</h4>
-                </div>
-                <div class="col-sm-6">
-                  <div class="nav-utility">
-                    <!-- <tooltip text="Download data" placement="top">
-                      <a href="#"><span class="icon icon-cloud-download"></span><span class="sr-only">Download Data</span></a>
-                    </tooltip> -->
-                    <tooltip text="About this map" placement="top">
-                      <a href="#"><span class="icon icon-info-circle" data-toggle="tooltip" data-placement="top" title="" data-original-title="About"></span><span class="sr-only">About this map</span></a>
-                    </tooltip>
-                  </div>
-                </div>
+                </div>                
               </div>
               <speed-chart :width="392" :height="270" :data="techChartData.d.all" :providers="providerNames" v-if="direction === 'd' && techChartData.d.all"></speed-chart>
               <div class="alert alert-info" v-if="direction === 'd' && !techChartData.d.all">
@@ -159,17 +140,7 @@
               <div class="row">
                 <div class="col-sm-6">
                   <h4 class="h5">ADSL</h4>
-                </div>
-                <div class="col-sm-6">
-                  <div class="nav-utility">
-                    <!-- <tooltip text="Download data" placement="top">
-                      <a href="#"><span class="icon icon-cloud-download"></span><span class="sr-only">Download Data</span></a>
-                    </tooltip> -->
-                    <tooltip text="About this map" placement="top">
-                      <a href="#"><span class="icon icon-info-circle" data-toggle="tooltip" data-placement="top" title="" data-original-title="About"></span><span class="sr-only">About this map</span></a>
-                    </tooltip>
-                  </div>
-                </div>
+                </div>                
               </div>
               <speed-chart :width="392" :height="270" :data="techChartData.d.adsl" :providers="providerNames" v-if="direction === 'd' && techChartData.d.adsl"></speed-chart>
               <div class="alert alert-info" v-if="direction === 'd' && !techChartData.d.adsl">
@@ -190,17 +161,7 @@
               <div class="row">
                 <div class="col-sm-6">
                   <h4 class="h5">Cable</h4>
-                </div>
-                <div class="col-sm-6">
-                  <div class="nav-utility">
-                    <!-- <tooltip text="Download data" placement="top">
-                      <a href="#"><span class="icon icon-cloud-download"></span><span class="sr-only">Download Data</span></a>
-                    </tooltip> -->
-                    <tooltip text="About this map" placement="top">
-                      <a href="#"><span class="icon icon-info-circle" data-toggle="tooltip" data-placement="top" title="" data-original-title="About"></span><span class="sr-only">About this map</span></a>
-                    </tooltip>
-                  </div>
-                </div>
+                </div>                
               </div>
               <speed-chart :width="392" :height="270" :data="techChartData.d.cable" :providers="providerNames" v-if="direction === 'd' && techChartData.d.cable"></speed-chart>
               <div class="alert alert-info" v-if="direction === 'd' && !techChartData.d.cable">
@@ -223,17 +184,7 @@
               <div class="row">
                 <div class="col-sm-6">
                   <h4 class="h5">Fiber</h4>
-                </div>
-                <div class="col-sm-6">
-                  <div class="nav-utility">
-                    <!-- <tooltip text="Download data" placement="top">
-                      <a href="#"><span class="icon icon-cloud-download"></span><span class="sr-only">Download Data</span></a>
-                    </tooltip> -->
-                    <tooltip text="About this map" placement="top">
-                      <a href="#"><span class="icon icon-info-circle" data-toggle="tooltip" data-placement="top" title="" data-original-title="About"></span><span class="sr-only">About this map</span></a>
-                    </tooltip>
-                  </div>
-                </div>
+                </div>                
               </div>
               <speed-chart :width="392" :height="270" :data="techChartData.d.fiber" :providers="providerNames" v-if="direction === 'd' && techChartData.d.fiber"></speed-chart>
               <div class="alert alert-info" v-if="direction === 'd' && !techChartData.d.fiber">
@@ -254,17 +205,7 @@
               <div class="row">
                 <div class="col-sm-6">
                   <h4 class="h5">Fixed Wireless</h4>
-                </div>
-                <div class="col-sm-6">
-                  <div class="nav-utility">
-                    <!-- <tooltip text="Download data" placement="top">
-                      <a href="#"><span class="icon icon-cloud-download"></span><span class="sr-only">Download Data</span></a>
-                    </tooltip> -->
-                    <tooltip text="About this map" placement="top">
-                      <a href="#"><span class="icon icon-info-circle" data-toggle="tooltip" data-placement="top" title="" data-original-title="About"></span><span class="sr-only">About this map</span></a>
-                    </tooltip>
-                  </div>
-                </div>
+                </div>                
               </div>
               <speed-chart :width="392" :height="270" :data="techChartData.d.fixedWireless" :providers="providerNames" v-if="direction === 'd' && techChartData.d.fixedWireless"></speed-chart>
               <div class="alert alert-info" v-if="direction === 'd' && !techChartData.d.fixedWireless">
@@ -287,17 +228,7 @@
               <div class="row">
                 <div class="col-sm-6">
                   <h4 class="h5">Satellite</h4>
-                </div>
-                <div class="col-sm-6">
-                  <div class="nav-utility">
-                    <!-- <tooltip text="Download data" placement="top">
-                      <a href="#"><span class="icon icon-cloud-download"></span><span class="sr-only">Download Data</span></a>
-                    </tooltip> -->
-                    <tooltip text="About this map" placement="top">
-                      <a href="#"><span class="icon icon-info-circle" data-toggle="tooltip" data-placement="top" title="" data-original-title="About"></span><span class="sr-only">About this map</span></a>
-                    </tooltip>
-                  </div>
-                </div>
+                </div>                
               </div>
               <speed-chart :width="392" :height="270" :data="techChartData.d.satellite" :providers="providerNames" v-if="direction === 'd' && techChartData.d.satellite"></speed-chart>
               <div class="alert alert-info" v-if="direction === 'd' && !techChartData.d.satellite">
@@ -318,17 +249,7 @@
               <div class="row">
                 <div class="col-sm-6">
                   <h4 class="h5">Other</h4>
-                </div>
-                <div class="col-sm-6">
-                  <div class="nav-utility">
-                    <!-- <tooltip text="Download data" placement="top">
-                      <a href="#"><span class="icon icon-cloud-download"></span><span class="sr-only">Download Data</span></a>
-                    </tooltip> -->
-                    <tooltip text="About this map" placement="top">
-                      <a href="#"><span class="icon icon-info-circle" data-toggle="tooltip" data-placement="top" title="" data-original-title="About"></span><span class="sr-only">About this map</span></a>
-                    </tooltip>
-                  </div>
-                </div>
+                </div>                
               </div>
               <speed-chart :width="392" :height="270" :data="techChartData.d.other" :providers="providerNames" v-if="direction === 'd' && techChartData.d.other"></speed-chart>
               <div class="alert alert-info" v-if="direction === 'd' && !techChartData.d.other">
