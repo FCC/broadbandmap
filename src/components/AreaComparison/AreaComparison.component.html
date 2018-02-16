@@ -9,7 +9,7 @@
           <!-- <tooltip text="Download data" placement="top">
           <a href="#"><span class="icon icon-cloud-download"></span><span class="sr-only">Download Data</span></a>
         </tooltip> -->
-          <tooltip text="About this map" trigger="hover" placement="bottom">
+          <tooltip text="About this page" trigger="hover" placement="left">
             <button class="btn btn-link" type="button" @click.prevent="openAboutAreaCompare">
               <span class="icon icon-info-circle"></span>
             </button>
@@ -92,10 +92,10 @@
               <div class="col-sm-6">
                 <div class="nav-utility">
                   <tooltip text="Download Excel file" placement="left">
-                    <a href="/area-comparison/#" download type="text/csv" @click.prevent="exportTable('.table-nw', 'Nationwide')"><span class="icon icon-file-excel-o"></span><span class="sr-only">Download Excel file</span></a>
+                    <a href="/area-comparison/#" download @click.prevent="exportTable('.table-nw', 'Nationwide')"><span class="icon icon-file-excel-o"></span><span class="sr-only">Download Excel file</span></a>
                   </tooltip>
                   <tooltip text="Download API data" placement="left">
-                    <a :href="nwDataDownload" target="_blank"><span class="icon icon-cloud-download"></span><span class="sr-only">Download Data</span></a>
+                    <a :href="nwDataDownload" download><span class="icon icon-cloud-download"></span><span class="sr-only">Download Data</span></a>
                   </tooltip>
                 </div>
               </div>
@@ -114,10 +114,10 @@
               <div class="col-sm-6">
                 <div class="nav-utility">
                   <tooltip text="Download Excel file" placement="left">
-                    <a href="/area-comparison/#" download type="text/csv" @click.prevent="exportTable('.table-state', 'State')"><span class="icon icon-file-excel-o"></span><span class="sr-only">Download Excel file</span></a>
+                    <a href="/area-comparison/#" download @click.prevent="exportTable('.table-state', 'State')"><span class="icon icon-file-excel-o"></span><span class="sr-only">Download Excel file</span></a>
                   </tooltip>
                   <tooltip text="Download API data" placement="left">
-                    <a :href="stateDataDownload" target="_blank"><span class="icon icon-cloud-download"></span><span class="sr-only">Download Data</span></a>
+                    <a :href="stateDataDownload" download><span class="icon icon-cloud-download"></span><span class="sr-only">Download Data</span></a>
                   </tooltip>
                 </div>
               </div>
@@ -134,16 +134,15 @@
               <div class="col-sm-6">
                 <div class="nav-utility">
                   <tooltip text="Download Excel file" placement="left">
-                    <a href="/area-comparison/#" download type="text/csv" @click.prevent="exportTable('.table-geog', searchGeogType)"><span class="icon icon-file-excel-o"></span><span class="sr-only">Download Excel file</span></a>
+                    <a href="/area-comparison/#" download @click.prevent="exportTable('.table-geog', searchGeogType)"><span class="icon icon-file-excel-o"></span><span class="sr-only">Download Excel file</span></a>
                   </tooltip>
                   <tooltip text="Download API data" placement="left">
-                    <a :href="geogTypeDownload" target="_blank"><span class="icon icon-cloud-download"></span><span class="sr-only">Download API data</span></a>
+                    <a :href="geogTypeDownload" download><span class="icon icon-cloud-download"></span><span class="sr-only">Download API data</span></a>
                   </tooltip>
                 </div>
               </div>
             </div>
             <div class="table-container panel panel-default">
-
               <vue-good-table styleClass="table-geog table-vgt table-fixed table table-stripped" :columns="columns" :rows="rows" globalSearch="true" :defaultSortBy="{field: 'area_name', type: 'asc'}" :paginate="true" perPage="200" :lineNumbers="false" :responsive="true" />
             </div>
           </section>
