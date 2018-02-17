@@ -33,7 +33,8 @@ export default {
       // Tooltip component needs access to document.querySelector() inside Autocomplete
       document,
       enableTooltip: false,
-      searchType: this.defaultSearch
+      searchType: this.defaultSearch,
+      ariaExpanded: false
     }
   },
   methods: {
