@@ -1,7 +1,6 @@
 import { Spinner } from 'spin.js'
 import axios from 'axios'
 import { Dropdown, Tooltip } from 'uiv'
-import FileSaver from 'file-saver'
 
 import EventHub from '../../_mixins/EventHub.js'
 import Autocomplete from '@/components/Autocomplete/index.vue'
@@ -669,20 +668,14 @@ export default {
       EventHub.$emit('openAboutAreaCompare')
     },
     exportTable (tableID, geogType) {
-      // Export results table as Excel file
-      let tableText = "<table border='1px'><tr>"
-      let tab = document.querySelector(tableID)
+      // Export results table as Excel (xlsx) file
+      // SheetJS JS-XLSX library accessed via CDN on index.html
+      let fileType = 'xlsx'
 
-      for (let j = 0; j < tab.rows.length; j++) {
-        tableText += tab.rows[j].innerHTML + '</tr>'
-      }
+      let elt = document.querySelector(tableID)
+      let wb = XLSX.utils.table_to_book(elt, {sheet: 'Sheet JS'})
 
-      tableText += '</table>'
-      // reomve input params
-      tableText = tableText.replace(/<input[^>]*>|<\/input>/gi, '')
-
-      let blob = new Blob([tableText], { type: 'text/xls' })
-      FileSaver.saveAs(blob, geogType + '_results.xls')
+      return XLSX.writeFile(wb, geogType + '_results.' + fileType)
     }
   },
   computed: {
