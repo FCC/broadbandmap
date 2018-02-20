@@ -1,4 +1,4 @@
-<modal v-model="showModal" title="About Provider Detail" @hide="" ref="modal">
+<modal v-model="showModal" title="About Provider Detail"  @show="init" @hide="close" ref="modal">
   <section>
     <h2>About the map</h2>
     <p>This map will display the residential broadband footprint of up to three providers at one time. Use the search box to look for a provider's name and add the footprint to the map. Click on the "Add Provider" link to get additional search boxes to add additional footprints (up to three).</p>
