@@ -1,4 +1,5 @@
 // Accessibility fix to focus and trap tabbing within modal
+// Source: https://github.com/ireade/accessible-modal-dialog/blob/gh-pages/Dialog.js
 
 export const modalAccessibility = {
   methods: {
@@ -21,7 +22,7 @@ export const modalAccessibility = {
       this.focusedElBeforeOpen = document.activeElement
 
       this.dialogEl.addEventListener('keydown', function (e) {
-        Dialog._handleKeyDown(e)
+        Dialog.handleKeyDown(e)
       })
 
       this.firstFocusableEl.focus()
@@ -33,7 +34,7 @@ export const modalAccessibility = {
         this.focusedElBeforeOpen.focus()
       }
     },
-    _handleKeyDown (e) {
+    handleKeyDown (e) {
       const Dialog = this
       const KEY_TAB = 9
 
