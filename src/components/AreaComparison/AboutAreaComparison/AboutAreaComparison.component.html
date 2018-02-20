@@ -1,4 +1,4 @@
-<modal v-model="showModal" title="About Area Comparison" @hide="" ref="modal">
+<modal v-model="showModal" title="About Area Comparison" @show="init" @hide="close" ref="modal">
   <section>
     <h2>About this page</h2>
     <p>This page allows you to compare data about different areas, either across the country or within one state. Begin by choosing whether you want to compare nationwide or only within one state. Then, choose the type of area you want to compare; choices are States, Counties, Congressional Districts, Census Places (cities and towns), Federally-recognized Tribal Areas and Core-Based Statistical Areas (CBSA), which include Metropolitan and Statistical Areas (MSAs) and Micropolitan Statistical Areas. Finally, hit "Compare".</p>

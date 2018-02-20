@@ -12,6 +12,7 @@
           <tooltip text="About this map" trigger="hover" placement="bottom">
             <button class="btn btn-link" type="button" @click.prevent="openAboutProvider">
               <span class="icon icon-info-circle"></span>
+              <span class="sr-only">About this page</span>
             </button>
           </tooltip>
           <bookmark-link v-if="showResults"></bookmark-link>
@@ -30,7 +31,7 @@
               <div class="input-group input-group-lg" :key="provider.id">
                 <Autocomplete ref="providerBox" :placeholderText="getPlaceholderText" :searchType="searchType" originPage="ProviderDetail" v-model="provider.id"></Autocomplete>
                 <span class="input-group-btn">
-                <button class="btn btn-default btn-remove" type="button" @click.prevent="removeProvider(provider.id)"><span class="icon icon-close"></span></button>
+                <button class="btn btn-default btn-remove" type="button" @click.prevent="removeProvider(provider.id)"><span class="icon icon-close"></span> <span class="sr-only">Delete provider name</span></button>
                 </span>
               </div>
             </template>

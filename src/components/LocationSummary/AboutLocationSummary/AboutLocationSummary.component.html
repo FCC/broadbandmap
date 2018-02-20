@@ -1,4 +1,4 @@
-<modal v-model="showModal" title="About Location Summary" @hide="" ref="modal">
+<modal v-model="showModal" title="About Location Summary" @show="init" @hide="close" ref="modal">
   <section>
     <h2>About this page</h2>
     <p>This map displays data showing the number of providers reporting residential fixed broadband service around the country. As you zoom in, you will see more granular broadband data. When zoomed out, the map displays the population-weighted average number of broadband providers (at the county or census tract) level; at higher zoom levels (as you zoom in closer), the map displays the number of providers in each census block.</p>
