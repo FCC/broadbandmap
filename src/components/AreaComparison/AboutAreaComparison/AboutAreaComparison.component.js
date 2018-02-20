@@ -1,3 +1,5 @@
+// SheetJS JS-XLSX library accessed via CDN on index.html
+
 import { Modal } from 'uiv'
 import { modalAccessibility } from '../../../_mixins/modal-accessibility.js'
 
