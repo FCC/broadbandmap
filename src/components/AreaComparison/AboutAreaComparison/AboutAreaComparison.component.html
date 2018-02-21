@@ -1,13 +1,12 @@
-<modal v-model="showModal" title="About Area Comparison" @hide="" ref="modal">
-<section>
-	<h2>About the table</h2>
-
-<p>This page allows you to compare data about different areas, either across the country or within one state. Begin by choosing whether you want to compare nationwide or only within one state. Then, choose the type of area you want to compare; choices are States, Counties, Congressional Districts, Census Places (cities and towns), Federally-recognized Tribal Areas and Core-Based Statistical Areas (CBSA), which include Metropolitan and Statistical Areas (MSAs) and Micropolitan Statistical Areas. Finally, hit "Compare".</p>
-
-<p>If you are interested in one particular area, you can sort by the name of the Area (by hitting the triangle next to the Area column heading) and scroll to find the area of interest. Alternatively, you can type the name of the area into the "Filter Area" box to limit the number of rows visible.</p>
-</section>
-<hr>
-<section>
+<modal v-model="showModal" title="About Area Comparison" @show="init" @hide="close" ref="modal">
+  <section>
+    <h2>About this page</h2>
+    <p>This page allows you to compare data about different areas, either across the country or within one state. Begin by choosing whether you want to compare nationwide or only within one state. Then, choose the type of area you want to compare; choices are States, Counties, Congressional Districts, Census Places (cities and towns), Federally-recognized Tribal Areas and Core-Based Statistical Areas (CBSA), which include Metropolitan and Statistical Areas (MSAs) and Micropolitan Statistical Areas. Finally, hit "Compare".</p>
+    <p>Data for the country are displayed at the top of the page; and if you search within a state, data for that state overall will also appear at the top of the page. You can adjust the number of rows displayed in the table using the Rows per page pull down at the bottom of the table.</p>
+    <p>If you are interested in one particular area, you can sort by the name of the Area (by hitting the triangle next to the Area column heading) and scroll to find the area of interest. Alternatively, you can type the name of the area into the "Filter Area" box to limit the number of rows visible.</p>
+  </section>
+  <hr>
+  <section>
     <h2>Table controls</h2>
     <table class="table-mapControls table table-condensed table-bordered">
       <thead>
@@ -25,9 +24,17 @@
           <td><span class="icon icon-link"></span></td>
           <td>To save or share the results table, click on the "Link to this page" button, then click the "Copy to Clipboard" button.</td>
         </tr>
+        <tr>
+          <td><span class="icon icon-cloud-download"></span></td>
+          <td>Download data as JSON file.</td>
+        </tr>
+        <tr>
+          <td><span class="icon icon-file-excel-o"></span></td>
+          <td>Download data as Excel file.</td>
+        </tr>
       </tbody>
     </table>
-  </section>
+  </section>  
   <div slot="footer">
     <!-- <button class="btn btn-default" type="button" @click="closeModal">Close</button> -->
     <button class="btn btn-default pull-right" type="button" @click="closeModal">Close</button>

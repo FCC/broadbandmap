@@ -1,4 +1,4 @@
-<modal v-model="showModal" title="About Provider Detail" @hide="" ref="modal">
+<modal v-model="showModal" title="About Provider Detail"  @show="init" @hide="close" ref="modal">
   <section>
     <h2>About the map</h2>
     <p>This map will display the residential broadband footprint of up to three providers at one time. Use the search box to look for a provider's name and add the footprint to the map. Click on the "Add Provider" link to get additional search boxes to add additional footprints (up to three).</p>
@@ -6,7 +6,7 @@
   <hr>
   <section>
     <h2>About the graphs</h2>
-    <p>The graphs on the page provide more information about each provider's reported residential broadband service. The top-most graph displays the fraction of each provider’s reported service availability, as a function of reported broadband speed. Subsequent graphs show the fraction of each provider's footprint that relies on each technology, as a function of speed.</p>
+    <p>The graphs on the page provide more information about each provider's reported residential broadband service. The first graph shows the fraction of the population that each provider’s reported footprint covers.  Below that, the next graph displays the fraction of each provider’s reported service availability, as a function of reported broadband speed. Subsequent graphs show the fraction of each provider's footprint that relies on each technology, as a function of speed.</p>
     <p>Choose "Download" or "Upload" speed, at the top of the page to change whether the graphs display information about download speeds or upload speeds.</p>
     <p>Broadband providers report data at the census block level, and may not offer service to every home in every block in which they report service. The calculations used to create the graphs treat every location as having service, and may therefore over-estimate broadband coverage, particularly in areas with large census blocks.</p>
   </section>
@@ -27,11 +27,7 @@
           <th>Description</th>
         </tr>
       </thead>
-      <tbody>
-        <tr>
-          <td><span class="icon icon-cog"></span></td>
-          <td>The "Select Broadband" menu allows you to change the technologies and downstream and upstream speeds displayed in this map.</td>
-        </tr>
+      <tbody>        
         <tr>
           <td>
             <span class="mapboxgl-ctrl-icon mapboxgl-ctrl-zoom-in"></span>

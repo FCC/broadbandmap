@@ -143,6 +143,9 @@ export default {
       let geoid = typeaheadModel.geoid
       let bbox_arr = typeaheadModel.bbox_arr
 
+      // Set search flag
+      this.newSearch = true
+
        // Reset the map view
       this.setMapView({})
 
@@ -297,13 +300,15 @@ export default {
           let bbox = response.data[0].bbox_arr.replace(/{/g, '').replace(/}/g, '')
           let envArray = bbox.split(',')
 
-          // Don't reposition map if current geoid is the same as previous search
-          if (this.getGeogSearch().geoid !== this.prevGeoID) {
+          // Only reposition map if new search query
+          if (this.getGeogSearch().geoid !== this.prevGeoID || this.newSearch) {
             this.Map.fitBounds(envArray, {
               animate: false,
               easeTo: true,
               padding: 100
             })
+
+            this.newSearch = false
           }
 
           // Clear existing geography highlight
@@ -446,6 +451,9 @@ export default {
     viewNationwide () {
       // Clear search box
       document.getElementById('addr').value = ''
+
+      // Clear search flag
+      this.newSearch = false
 
       // Remove map highlight
       let layerExists = this.Map.getLayer(this.geogHighlight)

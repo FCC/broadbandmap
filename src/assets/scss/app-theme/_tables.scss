@@ -12,3 +12,31 @@
     }
   }
 }
+
+.good-table {
+  thead {
+    .sorting {
+      padding-right: 24px !important;
+      vertical-align: top !important;
+      > span:first-child {
+        display: inline-block;
+      }
+    }
+    
+    .help-inline {
+      display: block;
+      font-size: 11px;
+      margin-bottom: 0;
+    }
+  }
+  td {
+    padding-right: 24px !important;
+  }
+  .table-footer,
+  .pagination-controls a {
+    font-size: 13px !important;
+  }
+  .responsive {
+    overflow-x: auto !important;
+  }
+}

@@ -33,7 +33,8 @@ export default {
       // Tooltip component needs access to document.querySelector() inside Autocomplete
       document,
       enableTooltip: false,
-      searchType: this.defaultSearch
+      searchType: this.defaultSearch,
+      ariaExpanded: false
     }
   },
   methods: {
@@ -79,17 +80,21 @@ export default {
       this.toggleSearchType(this.searchType)
     },
     openMapSettings () {
+      this.hideTooltips()
+
       EventHub.$emit('openMapSettings')
     },
-    openAboutModal () {
-      if (this.$route.name === 'LocationSummary') {
-        EventHub.$emit('openAboutLocSummary')
-      } else {
-        EventHub.$emit('openAboutAreaSummary')
-      }
-    },
     openMapAppearance () {
+      this.hideTooltips()
+
       EventHub.$emit('openMapAppearance')
+    },
+    hideTooltips () {
+      let thisTooltip = document.querySelectorAll('.tooltip')
+
+      for (let i = 0; i < thisTooltip.length; i++) {
+        thisTooltip[i].parentNode.removeChild(thisTooltip[i])
+      }
     }
   },
   computed: {

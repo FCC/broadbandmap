@@ -29,17 +29,17 @@ export default {
     validateQuery (event) {
       const geogs = ['State', 'County', 'Congressional District', 'Census Place', 'Tribal Area', 'CBSA (MSA)']
 
+      // Provider search is validated in Provider component
       if (this.searchType === 'Provider') {
         return
       }
 
       // Validate address search
       if (this.searchType === 'Address') {
+        // If enter key pressed, wait for typeahead to be updated before validating
         setTimeout(() => {
           this.geoCode()
         }, 100)
-
-        // this.gotoGeography()
       }
 
       // Validate coordinates search
@@ -108,7 +108,9 @@ export default {
       }
     },
     validateGeog () {
-      if (this.typeaheadModel.hasOwnProperty('geoid') && this.typeaheadModel.geoid !== '') {
+      let searchTxt = document.getElementById('addr').value
+
+      if (this.typeaheadModel.hasOwnProperty('geoid') && this.typeaheadModel.geoid !== '' && searchTxt !== '') {
         this.gotoGeography()
       } else {
         this.showError()
@@ -150,11 +152,16 @@ export default {
       }
     },
     showError () {
-      let srchLabel = this.searchType === 'CBSA (MSA)' ? this.searchType : this.searchType.toLowerCase()
-      let errorMsg = 'Please type then select a valid ' + srchLabel + ' from the search suggestions.'
+      let searchType = this.searchType
+      let srchLabel = searchType === 'CBSA (MSA)' ? searchType : searchType.toLowerCase()
+
+      let errorGeog = 'Please type then select a valid ' + srchLabel + ' from the search suggestions.'
+      let errorCoords = 'Please enter valid coordinates in latitude, longitude format.'
+
+      let errorMsg = searchType === 'Coordinates' ? errorCoords : errorGeog
 
       // Call Modal component in app footer
-      EventHub.$emit('openModal', this.searchType + ' not found', errorMsg)
+      EventHub.$emit('openModal', searchType + ' not found', errorMsg)
 
       // Clear search input
       this.typeaheadModel = ''

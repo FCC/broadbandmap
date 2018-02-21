@@ -1,9 +1,9 @@
-<modal v-model="showModal" title="About Location Summary" @hide="" ref="modal">
+<modal v-model="showModal" title="About Location Summary" @show="init" @hide="close" ref="modal">
   <section>
-    <h2>About the map</h2>
+    <h2>About this page</h2>
     <p>This map displays data showing the number of providers reporting residential fixed broadband service around the country. As you zoom in, you will see more granular broadband data. When zoomed out, the map displays the population-weighted average number of broadband providers (at the county or census tract) level; at higher zoom levels (as you zoom in closer), the map displays the number of providers in each census block.</p>
-    <p>You can chose the technologies, and downstream and upstream speeds, displayed in this map when you click on the gear icon [picture of gear icon]. By default, the map shows all technologies and broadband at a speed of at least 25 Mbps downstream / 3 Mbps upstream.</p>
-    <p>Census blocks without any land do not appear on the map, though providers do sometimes report service in such areas. In addition, census blocks and tracts without any population are shown as [TBD].</p>
+    <p>You can chose the technologies, and downstream and upstream speeds, displayed in this map when you click on the gear icon <span class="icon icon-cog"></span>. By default, the map shows all technologies and broadband at a speed of at least 25 Mbps downstream / 3 Mbps upstream.</p>
+    <p>Census blocks without any land do not appear on the map by default, though providers do sometimes report service in such areas.  You can display data for such blocks by clicking "Display water only blocks" in the Map Appearance menu (see <b>Map controls</b> below for more information).  In addition census blocks and tracts without appear on the map by default; you can turn off display of data in such blocks by unchecking "Display unpopulated blocks/tracts" in the Map Appearance menu.</p>
     <p>Since the map color is determined by the combination of technology and speed, while the table lists all provider reporting service in each block, the map may display a lower count of providers than the number of providers listed in the table.</p>
   </section>
   <hr>
@@ -28,6 +28,7 @@
           <td><span class="icon icon-cog"></span></td>
           <td>The "Select Broadband" menu allows you to change the technologies and downstream and upstream speeds displayed in this map.</td>
         </tr>
+        
         <tr>
           <td>
             <span class="mapboxgl-ctrl-icon mapboxgl-ctrl-zoom-in"></span>
@@ -51,6 +52,18 @@
         <tr>
           <td><span class="icon icon-link"></span></td>
           <td>To save or share the current map view and Provider table click on the "Link to this page" button, then click the Copy to Clipboard button.</td>
+        </tr>
+        <tr>
+          <td><span class="icon icon-sliders"></span></td>
+          <td>Adjust map appearance (layer options, transparency, and highlight color).</td>
+        </tr>
+        <tr>
+          <td><img src="../../../assets/images/slider-transparency.png" alt="Slider transparency control"></td>
+          <td>Adjust layer transparency. This will show or hide data for some areas.</td>
+        </tr>
+        <tr>
+          <td><img src="../../../assets/images/layer-highlight-control.png" alt="Select map layer highlight color"></td>
+          <td>Select the map layer highlight color.</td>
         </tr>
       </tbody>
     </table>
