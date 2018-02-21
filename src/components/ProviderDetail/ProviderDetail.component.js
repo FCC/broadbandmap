@@ -39,9 +39,14 @@ export default {
   methods: {
     mapInit (map) {
       this.Map = map
-    },
-    mapClick () {
-      console.log('map click')
+
+      map.on('load', () => {
+        this.addLayers(map)
+      })
+
+      map.on('style.load', () => {
+        this.addLayers(map)
+      })
     },
     loadProviderLookup () {
       const self = this
@@ -137,59 +142,64 @@ export default {
       // Fetch provider data
       this.fetchProviderData()
     },
-    updateMap (map) {
-      map.on('load', () => {
-        // Add a layer for each hoconum
-        this.providerHoconums.forEach((hoconum, index) => {
+    addLayers (map) {
+      // Add a layer for each hoconum
+      this.providerHoconums.forEach((hoconum, index) => {
           // Template for layer style
-          let layerStyle = {
-            id: '',
-            source: {
-              type: 'vector',
-              url: ''
-            },
-            type: 'fill',
-            'source-layer': '',
-            layout: {
-              visibility: 'visible'
-            },
-            paint: {
-              'fill-opacity': 0.5,
-              'fill-color': this.layerColors[index]
-            },
-            'filter': ['in', 'hoconum', hoconum]
-          }
+        let layerStyle = {
+          id: '',
+          source: {
+            type: 'vector',
+            url: ''
+          },
+          type: 'fill',
+          'source-layer': '',
+          layout: {
+            visibility: 'visible'
+          },
+          paint: {
+            'fill-opacity': 0.5,
+            'fill-color': this.layerColors[index]
+          },
+          'filter': ['in', 'hoconum', hoconum]
+        }
 
-          let layerLargeProv = {
-            id: 'large_prov_' + hoconum,
-            source: {
-              type: 'vector',
-              url: 'mapbox://fcc.d16_v1_prov_lg'
-            },
-            'source-layer': 'dec2016_7nov17_prov_lg'
-          }
+        let layerLargeProv = {
+          id: 'large_prov_' + hoconum,
+          source: {
+            type: 'vector',
+            url: 'mapbox://fcc.d16_v1_prov_lg'
+          },
+          'source-layer': 'dec2016_7nov17_prov_lg'
+        }
 
-          let layerProvOther = {
-            id: 'prov_other_' + hoconum,
-            source: {
-              type: 'vector',
-              url: 'mapbox://fcc.d16_v1_prov_other'
-            },
-            'source-layer': 'dec2016_7nov17_prov_other'
-          }
+        let layerProvOther = {
+          id: 'prov_other_' + hoconum,
+          source: {
+            type: 'vector',
+            url: 'mapbox://fcc.d16_v1_prov_other'
+          },
+          'source-layer': 'dec2016_7nov17_prov_other'
+        }
 
           // Merge layer style properties
-          let lyrLargeProv = Object.assign({}, layerStyle, layerLargeProv)
-          let lyrProvOther = Object.assign({}, layerStyle, layerProvOther)
+        let lyrLargeProv = Object.assign({}, layerStyle, layerLargeProv)
+        let lyrProvOther = Object.assign({}, layerStyle, layerProvOther)
 
-          // Add layer to map
-          map.addLayer(lyrProvOther, 'county')
+        let layerExists = this.Map.getLayer(layerLargeProv.id)
+
+        // Add layer to map if it doesn't already exist
+        if (layerExists === undefined) {
           map.addLayer(lyrLargeProv, 'county')
-        })
+        }
+
+        layerExists = this.Map.getLayer(layerProvOther.id)
+        if (layerExists === undefined) {
+          map.addLayer(lyrProvOther, 'county')
+        }
       })
     },
-    // Call Socrata API - Lookup Table for geographies
-    fetchProviderData () {
+    fetchProviderData () { // Call Socrata API - Lookup Table for geographies
       const self = this
       // Call Socrata API - Combined Table for charts
       let socrataURL = ''
@@ -233,12 +243,6 @@ export default {
 
         // Display charts section
         self.showResults = true
-
-        // Resize the map once the charts section is visible
-        setTimeout(() => {
-          self.Map.resize()
-          self.updateMap(self.Map)
-        }, 100)
 
         let providerBox = self.$refs.providerBox
         // Populate list of provider Names
