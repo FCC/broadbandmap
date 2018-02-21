@@ -11,29 +11,7 @@ Prerequisites: Node.js (>=6.x), npm version 3+ and Git.
    npm install
    ```
 
-3. Test the app. 
-
-   Unit and End-to-end tests
-   ```
-   npm test
-   ```
-
-   Unit tests
-   ```
-   npm run unit
-   ```
-   
-   End-to-end test
-   ```
-   npm run e2e
-   ```
-   
-   Lint
-   ```
-   npm run lint
-   ```
-   
-4. Run the app.
+3. Run the app.
 
    Local
    ```
@@ -43,14 +21,18 @@ Prerequisites: Node.js (>=6.x), npm version 3+ and Git.
 ### Deployment
 1. Set the assets path in ./config/index.js based on environment (DEV, ST, AT)
    ```
-   assetsPublicPath: 'http://nelson:7028/nbm2/DEV/'
+   assetsPublicPath: 'https://broadbandmap.fcc.gov/'
    ```
    
 2. Build the app.
    ```
    npm run build
    ```   
-3. Copy files from the ```dist``` folder to ```nelson/nbm2/[environment]```.
+3. Copy files from the ```dist``` folder and create a .zip file (PROD-East.zip).
+
+4. Copy the .zip file to ```K:\Projects\DevOps\NBM```.
+
+5. Request CM ticket for deployment.
 
    
 ### Project Info
