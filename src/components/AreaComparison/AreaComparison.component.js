@@ -166,7 +166,6 @@ export default {
 
     this.setSocrata()
     this.cacheStates()
-    this.getNWData()
 
     this.justMounted = true
 
@@ -244,7 +243,12 @@ export default {
       this.selectedTech = selectedTech
       this.selectedSpeed = selectedSpeed
 
-      if (!this.justMounted) this.compareAreas()
+      this.getNWData()
+      this.getStateData()
+
+      if (!this.justMounted) {
+        this.compareAreas()
+      }
 
        // Display tech and speed
       if (selectedTech !== undefined) {
@@ -347,8 +351,8 @@ export default {
 
       let socParams = {
         type: 'nation',
-        tech: 'acfosw',
-        speed: '25',
+        tech: this.selectedTech,
+        speed: this.speedDictionary[this.selectedSpeed],
         $limit: 5,
         $$app_token: this.appToken,
         $select: 'id,sum(has_0),sum(has_1),sum(has_2),sum(has_3more)',
@@ -386,8 +390,8 @@ export default {
 
       let socParams = {
         type: 'state',
-        tech: 'acfosw',
-        speed: '25',
+        tech: this.selectedTech,
+        speed: this.speedDictionary[this.selectedSpeed],
         $limit: 5,
         $$app_token: this.appToken,
         $select: 'id,sum(has_0),sum(has_1),sum(has_2),sum(has_3more)',
