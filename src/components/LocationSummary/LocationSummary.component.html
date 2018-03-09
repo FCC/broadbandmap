@@ -49,7 +49,7 @@
           </dl>
         </div>
         <div class="charts" slot="charts">
-          <vue-good-table v-if="providerRows.length" styleClass="table-fixed table table-stripped" :columns="providerColumns" :rows="providerRows" :defaultSortBy="{field: 'down', type: 'desc'}" :paginate="false" :lineNumbers="false" :responsive="false">
+          <vue-good-table v-if="providerRows.length" styleClass="table-fixed table table-stripped" :columns="providerColumns" :rows="providerRows" :onClick="showNames" :defaultSortBy="{field: 'down', type: 'desc'}" :paginate="false" :lineNumbers="false" :responsive="false">
             <template slot="table-column" slot-scope="props">
               <span v-if="props.column.label === 'Up' || props.column.label === 'Down'">{{props.column.label}} <span class="help-inline">(Mbps)</span></span>
               <span v-else>{{props.column.label}}</span>
