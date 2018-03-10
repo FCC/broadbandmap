@@ -334,7 +334,7 @@ export default {
           otherNamesHTML = ''
         } else {
           hocoFinalHTML = '<a href="javascript:void(0)" class="btn-collapse collapsed" role="button"><span class="icon icon-plus-circle"></span>' + data[index].hocofinal + '</a>'
-          otherNamesHTML = '<div id="otherNames' + index + '" class="hide">' + otherNames.join('<br>') + '</div>'
+          otherNamesHTML = '<div id="otherNames' + index + '" class="collapsible">' + otherNames.join('<br>') + '</div>'
         }
 
         // Join list of names as a string with HTML
@@ -357,7 +357,14 @@ export default {
       let elm = document.getElementById('otherNames' + row.id)
 
       if (elm !== null) {
-        elm.classList.toggle('hide')
+        let elmHt = elm.style.height
+
+        if (elmHt === '' || elmHt === '0px') {
+          elm.style.height = elm.scrollHeight + 'px'
+        } else {
+          elm.style.height = '0px'
+        }
+
         elm.previousSibling.classList.toggle('collapsed')
       }
     },
