@@ -541,7 +541,10 @@ div.legend-keys {
       width: auto;
     }
     dd {
-      margin-left: 80px;
+      margin: 0 0 10px 0;
+      @media(min-width: 768px) {
+        margin: 0 0 0 80px;
+      }
     }
   }
   .btn {
