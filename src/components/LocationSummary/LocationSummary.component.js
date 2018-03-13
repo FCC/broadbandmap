@@ -22,6 +22,7 @@ export default {
         {
           label: 'Provider',
           field: 'provider',
+          html: true,
           width: '150px'
         },
         {
@@ -302,6 +303,9 @@ export default {
       this.providerRows = []
       let techCode = ''
 
+      let otherNamesHTML = ''
+      let hocoFinalHTML = ''
+
       // Loop through all providers
       for (var index in data) {
         if (typeof this.techCodes[data[index].techcode] !== 'undefined') {
@@ -310,10 +314,36 @@ export default {
           techCode = ''
         }
 
-        // Add this provider to the array
+        // hofofinal name is displayed in Provider table but a provider may be referenced by multiple names
+        // Consolidate list of names
+        let providerNames = [data[index].hocofinal, data[index].holdingcompanyname, data[index].providername, data[index].dbaname]
+
+        // Remove duplicate names
+        let provNames = providerNames.filter(function (item, pos) {
+          return providerNames.indexOf(item) === pos
+        })
+
+        let otherNames = provNames.splice(1)
+
+        // If there are no duplicates, display provider name without collapse feature
+        if (otherNames.length === 1 && otherNames[0].replace(/[.,]/g, '') === data[index].hocofinal.replace(/[.,]/g, '')) {
+          hocoFinalHTML = data[index].hocofinal
+          otherNamesHTML = ''
+        } else if (otherNames.length === 0) {
+          hocoFinalHTML = data[index].hocofinal
+          otherNamesHTML = ''
+        } else {
+          hocoFinalHTML = '<a href="javascript:void(0)" class="btn-collapse collapsed" role="button"><span class="icon icon-plus-circle"></span>' + data[index].hocofinal + '</a>'
+          otherNamesHTML = '<div id="otherNames' + index + '" class="collapsible">' + otherNames.join('<br>') + '</div>'
+        }
+
+        // Join list of names as a string with HTML
+        let names = [hocoFinalHTML, otherNamesHTML].join('')
+
+        // Update array used by Provider table
         this.providerRows.push({
           id: index,
-          provider: data[index].hocofinal,
+          provider: names,
           tech: techCode,
           down: data[index].maxaddown,
           up: data[index].maxadup
@@ -322,6 +352,21 @@ export default {
 
       // Trigger warning message when num. providers = 0
       this.noProviders = !(this.providerRows.length > 0)
+    },
+    showNames (row, index) { // Toggle display of other provider names
+      let elm = document.getElementById('otherNames' + row.id)
+
+      if (elm !== null) {
+        let elmHt = elm.style.height
+
+        if (elmHt === '' || elmHt === '0px') {
+          elm.style.height = elm.scrollHeight + 'px'
+        } else {
+          elm.style.height = '0px'
+        }
+
+        elm.previousSibling.classList.toggle('collapsed')
+      }
     },
     clearProviderTable () { // Remove Census block & provider table results
       this.censusBlock = ''
