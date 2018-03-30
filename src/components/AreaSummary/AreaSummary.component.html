@@ -29,7 +29,7 @@
         </section>
         <div class="techSpeed" slot="techSpeed">
           <div class="row">
-            <div class="col-sm-6">
+            <div class="col-xs-6 col-sm-6">
               <h5><b>Broadband</b></h5>
             </div>
             <div class="col-sm-6 text-right">
@@ -46,6 +46,8 @@
             <dd><span v-if="tech !== ''">{{ tech }}</span><span v-if="tech ===''">(none)</span></dd>
             <dt>Speed</dt>
             <dd><span v-if="speed !== ''">&ge; {{ speed }} Mbps</span><span v-if="speed ===''">(none)</span></dd>
+            <dt>Date</dt>
+            <dd>December 2016 <span class="help-inline">(latest public release)</span></dd>
           </dl>
         </div>
         <div class="charts" slot="charts" v-if="showCharts">
