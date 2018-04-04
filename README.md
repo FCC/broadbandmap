@@ -9,7 +9,7 @@ The Form 477 data collection relies on 2010 Census blocks as a standard for data
 For more information, please visit the [**Data Download**](https://broadbandmap.fcc.gov/#/data-download) page.
 
  ### Screenshot
-![alt text](https://raw.githubusercontent.com/FCC/broadbandmap/static/img/screenshot-home.png "FCC Fixed Broadband Deployment")
+![alt text](https://raw.githubusercontent.com/FCC/broadbandmap/master/static/img/screenshot-home.png "FCC Fixed Broadband Deployment")
 
 ## Form 477 Information and Data
 
