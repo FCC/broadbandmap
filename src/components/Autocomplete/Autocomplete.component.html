@@ -19,7 +19,7 @@
             <!-- Iterate through each address returned -->
             <li v-for="(item, index) in props.items" :class="{active:props.activeIndex===index}">
                 <!-- Link to this address -->
-                <a href="javascript:void(0)" @click="props.select(item); validateQuery()">
+                <a href="javascript:void(0)" @click="props.select(item); validateLocation()">
                     <!-- Highlight search keywords in this item -->
                     <span v-html="props.highlight(item)"></span>
                 </a>
