@@ -1,8 +1,11 @@
+import { mapGetters, mapMutations } from 'vuex'
 import { Typeahead } from 'uiv'
 import axios from 'axios'
 
 import EventHub from '../../_mixins/EventHub.js'
 import { urlValidation } from '../../_mixins/urlValidation.js'
+
+const GEOGS = ['State', 'County', 'Congressional District', 'Census Place', 'Tribal Area', 'CBSA (MSA)']
 
 export default {
   components: {
@@ -26,16 +29,22 @@ export default {
     this.$nextTick(this.populateTypeahead)
   },
   methods: {
+    ...mapGetters([
+      // Mount store getters to component scope
+      'getAppRelease',
+      'getAddrSearch'
+    ]),
+    ...mapMutations([
+      // Mount store mutation functions
+      'setAddrSearch'
+    ]),
     validateQuery (event) {
-      const geogs = ['State', 'County', 'Congressional District', 'Census Place', 'Tribal Area', 'CBSA (MSA)']
-
-      // Provider search is validated in Provider component
-      if (this.searchType === 'Provider') {
-        return
-      }
-
       // Validate address search
       if (this.searchType === 'Address') {
+        if (this.getAddrSearch().place_name && this.getAddrSearch().place_name === this.typeaheadModel) {
+          return
+        }
+
         // If enter key pressed, wait for typeahead to be updated before validating
         setTimeout(() => {
           this.geoCode()
@@ -48,7 +57,7 @@ export default {
       }
 
       // Validate geography (state, county, etc.) search
-      if (geogs.indexOf(this.searchType) > -1) {
+      if (GEOGS.indexOf(this.searchType) > -1) {
         if (event && event.keyCode === 13) {
           // If enter key pressed, wait for typeahead to be updated before validating
           setTimeout(() => {
@@ -79,7 +88,7 @@ export default {
             if (foundResult.length > 0) {
               this.typeaheadModel = foundResult[0]
 
-              this.validateAddr()
+              this.validateLocation()
             } else {
               this.showError()
             }
@@ -89,10 +98,22 @@ export default {
           })
       }
     },
-    validateAddr () {
-      if (typeof this.typeaheadModel === 'object' && typeof this.typeaheadModel.id === 'string') {
+    validateLocation () {
+      // Provider search is validated in Provider component
+      if (this.searchType === 'Provider') {
+        return
+      }
+
+      // If search type is geography (state, county, etc.) then validate geography, otherwise validate address
+      if (GEOGS.indexOf(this.searchType) > -1) {
+        this.validateGeog()
+      } else if (typeof this.typeaheadModel === 'object' && typeof this.typeaheadModel.id === 'string') {
         this.gotoGeography()
         this.selectedItem = this.typeaheadModel
+
+        this.setAddrSearch({
+          place_name: this.typeaheadModel.place_name
+        })
       } else {
         this.showError()
       }
@@ -261,28 +282,28 @@ export default {
       }
 
       axios
-      .get(socrataURL, {
-        params: axiosParams,
-        headers: httpHeaders
-      })
-      .then(function (response) {
-        self.dataSource = response.data
-      })
-      .catch(function (error) {
-        if (error.response) {
+        .get(socrataURL, {
+          params: axiosParams,
+          headers: httpHeaders
+        })
+        .then(function (response) {
+          self.dataSource = response.data
+        })
+        .catch(function (error) {
+          if (error.response) {
           // Server responded with a status code that falls out of the range of 2xx
-          console.log(error.response.data)
-          console.log(error.response.status)
-          console.log(error.response.headers)
-        } else if (error.request) {
+            console.log(error.response.data)
+            console.log(error.response.status)
+            console.log(error.response.headers)
+          } else if (error.request) {
           // Request was made but no response was received
-          console.log(error.request)
-        } else {
+            console.log(error.request)
+          } else {
           // Something happened in setting up the request that triggered an Error
-          console.log('Error', error.message)
-        }
-        console.log(error)
-      })
+            console.log('Error', error.message)
+          }
+          console.log(error)
+        })
     }
   },
   watch: {
