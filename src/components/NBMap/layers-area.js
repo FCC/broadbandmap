@@ -11,7 +11,7 @@ export const LayersArea = [
       url: 'mapbox://fcc.v1_place'
     },
     type: 'line',
-    'source-layer': 'place_2016geojson',
+    'source-layer': 'place_2016',
     layout: {
       visibility: 'visible'
     },
@@ -28,7 +28,7 @@ export const LayersArea = [
       url: 'mapbox://fcc.v1_cd115'
     },
     type: 'line',
-    'source-layer': 'cd115_2016geojson',
+    'source-layer': 'cd115_2016',
     layout: {
       visibility: 'visible'
     },
@@ -45,7 +45,7 @@ export const LayersArea = [
       url: 'mapbox://fcc.v1_tribal'
     },
     type: 'line',
-    'source-layer': 'tribal_2016geojson',
+    'source-layer': 'tribal_2016',
     layout: {
       visibility: 'visible'
     },
@@ -62,7 +62,7 @@ export const LayersArea = [
       url: 'mapbox://fcc.v1_cbsa'
     },
     type: 'line',
-    'source-layer': 'cbsa_2016geojson',
+    'source-layer': 'cbsa_2016',
     layout: {
       visibility: 'visible'
     },
