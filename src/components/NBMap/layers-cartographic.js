@@ -9,7 +9,7 @@ export const LayersCartographic = [
       url: 'mapbox://fcc.v1_county_carto'
     },
     type: 'line',
-    'source-layer': 'county_carto_2016geojson',
+    'source-layer': 'county_carto_2016',
     layout: {
       visibility: 'visible'
     },
@@ -26,7 +26,7 @@ export const LayersCartographic = [
       url: 'mapbox://fcc.v1_county_carto'
     },
     type: 'line',
-    'source-layer': 'county_carto_2016geojson',
+    'source-layer': 'county_carto_2016',
     layout: {
       visibility: 'visible'
     },
@@ -43,7 +43,7 @@ export const LayersCartographic = [
       url: 'mapbox://fcc.v1_state'
     },
     type: 'line',
-    'source-layer': 'state_2016geojson',
+    'source-layer': 'state_2016',
     layout: {
       visibility: 'visible'
     },
@@ -59,7 +59,7 @@ export const LayersCartographic = [
       url: 'mapbox://fcc.v1_state'
     },
     type: 'line',
-    'source-layer': 'state_2016geojson',
+    'source-layer': 'state_2016',
     layout: {
       visibility: 'visible'
     },
